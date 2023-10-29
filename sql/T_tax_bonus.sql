@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS public."T_tax_bonus"
     long_term_care_insurance integer,
     income_tax integer,
     residence_tax integer,
-    notes1 character varying(250) COLLATE pg_catalog."default",
-    notes2 character varying(250) COLLATE pg_catalog."default",
+    year_end_adjustment character varying(250) COLLATE pg_catalog."default",
+    notes character varying(250) COLLATE pg_catalog."default",
     "createdAt" timestamp with time zone NOT NULL DEFAULT now(),
     "updatedAt" timestamp with time zone NOT NULL DEFAULT now(),
     CONSTRAINT "T_tax_bonus_pkey" PRIMARY KEY (id),
@@ -33,8 +33,8 @@ COMMENT ON COLUMN public."T_tax_bonus".employee_insurance_expense IS '雇用保�
 COMMENT ON COLUMN public."T_tax_bonus".long_term_care_insurance IS '介護保険料';
 COMMENT ON COLUMN public."T_tax_bonus".income_tax IS '所得税';
 COMMENT ON COLUMN public."T_tax_bonus".residence_tax IS '住民税';
-COMMENT ON COLUMN public."T_tax_bonus".notes1 IS 'その他1';
-COMMENT ON COLUMN public."T_tax_bonus".notes2 IS 'その他2';
+COMMENT ON COLUMN public."T_tax_bonus".year_end_adjustment IS '年末調整';
+COMMENT ON COLUMN public."T_tax_bonus".notes IS 'その他控除';
 
 -- Trigger: trigger_update_updatedat
 

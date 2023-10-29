@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS public."T_tax"
     residence_tax integer,
     year_end_adjustment character varying(250) COLLATE pg_catalog."default",
     notes character varying(250) COLLATE pg_catalog."default",
-    "createdAt" timestamp with time zone DEFAULT now(),
-    "updatedAt" timestamp with time zone DEFAULT now(),
+    "createdAt" timestamp with time zone NOT NULL DEFAULT now(),
+    "updatedAt" timestamp with time zone NOT NULL DEFAULT now(),
     CONSTRAINT "T_tax_pkey" PRIMARY KEY (id),
     CONSTRAINT fk_company_id FOREIGN KEY (company_id)
         REFERENCES public."M_company" (id) MATCH SIMPLE

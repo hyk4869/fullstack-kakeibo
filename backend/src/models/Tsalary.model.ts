@@ -6,21 +6,21 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('T_bonus')
-export class TBonus {
+@Entity('T_salary')
+export class TSalary {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ name: 'user_id', type: 'integer' })
   userId: number;
 
-  @Column({ name: 'payday', nullable: true })
+  @Column({ name: 'payday' })
   payday: Date;
 
-  @Column({ name: 'bonus_amount', type: 'integer', nullable: true })
-  bonusAmount: number;
+  @Column({ name: 'salary', type: 'integer' })
+  salary: number;
 
-  @Column({ name: 'company_id', type: 'integer', nullable: true })
+  @Column({ name: 'company_id', type: 'integer' })
   companyId: number;
 
   @CreateDateColumn({
