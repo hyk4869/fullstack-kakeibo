@@ -6,22 +6,25 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('T_salary')
-export class TSalary {
+@Entity('M_company')
+export class MCompany {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ name: 'user_id', type: 'integer' })
   userId: number;
 
-  @Column({ name: 'payday', type: 'date' })
-  payday: Date;
+  @Column({ name: 'name', length: 100 })
+  name: string;
 
-  @Column({ name: 'salary', type: 'integer' })
-  salary: number;
+  @Column({ name: 'major_sector', length: 70 })
+  majorSector: string;
 
-  @Column({ name: 'company_id', type: 'integer' })
-  companyId: number;
+  @Column({ name: 'subsector', length: 50, nullable: true })
+  subsector: string;
+
+  @Column({ name: 'industry', length: 50, nullable: true })
+  industry: string;
 
   @CreateDateColumn({
     name: 'createdAt',

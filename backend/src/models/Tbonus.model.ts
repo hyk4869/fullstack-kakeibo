@@ -14,7 +14,7 @@ export class TBonus {
   @Column({ name: 'user_id', type: 'integer' })
   userId: number;
 
-  @Column({ name: 'payday', nullable: true })
+  @Column({ name: 'payday', type: 'date', nullable: true })
   payday: Date;
 
   @Column({ name: 'bonus_amount', type: 'integer', nullable: true })

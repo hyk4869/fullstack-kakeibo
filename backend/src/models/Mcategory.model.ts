@@ -6,22 +6,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('T_salary')
-export class TSalary {
-  @PrimaryGeneratedColumn()
-  id: number;
+@Entity('M_category')
+export class MCategory {
+  @PrimaryGeneratedColumn({ name: 'category_id' })
+  categoryId: number;
 
   @Column({ name: 'user_id', type: 'integer' })
   userId: number;
 
-  @Column({ name: 'payday', type: 'date' })
-  payday: Date;
-
-  @Column({ name: 'salary', type: 'integer' })
-  salary: number;
-
-  @Column({ name: 'company_id', type: 'integer' })
-  companyId: number;
+  @Column({ name: 'category_name', length: 50 })
+  categoryName: string;
 
   @CreateDateColumn({
     name: 'createdAt',
