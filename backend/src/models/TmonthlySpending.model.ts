@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { MCategory } from './Mcategory.model';
 
 @Entity('T_monthly_spending')
 export class TMonthlySpending {
@@ -20,8 +23,12 @@ export class TMonthlySpending {
   @Column({ name: 'store', length: 70 })
   store: string;
 
-  @Column({ name: 'category', type: 'integer' })
-  category: number;
+  // @Column({ name: 'category', type: 'integer' })
+  // category: number;
+
+  @ManyToOne(() => MCategory)
+  @JoinColumn({ name: 'categoryId' })
+  category: MCategory;
 
   @Column({ name: 'usage_fee', type: 'integer' })
   usageFee: number;
