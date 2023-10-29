@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConnectionController } from './connection.controller';
-import { ConnectionService } from './connection.service';
+import { MonthlySpendingService } from './monthly-spending.service';
+import { MonthlySpendingController } from './monthly-spending.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TMonthlySpending } from 'src/models/monthlySpending.model';
+import { TMonthlySpending } from 'src/models/TmonthlySpending.model';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { TMonthlySpending } from 'src/models/monthlySpending.model';
       synchronize: true,
     }),
   ],
-  controllers: [ConnectionController],
-  providers: [ConnectionService],
+  providers: [MonthlySpendingService],
+  controllers: [MonthlySpendingController],
 })
-export class ConnectionModule {}
+export class MonthlySpendingModule {}
