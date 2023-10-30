@@ -124,3 +124,8 @@ model Mhire_date {
   updatedAt DateTime @updatedAt
   MCompany MCompany @relation(fields: [company_id], references: [id])
 }
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output = "./ERD.png"
+}
