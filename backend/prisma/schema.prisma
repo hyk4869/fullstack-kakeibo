@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TMonthlySpending {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  paymentDay DateTime
+  store     String
+  categoryId Int
+  usageFee  Int
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  category  MCategory?  @relation(fields: [categoryId], references: [categoryId])
+}
+
+model TSalary {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  payday    DateTime
+  salary    Int
+  companyId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  MCompany    MCompany? @relation(fields: [companyId], references: [id])
+  TTax    TTax? @relation(fields: [id], references: [id])
+}
+
+model TTax {
+  id                           Int      @id @default(autoincrement())
+  userId                       Int
+  companyId                    Int?
+  healthInsuranceExpense       Int?
+  employeePensionInsuranceExpense Int?
+  nationalPensionInsuranceExpense Int?
+  employeeInsuranceExpense      Int?
+  longTermCareInsurance         Int?
+  incomeTax                    Int?
+  residenceTax                 Int?
+  yearEndAdjustment            String?
+  notes                        String?
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+  TSalary TSalary[]
+  MCompany    MCompany? @relation(fields: [companyId], references: [id])
+
+}
+
+model TBonus {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  payday      DateTime?
+  bonusAmount Int?
+  companyId   Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  MCompany    MCompany? @relation(fields: [companyId], references: [id])
+  TTaxBonus    TTaxBonus? @relation(fields: [id], references: [id])
+
+}
+
+model TTaxBonus {
+  id                           Int      @id @default(autoincrement())
+  userId                       Int
+  companyId                    Int?
+  healthInsuranceExpense       Int?
+  employeePensionInsuranceExpense Int?
+  nationalPensionInsuranceExpense Int?
+  employeeInsuranceExpense      Int?
+  longTermCareInsurance         Int?
+  incomeTax                    Int?
+  residenceTax                 Int?
+  yearEndAdjustment            String?
+  notes                        String?
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+  TBonus TBonus[]
+  MCompany    MCompany? @relation(fields: [companyId], references: [id])
+
+}
+
+model MCategory {
+  categoryId   Int      @id @default(autoincrement())
+  userId       Int
+  categoryName String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  spendings    TMonthlySpending[]
+}
+
+
+model MCompany {
+  id Int @id @default(autoincrement())
+  user_id Int
+  name String
+  major_sector String
+  subsector String?
+  industry String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Mhire_date Mhire_date[]
+  TTaxBonus TTaxBonus[]
+  TTax TTax[]
+  TSalary TSalary[]
+  TBonus TBonus[]
+}
+
+model Mhire_date {
+  id Int @id @default(autoincrement())
+  user_id Int
+  company_id Int
+  hire_date DateTime
+  retirement_date DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  MCompany MCompany @relation(fields: [company_id], references: [id])
+}
