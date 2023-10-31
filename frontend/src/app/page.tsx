@@ -1,14 +1,20 @@
-import Image from 'next/image';
+import Link from 'next/link';
 import styles from './page.module.css';
+type HomeProps = {
+  //
+};
 
-export default function Home() {
+const Home: React.FC<HomeProps> = () => {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <div className={styles.center}>
-          <Image className={styles.logo} src='/ERD.svg' alt='Next.js Logo' width={1200} height={1200} priority />
-        </div>
+    <>
+      <div className={styles.links}>
+        <Link style={{ paddingRight: '1rem' }} href={'/test'}>
+          test
+        </Link>
+        <Link href={'/erFigure'}>ER図</Link>
       </div>
-    </main>
+    </>
   );
-}
+};
+
+export default Home;
