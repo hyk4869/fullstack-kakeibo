@@ -21,12 +21,13 @@ const SummaryTable = () => {
         if (res.data) {
           dispatch(setMonthlySpending(res.data));
         }
-        console.log(data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  console.log(data);
+
   return (
     <>
       <div>
@@ -34,6 +35,7 @@ const SummaryTable = () => {
           API TEST
         </Button>
         <br />
+        <div>{data && data.map((a) => a.store)}</div>
       </div>
     </>
   );
