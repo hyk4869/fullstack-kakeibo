@@ -11,7 +11,10 @@ const Home: React.FC<HomeProps> = () => {
         <Link style={{ paddingRight: '1rem' }} href={'/test'}>
           test
         </Link>
-        <Link href={'/erFigure'}>ER図</Link>
+        <Link style={{ paddingRight: '1rem' }} href={'/erFigure'}>
+          ER図
+        </Link>
+        <Link href={'/apitest'}>API test</Link>
       </div>
     </>
   );
