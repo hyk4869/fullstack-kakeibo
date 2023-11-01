@@ -14,7 +14,7 @@ const Home: React.FC<HomeProps> = () => {
         <Link style={{ paddingRight: '1rem' }} href={'/erFigure'}>
           ER図
         </Link>
-        <Link href={'/apitest'}>API test</Link>
+        <Link href={'/summaryTable'}>Summary Table</Link>
       </div>
     </>
   );

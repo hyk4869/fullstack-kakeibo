@@ -1,21 +1,27 @@
 'use client';
 
-import { MonthlySpending } from '@/interfaces/monthlySpending';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
+import { getMonthlySpending } from '../_api/url';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, store } from '../_store/store';
+import { MonthlySpending, setMonthlySpending } from '../_store/slice';
 
-const ApiTest = () => {
+const SummaryTable = () => {
   const [apiBox, setApiBox] = useState<Array<MonthlySpending>>([]);
+  const dispatch = useDispatch();
+
+  const data = useSelector((state: RootState) => state.getMonthlySpendingContent);
 
   const handleClickAPI = () => {
     axios
-      .get('http://localhost:3005/monthly-spending')
+      .get(getMonthlySpending)
       .then((res) => {
-        console.log(res.data);
         if (res.data) {
-          setApiBox(res.data);
+          dispatch(setMonthlySpending(res.data));
         }
+        console.log(data);
       })
       .catch((error) => {
         console.log(error);
@@ -28,10 +34,9 @@ const ApiTest = () => {
           API TEST
         </Button>
         <br />
-        {apiBox && <div>{apiBox.map((a) => a.store)}</div>}
       </div>
     </>
   );
 };
 
-export default ApiTest;
+export default SummaryTable;
