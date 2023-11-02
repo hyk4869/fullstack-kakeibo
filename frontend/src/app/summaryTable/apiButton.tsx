@@ -18,7 +18,7 @@ const ApiButton = () => {
         if (res.data) {
           const formattedData: MonthlySpending[] = res.data.map((item: MonthlySpending) => ({
             ...item,
-            paymentDay: item.paymentDay ? format(new Date(item.paymentDay), 'yyyy-MM-dd HH:mm') : null,
+            paymentDay: item.paymentDay ? format(new Date(item.paymentDay), 'yyyy-MM-dd') : null,
           }));
           dispatch(setMonthlySpending(formattedData));
         }
