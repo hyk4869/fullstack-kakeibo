@@ -4,8 +4,9 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { getMonthlySpending } from '../_api/url';
 import { useDispatch } from 'react-redux';
-import { setMonthlySpending } from '../_store/slice';
+import { MonthlySpending, setMonthlySpending } from '../_store/slice';
 import styles from './apiTest.module.css';
+import { format } from 'date-fns';
 
 const ApiButton = () => {
   const dispatch = useDispatch();
@@ -15,7 +16,11 @@ const ApiButton = () => {
       .get(getMonthlySpending)
       .then((res) => {
         if (res.data) {
-          dispatch(setMonthlySpending(res.data));
+          const formattedData: MonthlySpending[] = res.data.map((item: MonthlySpending) => ({
+            ...item,
+            paymentDay: item.paymentDay ? format(new Date(item.paymentDay), 'yyyy-MM-dd HH:mm') : null,
+          }));
+          dispatch(setMonthlySpending(formattedData));
         }
       })
       .catch((error) => {

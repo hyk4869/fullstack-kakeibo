@@ -13,19 +13,4 @@ export class MonthlySpendingService {
       },
     });
   }
-  // async getMonthlySpendingWithCategory() {
-  //   const monthlySpendings = await this.prisma.tMonthlySpending.findMany({
-  //     include: {
-  //       category: true,
-  //     },
-  //   });
-
-  //   /**  日付フォーマット変換 */
-  //   const formattedMonthlySpendings = monthlySpendings.map((spending) => ({
-  //     ...spending,
-  //     paymentDay: format(spending.paymentDay, 'yyyy-MM-dd HH:mm'),
-  //   }));
-
-  //   return formattedMonthlySpendings;
-  // }
 }
