@@ -2,17 +2,13 @@
 
 import { Button } from '@mui/material';
 import axios from 'axios';
-import { useState } from 'react';
 import { getMonthlySpending } from '../_api/url';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, store } from '../_store/store';
-import { MonthlySpending, setMonthlySpending } from '../_store/slice';
+import { useDispatch } from 'react-redux';
+import { setMonthlySpending } from '../_store/slice';
+import styles from './apiTest.module.css';
 
-const SummaryTable = () => {
-  const [apiBox, setApiBox] = useState<Array<MonthlySpending>>([]);
+const ApiButton = () => {
   const dispatch = useDispatch();
-
-  const data = useSelector((state: RootState) => state.getMonthlySpendingContent);
 
   const handleClickAPI = () => {
     axios
@@ -26,7 +22,6 @@ const SummaryTable = () => {
         console.log(error);
       });
   };
-  console.log(data);
 
   return (
     <>
@@ -34,11 +29,9 @@ const SummaryTable = () => {
         <Button variant='contained' onClick={handleClickAPI}>
           API TEST
         </Button>
-        <br />
-        <div>{data && data.map((a) => a.store)}</div>
       </div>
     </>
   );
 };
 
-export default SummaryTable;
+export default ApiButton;
