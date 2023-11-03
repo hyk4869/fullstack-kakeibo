@@ -26,6 +26,8 @@ import { MonthlySpending } from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
 import { CustomDate } from '../_customComponents/customDate';
 import dayjs from 'dayjs';
+import { Button } from '@mui/material';
+import { blue, green } from '@mui/material/colors';
 
 type Order = 'asc' | 'desc';
 
@@ -162,6 +164,9 @@ const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
 
 type EnhancedTableToolbarProps = {
   numSelected: number;
+  edit: boolean;
+  dataLength: number;
+  handleEditFlag: () => void;
 };
 /**
  *
@@ -169,7 +174,7 @@ type EnhancedTableToolbarProps = {
  *
  */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
-  const { numSelected } = props;
+  const { numSelected, edit, dataLength, handleEditFlag } = props;
 
   return (
     <Toolbar
@@ -190,6 +195,17 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           クレジット明細
         </Typography>
       )}
+      <Button
+        variant="outlined"
+        disabled={dataLength === 0}
+        sx={{ transform: 'translateX(-50px)' }}
+        onClick={handleEditFlag}
+      >
+        {edit ? '確定' : '編集'}
+      </Button>
+      <Button variant="outlined" disabled={dataLength === 0} sx={{ transform: 'translateX(-30px)' }}>
+        保存
+      </Button>
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
@@ -222,6 +238,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [edit, setEdit] = useState<boolean>(false);
 
   const data = useSelector((state: RootState) => state.getMonthlySpendingContent);
 
@@ -293,10 +310,19 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     [order, orderBy, page, rowsPerPage, data],
   );
 
+  const handleEditFlag = () => {
+    setEdit((edit) => !edit);
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '95%', margin: '1rem auto' }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          edit={edit}
+          dataLength={data.length}
+          handleEditFlag={handleEditFlag}
+        />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -341,13 +367,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       {row.id}
                     </TableCell>
                     <TableCell align="center">
-                      <CustomDate date={dayjs(row.paymentDay)} edit={false} />
+                      <CustomDate date={dayjs(row.paymentDay)} edit={edit} />
                     </TableCell>
-                    {/* <TableCell align="center">{row.paymentDay}</TableCell> */}
                     <TableCell align="center">{row.store}</TableCell>
                     <TableCell align="center">{row.category.categoryName}</TableCell>
                     <TableCell align="center">
-                      <CustomNumberFormat value={row.usageFee} suffix=" 円" edit={false} />
+                      <CustomNumberFormat value={row.usageFee} suffix=" 円" edit={edit} />
                     </TableCell>
                   </TableRow>
                 );
