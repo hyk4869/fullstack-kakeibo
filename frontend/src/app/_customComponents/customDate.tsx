@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
-import dayjs from 'dayjs';
-import 'dayjs/locale/ja';
+import React, { useCallback, useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
-dayjs.locale('ja');
+import { Dayjs } from 'dayjs';
 
 type CustomDateProps = {
-  date: Date | null;
+  date: Date | Dayjs | null;
   edit?: boolean;
 };
+
 export const CustomDate: React.FC<CustomDateProps> = (props) => {
   const { date, edit } = props;
-  const [selectedDate, setSelectedDate] = useState<Date | null>(date);
+  const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(date);
 
-  const handleDateChange = (date: Date | null) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
-    const newDate = formattedDate ? new Date(formattedDate) : null;
-
-    setSelectedDate(newDate);
-  };
+  const handleDateChange = useCallback(
+    (date: Date | Dayjs | null) => {
+      setSelectedDate(date);
+    },
+    [date, edit],
+  );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -28,8 +26,9 @@ export const CustomDate: React.FC<CustomDateProps> = (props) => {
         label="日付"
         format="YYYY-MM-DD"
         value={selectedDate}
-        onChange={() => handleDateChange(date)}
+        onChange={handleDateChange}
         disabled={!edit}
+        slotProps={{ textField: { variant: 'standard' } }}
       />
     </LocalizationProvider>
   );

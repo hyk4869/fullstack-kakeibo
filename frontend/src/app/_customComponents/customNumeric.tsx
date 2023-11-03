@@ -1,5 +1,5 @@
 import { Box, TextField } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NumericFormat } from 'react-number-format';
 
 type CustomNumberFormatProps = {
@@ -16,11 +16,12 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: align }}>
       <NumericFormat
-        inputRef={null}
+        inputRef={inputRef as React.Ref<HTMLInputElement>}
         getInputRef={inputRef}
         displayType={edit ? 'input' : 'text'}
         customInput={TextFieldCustomInput}
         value={value}
+        thousandSeparator={true}
         {...other}
       />
       <Box sx={{ color: 'rgba(0, 0, 0, 0.6)' }}>{suffix}</Box>

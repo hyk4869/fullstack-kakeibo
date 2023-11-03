@@ -25,39 +25,9 @@ import { useMemo, useState } from 'react';
 import { MonthlySpending } from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
 import { CustomDate } from '../_customComponents/customDate';
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+import dayjs from 'dayjs';
 
 type Order = 'asc' | 'desc';
-
-function getComparator(
-  order: Order,
-  orderBy: keyof MonthlySpending,
-): (a: MonthlySpending, b: MonthlySpending) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
 
 interface HeadCell {
   disablePadding: boolean;
@@ -93,14 +63,52 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
+function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+const getComparator = (
+  order: Order,
+  orderBy: keyof MonthlySpending,
+): ((a: MonthlySpending, b: MonthlySpending) => number) => {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+};
+
+const stableSort = (
+  array: MonthlySpending[],
+  comparator: (a: MonthlySpending, b: MonthlySpending) => number,
+): MonthlySpending[] => {
+  const stabilizedThis = array.map((el, index) => [el, index] as [MonthlySpending, number]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) {
+      return order;
+    }
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+};
+
 type EnhancedTableProps = {
+  /** 選択されたID */
   numSelected: number;
+  /** 昇順降順の選択 */
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof MonthlySpending) => void;
+  /** 全選択のクリック関数 */
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
 };
+
 /**
  *
  * ヘッダー
@@ -217,12 +225,23 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   const data = useSelector((state: RootState) => state.getMonthlySpendingContent);
 
+  /**
+   * 昇順降順のソート
+   * @param event
+   * @param property どの列がクリックされたか
+   * @return テーブルの列のクリックに応じて、ソート対象の列とソート順を切り替える役割
+   */
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof MonthlySpending) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
+  /**
+   * 全選択のクリック関数
+   * @param event boolean event
+   * @returns
+   */
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       setSelected((setNum) => {
@@ -237,19 +256,21 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  /**
+   * 行または項目の選択に対しての判定
+   * @param event
+   * @param id
+   */
+  const handleSelect = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      newSelected = [...selected, id];
+    } else {
+      newSelected = selected.filter((itemId) => itemId !== id);
     }
+
     setSelected(newSelected);
   };
 
@@ -264,12 +285,11 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
+  /**
+   * テーブルやリストの表示に必要なデータを計算し、最適化
+   */
   const visibleRows = useMemo(
-    () =>
-      stableSort<MonthlySpending>(data, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
+    () => stableSort(data, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [order, orderBy, page, rowsPerPage, data],
   );
 
@@ -298,7 +318,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     hover
                     onClick={(event) => {
                       if (row.id !== null) {
-                        handleClick(event, row.id as number);
+                        handleSelect(event, row.id as number);
                       }
                     }}
                     role="checkbox"
@@ -321,8 +341,9 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       {row.id}
                     </TableCell>
                     <TableCell align="center">
-                      <CustomDate date={row.paymentDay} edit={true} />
+                      <CustomDate date={dayjs(row.paymentDay)} edit={false} />
                     </TableCell>
+                    {/* <TableCell align="center">{row.paymentDay}</TableCell> */}
                     <TableCell align="center">{row.store}</TableCell>
                     <TableCell align="center">{row.category.categoryName}</TableCell>
                     <TableCell align="center">
