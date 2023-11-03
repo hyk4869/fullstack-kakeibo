@@ -24,6 +24,7 @@ import { RootState } from '../_store/store';
 import { useMemo, useState } from 'react';
 import { MonthlySpending } from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
+import { CustomDate } from '../_customComponents/customDate';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -319,11 +320,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <TableCell component="th" id={labelId} scope="row">
                       {row.id}
                     </TableCell>
-                    <TableCell align="center">{row.paymentDay}</TableCell>
+                    <TableCell align="center">
+                      <CustomDate date={row.paymentDay} edit={true} />
+                    </TableCell>
                     <TableCell align="center">{row.store}</TableCell>
                     <TableCell align="center">{row.category.categoryName}</TableCell>
                     <TableCell align="center">
-                      {/* <NumericFormat value={row.usageFee} suffix=" 円" displayType="input" thousandSeparator={true} /> */}
                       <CustomNumberFormat value={row.usageFee} suffix=" 円" edit={false} />
                     </TableCell>
                   </TableRow>

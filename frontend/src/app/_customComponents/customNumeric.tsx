@@ -3,7 +3,7 @@ import React from 'react';
 import { NumericFormat } from 'react-number-format';
 
 type CustomNumberFormatProps = {
-  inputRef?: React.Ref<any>;
+  inputRef?: React.Ref<HTMLInputElement>;
   variant?: 'outlined' | 'filled' | 'standard';
   edit?: boolean;
   value?: number | null;
@@ -11,7 +11,7 @@ type CustomNumberFormatProps = {
   align?: 'left' | 'center' | 'right';
 };
 const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
-  const { inputRef, variant, edit, value, suffix, align = 'center', ...other } = props;
+  const { inputRef, edit, value, suffix, align = 'center', ...other } = props;
 
   return (
     <Box sx={{ display: 'flex', justifyContent: align }}>

@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { MonthlySpending, setMonthlySpending } from '../_store/slice';
 import styles from './apiTest.module.css';
 import { format } from 'date-fns';
+import dayjs from 'dayjs';
 
 const ApiButton = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const ApiButton = () => {
           /** storeに格納する前に日付のフォーマとを修正 */
           const formattedData: MonthlySpending[] = res.data.map((item: MonthlySpending) => ({
             ...item,
-            paymentDay: item.paymentDay ? format(new Date(item.paymentDay), 'yyyy-MM-dd') : null,
+            paymentDay: item.paymentDay ? dayjs(item.paymentDay) : null,
           }));
           dispatch(setMonthlySpending(formattedData));
         }
@@ -32,7 +33,7 @@ const ApiButton = () => {
   return (
     <>
       <div>
-        <Button variant='contained' onClick={handleClickAPI}>
+        <Button variant="contained" onClick={handleClickAPI}>
           API TEST
         </Button>
       </div>
