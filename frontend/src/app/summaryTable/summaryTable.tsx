@@ -16,16 +16,14 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-
 import { useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import { useMemo, useState } from 'react';
 import { MonthlySpending } from '../_store/slice';
+import CustomNumberFormat from '../_customComponents/customNumeric';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -41,7 +39,7 @@ type Order = 'asc' | 'desc';
 
 function getComparator(
   order: Order,
-  orderBy: keyof MonthlySpending
+  orderBy: keyof MonthlySpending,
 ): (a: MonthlySpending, b: MonthlySpending) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -64,37 +62,31 @@ interface HeadCell {
   disablePadding: boolean;
   id: keyof MonthlySpending;
   label: string;
-  numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
     id: 'id',
-    numeric: false,
     disablePadding: true,
     label: 'id',
   },
   {
     id: 'paymentDay',
-    numeric: true,
     disablePadding: false,
     label: '利用日',
   },
   {
     id: 'store',
-    numeric: true,
     disablePadding: false,
     label: '利用店',
   },
   {
     id: 'category',
-    numeric: true,
     disablePadding: false,
     label: 'カテゴリー',
   },
   {
     id: 'usageFee',
-    numeric: true,
     disablePadding: false,
     label: '利用金額',
   },
@@ -122,9 +114,9 @@ const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding='checkbox'>
+        <TableCell padding="checkbox">
           <Checkbox
-            color='primary'
+            color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
@@ -136,7 +128,7 @@ const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={'center'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -147,7 +139,7 @@ const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
             >
               {headCell.label}
               {orderBy === headCell.id ? (
-                <Box component='span' sx={visuallyHidden}>
+                <Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
@@ -181,22 +173,22 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       }}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
+        <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography sx={{ flex: '1 1 100%' }} variant='h6' id='tableTitle' component='div'>
+        <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
           クレジット明細
         </Typography>
       )}
       {numSelected > 0 ? (
-        <Tooltip title='Delete'>
+        <Tooltip title="Delete">
           <IconButton>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title='Filter list'>
+        <Tooltip title="Filter list">
           <IconButton>
             <FilterListIcon />
           </IconButton>
@@ -220,7 +212,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [orderBy, setOrderBy] = useState<keyof MonthlySpending>('id');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const data = useSelector((state: RootState) => state.getMonthlySpendingContent);
@@ -270,30 +261,23 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     setPage(0);
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   const visibleRows = useMemo(
     () =>
       stableSort<MonthlySpending>(data, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
+        page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage, data]
+    [order, orderBy, page, rowsPerPage, data],
   );
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '95%', margin: '1rem auto' }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle' size={dense ? 'small' : 'medium'}>
+          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -302,6 +286,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
               onRequestSort={handleRequestSort}
               rowCount={data.length}
             />
+
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = row.id !== null ? isSelected(row.id as number) : undefined;
@@ -315,47 +300,41 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         handleClick(event, row.id as number);
                       }
                     }}
-                    role='checkbox'
+                    role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
                     key={row.id}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell padding='checkbox'>
+                    <TableCell padding="checkbox">
                       <Checkbox
-                        color='primary'
+                        color="primary"
                         checked={isItemSelected}
                         inputProps={{
                           'aria-labelledby': labelId,
                         }}
                       />
                     </TableCell>
-                    <TableCell component='th' id={labelId} scope='row' padding='none'>
+                    <TableCell component="th" id={labelId} scope="row">
                       {row.id}
                     </TableCell>
-                    <TableCell align='right'>{row.paymentDay}</TableCell>
-                    <TableCell align='right'>{row.store}</TableCell>
-                    <TableCell align='right'>{row.usageFee}</TableCell>
-                    <TableCell align='right'>{row.usageFee}</TableCell>
+                    <TableCell align="center">{row.paymentDay}</TableCell>
+                    <TableCell align="center">{row.store}</TableCell>
+                    <TableCell align="center">{row.category.categoryName}</TableCell>
+                    <TableCell align="center">
+                      {/* <NumericFormat value={row.usageFee} suffix=" 円" displayType="input" thousandSeparator={true} /> */}
+                      <CustomNumberFormat value={row.usageFee} suffix=" 円" edit={false} />
+                    </TableCell>
                   </TableRow>
                 );
               })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[20, 50, 100, 200]}
-          component='div'
+          component="div"
           count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
@@ -363,7 +342,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label='Dense padding' />
     </Box>
   );
 };
