@@ -18,4 +18,18 @@ export class MonthlySpendingService {
   async getCategory(): Promise<MCategory[]> {
     return this.prisma.mCategory.findMany();
   }
+
+  async getMonthlySpendingByDateRange(startDate: Date, endDate: Date) {
+    return this.prisma.tMonthlySpending.findMany({
+      where: {
+        paymentDay: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      include: {
+        category: true,
+      },
+    });
+  }
 }

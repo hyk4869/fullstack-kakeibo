@@ -15,6 +15,7 @@ const ApiButton = () => {
 
   const dispatch = useDispatch();
 
+  /** 全期間のデータを取得 */
   const getAllContent = () => {
     setIsLoading(true);
     axios
@@ -37,10 +38,11 @@ const ApiButton = () => {
       });
   };
 
+  /** 期間を指定してデータを取得 */
   const getSomeContent = () => {
     setIsLoading(true);
     axios
-      .get(getMonthlySpending, {
+      .get(getSomeMonthlySpending, {
         params: {
           startDate: startDate,
           endDate: endDate,
@@ -101,7 +103,7 @@ const ApiButton = () => {
         <Button variant="contained" onClick={getAllContent} sx={{ transform: 'translateX(30px)' }}>
           全取得
         </Button>
-        {isLoading === true ? (
+        {isLoading === false ? (
           <></>
         ) : (
           <div
