@@ -16,6 +16,10 @@ export const CustomDate: React.FC<CustomDateProps> = (props) => {
   const { date, edit, paramKey, onChangeValue } = props;
   const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(date);
 
+  useEffect(() => {
+    setSelectedDate(date);
+  }, []);
+
   const handleDateChange = useCallback(
     (e: React.SetStateAction<Date | Dayjs | null>) => {
       setSelectedDate(e);
@@ -27,9 +31,6 @@ export const CustomDate: React.FC<CustomDateProps> = (props) => {
     },
     [date, edit, onChangeValue, paramKey],
   );
-  useEffect(() => {
-    setSelectedDate(date);
-  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

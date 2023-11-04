@@ -8,14 +8,19 @@ export class MonthlySpendingController {
     private readonly monthlySpendingService: MonthlySpendingService,
   ) {}
 
+  /** TMonthlyとMCategoryをDBからクライアントに送信 */
   @Get()
   async getMonthlySpendingWithCategory(): Promise<TMonthlySpending[]> {
     return this.monthlySpendingService.getMonthlySpendingWithCategory();
   }
+
+  /** MCategoryをDBからクライアントに送信 */
   @Get('/category')
   async getCategory(): Promise<MCategory[]> {
     return this.monthlySpendingService.getCategory();
   }
+
+  /** 期間を指定してTMonthlyとMCategoryをDBからクライアントに送信 */
   @Get('/someContent')
   async getMonthlySpendingByDateRange(
     @Query('startDate') startDate: string,

@@ -13,13 +13,13 @@ export const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
 
   const [selectItem, setSelectItem] = useState<string>();
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectItem(event.target.value);
-  };
-
   useEffect(() => {
     setSelectItem(String(value));
   }, []);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectItem(event.target.value);
+  };
 
   const validValue = list?.find((item) => item.label === value)?.value;
   const initialValue = validValue || '';
