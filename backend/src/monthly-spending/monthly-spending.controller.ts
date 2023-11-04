@@ -1,6 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { MonthlySpendingService } from './monthly-spending.service';
-// import { TMonthlySpending } from 'src/models/TmonthlySpending.model';
 import { MCategory, TMonthlySpending } from '@prisma/client';
 
 @Controller('monthly-spending')

@@ -3,9 +3,9 @@ import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../_api/url';
 import { useDispatch } from 'react-redux';
-import { MonthlySpending, setCategoryContent, setMonthlySpending } from '../_store/slice';
+import { setCategoryContent, setMonthlySpending } from '../_store/slice';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CustomDate } from '../_customComponents/customDate';
 
 const ApiButton = () => {
@@ -81,8 +81,6 @@ const ApiButton = () => {
         break;
     }
   };
-
-  console.log({ startDate, endDate });
 
   return (
     <>

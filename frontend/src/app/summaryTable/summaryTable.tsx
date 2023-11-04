@@ -21,7 +21,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { MCategory, MonthlySpending } from '../_store/slice';
 import { CustomNumberFormat } from '../_customComponents/customNumeric';
 import { CustomDate } from '../_customComponents/customDate';
@@ -193,7 +193,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         </Typography>
       ) : (
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-          クレジット明細
+          クレジットカード明細
         </Typography>
       )}
       <Button
@@ -281,27 +281,33 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * @param event
    * @param id
    */
-  const handleSelect = (event: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
+  const handleSelect = useCallback(
+    (event: React.MouseEvent<unknown>, id: number) => {
+      const selectedIndex = selected.indexOf(id);
+      let newSelected: readonly number[] = [];
 
-    if (selectedIndex === -1) {
-      newSelected = [...selected, id];
-    } else {
-      newSelected = selected.filter((itemId) => itemId !== id);
-    }
+      if (selectedIndex === -1) {
+        newSelected = [...selected, id];
+      } else {
+        newSelected = selected.filter((itemId) => itemId !== id);
+      }
 
-    setSelected(newSelected);
-  };
+      setSelected(newSelected);
+    },
+    [selected],
+  );
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    },
+    [page, rowsPerPage],
+  );
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
@@ -349,16 +355,16 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => {
-                      if (row.id !== null) {
-                        handleSelect(event, row.id as number);
-                      }
-                    }}
+                    // onClick={(event) => {
+                    //   if (row.id !== null) {
+                    //     handleSelect(event, row.id as number);
+                    //   }
+                    // }}
                     role="checkbox"
-                    aria-checked={isItemSelected}
+                    // aria-checked={isItemSelected}
                     tabIndex={-1}
                     key={row.id}
-                    selected={isItemSelected}
+                    // selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
                     <TableCell padding="checkbox">
@@ -367,6 +373,11 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         checked={isItemSelected}
                         inputProps={{
                           'aria-labelledby': labelId,
+                        }}
+                        onClick={(event) => {
+                          if (row.id !== null) {
+                            handleSelect(event, row.id as number);
+                          }
                         }}
                       />
                     </TableCell>

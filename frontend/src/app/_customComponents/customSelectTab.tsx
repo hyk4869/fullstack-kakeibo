@@ -20,7 +20,6 @@ export const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
   useEffect(() => {
     setSelectItem(String(value));
   }, []);
-  console.log(selectItem);
 
   const validValue = list?.find((item) => item.label === value)?.value;
   const initialValue = validValue || '';
