@@ -197,14 +197,14 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         </Typography>
       )}
       <Button
-        variant="outlined"
+        variant="contained"
         disabled={dataLength === 0}
         sx={{ transform: 'translateX(-50px)' }}
         onClick={handleEditFlag}
       >
         {edit ? '確定' : '編集'}
       </Button>
-      <Button variant="outlined" disabled={dataLength === 0} sx={{ transform: 'translateX(-30px)' }}>
+      <Button variant="contained" disabled={dataLength === 0} sx={{ transform: 'translateX(-30px)' }}>
         保存
       </Button>
       {numSelected > 0 ? (
@@ -262,6 +262,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * @returns
    */
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelected([]);
     if (event.target.checked) {
       setSelected((setNum) => {
         if (monthlyData) {
@@ -378,7 +379,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <TableCell align="center">
                       <CustomTextfield value={row.store} edit={edit} />
                     </TableCell>
-                    {/* <TableCell align="center">{row.category.categoryName}</TableCell> */}
                     <TableCell align="center">
                       <CustomSelectTab
                         list={categoryData.map((a: MCategory) => {
