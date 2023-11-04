@@ -3,6 +3,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
+import { commonFontSize } from './customProperties';
 
 type CustomDateProps = {
   date: Date | Dayjs | null;
@@ -23,12 +24,22 @@ export const CustomDate: React.FC<CustomDateProps> = (props) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
-        label="日付"
         format="YYYY-MM-DD"
         value={selectedDate}
         onChange={handleDateChange}
         disabled={!edit}
-        slotProps={{ textField: { variant: 'standard' } }}
+        sx={{
+          fontSize: commonFontSize,
+          maxWidth: '7rem',
+        }}
+        slotProps={{
+          textField: {
+            variant: 'standard',
+            InputProps: {
+              style: { fontSize: commonFontSize },
+            },
+          },
+        }}
       />
     </LocalizationProvider>
   );

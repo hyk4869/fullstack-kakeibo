@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { getMonthlySpendingContent } from './slice';
+import { getCategoryContent, getMonthlySpendingContent } from './slice';
 
 export const store = configureStore({
   reducer: {
     getMonthlySpendingContent: getMonthlySpendingContent.reducer,
+    getCategoryContent: getCategoryContent.reducer,
   },
 });
 

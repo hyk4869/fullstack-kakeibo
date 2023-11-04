@@ -1,6 +1,7 @@
 import { Box, TextField } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NumericFormat } from 'react-number-format';
+import { commonFontSize } from './customProperties';
 
 type CustomNumberFormatProps = {
   inputRef?: React.Ref<HTMLInputElement>;
@@ -10,11 +11,11 @@ type CustomNumberFormatProps = {
   suffix?: string;
   align?: 'left' | 'center' | 'right';
 };
-const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
+export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
   const { inputRef, edit, value, suffix, align = 'center', ...other } = props;
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: align }}>
+    <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '9rem' }}>
       <NumericFormat
         inputRef={inputRef as React.Ref<HTMLInputElement>}
         getInputRef={inputRef}
@@ -22,9 +23,10 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
         customInput={TextFieldCustomInput}
         value={value}
         thousandSeparator={true}
+        style={{ fontSize: commonFontSize }}
         {...other}
       />
-      <Box sx={{ color: 'rgba(0, 0, 0, 0.6)' }}>{suffix}</Box>
+      <Box sx={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: commonFontSize }}>{suffix}</Box>
     </Box>
   );
 };
@@ -34,7 +36,12 @@ type TextFieldCustomInputProps = {
 };
 const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
   const { inputRef, ...other } = props;
-  return <TextField variant="standard" inputRef={inputRef} {...other} />;
+  return (
+    <TextField
+      variant="standard"
+      inputRef={inputRef}
+      InputProps={{ style: { fontSize: commonFontSize, maxWidth: '6rem' } }}
+      {...other}
+    />
+  );
 };
-
-export default CustomNumberFormat;

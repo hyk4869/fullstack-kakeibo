@@ -22,12 +22,13 @@ import { visuallyHidden } from '@mui/utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import { useMemo, useState } from 'react';
-import { MonthlySpending } from '../_store/slice';
-import CustomNumberFormat from '../_customComponents/customNumeric';
+import { MCategory, MonthlySpending } from '../_store/slice';
+import { CustomNumberFormat } from '../_customComponents/customNumeric';
 import { CustomDate } from '../_customComponents/customDate';
 import dayjs from 'dayjs';
 import { Button } from '@mui/material';
-import { blue, green } from '@mui/material/colors';
+import { CustomTextfield } from '../_customComponents/customTextfield';
+import { CustomSelectTab } from '../_customComponents/customSelectTab';
 
 type Order = 'asc' | 'desc';
 
@@ -240,7 +241,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [edit, setEdit] = useState<boolean>(false);
 
-  const data = useSelector((state: RootState) => state.getMonthlySpendingContent);
+  const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
+  const categoryData = useSelector((state: RootState) => state.getCategoryContent);
 
   /**
    * 昇順降順のソート
@@ -262,8 +264,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       setSelected((setNum) => {
-        if (data) {
-          const filteredData: number[] = data.filter((d) => d.id !== null).map((d) => d.id as number);
+        if (monthlyData) {
+          const filteredData: number[] = monthlyData.filter((d) => d.id !== null).map((d) => d.id as number);
           return [...setNum, ...filteredData];
         }
         return setNum;
@@ -306,8 +308,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * テーブルやリストの表示に必要なデータを計算し、最適化
    */
   const visibleRows = useMemo(
-    () => stableSort(data, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage, data],
+    () =>
+      stableSort(monthlyData, getComparator(order, orderBy)).slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage,
+      ),
+    [order, orderBy, page, rowsPerPage, monthlyData],
   );
 
   const handleEditFlag = () => {
@@ -320,7 +326,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
         <EnhancedTableToolbar
           numSelected={selected.length}
           edit={edit}
-          dataLength={data.length}
+          dataLength={monthlyData.length}
           handleEditFlag={handleEditFlag}
         />
         <TableContainer>
@@ -331,7 +337,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={data.length}
+              rowCount={monthlyData.length}
             />
 
             <TableBody>
@@ -369,10 +375,22 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <TableCell align="center">
                       <CustomDate date={dayjs(row.paymentDay)} edit={edit} />
                     </TableCell>
-                    <TableCell align="center">{row.store}</TableCell>
-                    <TableCell align="center">{row.category.categoryName}</TableCell>
                     <TableCell align="center">
-                      <CustomNumberFormat value={row.usageFee} suffix=" 円" edit={edit} />
+                      <CustomTextfield value={row.store} edit={edit} />
+                    </TableCell>
+                    {/* <TableCell align="center">{row.category.categoryName}</TableCell> */}
+                    <TableCell align="center">
+                      <CustomSelectTab
+                        list={categoryData.map((a: MCategory) => {
+                          return { value: String(a.categoryId), label: String(a.categoryName) };
+                        })}
+                        value={row.category.categoryName}
+                        edit={edit}
+                      />
+                    </TableCell>
+
+                    <TableCell align="center">
+                      <CustomNumberFormat value={row.usageFee} suffix=" 円" edit={edit} align="center" />
                     </TableCell>
                   </TableRow>
                 );
@@ -383,7 +401,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
         <TablePagination
           rowsPerPageOptions={[20, 50, 100, 200]}
           component="div"
-          count={data.length}
+          count={monthlyData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

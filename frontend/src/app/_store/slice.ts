@@ -23,6 +23,12 @@ export interface MonthlySpending {
   };
 }
 
+export interface MCategory {
+  categoryId: number | null;
+  userId: number | null;
+  categoryName: string | null;
+}
+
 export const getMonthlySpendingContent = createSlice({
   name: 'getMonthlySpendingContent',
   initialState: [] as MonthlySpending[],
@@ -33,4 +39,15 @@ export const getMonthlySpendingContent = createSlice({
   },
 });
 
+export const getCategoryContent = createSlice({
+  name: 'getCategoryContent',
+  initialState: [] as MCategory[],
+  reducers: {
+    setCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
+      return action.payload;
+    },
+  },
+});
+
 export const { setMonthlySpending } = getMonthlySpendingContent.actions;
+export const { setCategoryContent } = getCategoryContent.actions;

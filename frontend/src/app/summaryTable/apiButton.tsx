@@ -1,9 +1,9 @@
 'use client';
 import { Button } from '@mui/material';
 import axios from 'axios';
-import { getMonthlySpending } from '../_api/url';
+import { getCategory, getMonthlySpending } from '../_api/url';
 import { useDispatch } from 'react-redux';
-import { setMonthlySpending } from '../_store/slice';
+import { MonthlySpending, setCategoryContent, setMonthlySpending } from '../_store/slice';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect, useState } from 'react';
 
@@ -19,6 +19,12 @@ const ApiButton = () => {
       .then((res) => {
         if (res.data) {
           dispatch(setMonthlySpending(res.data));
+        }
+        return axios.get(getCategory);
+      })
+      .then((res) => {
+        if (res.data) {
+          dispatch(setCategoryContent(res.data));
           setIsLoading(false);
         }
       })
