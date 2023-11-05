@@ -8,3 +8,18 @@ export const minWidth = '6rem';
 export const colorWhite = 'white';
 /**黒 */
 export const colorBlack = 'black';
+
+//   const changeValue = useCallback((paramKey: string, value: unknown) => {
+//     setMakeNewArray((prevArray) => {
+//       return prevArray.map((row) => {
+//         if (row.id === Number(paramKey)) {
+//           return {
+//             ...row,
+//             [paramKey]: value === '' ? null : value,
+//           };
+//         } else {
+//           return row;
+//         }
+//       });
+//     });
+//   }, []);

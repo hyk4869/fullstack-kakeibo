@@ -15,7 +15,7 @@ export const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
 
   useEffect(() => {
     setSelectItem(String(value));
-  }, []);
+  }, [selectItem]);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectItem(event.target.value);

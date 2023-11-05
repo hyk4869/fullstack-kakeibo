@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 /**月の出費 */
-export interface MonthlySpending {
+export interface TMonthlySpending {
   /** id番号 */
   id: number | null;
   /** ユーザーID */
@@ -10,17 +10,20 @@ export interface MonthlySpending {
   paymentDay: Date | null;
   /** 利用店 */
   store: string | null;
+  /** カテゴリーID */
+  categoryId: number | null;
   /** 利用金額 */
   usageFee: number | null;
-  /** カテゴリー */
-  category: {
-    /** カテゴリーID */
-    categoryId: number | null;
-    /** カテゴリー名 */
-    categoryName: string | null;
-    /** ユーザーID */
-    userId: number | null;
-  };
+}
+
+/** カテゴリー */
+export interface Mcategory {
+  /** カテゴリーID */
+  categoryId: number | null;
+  /** カテゴリー名 */
+  categoryName: string | null;
+  /** ユーザーID */
+  userId: number | null;
 }
 
 export interface MCategory {
@@ -31,14 +34,14 @@ export interface MCategory {
 
 export const getMonthlySpendingContent = createSlice({
   name: 'getMonthlySpendingContent',
-  initialState: [] as MonthlySpending[],
+  initialState: [] as TMonthlySpending[],
   reducers: {
     /** 値の格納 */
-    setMonthlySpending: (state, action: PayloadAction<MonthlySpending[]>) => {
+    setMonthlySpending: (state, action: PayloadAction<TMonthlySpending[]>) => {
       return [...action.payload];
     },
     /** 値の作成 */
-    setCreateMonthlySpending: (state: MonthlySpending[], action: PayloadAction<MonthlySpending[]>) => {
+    setCreateMonthlySpending: (state: TMonthlySpending[], action: PayloadAction<TMonthlySpending[]>) => {
       const newItems = action.payload.filter((d) => d.id !== null && d.id >= 0);
       const valueCheck = state.map((s) => s.id);
       newItems.forEach((a) => {

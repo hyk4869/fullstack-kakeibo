@@ -2,11 +2,12 @@
 import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../_api/url';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryContent, setMonthlySpending } from '../_store/slice';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CustomDate } from '../_customComponents/customDate';
+import { RootState } from '../_store/store';
 
 const ApiButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -14,6 +15,10 @@ const ApiButton = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const dispatch = useDispatch();
+  const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
+  const categoryData = useSelector((state: RootState) => state.getCategoryContent);
+
+  console.log({ monthlyData, categoryData });
 
   /** 全期間のデータを取得 */
   const getAllContent = () => {

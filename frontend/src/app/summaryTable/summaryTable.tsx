@@ -23,7 +23,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import { useCallback, useMemo, useState } from 'react';
-import { MCategory, MonthlySpending, setCreateMonthlySpending } from '../_store/slice';
+import { MCategory, TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
 import { CustomNumberFormat } from '../_customComponents/customNumeric';
 import { CustomDate } from '../_customComponents/customDate';
 import dayjs from 'dayjs';
@@ -38,7 +38,7 @@ type Order = 'asc' | 'desc';
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof MonthlySpending;
+  id: keyof TMonthlySpending;
   label: string;
 }
 
@@ -59,7 +59,7 @@ const headCells: readonly HeadCell[] = [
     label: '利用店',
   },
   {
-    id: 'category',
+    id: 'categoryId',
     disablePadding: false,
     label: 'カテゴリー',
   },
@@ -82,18 +82,18 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 const getComparator = (
   order: Order,
-  orderBy: keyof MonthlySpending,
-): ((a: MonthlySpending, b: MonthlySpending) => number) => {
+  orderBy: keyof TMonthlySpending,
+): ((a: TMonthlySpending, b: TMonthlySpending) => number) => {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 };
 
 const stableSort = (
-  array: MonthlySpending[],
-  comparator: (a: MonthlySpending, b: MonthlySpending) => number,
-): MonthlySpending[] => {
-  const stabilizedThis = array.map((el, index) => [el, index] as [MonthlySpending, number]);
+  array: TMonthlySpending[],
+  comparator: (a: TMonthlySpending, b: TMonthlySpending) => number,
+): TMonthlySpending[] => {
+  const stabilizedThis = array.map((el, index) => [el, index] as [TMonthlySpending, number]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
@@ -108,7 +108,7 @@ type EnhancedTableProps = {
   /** 選択されたID */
   numSelected: number;
   /** 昇順降順の選択 */
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof MonthlySpending) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TMonthlySpending) => void;
   /** 全選択のクリック関数 */
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -123,7 +123,7 @@ type EnhancedTableProps = {
  */
 const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof MonthlySpending) => (event: React.MouseEvent<unknown>) => {
+  const createSortHandler = (property: keyof TMonthlySpending) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
@@ -257,7 +257,7 @@ type SummaryTableProps = {
  */
 const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof MonthlySpending>('id');
+  const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -272,7 +272,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * @param property どの列がクリックされたか
    * @return テーブルの列のクリックに応じて、ソート対象の列とソート順を切り替える役割
    */
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof MonthlySpending) => {
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TMonthlySpending) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -349,22 +349,20 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     setEdit((edit) => !edit);
   };
 
-  // const changeValue = useCallback((paramKey: string, value: unknown) => {
-  //   let _startDate: Date | null;
-  //   let _endDate: Date | null;
-
-  //   switch (paramKey) {
-  //     case 'startDate':
-  //       _startDate = value !== null ? (value as Date) : null;
-  //       setStartDate(_startDate);
-  //       break;
-  //     case 'endDate':
-  //       _endDate = value !== null ? (value as Date) : null;
-  //       setEndDate(_endDate);
-  //       break;
-  //   }
-  // }, []);
-
+  const changeValue = useCallback((paramKey: string, value: unknown) => {
+    // let _startDate: Date | null;
+    // let _endDate: Date | null;
+    // switch (paramKey) {
+    //   case 'startDate':
+    //     _startDate = value !== null ? (value as Date) : null;
+    //     setStartDate(_startDate);
+    //     break;
+    //   case 'endDate':
+    //     _endDate = value !== null ? (value as Date) : null;
+    //     setEndDate(_endDate);
+    //     break;
+    // }
+  }, []);
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[100] }}>
@@ -426,7 +424,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       <CustomDate
                         date={dayjs(row.paymentDay)}
                         edit={edit}
-                        // onChangeValue={changeValue}
+                        onChangeValue={changeValue}
                         paramKey={String(row.id)}
                       />
                     </TableCell>
@@ -438,11 +436,10 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         list={categoryData.map((a: MCategory) => {
                           return { value: String(a.categoryId), label: String(a.categoryName) };
                         })}
-                        value={row.category.categoryName}
+                        value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryName}
                         edit={edit}
                       />
                     </TableCell>
-
                     <TableCell align="center">
                       <CustomNumberFormat value={row.usageFee} suffix=" 円" edit={edit} align="center" />
                     </TableCell>
