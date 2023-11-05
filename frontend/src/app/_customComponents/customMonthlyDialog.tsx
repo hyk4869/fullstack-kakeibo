@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { MCategory, MonthlySpending, setCreateMonthlySpending } from '../_store/slice';
+import { MCategory, TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Paper, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import { CustomDate } from './customDate';
@@ -23,7 +23,7 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
   const { openDialog, onClose, edit } = props;
   const [arrayLastId, setArrayLastId] = useState<number>(0);
   const [increment, setIncrement] = useState<number>(arrayLastId);
-  const [makeNewArray, setMakeNewArray] = useState<Array<MonthlySpending>>([]);
+  const [makeNewArray, setMakeNewArray] = useState<Array<TMonthlySpending>>([]);
 
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
@@ -33,23 +33,40 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
     setArrayLastId(ID);
     setIncrement(ID);
 
-    const pickLastContent: MonthlySpending = monthlyData.map((a) => a).slice(-1)[0];
+    const pickLastContent: TMonthlySpending = monthlyData.map((a) => a).slice(-1)[0];
     setMakeNewArray([pickLastContent]);
   }, [monthlyData, categoryData]);
 
-  const changeValue = useCallback(() => {
-    //
-  }, []);
+  /**値の更新関数 */
+  const changeValue = useCallback(
+    (paramKey: string, value: unknown) => {
+      setMakeNewArray((prevArray) => {
+        return prevArray.map((row) => {
+          if (row.id === Number(paramKey)) {
+            return {
+              ...row,
+              [paramKey]: value === '' ? null : value,
+            };
+          } else {
+            return row;
+          }
+        });
+      });
+    },
+    [makeNewArray],
+  );
+
+  console.log(makeNewArray);
 
   /**新しいレコードの追加 */
   const addNewArray = useCallback(() => {
     const newMonthlySpending = {
       id: increment + 1,
       userId: null,
-      paymentDay: new Date(),
+      paymentDay: null,
       store: '',
       usageFee: 0,
-      category: { categoryId: null, categoryName: null, userId: null },
+      categoryId: null,
     };
     setIncrement((prevValue) => prevValue + 1);
     setMakeNewArray((prevArray) => [...prevArray, newMonthlySpending]);
@@ -108,7 +125,7 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
                         list={categoryData.map((a: MCategory) => {
                           return { value: String(a.categoryId), label: String(a.categoryName) };
                         })}
-                        value={row?.category.categoryName}
+                        value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryName}
                         edit={row?.id === arrayLastId ? false : edit}
                       />
                     </TableCell>
