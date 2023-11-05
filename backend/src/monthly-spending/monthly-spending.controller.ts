@@ -2,7 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { MonthlySpendingService } from './monthly-spending.service';
 import { MCategory, TMonthlySpending } from '@prisma/client';
 
-@Controller('monthly-spending')
+@Controller('summaryTable')
 export class MonthlySpendingController {
   constructor(
     private readonly monthlySpendingService: MonthlySpendingService,
