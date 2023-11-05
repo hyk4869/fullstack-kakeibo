@@ -33,8 +33,20 @@ export const getMonthlySpendingContent = createSlice({
   name: 'getMonthlySpendingContent',
   initialState: [] as MonthlySpending[],
   reducers: {
+    /** 値の格納 */
     setMonthlySpending: (state, action: PayloadAction<MonthlySpending[]>) => {
-      return action.payload;
+      return [...action.payload];
+    },
+    /** 値の作成 */
+    setCreateMonthlySpending: (state: MonthlySpending[], action: PayloadAction<MonthlySpending[]>) => {
+      const newItems = action.payload.filter((d) => d.id !== null && d.id >= 0);
+      const valueCheck = state.map((s) => s.id);
+      newItems.forEach((a) => {
+        if (valueCheck.includes(a.id)) {
+          return window.alert('idが重複しています。');
+        }
+      });
+      return [...state, ...action.payload];
     },
   },
 });
@@ -43,11 +55,12 @@ export const getCategoryContent = createSlice({
   name: 'getCategoryContent',
   initialState: [] as MCategory[],
   reducers: {
+    /** 値の格納 */
     setCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
-      return action.payload;
+      return [...action.payload];
     },
   },
 });
 
-export const { setMonthlySpending } = getMonthlySpendingContent.actions;
+export const { setMonthlySpending, setCreateMonthlySpending } = getMonthlySpendingContent.actions;
 export const { setCategoryContent } = getCategoryContent.actions;

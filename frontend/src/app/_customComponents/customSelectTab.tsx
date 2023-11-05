@@ -1,6 +1,6 @@
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { commonFontSize } from './customProperties';
+import { commonFontSize, minWidth } from './customProperties';
 
 type CustomSelectTabProps = {
   list?: { value: string; label: string }[];
@@ -26,7 +26,7 @@ export const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
 
   return (
     <>
-      <FormControl variant="standard" sx={{ minWidth: '4rem', justifyContent: align }}>
+      <FormControl variant="standard" sx={{ justifyContent: align }}>
         {edit ? (
           <Select
             value={initialValue}
@@ -34,9 +34,10 @@ export const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
             label="category"
             sx={{
               fontSize: commonFontSize,
-              minWidth: '13rem',
+              minWidth: '10rem',
+              maxWidth: '13rem',
             }}
-            inputProps={{ style: { fontSize: commonFontSize, minWidth: '13rem' } }}
+            inputProps={{ style: { fontSize: commonFontSize } }}
           >
             {list?.map((data, idx) => {
               return (

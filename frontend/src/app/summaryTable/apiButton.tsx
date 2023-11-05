@@ -5,7 +5,7 @@ import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../_api
 import { useDispatch } from 'react-redux';
 import { setCategoryContent, setMonthlySpending } from '../_store/slice';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CustomDate } from '../_customComponents/customDate';
 
 const ApiButton = () => {
@@ -66,21 +66,24 @@ const ApiButton = () => {
       });
   };
 
-  const changeValue = (paramKey: string, value: unknown) => {
-    let _startDate: Date | null;
-    let _endDate: Date | null;
+  const changeValue = useCallback(
+    (paramKey: string, value: unknown) => {
+      let _startDate: Date | null;
+      let _endDate: Date | null;
 
-    switch (paramKey) {
-      case 'startDate':
-        _startDate = value !== null ? (value as Date) : null;
-        setStartDate(_startDate);
-        break;
-      case 'endDate':
-        _endDate = value !== null ? (value as Date) : null;
-        setEndDate(_endDate);
-        break;
-    }
-  };
+      switch (paramKey) {
+        case 'startDate':
+          _startDate = value !== null ? (value as Date) : null;
+          setStartDate(_startDate);
+          break;
+        case 'endDate':
+          _endDate = value !== null ? (value as Date) : null;
+          setEndDate(_endDate);
+          break;
+      }
+    },
+    [startDate, endDate],
+  );
 
   return (
     <>

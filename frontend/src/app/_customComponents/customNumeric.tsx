@@ -1,7 +1,7 @@
 import { Box, TextField } from '@mui/material';
 import React from 'react';
 import { NumericFormat } from 'react-number-format';
-import { commonFontSize } from './customProperties';
+import { commonFontSize, minWidth } from './customProperties';
 
 type CustomNumberFormatProps = {
   inputRef?: React.Ref<HTMLInputElement>;
@@ -15,7 +15,7 @@ export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => 
   const { inputRef, edit, value, suffix, align = 'center', ...other } = props;
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '9rem' }}>
+    <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth }}>
       <NumericFormat
         inputRef={inputRef as React.Ref<HTMLInputElement>}
         getInputRef={inputRef}
@@ -24,6 +24,7 @@ export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => 
         value={value}
         thousandSeparator={true}
         style={{ fontSize: commonFontSize }}
+        // onValueChange={}
         {...other}
       />
       <Box sx={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: commonFontSize }}>{suffix}</Box>
@@ -40,7 +41,7 @@ const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
     <TextField
       variant="standard"
       inputRef={inputRef}
-      InputProps={{ style: { fontSize: commonFontSize, maxWidth: '6rem' } }}
+      InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth } }}
       {...other}
     />
   );

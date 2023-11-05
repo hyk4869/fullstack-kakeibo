@@ -9,3 +9,19 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
+
+// import { configureStore } from '@reduxjs/toolkit';
+// import { combineReducers } from 'redux';
+
+// import { getCategoryContent, getMonthlySpendingContent } from './slice';
+
+// const rootReducer = combineReducers({
+//   getMonthlySpendingContent: getMonthlySpendingContent.reducer,
+//   getCategoryContent: getCategoryContent.reducer,
+// });
+
+// export const store = configureStore({
+//   reducer: rootReducer,
+// });
+
+// export type RootState = ReturnType<typeof store.getState>;

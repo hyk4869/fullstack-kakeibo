@@ -3,13 +3,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
-import { commonFontSize } from './customProperties';
+import { commonFontSize, minWidth } from './customProperties';
 
 type CustomDateProps = {
   date: Date | Dayjs | null;
   edit?: boolean;
-  paramKey?: string;
-  onChangeValue?: (paramKey: string, value: Date | null) => void;
+  paramKey: string;
+  onChangeValue: (paramKey: string, value: Date | null) => void;
 };
 
 export const CustomDate: React.FC<CustomDateProps> = (props) => {
@@ -42,6 +42,7 @@ export const CustomDate: React.FC<CustomDateProps> = (props) => {
         sx={{
           fontSize: commonFontSize,
           maxWidth: '7rem',
+          minWidth: minWidth,
         }}
         slotProps={{
           textField: {

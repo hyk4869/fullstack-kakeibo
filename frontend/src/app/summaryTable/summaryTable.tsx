@@ -1,4 +1,5 @@
 'use client';
+
 import * as React from 'react';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -19,16 +20,19 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import { useCallback, useMemo, useState } from 'react';
-import { MCategory, MonthlySpending } from '../_store/slice';
+import { MCategory, MonthlySpending, setCreateMonthlySpending } from '../_store/slice';
 import { CustomNumberFormat } from '../_customComponents/customNumeric';
 import { CustomDate } from '../_customComponents/customDate';
 import dayjs from 'dayjs';
 import { Button } from '@mui/material';
 import { CustomTextfield } from '../_customComponents/customTextfield';
 import { CustomSelectTab } from '../_customComponents/customSelectTab';
+import { AnyAction, Dispatch } from '@reduxjs/toolkit';
+import CustomMonthlyDialog from '../_customComponents/customMonthlyDialog';
+import { grey } from '@mui/material/colors';
 
 type Order = 'asc' | 'desc';
 
@@ -177,6 +181,8 @@ type EnhancedTableToolbarProps = {
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
   const { numSelected, edit, dataLength, handleEditFlag } = props;
 
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+
   return (
     <Toolbar
       sx={{
@@ -185,6 +191,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         ...(numSelected > 0 && {
           bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
+        display: 'block',
       }}
     >
       {numSelected > 0 ? (
@@ -192,34 +199,49 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
+        <Typography sx={{ padding: '10px', minWidth: '250px' }} variant="h6" id="tableTitle" component="div">
           クレジットカード明細
         </Typography>
       )}
-      <Button
-        variant="contained"
-        disabled={dataLength === 0}
-        sx={{ transform: 'translateX(-50px)' }}
-        onClick={handleEditFlag}
-      >
-        {edit ? '確定' : '編集'}
-      </Button>
-      <Button variant="contained" disabled={dataLength === 0} sx={{ transform: 'translateX(-30px)' }}>
-        保存
-      </Button>
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+        <Button
+          variant="contained"
+          disabled={dataLength === 0}
+          sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
+          onClick={handleEditFlag}
+        >
+          {edit ? '確定' : '編集'}
+        </Button>
+        <Button
+          variant="contained"
+          disabled={dataLength === 0 || edit === false}
+          sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
+          onClick={() => setOpenDialog(!openDialog)}
+        >
+          追加
+        </Button>
+        <Button
+          variant="contained"
+          disabled={dataLength === 0 || edit === false}
+          sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
+        >
+          保存
+        </Button>
+        {numSelected > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton>
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
+      <CustomMonthlyDialog openDialog={openDialog} onClose={() => setOpenDialog(false)} edit={edit} />
     </Toolbar>
   );
 };
@@ -327,9 +349,25 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     setEdit((edit) => !edit);
   };
 
+  // const changeValue = useCallback((paramKey: string, value: unknown) => {
+  //   let _startDate: Date | null;
+  //   let _endDate: Date | null;
+
+  //   switch (paramKey) {
+  //     case 'startDate':
+  //       _startDate = value !== null ? (value as Date) : null;
+  //       setStartDate(_startDate);
+  //       break;
+  //     case 'endDate':
+  //       _endDate = value !== null ? (value as Date) : null;
+  //       setEndDate(_endDate);
+  //       break;
+  //   }
+  // }, []);
+
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '95%', margin: '1rem auto' }}>
+      <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[100] }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
           edit={edit}
@@ -385,7 +423,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       {row.id}
                     </TableCell>
                     <TableCell align="center">
-                      <CustomDate date={dayjs(row.paymentDay)} edit={edit} />
+                      <CustomDate
+                        date={dayjs(row.paymentDay)}
+                        edit={edit}
+                        // onChangeValue={changeValue}
+                        paramKey={String(row.id)}
+                      />
                     </TableCell>
                     <TableCell align="center">
                       <CustomTextfield value={row.store} edit={edit} />
@@ -410,7 +453,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[20, 50, 100, 200]}
+          rowsPerPageOptions={[20, 50, 100]}
           component="div"
           count={monthlyData.length}
           rowsPerPage={rowsPerPage}
