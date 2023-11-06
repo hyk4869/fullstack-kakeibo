@@ -1,18 +1,35 @@
 import { Box, TextField } from '@mui/material';
-import React from 'react';
-import { NumericFormat } from 'react-number-format';
+import React, { useCallback, useEffect, useState } from 'react';
+import { NumericFormat, OnValueChange } from 'react-number-format';
 import { commonFontSize, minWidth } from './customProperties';
 
 type CustomNumberFormatProps = {
+  value: number | null;
+  onChangeValue: (id: number, paramKey: string, value: number | null) => void;
+  paramKey: string;
+  id: number;
   inputRef?: React.Ref<HTMLInputElement>;
   variant?: 'outlined' | 'filled' | 'standard';
   edit?: boolean;
-  value?: number | null;
   suffix?: string;
   align?: 'left' | 'center' | 'right';
 };
 export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
-  const { inputRef, edit, value, suffix, align = 'center', ...other } = props;
+  const { inputRef, edit, value, suffix, align = 'center', onChangeValue, paramKey, id, ...other } = props;
+  const [numeric, setNumeric] = useState<number | null>(value);
+
+  useEffect(() => {
+    setNumeric(value);
+  }, [value]);
+
+  const hadleChangeNumericValue: OnValueChange = useCallback(
+    (values) => {
+      const floatValue = values.floatValue !== undefined ? values.floatValue : 0;
+      setNumeric(floatValue);
+      onChangeValue(id, paramKey || '', floatValue);
+    },
+    [value],
+  );
 
   return (
     <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth }}>
@@ -21,10 +38,11 @@ export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => 
         getInputRef={inputRef}
         displayType={edit ? 'input' : 'text'}
         customInput={TextFieldCustomInput}
-        value={value}
+        value={numeric}
         thousandSeparator={true}
         style={{ fontSize: commonFontSize }}
-        // onValueChange={}
+        onValueChange={hadleChangeNumericValue}
+        decimalScale={0}
         {...other}
       />
       <Box sx={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: commonFontSize }}>{suffix}</Box>

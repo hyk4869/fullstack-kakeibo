@@ -37,16 +37,46 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
     setMakeNewArray([pickLastContent]);
   }, [monthlyData, categoryData]);
 
-  /**値の更新関数 */
+  // /**値の更新関数 */
+  // const changeValue = useCallback(
+  //   (paramKey: string, value: unknown) => {
+  //     setMakeNewArray((prevArray) => {
+  //       return prevArray.map((row) => {
+  //         if (row.id === Number(paramKey)) {
+  //           return {
+  //             ...row,
+  //             [paramKey]: value === '' ? null : value,
+  //           };
+  //         } else {
+  //           return row;
+  //         }
+  //       });
+  //     });
+  //   },
+  //   [makeNewArray],
+  // );
+
   const changeValue = useCallback(
-    (paramKey: string, value: unknown) => {
+    (id: number, paramKey: string, value: unknown) => {
       setMakeNewArray((prevArray) => {
         return prevArray.map((row) => {
-          if (row.id === Number(paramKey)) {
-            return {
-              ...row,
-              [paramKey]: value === '' ? null : value,
-            };
+          if (row.id === id) {
+            const updatedRow = { ...row };
+            switch (paramKey) {
+              case 'paymentDay':
+                updatedRow.paymentDay = value === '' ? null : (value as Date);
+                break;
+              case 'store':
+                updatedRow.store = value === '' ? null : (value as string);
+                break;
+              case 'categoryId':
+                updatedRow.categoryId = value === '' ? null : (value as number);
+                break;
+              case 'usageFee':
+                updatedRow.usageFee = value === '' ? null : parseFloat(value as string);
+                break;
+            }
+            return updatedRow;
           } else {
             return row;
           }
@@ -114,7 +144,8 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
                         date={dayjs(row?.paymentDay)}
                         edit={row?.id === arrayLastId ? false : edit}
                         onChangeValue={changeValue}
-                        paramKey={String(row?.id)}
+                        paramKey={'paymentDay'}
+                        id={Number(row?.id)}
                       />
                     </TableCell>
                     <TableCell align="center">
@@ -136,6 +167,9 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
                         suffix=" 円"
                         edit={row?.id === arrayLastId ? false : edit}
                         align="center"
+                        onChangeValue={changeValue}
+                        paramKey={'usageFee'}
+                        id={Number(row?.id)}
                       />
                     </TableCell>
                   </TableRow>

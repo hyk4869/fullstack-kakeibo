@@ -349,7 +349,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     setEdit((edit) => !edit);
   };
 
-  const changeValue = useCallback((paramKey: string, value: unknown) => {
+  const changeValue = useCallback((id: number, paramKey: string, value: unknown) => {
     // let _startDate: Date | null;
     // let _endDate: Date | null;
     // switch (paramKey) {
@@ -425,7 +425,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         date={dayjs(row.paymentDay)}
                         edit={edit}
                         onChangeValue={changeValue}
-                        paramKey={String(row.id)}
+                        paramKey={'paymentDay'}
+                        id={Number(row?.id)}
                       />
                     </TableCell>
                     <TableCell align="center">
@@ -441,7 +442,15 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <CustomNumberFormat value={row.usageFee} suffix=" 円" edit={edit} align="center" />
+                      <CustomNumberFormat
+                        value={row.usageFee}
+                        suffix=" 円"
+                        edit={edit}
+                        align="center"
+                        onChangeValue={changeValue}
+                        paramKey={'usageFee'}
+                        id={Number(row?.id)}
+                      />
                     </TableCell>
                   </TableRow>
                 );

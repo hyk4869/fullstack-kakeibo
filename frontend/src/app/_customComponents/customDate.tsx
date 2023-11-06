@@ -7,13 +7,14 @@ import { commonFontSize, minWidth } from './customProperties';
 
 type CustomDateProps = {
   date: Date | Dayjs | null;
-  edit?: boolean;
   paramKey: string;
-  onChangeValue: (paramKey: string, value: Date | null) => void;
+  id: number;
+  onChangeValue: (id: number, paramKey: string, value: Date | null) => void;
+  edit?: boolean;
 };
 
 export const CustomDate: React.FC<CustomDateProps> = (props) => {
-  const { date, edit, paramKey, onChangeValue } = props;
+  const { date, edit, paramKey, onChangeValue, id } = props;
   const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(date);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const CustomDate: React.FC<CustomDateProps> = (props) => {
 
       if (onChangeValue && e !== null) {
         const selectedDateAsDate = (e as Dayjs) ? (e as Dayjs).toDate() : (e as Date);
-        onChangeValue(paramKey || '', selectedDateAsDate);
+        onChangeValue(id, paramKey || '', selectedDateAsDate);
       }
     },
     [date, edit, onChangeValue, paramKey],
