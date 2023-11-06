@@ -105,9 +105,9 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
             />
           </Box>
 
-          <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxHeight: '450px' }}>
             <Table>
-              <TableBody sx={{ maxHeight: '450px' }}>
+              <TableBody>
                 {makeNewArray?.map((row) => {
                   return (
                     <TableRow
