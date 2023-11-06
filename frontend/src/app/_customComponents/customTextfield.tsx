@@ -3,13 +3,16 @@ import React from 'react';
 import { commonFontSize } from './customProperties';
 
 type CustomTextfieldProps = {
+  value: string | null;
+  onChangeValue: (id: number, paramKey: string, value: string | null) => void;
+  paramKey: string;
+  id: number;
   inputRef?: React.Ref<HTMLInputElement>;
-  value?: string | null;
   edit?: boolean;
   align?: 'left' | 'center' | 'right';
 };
 export const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
-  const { value, edit, align = 'center', ...other } = props;
+  const { value, edit, align = 'center', onChangeValue, paramKey, id, ...other } = props;
 
   return (
     <>

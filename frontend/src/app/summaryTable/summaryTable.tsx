@@ -426,18 +426,24 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         edit={edit}
                         onChangeValue={changeValue}
                         paramKey={'paymentDay'}
-                        id={Number(row?.id)}
+                        id={Number(row.id)}
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <CustomTextfield value={row.store} edit={edit} />
+                      <CustomTextfield
+                        value={row.store}
+                        edit={edit}
+                        onChangeValue={changeValue}
+                        paramKey={'store'}
+                        id={Number(row.id)}
+                      />
                     </TableCell>
                     <TableCell align="center">
                       <CustomSelectTab
                         list={categoryData.map((a: MCategory) => {
                           return { value: String(a.categoryId), label: String(a.categoryName) };
                         })}
-                        value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryName}
+                        value={categoryData.find((a) => a.categoryId === row.categoryId)?.categoryName}
                         edit={edit}
                       />
                     </TableCell>
@@ -449,7 +455,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         align="center"
                         onChangeValue={changeValue}
                         paramKey={'usageFee'}
-                        id={Number(row?.id)}
+                        id={Number(row.id)}
                       />
                     </TableCell>
                   </TableRow>

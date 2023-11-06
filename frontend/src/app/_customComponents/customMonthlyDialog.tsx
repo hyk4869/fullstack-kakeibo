@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { MCategory, TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Paper, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import { CustomDate } from './customDate';
 import { CustomSelectTab } from './customSelectTab';
 import { CustomTextfield } from './customTextfield';
@@ -37,25 +37,7 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
     setMakeNewArray([pickLastContent]);
   }, [monthlyData, categoryData]);
 
-  // /**値の更新関数 */
-  // const changeValue = useCallback(
-  //   (paramKey: string, value: unknown) => {
-  //     setMakeNewArray((prevArray) => {
-  //       return prevArray.map((row) => {
-  //         if (row.id === Number(paramKey)) {
-  //           return {
-  //             ...row,
-  //             [paramKey]: value === '' ? null : value,
-  //           };
-  //         } else {
-  //           return row;
-  //         }
-  //       });
-  //     });
-  //   },
-  //   [makeNewArray],
-  // );
-
+  /**値の更新 */
   const changeValue = useCallback(
     (id: number, paramKey: string, value: unknown) => {
       setMakeNewArray((prevArray) => {
@@ -95,7 +77,7 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
       userId: null,
       paymentDay: null,
       store: '',
-      usageFee: 0,
+      usageFee: null,
       categoryId: null,
     };
     setIncrement((prevValue) => prevValue + 1);
@@ -124,58 +106,66 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
           </Box>
 
           <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-            <TableBody sx={{ maxHeight: '450px' }}>
-              {makeNewArray?.map((row) => {
-                return (
-                  <TableRow
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row?.id}
-                    sx={{
-                      cursor: 'pointer',
-                      background: row?.id === arrayLastId ? grey[400] : undefined,
-                    }}
-                  >
-                    <TableCell component="th" id={String(row?.id)} scope="row?">
-                      {row?.id}
-                    </TableCell>
-                    <TableCell align="center">
-                      <CustomDate
-                        date={dayjs(row?.paymentDay)}
-                        edit={row?.id === arrayLastId ? false : edit}
-                        onChangeValue={changeValue}
-                        paramKey={'paymentDay'}
-                        id={Number(row?.id)}
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <CustomTextfield value={row?.store} edit={row?.id === arrayLastId ? false : edit} />
-                    </TableCell>
-                    <TableCell align="center">
-                      <CustomSelectTab
-                        list={categoryData.map((a: MCategory) => {
-                          return { value: String(a.categoryId), label: String(a.categoryName) };
-                        })}
-                        value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryName}
-                        edit={row?.id === arrayLastId ? false : edit}
-                      />
-                    </TableCell>
+            <Table>
+              <TableBody sx={{ maxHeight: '450px' }}>
+                {makeNewArray?.map((row) => {
+                  return (
+                    <TableRow
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={Number(row?.id)}
+                      sx={{
+                        cursor: 'pointer',
+                        background: row?.id === arrayLastId ? grey[400] : undefined,
+                      }}
+                    >
+                      <TableCell component="th" id={String(row?.id)} scope="row?">
+                        {row?.id}
+                      </TableCell>
+                      <TableCell align="center">
+                        <CustomDate
+                          date={dayjs(row?.paymentDay)}
+                          edit={row?.id === arrayLastId ? false : edit}
+                          onChangeValue={changeValue}
+                          paramKey={'paymentDay'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <CustomTextfield
+                          value={row?.store}
+                          onChangeValue={changeValue}
+                          paramKey={'store'}
+                          id={Number(row?.id)}
+                          edit={row?.id === arrayLastId ? false : edit}
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <CustomSelectTab
+                          list={categoryData.map((a: MCategory) => {
+                            return { value: String(a.categoryId), label: String(a.categoryName) };
+                          })}
+                          value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryName}
+                          edit={row?.id === arrayLastId ? false : edit}
+                        />
+                      </TableCell>
 
-                    <TableCell align="center">
-                      <CustomNumberFormat
-                        value={row?.usageFee}
-                        suffix=" 円"
-                        edit={row?.id === arrayLastId ? false : edit}
-                        align="center"
-                        onChangeValue={changeValue}
-                        paramKey={'usageFee'}
-                        id={Number(row?.id)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+                      <TableCell align="center">
+                        <CustomNumberFormat
+                          value={row?.usageFee}
+                          suffix=" 円"
+                          edit={row?.id === arrayLastId ? false : edit}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'usageFee'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </TableContainer>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button

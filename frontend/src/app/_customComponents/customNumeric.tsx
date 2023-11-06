@@ -8,14 +8,13 @@ type CustomNumberFormatProps = {
   onChangeValue: (id: number, paramKey: string, value: number | null) => void;
   paramKey: string;
   id: number;
-  inputRef?: React.Ref<HTMLInputElement>;
   variant?: 'outlined' | 'filled' | 'standard';
   edit?: boolean;
   suffix?: string;
   align?: 'left' | 'center' | 'right';
 };
 export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
-  const { inputRef, edit, value, suffix, align = 'center', onChangeValue, paramKey, id, ...other } = props;
+  const { edit, value, suffix, align = 'center', onChangeValue, paramKey, id, ...other } = props;
   const [numeric, setNumeric] = useState<number | null>(value);
 
   useEffect(() => {
@@ -34,8 +33,6 @@ export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => 
   return (
     <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth }}>
       <NumericFormat
-        inputRef={inputRef as React.Ref<HTMLInputElement>}
-        getInputRef={inputRef}
         displayType={edit ? 'input' : 'text'}
         customInput={TextFieldCustomInput}
         value={numeric}
@@ -51,16 +48,11 @@ export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => 
 };
 
 type TextFieldCustomInputProps = {
-  inputRef: React.Ref<HTMLInputElement>;
+  // inputRef: React.Ref<HTMLInputElement>;
 };
 const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
-  const { inputRef, ...other } = props;
+  const { ...other } = props;
   return (
-    <TextField
-      variant="standard"
-      inputRef={inputRef}
-      InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth } }}
-      {...other}
-    />
+    <TextField variant="standard" InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth } }} {...other} />
   );
 };
