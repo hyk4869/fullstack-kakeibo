@@ -25,13 +25,13 @@ import { RootState } from '../_store/store';
 import { useCallback, useMemo, useState } from 'react';
 import { MCategory, TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
+import CustomTextfield from '../_customComponents/customTextfield';
 import CustomDate from '../_customComponents/customDate';
+import CustomSelectTab from '../_customComponents/customSelectTab';
 import dayjs from 'dayjs';
 import { Button } from '@mui/material';
-import CustomTextfield from '../_customComponents/customTextfield';
-import CustomSelectTab from '../_customComponents/customSelectTab';
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
-import CustomMonthlyDialog from '../_customComponents/customMonthlyDialog';
+import MonthlyDialog from '../_dialog/monthlyDialog';
 import { grey } from '@mui/material/colors';
 
 type Order = 'asc' | 'desc';
@@ -241,7 +241,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           </Tooltip>
         )}
       </Box>
-      <CustomMonthlyDialog openDialog={openDialog} onClose={() => setOpenDialog(false)} edit={edit} />
+      <MonthlyDialog openDialog={openDialog} onClose={() => setOpenDialog(false)} edit={edit} />
     </Toolbar>
   );
 };

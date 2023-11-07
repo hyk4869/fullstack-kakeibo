@@ -36,7 +36,7 @@ const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
           value={textValue}
           disabled={!edit}
           onChange={(e) => handleChangeText(e)}
-          onBlur={handleBlur} // フォーカスが外れたときに実行
+          onBlur={handleBlur}
           sx={{
             fontSize: commonFontSize,
             minWidth: '13rem',

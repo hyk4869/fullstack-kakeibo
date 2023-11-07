@@ -4,22 +4,22 @@ import Dialog from '@mui/material/Dialog';
 import { MCategory, TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
-import CustomDate from './customDate';
-import CustomSelectTab from './customSelectTab';
-import CustomTextfield from './customTextfield';
-import CustomNumberFormat from './customNumeric';
+import CustomDate from '../_customComponents/customDate';
+import CustomSelectTab from '../_customComponents/customSelectTab';
+import CustomTextfield from '../_customComponents/customTextfield';
+import CustomNumberFormat from '../_customComponents/customNumeric';
 import { RootState } from '../_store/store';
 import dayjs from 'dayjs';
 import { useEffect, useState, useCallback } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
 
-type CustomMonthlyDialogProps = {
+type MonthlyDialogProps = {
   openDialog: boolean;
   onClose: () => void;
   edit?: boolean;
 };
-const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
+const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
   const { openDialog, onClose, edit } = props;
   const [arrayLastId, setArrayLastId] = useState<number>(0);
   const [increment, setIncrement] = useState<number>(arrayLastId);
@@ -199,4 +199,4 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
   );
 };
 
-export default React.memo(CustomMonthlyDialog);
+export default React.memo(MonthlyDialog);
