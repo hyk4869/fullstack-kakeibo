@@ -1,9 +1,9 @@
 import { grey, red } from '@mui/material/colors';
 
 /**共通のフォントサイズ */
-export const commonFontSize = '11px';
+export const commonFontSize = '12px';
 /**共通の最低幅 */
-export const minWidth = '6rem';
+export const minWidth = '7.2rem';
 /**白 */
 export const colorWhite = 'white';
 /**黒 */

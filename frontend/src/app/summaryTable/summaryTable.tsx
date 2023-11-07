@@ -29,7 +29,7 @@ import CustomDate from '../_customComponents/customDate';
 import dayjs from 'dayjs';
 import { Button } from '@mui/material';
 import CustomTextfield from '../_customComponents/customTextfield';
-import { CustomSelectTab } from '../_customComponents/customSelectTab';
+import CustomSelectTab from '../_customComponents/customSelectTab';
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import CustomMonthlyDialog from '../_customComponents/customMonthlyDialog';
 import { grey } from '@mui/material/colors';
@@ -441,10 +441,13 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <TableCell align="center">
                       <CustomSelectTab
                         list={categoryData.map((a: MCategory) => {
-                          return { value: String(a.categoryId), label: String(a.categoryName) };
+                          return { value: Number(a.categoryId), label: String(a.categoryName) };
                         })}
-                        value={categoryData.find((a) => a.categoryId === row.categoryId)?.categoryName}
+                        value={categoryData.find((a) => a.categoryId === row.categoryId)?.categoryId ?? null}
                         edit={edit}
+                        paramKey={'categoryId'}
+                        id={Number(row?.id)}
+                        onChangeValue={changeValue}
                       />
                     </TableCell>
                     <TableCell align="center">

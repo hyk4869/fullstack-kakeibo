@@ -1,35 +1,41 @@
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { commonFontSize, minWidth } from './customProperties';
+import React, { useCallback, useEffect, useState } from 'react';
+import { commonFontSize } from './customProperties';
 
 type CustomSelectTabProps = {
-  list?: { value: string; label: string }[];
-  value?: string | null;
+  onChangeValue: (id: number, paramKey: string, value: number | null) => void;
+  paramKey: string;
+  id: number;
+  value: number | null;
+  list?: { value: number; label: string }[];
   edit?: boolean;
   align?: 'left' | 'center' | 'right';
 };
-export const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
-  const { list, value, edit, align = 'center', ...other } = props;
+const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
+  const { list, value, edit, align = 'center', onChangeValue, paramKey, id } = props;
 
-  const [selectItem, setSelectItem] = useState<string>();
+  const [labelNumber, setLabelNumber] = useState<number | null>();
 
   useEffect(() => {
-    setSelectItem(String(value));
-  }, [selectItem]);
+    const stringLabel = list?.find((item) => item.value === value);
+    setLabelNumber(stringLabel?.value);
+  }, [list]);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectItem(event.target.value);
-  };
-
-  const validValue = list?.find((item) => item.label === value)?.value;
-  const initialValue = validValue || '';
+  const handleChange = useCallback(
+    (e: SelectChangeEvent) => {
+      const selectedValue = parseInt(e.target.value, 10);
+      setLabelNumber(selectedValue);
+      onChangeValue(id, paramKey || '', selectedValue);
+    },
+    [list, labelNumber],
+  );
 
   return (
     <>
       <FormControl variant="standard" sx={{ justifyContent: align }}>
         {edit ? (
           <Select
-            value={initialValue}
+            value={labelNumber?.toString() ?? ''}
             onChange={handleChange}
             label="category"
             sx={{
@@ -48,9 +54,11 @@ export const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
             })}
           </Select>
         ) : (
-          <Box>{selectItem}</Box>
+          <Box>{list?.find((a) => a.value === Number(labelNumber))?.label}</Box>
         )}
       </FormControl>
     </>
   );
 };
+
+export default React.memo(CustomSelectTab);

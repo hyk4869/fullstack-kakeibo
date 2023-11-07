@@ -5,7 +5,7 @@ import { MCategory, TMonthlySpending, setCreateMonthlySpending } from '../_store
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import CustomDate from './customDate';
-import { CustomSelectTab } from './customSelectTab';
+import CustomSelectTab from './customSelectTab';
 import CustomTextfield from './customTextfield';
 import CustomNumberFormat from './customNumeric';
 import { RootState } from '../_store/store';
@@ -67,8 +67,6 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
     },
     [makeNewArray],
   );
-
-  console.log(makeNewArray);
 
   /**新しいレコードの追加 */
   const addNewArray = useCallback(() => {
@@ -143,10 +141,13 @@ const CustomMonthlyDialog: React.FC<CustomMonthlyDialogProps> = (props) => {
                       <TableCell align="center">
                         <CustomSelectTab
                           list={categoryData.map((a: MCategory) => {
-                            return { value: String(a.categoryId), label: String(a.categoryName) };
+                            return { value: Number(a.categoryId), label: String(a.categoryName) };
                           })}
-                          value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryName}
+                          value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryId ?? null}
                           edit={row?.id === arrayLastId ? false : edit}
+                          paramKey={'categoryId'}
+                          id={Number(row?.id)}
+                          onChangeValue={changeValue}
                         />
                       </TableCell>
 
