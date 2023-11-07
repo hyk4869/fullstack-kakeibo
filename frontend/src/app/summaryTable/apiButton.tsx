@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryContent, setMonthlySpending } from '../_store/slice';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useCallback, useState } from 'react';
-import { CustomDate } from '../_customComponents/customDate';
+import CustomDate from '../_customComponents/customDate';
 import { RootState } from '../_store/store';
 
 const ApiButton = () => {
@@ -72,7 +72,7 @@ const ApiButton = () => {
   };
 
   const changeValue = useCallback(
-    (paramKey: string, value: unknown) => {
+    (id: number, paramKey: string, value: unknown) => {
       let _startDate: Date | null;
       let _endDate: Date | null;
 
@@ -95,11 +95,17 @@ const ApiButton = () => {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ display: 'flex', margin: '0.75rem' }}>
           <Box>
-            <CustomDate date={startDate} edit={true} onChangeValue={changeValue} paramKey="startDate"></CustomDate>
+            <CustomDate
+              date={startDate}
+              edit={true}
+              onChangeValue={changeValue}
+              paramKey="startDate"
+              id={0}
+            ></CustomDate>
           </Box>
           <span style={{ transform: 'translateX(7px)' }}>{'~'}</span>
           <Box sx={{ margin: ' 0 1rem' }}>
-            <CustomDate date={endDate} edit={true} onChangeValue={changeValue} paramKey="endDate"></CustomDate>
+            <CustomDate date={endDate} edit={true} onChangeValue={changeValue} paramKey="endDate" id={0}></CustomDate>
           </Box>
         </Box>
 

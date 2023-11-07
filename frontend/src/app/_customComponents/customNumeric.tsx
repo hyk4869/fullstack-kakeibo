@@ -13,22 +13,22 @@ type CustomNumberFormatProps = {
   suffix?: string;
   align?: 'left' | 'center' | 'right';
 };
-export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
+const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
   const { edit, value, suffix, align = 'center', onChangeValue, paramKey, id, ...other } = props;
   const [numeric, setNumeric] = useState<number | null>(value);
 
   useEffect(() => {
     setNumeric(value);
-  }, [value]);
+  }, []);
 
-  const hadleChangeNumericValue: OnValueChange = useCallback(
-    (values) => {
-      const floatValue = values.floatValue !== undefined ? values.floatValue : 0;
-      setNumeric(floatValue);
-      onChangeValue(id, paramKey || '', floatValue);
-    },
-    [value],
-  );
+  const hadleChangeNumericValue: OnValueChange = useCallback((values) => {
+    const floatValue = values.floatValue !== undefined ? values.floatValue : 0;
+    setNumeric(floatValue);
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    onChangeValue(id, paramKey || '', numeric);
+  }, [id, paramKey, numeric, onChangeValue]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth }}>
@@ -40,6 +40,7 @@ export const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => 
         style={{ fontSize: commonFontSize }}
         onValueChange={hadleChangeNumericValue}
         decimalScale={0}
+        onBlur={handleBlur}
         {...other}
       />
       <Box sx={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: commonFontSize }}>{suffix}</Box>
@@ -56,3 +57,5 @@ const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
     <TextField variant="standard" InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth } }} {...other} />
   );
 };
+
+export default React.memo(CustomNumberFormat);

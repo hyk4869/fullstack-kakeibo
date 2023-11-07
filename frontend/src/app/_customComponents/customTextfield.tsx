@@ -1,5 +1,5 @@
 import { Box, TextField } from '@mui/material';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { commonFontSize } from './customProperties';
 
 type CustomTextfieldProps = {
@@ -11,16 +11,32 @@ type CustomTextfieldProps = {
   edit?: boolean;
   align?: 'left' | 'center' | 'right';
 };
-export const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
+const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
   const { value, edit, align = 'center', onChangeValue, paramKey, id, ...other } = props;
+
+  const [textValue, setTextValue] = useState<string | null>(value);
+
+  useEffect(() => {
+    setTextValue(value);
+  }, []);
+
+  const handleChangeText = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setTextValue(e.target.value);
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    onChangeValue(id, paramKey || '', textValue);
+  }, [id, paramKey, textValue, onChangeValue]);
 
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: align }}>
         <TextField
           variant="standard"
-          value={value}
+          value={textValue}
           disabled={!edit}
+          onChange={(e) => handleChangeText(e)}
+          onBlur={handleBlur} // フォーカスが外れたときに実行
           sx={{
             fontSize: commonFontSize,
             minWidth: '13rem',
@@ -32,3 +48,5 @@ export const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
     </>
   );
 };
+
+export default React.memo(CustomTextfield);

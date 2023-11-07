@@ -13,7 +13,7 @@ type CustomDateProps = {
   edit?: boolean;
 };
 
-export const CustomDate: React.FC<CustomDateProps> = (props) => {
+const CustomDate: React.FC<CustomDateProps> = (props) => {
   const { date, edit, paramKey, onChangeValue, id } = props;
   const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(date);
 
@@ -57,3 +57,5 @@ export const CustomDate: React.FC<CustomDateProps> = (props) => {
     </LocalizationProvider>
   );
 };
+
+export default React.memo(CustomDate);
