@@ -209,7 +209,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <Button
           variant="contained"
-          disabled={dataLength === 0}
+          disabled={dataLength <= 0}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={handleEditFlag}
         >
@@ -217,7 +217,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         </Button>
         <Button
           variant="contained"
-          disabled={dataLength === 0 || edit === false}
+          disabled={dataLength <= 0 || edit === false}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={() => setOpenDialog(!openDialog)}
         >
@@ -225,7 +225,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         </Button>
         <Button
           variant="contained"
-          disabled={dataLength === 0 || edit === false}
+          disabled={dataLength <= 0 || edit === false}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
         >
           保存

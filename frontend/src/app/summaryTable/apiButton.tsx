@@ -89,6 +89,11 @@ const ApiButton = () => {
     [startDate, endDate],
   );
 
+  const clearAllContent = () => {
+    dispatch(setMonthlySpending([]));
+    dispatch(setCategoryContent([]));
+  };
+
   const disable =
     startDate === null ||
     (startDate instanceof Date && isNaN(startDate.getTime())) ||
@@ -117,8 +122,17 @@ const ApiButton = () => {
         <Button variant="contained" disabled={disable} onClick={getSomeContent}>
           期間を指定して取得
         </Button>
-        <Button variant="contained" onClick={getAllContent} sx={{ transform: 'translateX(30px)' }}>
+        <Button variant="contained" onClick={getAllContent} sx={{ marginLeft: '30px' }}>
           全取得
+        </Button>
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={clearAllContent}
+          sx={{ marginLeft: '30px' }}
+          disabled={monthlyData.length <= 0}
+        >
+          テーブルをクリア
         </Button>
         {isLoading === false ? (
           <></>
