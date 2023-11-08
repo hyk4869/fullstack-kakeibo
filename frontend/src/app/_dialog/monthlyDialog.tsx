@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { useEffect, useState, useCallback } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
+import NextActionDialog from './nextActionDialog';
 
 type MonthlyDialogProps = {
   openDialog: boolean;
@@ -24,6 +25,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
   const [arrayLastId, setArrayLastId] = useState<number>(0);
   const [increment, setIncrement] = useState<number>(arrayLastId);
   const [makeNewArray, setMakeNewArray] = useState<Array<TMonthlySpending>>([]);
+  const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
 
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
@@ -82,6 +84,9 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
     setMakeNewArray((prevArray) => [...prevArray, newMonthlySpending]);
   }, [increment, makeNewArray]);
 
+  const showDialog = () => {
+    setIsShowDialog(!isShowDialog);
+  };
   const dispatch = useDispatch();
 
   return (
@@ -109,7 +114,6 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
                 {makeNewArray?.map((row) => {
                   return (
                     <TableRow
-                      role="checkbox"
                       tabIndex={-1}
                       key={Number(row?.id)}
                       sx={{
@@ -189,11 +193,22 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
             >
               レコード追加
             </Button>
-            <Button variant="contained" sx={{ margin: '0.75rem 1.5rem' }} disabled={makeNewArray.length - 1 === 0}>
+            <Button
+              variant="contained"
+              sx={{ margin: '0.75rem 1.5rem' }}
+              disabled={makeNewArray.length - 1 === 0}
+              onClick={showDialog}
+            >
               確定
             </Button>
           </Box>
         </Paper>
+        <NextActionDialog
+          isShow={isShowDialog}
+          onClose={() => setIsShowDialog(false)}
+          contentNum={makeNewArray.length - 1}
+          contentID={makeNewArray.filter((a) => a?.id !== arrayLastId)}
+        />
       </Dialog>
     </Box>
   );

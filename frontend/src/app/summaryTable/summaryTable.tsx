@@ -42,7 +42,7 @@ interface HeadCell {
   label: string;
 }
 
-const headCells: readonly HeadCell[] = [
+export const monthlySpendingHeadCells: readonly HeadCell[] = [
   {
     id: 'id',
     disablePadding: true,
@@ -141,7 +141,7 @@ const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
             }}
           />
         </TableCell>
-        {headCells.map((headCell) => (
+        {monthlySpendingHeadCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={'center'}
