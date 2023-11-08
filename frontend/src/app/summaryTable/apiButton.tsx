@@ -5,7 +5,7 @@ import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../_api
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryContent, setMonthlySpending } from '../_store/slice';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import CustomDate from '../_customComponents/customDate';
 import { RootState } from '../_store/store';
 
@@ -21,7 +21,7 @@ const ApiButton = () => {
   console.log({ monthlyData, categoryData });
 
   /** 全期間のデータを取得 */
-  const getAllContent = () => {
+  const getAllContent = (): void => {
     setIsLoading(true);
     axios
       .get(getMonthlySpending)
@@ -44,7 +44,7 @@ const ApiButton = () => {
   };
 
   /** 期間を指定してデータを取得 */
-  const getSomeContent = () => {
+  const getSomeContent = (): void => {
     setIsLoading(true);
     axios
       .get(getSomeMonthlySpending, {
@@ -72,10 +72,9 @@ const ApiButton = () => {
   };
 
   const changeValue = useCallback(
-    (id: number, paramKey: string, value: unknown) => {
+    (id: number, paramKey: string, value: unknown): void => {
       let _startDate: Date | null;
       let _endDate: Date | null;
-
       switch (paramKey) {
         case 'startDate':
           _startDate = value !== null ? (value as Date) : null;
@@ -89,6 +88,12 @@ const ApiButton = () => {
     },
     [startDate, endDate],
   );
+
+  const disable =
+    startDate === null ||
+    (startDate instanceof Date && isNaN(startDate.getTime())) ||
+    endDate === null ||
+    (endDate instanceof Date && isNaN(endDate.getTime()));
 
   return (
     <>
@@ -109,7 +114,7 @@ const ApiButton = () => {
           </Box>
         </Box>
 
-        <Button variant="contained" disabled={startDate == null || endDate == null} onClick={getSomeContent}>
+        <Button variant="contained" disabled={disable} onClick={getSomeContent}>
           期間を指定して取得
         </Button>
         <Button variant="contained" onClick={getAllContent} sx={{ transform: 'translateX(30px)' }}>

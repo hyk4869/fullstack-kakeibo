@@ -195,13 +195,16 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       }}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
+        <Box sx={{ flex: '1 1 100%' }} color="inherit">
           {numSelected} selected
-        </Typography>
+        </Box>
       ) : (
-        <Typography sx={{ padding: '10px', minWidth: '250px' }} variant="h6" id="tableTitle" component="div">
-          クレジットカード明細
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ padding: '10px', minWidth: '250px', fontSize: '1.3rem' }}>クレジットカード明細</Box>
+          <Box sx={{ padding: '10px', minWidth: '250px', display: 'flex', justifyContent: 'flex-end' }}>
+            レコード数：{dataLength}件
+          </Box>
+        </Box>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <Button
