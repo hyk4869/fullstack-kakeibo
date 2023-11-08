@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import { useEffect, useState, useCallback } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
-import NextActionDialog from './nextActionDialog';
+import MonthlyNextActionDialog from './monthlyNextActionDialog';
 
 type MonthlyDialogProps = {
   openDialog: boolean;
@@ -203,7 +203,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
             </Button>
           </Box>
         </Paper>
-        <NextActionDialog
+        <MonthlyNextActionDialog
           isShow={isShowDialog}
           onClose={() => setIsShowDialog(false)}
           contentNum={makeNewArray.length - 1}

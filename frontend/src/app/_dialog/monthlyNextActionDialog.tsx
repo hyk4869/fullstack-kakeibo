@@ -4,7 +4,7 @@ import { TMonthlySpending, setMonthlySpending } from '../_store/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 
-type NextActionDialogProps = {
+type MonthlyNextActionDialogProps = {
   isShow: boolean;
   onClose: () => void;
   contentNum: number;
@@ -12,7 +12,7 @@ type NextActionDialogProps = {
   onCloseMonthlyDialog: () => void;
 };
 
-const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
+const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) => {
   const { isShow, onClose, contentNum, content, onCloseMonthlyDialog } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -80,4 +80,4 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
   );
 };
 
-export default React.memo(NextActionDialog);
+export default React.memo(MonthlyNextActionDialog);
