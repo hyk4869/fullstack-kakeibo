@@ -1,8 +1,7 @@
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import React, { useState } from 'react';
-import { TMonthlySpending, setMonthlySpending } from '../_store/slice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../_store/store';
+import { TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
+import { useDispatch } from 'react-redux';
 
 type MonthlyNextActionDialogProps = {
   isShow: boolean;
@@ -19,8 +18,6 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
 
   const dispatch = useDispatch();
 
-  const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
-
   const saveValue = async (): Promise<void> => {
     setIsLoading(true);
     if (
@@ -34,7 +31,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
       )
     ) {
       try {
-        dispatch(setMonthlySpending([...monthlyData, ...content]));
+        dispatch(setCreateMonthlySpending(content));
       } catch (error) {
         console.log(error);
       } finally {

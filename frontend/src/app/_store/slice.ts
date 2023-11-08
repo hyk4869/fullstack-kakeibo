@@ -42,14 +42,16 @@ export const getMonthlySpendingContent = createSlice({
     },
     /** 値の作成 */
     setCreateMonthlySpending: (state: TMonthlySpending[], action: PayloadAction<TMonthlySpending[]>) => {
-      const newItems = action.payload.filter((d) => d.id !== null && d.id >= 0);
+      const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
       const valueCheck = state.map((s) => s.id);
       newItems.forEach((a) => {
         if (valueCheck.includes(a.id)) {
-          return window.alert('idが重複しています。');
+          window.alert('idが重複しています。');
+          return state;
         }
       });
       return [...state, ...action.payload];
+      //TODO:const iso8601String = parsedDate.toISOString(); ISO 8601 形式ににする。
     },
   },
 });
