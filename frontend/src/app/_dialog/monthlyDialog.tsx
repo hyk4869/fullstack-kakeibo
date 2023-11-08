@@ -101,7 +101,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[100] }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', padding: '1rem', justifyContent: 'center' }}>
             <Box>レコードの最終ID：{arrayLastId}</Box>
-            <Box sx={{ margin: '0 2rem' }}>{makeNewArray.length - 1} 個のレコードを追加</Box>
+            <Box sx={{ margin: '0 2rem' }}>{makeNewArray.length - 1} 件のレコードを追加</Box>
             <AddCircleOutlineIcon
               onClick={() => addNewArray()}
               sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }}
@@ -207,7 +207,8 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
           isShow={isShowDialog}
           onClose={() => setIsShowDialog(false)}
           contentNum={makeNewArray.length - 1}
-          contentID={makeNewArray.filter((a) => a?.id !== arrayLastId)}
+          content={makeNewArray.filter((a) => a?.id !== arrayLastId)}
+          onCloseMonthlyDialog={onClose}
         />
       </Dialog>
     </Box>
