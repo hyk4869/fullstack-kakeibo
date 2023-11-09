@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { getCategoryContent, getMonthlySpendingContent } from './slice';
 
 export const store = configureStore({
@@ -6,22 +6,10 @@ export const store = configureStore({
     getMonthlySpendingContent: getMonthlySpendingContent.reducer,
     getCategoryContent: getCategoryContent.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-
-// import { configureStore } from '@reduxjs/toolkit';
-// import { combineReducers } from 'redux';
-
-// import { getCategoryContent, getMonthlySpendingContent } from './slice';
-
-// const rootReducer = combineReducers({
-//   getMonthlySpendingContent: getMonthlySpendingContent.reducer,
-//   getCategoryContent: getCategoryContent.reducer,
-// });
-
-// export const store = configureStore({
-//   reducer: rootReducer,
-// });
-
-// export type RootState = ReturnType<typeof store.getState>;

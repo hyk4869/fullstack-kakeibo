@@ -38,20 +38,29 @@ export const getMonthlySpendingContent = createSlice({
   reducers: {
     /** 値の格納 */
     setMonthlySpending: (state, action: PayloadAction<TMonthlySpending[]>) => {
-      return [...action.payload];
+      const v = action.payload.map((d) => {
+        return {
+          ...d,
+          paymentDay: d.paymentDay ? new Date(d.paymentDay) : null,
+        };
+      });
+      return [...v];
     },
     /** 値の作成 */
     setCreateMonthlySpending: (state: TMonthlySpending[], action: PayloadAction<TMonthlySpending[]>) => {
       const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
       const valueCheck = state.map((s) => s.id);
+
       newItems.forEach((a) => {
         if (valueCheck.includes(a.id)) {
-          window.alert('idが重複しています。');
+          console.log('idが重複しています。');
           return state;
         }
       });
       return [...state, ...action.payload];
-      //TODO:const iso8601String = parsedDate.toISOString(); ISO 8601 形式ににする。
+
+      // TODO: const iso8601String = parsedDate.toISOString(); ISO 8601 形式ににする。
+      // TODO: 重複idの厳重チェック
     },
   },
 });
