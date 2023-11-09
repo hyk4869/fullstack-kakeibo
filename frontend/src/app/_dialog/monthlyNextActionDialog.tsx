@@ -31,7 +31,18 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
       )
     ) {
       try {
-        dispatch(setCreateMonthlySpending(content));
+        const idSet = new Set<number | null>();
+        const hasDuplicate = content.some((d) => {
+          if (idSet.has(d.id)) {
+            return true;
+          } else {
+            idSet.add(d.id);
+            return false;
+          }
+        });
+        if (!hasDuplicate) {
+          dispatch(setCreateMonthlySpending(content));
+        }
       } catch (error) {
         console.log(error);
       } finally {
