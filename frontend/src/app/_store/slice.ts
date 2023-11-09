@@ -58,9 +58,6 @@ export const getMonthlySpendingContent = createSlice({
         }
       });
       return [...state, ...action.payload];
-
-      // TODO: const iso8601String = parsedDate.toISOString(); ISO 8601 形式ににする。
-      // TODO: 重複idの厳重チェック
     },
   },
 });

@@ -5,7 +5,7 @@ import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../_api
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryContent, setMonthlySpending } from '../_store/slice';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import CustomDate from '../_customComponents/customDate';
 import { RootState } from '../_store/store';
 
