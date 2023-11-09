@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { MCategory, TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
-import { useDispatch, useSelector } from 'react-redux';
+import { MCategory, TMonthlySpending } from '../_store/slice';
+import { useSelector } from 'react-redux';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import CustomDate from '../_customComponents/customDate';
 import CustomSelectTab from '../_customComponents/customSelectTab';
@@ -14,14 +14,15 @@ import { useEffect, useState, useCallback } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
 import MonthlyNextActionDialog from './monthlyNextActionDialog';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-type MonthlyDialogProps = {
+type CreateNewRecordsDialogProps = {
   openDialog: boolean;
-  onClose: () => void;
+  onCloseAddRecords: () => void;
   edit?: boolean;
 };
-const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
-  const { openDialog, onClose, edit } = props;
+const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) => {
+  const { openDialog, onCloseAddRecords, edit } = props;
   const [arrayLastId, setArrayLastId] = useState<number>(0);
   const [increment, setIncrement] = useState<number>(arrayLastId);
   const [makeNewArray, setMakeNewArray] = useState<Array<TMonthlySpending>>([]);
@@ -39,7 +40,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
     setMakeNewArray([pickLastContent]);
   }, [monthlyData, categoryData]);
 
-  /**値の更新 */
+  /** 値の更新 */
   const changeValue = useCallback(
     (id: number, paramKey: string, value: unknown) => {
       setMakeNewArray((prevArray) => {
@@ -47,6 +48,9 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
           if (row.id === id) {
             const updatedRow = { ...row };
             switch (paramKey) {
+              case 'id':
+                updatedRow.id = value === '' ? null : (value as number);
+                break;
               case 'paymentDay':
                 updatedRow.paymentDay = value === '' ? null : (value as Date);
                 break;
@@ -70,7 +74,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
     [makeNewArray],
   );
 
-  /**新しいレコードの追加 */
+  /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
     const newMonthlySpending = {
       id: increment + 1,
@@ -84,16 +88,22 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
     setMakeNewArray((prevArray) => [...prevArray, newMonthlySpending]);
   }, [increment, makeNewArray]);
 
+  /** 次へ進むためのboolean */
   const showDialog = () => {
     setIsShowDialog(!isShowDialog);
   };
-  const dispatch = useDispatch();
+
+  const deleteValue = (id: number | null) => {
+    if (id === arrayLastId) return;
+    const deletedArray = makeNewArray.filter((a) => a.id !== id);
+    setMakeNewArray(deletedArray);
+  };
 
   return (
     <Box sx={{ width: '100%' }}>
       <Dialog
         open={openDialog ?? false}
-        onClose={onClose}
+        onClose={onCloseAddRecords}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullScreen={true}
@@ -108,7 +118,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
             />
           </Box>
 
-          <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxHeight: '450px' }}>
+          <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxHeight: '550px' }}>
             <Table>
               <TableBody>
                 {makeNewArray?.map((row) => {
@@ -122,8 +132,16 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
                       }}
                     >
                       <TableCell component="th" id={String(row?.id)} scope="row?">
-                        {row?.id}
+                        <CustomNumberFormat
+                          value={row?.id}
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'id'}
+                          id={Number(row?.id)}
+                        />
                       </TableCell>
+
                       <TableCell align="center">
                         <CustomDate
                           date={dayjs(row?.paymentDay)}
@@ -133,6 +151,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
                           id={Number(row?.id)}
                         />
                       </TableCell>
+
                       <TableCell align="center">
                         <CustomTextfield
                           value={row?.store}
@@ -142,6 +161,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
                           edit={row?.id === arrayLastId ? false : edit}
                         />
                       </TableCell>
+
                       <TableCell align="center">
                         <CustomSelectTab
                           list={categoryData.map((a: MCategory) => {
@@ -166,6 +186,12 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
                           id={Number(row?.id)}
                         />
                       </TableCell>
+                      <TableCell align="center">
+                        <DeleteIcon
+                          onClick={() => deleteValue(row.id)}
+                          sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }}
+                        />
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -181,7 +207,7 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
                 color: red[500],
                 borderColor: red[500],
               }}
-              onClick={onClose}
+              onClick={onCloseAddRecords}
             >
               キャンセル
             </Button>
@@ -208,11 +234,11 @@ const MonthlyDialog: React.FC<MonthlyDialogProps> = (props) => {
           onClose={() => setIsShowDialog(false)}
           contentNum={makeNewArray.length - 1}
           content={makeNewArray.filter((a) => a?.id !== arrayLastId)}
-          onCloseMonthlyDialog={onClose}
+          onCloseMonthlyDialog={onCloseAddRecords}
         />
       </Dialog>
     </Box>
   );
 };
 
-export default React.memo(MonthlyDialog);
+export default React.memo(CreateNewRecordsDialog);

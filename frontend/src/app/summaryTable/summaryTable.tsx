@@ -22,7 +22,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import { useCallback, useMemo, useState } from 'react';
-import { MCategory, TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
+import { MCategory, TMonthlySpending } from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
 import CustomTextfield from '../_customComponents/customTextfield';
 import CustomDate from '../_customComponents/customDate';
@@ -30,7 +30,7 @@ import CustomSelectTab from '../_customComponents/customSelectTab';
 import dayjs from 'dayjs';
 import { Button } from '@mui/material';
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
-import MonthlyDialog from '../_dialog/monthlyDialog';
+import CreateNewRecordsDialog from '../_dialog/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
 
 type Order = 'asc' | 'desc';
@@ -180,7 +180,7 @@ type EnhancedTableToolbarProps = {
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
   const { numSelected, edit, dataLength, handleEditFlag } = props;
 
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
 
   return (
     <Toolbar
@@ -218,7 +218,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           variant="contained"
           disabled={dataLength <= 0 || edit === false}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
-          onClick={() => setOpenDialog(!openDialog)}
+          onClick={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
         >
           追加
         </Button>
@@ -243,7 +243,11 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           </Tooltip>
         )}
       </Box>
-      <MonthlyDialog openDialog={openDialog} onClose={() => setOpenDialog(false)} edit={edit} />
+      <CreateNewRecordsDialog
+        openDialog={openAddRecordsDialog}
+        onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
+        edit={edit}
+      />
     </Toolbar>
   );
 };
