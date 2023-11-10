@@ -25,6 +25,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const { openDialog, onCloseAddRecords, edit } = props;
   const [arrayLastId, setArrayLastId] = useState<number>(0);
   const [increment, setIncrement] = useState<number>(arrayLastId);
+  const [incrementArray, setIncrementArray] = useState<Array<number>>([]);
   const [makeNewArray, setMakeNewArray] = useState<Array<TMonthlySpending>>([]);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
 
@@ -32,13 +33,23 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
 
   useEffect(() => {
-    const ID: number = monthlyData.map((a) => (a.id ?? 0) as number).slice(-1)[0];
-    setArrayLastId(ID);
-    setIncrement(ID);
+    if (monthlyData) {
+      const ID: number = monthlyData.map((a) => (a.id ?? 0) as number).slice(-1)[0];
+      setArrayLastId(ID);
+      setIncrement(ID);
 
-    const pickLastContent: TMonthlySpending = monthlyData.map((a) => a).slice(-1)[0];
-    setMakeNewArray([pickLastContent]);
-  }, [monthlyData, categoryData]);
+      const pickLastContent: TMonthlySpending = monthlyData.map((a) => a).slice(-1)[0];
+      setMakeNewArray([pickLastContent]);
+    }
+  }, [monthlyData]);
+
+  useEffect(() => {
+    if (increment !== null && increment !== undefined && increment > 0) {
+      setIncrementArray((prevValue) => [...prevValue, increment]);
+    }
+  }, [increment]);
+
+  console.log({ incrementArray, increment, arrayLastId, monthlyData });
 
   /** 値の更新 */
   const changeValue = useCallback(
@@ -88,15 +99,28 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     setMakeNewArray((prevArray) => [...prevArray, newMonthlySpending]);
   }, [increment, makeNewArray]);
 
+  /** 削除機能 */
+  const deleteValue = useCallback(
+    (id: number | null) => {
+      if (id === arrayLastId) return;
+      const deletedArray = makeNewArray.filter((a) => a.id !== id);
+      setMakeNewArray(deletedArray);
+
+      if (id !== null) {
+        // const sortedValue = incrementArray.filter((s) => s !== id);
+        // setIncrementArray(sortedValue);
+        const sortedValue = incrementArray.filter((s) => s !== id);
+        const updatedArray = sortedValue.map((a) => (a > id ? a - 1 : a));
+
+        setIncrementArray(updatedArray);
+      }
+    },
+    [makeNewArray, incrementArray],
+  );
+
   /** 次へ進むためのboolean */
   const showDialog = () => {
     setIsShowDialog(!isShowDialog);
-  };
-
-  const deleteValue = (id: number | null) => {
-    if (id === arrayLastId) return;
-    const deletedArray = makeNewArray.filter((a) => a.id !== id);
-    setMakeNewArray(deletedArray);
   };
 
   return (
@@ -134,7 +158,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                       <TableCell component="th" id={String(row?.id)} scope="row?">
                         <CustomNumberFormat
                           value={row?.id}
-                          edit={false}
+                          edit={row?.id === arrayLastId ? false : edit}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'id'}
@@ -231,7 +255,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         </Paper>
         <MonthlyNextActionDialog
           isShow={isShowDialog}
-          onClose={() => setIsShowDialog(false)}
+          onCloseConfirmDialog={() => setIsShowDialog(false)}
           contentNum={makeNewArray.length - 1}
           content={makeNewArray.filter((a) => a?.id !== arrayLastId)}
           onCloseMonthlyDialog={onCloseAddRecords}

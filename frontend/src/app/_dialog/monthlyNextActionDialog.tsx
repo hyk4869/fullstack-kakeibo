@@ -5,14 +5,14 @@ import { useDispatch } from 'react-redux';
 
 type MonthlyNextActionDialogProps = {
   isShow: boolean;
-  onClose: () => void;
+  onCloseConfirmDialog: () => void;
   contentNum: number;
   content: TMonthlySpending[];
   onCloseMonthlyDialog: () => void;
 };
 
 const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) => {
-  const { isShow, onClose, contentNum, content, onCloseMonthlyDialog } = props;
+  const { isShow, onCloseConfirmDialog, contentNum, content, onCloseMonthlyDialog } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
@@ -47,13 +47,13 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
         console.log(error);
       } finally {
         setIsLoading(false);
-        onClose();
+        onCloseConfirmDialog();
         onCloseMonthlyDialog();
       }
     } else {
       window.alert('レコードのいずれかの項目が空です。');
       setIsLoading(false);
-      onClose();
+      onCloseConfirmDialog();
     }
   };
 
@@ -61,7 +61,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
     <>
       <Dialog
         open={isShow ?? false}
-        onClose={onClose}
+        onClose={onCloseConfirmDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -76,7 +76,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} variant="contained" color="error">
+          <Button onClick={onCloseConfirmDialog} variant="contained" color="error">
             いいえ
           </Button>
           <Button onClick={saveValue} variant="contained">
