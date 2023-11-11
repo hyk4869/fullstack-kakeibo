@@ -44,12 +44,10 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   }, [monthlyData]);
 
   useEffect(() => {
-    if (increment !== null && increment !== undefined && increment > 0) {
+    if (increment !== null && increment !== undefined && increment > 0 && incrementArray.slice(-1)[0] !== increment) {
       setIncrementArray((prevValue) => [...prevValue, increment]);
     }
   }, [increment]);
-
-  console.log({ incrementArray, increment, arrayLastId, monthlyData });
 
   /** 値の更新 */
   const changeValue = useCallback(
@@ -87,17 +85,20 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
   /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
+    const incrementFromArray = incrementArray.slice(-1)[0] + 1;
+    const lastId = makeNewArray.slice(-1)[0].id;
+    if (lastId && incrementFromArray === lastId) return;
     const newMonthlySpending = {
-      id: increment + 1,
+      id: incrementFromArray,
       userId: null,
       paymentDay: null,
       store: '',
       usageFee: null,
       categoryId: null,
     };
-    setIncrement((prevValue) => prevValue + 1);
+    setIncrement(incrementFromArray);
     setMakeNewArray((prevArray) => [...prevArray, newMonthlySpending]);
-  }, [increment, makeNewArray]);
+  }, [increment, makeNewArray, incrementArray]);
 
   /** 削除機能 */
   const deleteValue = useCallback(
@@ -107,12 +108,17 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
       setMakeNewArray(deletedArray);
 
       if (id !== null) {
-        // const sortedValue = incrementArray.filter((s) => s !== id);
-        // setIncrementArray(sortedValue);
-        const sortedValue = incrementArray.filter((s) => s !== id);
-        const updatedArray = sortedValue.map((a) => (a > id ? a - 1 : a));
-
-        setIncrementArray(updatedArray);
+        const sortedValue = incrementArray.filter((s) => s !== id).map((a) => (a > id ? a - 1 : a));
+        setIncrementArray(sortedValue);
+        setMakeNewArray((prevId) =>
+          prevId.map((a) => {
+            return {
+              ...a,
+              id: a.id && a.id > id ? a.id - 1 : a.id,
+            };
+          }),
+        );
+        setIncrement(sortedValue.slice(-1)[0]);
       }
     },
     [makeNewArray, incrementArray],
@@ -168,7 +174,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
                       <TableCell align="center">
                         <CustomDate
-                          date={dayjs(row?.paymentDay)}
+                          value={dayjs(row?.paymentDay)}
                           edit={row?.id === arrayLastId ? false : edit}
                           onChangeValue={changeValue}
                           paramKey={'paymentDay'}

@@ -428,7 +428,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     </TableCell>
                     <TableCell align="center">
                       <CustomDate
-                        date={dayjs(row.paymentDay)}
+                        value={dayjs(row.paymentDay)}
                         edit={edit}
                         onChangeValue={changeValue}
                         paramKey={'paymentDay'}

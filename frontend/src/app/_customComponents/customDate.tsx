@@ -6,7 +6,7 @@ import { Dayjs } from 'dayjs';
 import { commonFontSize, minWidth } from './customProperties';
 
 type CustomDateProps = {
-  date: Date | Dayjs | null;
+  value: Date | Dayjs | null;
   paramKey: string;
   id: number;
   onChangeValue: (id: number, paramKey: string, value: Date | null) => void;
@@ -14,11 +14,11 @@ type CustomDateProps = {
 };
 
 const CustomDate: React.FC<CustomDateProps> = (props) => {
-  const { date, edit, paramKey, onChangeValue, id } = props;
-  const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(date);
+  const { value, edit, paramKey, onChangeValue, id } = props;
+  const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(value);
 
   useEffect(() => {
-    setSelectedDate(date);
+    setSelectedDate(value);
   }, []);
 
   const handleDateChange = useCallback(
@@ -30,7 +30,7 @@ const CustomDate: React.FC<CustomDateProps> = (props) => {
         onChangeValue(id, paramKey || '', selectedDateAsDate);
       }
     },
-    [date, edit, onChangeValue, paramKey],
+    [value, edit, onChangeValue, paramKey],
   );
 
   return (

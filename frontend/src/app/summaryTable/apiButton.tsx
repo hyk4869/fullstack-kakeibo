@@ -106,7 +106,7 @@ const ApiButton = () => {
         <Box sx={{ display: 'flex', margin: '0.75rem' }}>
           <Box>
             <CustomDate
-              date={startDate}
+              value={startDate}
               edit={true}
               onChangeValue={changeValue}
               paramKey="startDate"
@@ -115,7 +115,7 @@ const ApiButton = () => {
           </Box>
           <span style={{ transform: 'translateX(7px)' }}>{'~'}</span>
           <Box sx={{ margin: ' 0 1rem' }}>
-            <CustomDate date={endDate} edit={true} onChangeValue={changeValue} paramKey="endDate" id={0}></CustomDate>
+            <CustomDate value={endDate} edit={true} onChangeValue={changeValue} paramKey="endDate" id={0}></CustomDate>
           </Box>
         </Box>
 
