@@ -164,7 +164,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                       <TableCell component="th" id={String(row?.id)} scope="row?">
                         <CustomNumberFormat
                           value={row?.id}
-                          edit={row?.id === arrayLastId ? false : edit}
+                          edit={false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'id'}
