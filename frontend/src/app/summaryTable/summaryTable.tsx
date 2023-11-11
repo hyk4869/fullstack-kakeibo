@@ -21,15 +21,14 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
-import { useCallback, useMemo, useState } from 'react';
-import { MCategory, TMonthlySpending } from '../_store/slice';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { MCategory, TMonthlySpending, setEditMonthlySpending } from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
 import CustomTextfield from '../_customComponents/customTextfield';
 import CustomDate from '../_customComponents/customDate';
 import CustomSelectTab from '../_customComponents/customSelectTab';
 import dayjs from 'dayjs';
 import { Button } from '@mui/material';
-import { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import CreateNewRecordsDialog from '../_dialog/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
 
@@ -171,6 +170,7 @@ type EnhancedTableToolbarProps = {
   edit: boolean;
   dataLength: number;
   handleEditFlag: () => void;
+  saveValue: () => void;
 };
 /**
  *
@@ -178,7 +178,7 @@ type EnhancedTableToolbarProps = {
  *
  */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
-  const { numSelected, edit, dataLength, handleEditFlag } = props;
+  const { numSelected, edit, dataLength, handleEditFlag, saveValue } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
 
@@ -223,9 +223,10 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           追加
         </Button>
         <Button
-          variant="contained"
+          variant="outlined"
           disabled={dataLength <= 0 || edit === false}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
+          onClick={saveValue}
         >
           保存
         </Button>
@@ -262,15 +263,22 @@ type SummaryTableProps = {
  *
  */
 const SummaryTable: React.FC<SummaryTableProps> = () => {
+  const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
+  const categoryData = useSelector((state: RootState) => state.getCategoryContent);
+
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [edit, setEdit] = useState<boolean>(false);
+  const [editValue, setEditValue] = useState<Array<TMonthlySpending>>([]);
 
-  const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
-  const categoryData = useSelector((state: RootState) => state.getCategoryContent);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setEditValue(monthlyData);
+  }, [monthlyData]);
 
   /**
    * 昇順降順のソート
@@ -355,20 +363,48 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     setEdit((edit) => !edit);
   };
 
-  const changeValue = useCallback((id: number, paramKey: string, value: unknown) => {
-    // let _startDate: Date | null;
-    // let _endDate: Date | null;
-    // switch (paramKey) {
-    //   case 'startDate':
-    //     _startDate = value !== null ? (value as Date) : null;
-    //     setStartDate(_startDate);
-    //     break;
-    //   case 'endDate':
-    //     _endDate = value !== null ? (value as Date) : null;
-    //     setEndDate(_endDate);
-    //     break;
-    // }
-  }, []);
+  /** 値の編集用 */
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      setEditValue((prevArray) => {
+        return prevArray.map((row) => {
+          if (row.id === id) {
+            const updatedRow = { ...row };
+            switch (paramKey) {
+              case 'id':
+                updatedRow.id = value === '' ? null : (value as number);
+                break;
+              case 'paymentDay':
+                updatedRow.paymentDay = value === '' ? null : (value as Date);
+                break;
+              case 'store':
+                updatedRow.store = value === '' ? null : (value as string);
+                break;
+              case 'categoryId':
+                updatedRow.categoryId = value === '' ? null : (value as number);
+                break;
+              case 'usageFee':
+                updatedRow.usageFee = value === '' ? null : parseFloat(value as string);
+                break;
+            }
+            return updatedRow;
+          } else {
+            return row;
+          }
+        });
+      });
+    },
+    [editValue],
+  );
+
+  /**
+   * 保存用
+   * 後でpost用に変更
+   */
+  const saveValue = () => {
+    dispatch(setEditMonthlySpending(editValue));
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[100] }}>
@@ -377,6 +413,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           edit={edit}
           dataLength={monthlyData.length}
           handleEditFlag={handleEditFlag}
+          saveValue={saveValue}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -395,20 +432,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow
-                    hover
-                    // onClick={(event) => {
-                    //   if (row.id !== null) {
-                    //     handleSelect(event, row.id as number);
-                    //   }
-                    // }}
-                    role="checkbox"
-                    // aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    // selected={isItemSelected}
-                    sx={{ cursor: 'pointer' }}
-                  >
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
                     <TableCell padding="checkbox">
                       <Checkbox
                         color="primary"

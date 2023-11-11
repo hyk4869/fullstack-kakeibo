@@ -18,8 +18,6 @@ const ApiButton = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
 
-  console.log({ monthlyData, categoryData });
-
   /** 全期間のデータを取得 */
   const getAllContent = (): void => {
     setIsLoading(true);

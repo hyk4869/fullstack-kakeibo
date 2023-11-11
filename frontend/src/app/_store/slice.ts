@@ -46,6 +46,7 @@ export const getMonthlySpendingContent = createSlice({
       });
       return [...v];
     },
+
     /** 値の作成 */
     setCreateMonthlySpending: (state: TMonthlySpending[], action: PayloadAction<TMonthlySpending[]>) => {
       const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
@@ -58,6 +59,16 @@ export const getMonthlySpendingContent = createSlice({
         }
       });
       return [...state, ...action.payload];
+    },
+
+    /** 値の編集 */
+    setEditMonthlySpending: (state, action: PayloadAction<TMonthlySpending[]>) => {
+      const updatedState = state.map((existingItem) => {
+        const matchingItem = action.payload.find((newItem) => newItem.id === existingItem.id);
+        return matchingItem ? { ...existingItem, ...matchingItem } : existingItem;
+      });
+
+      return updatedState;
     },
   },
 });
@@ -73,5 +84,6 @@ export const getCategoryContent = createSlice({
   },
 });
 
-export const { setMonthlySpending, setCreateMonthlySpending } = getMonthlySpendingContent.actions;
+export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending } =
+  getMonthlySpendingContent.actions;
 export const { setCategoryContent } = getCategoryContent.actions;
