@@ -16,7 +16,6 @@ const ApiButton = () => {
 
   const dispatch = useDispatch();
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
-  const categoryData = useSelector((state: RootState) => state.getCategoryContent);
 
   /** 全期間のデータを取得 */
   const getAllContent = (): void => {

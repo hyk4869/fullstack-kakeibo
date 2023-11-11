@@ -35,15 +35,15 @@ import { grey } from '@mui/material/colors';
 type Order = 'asc' | 'desc';
 
 interface HeadCell {
-  disablePadding: boolean;
   id: keyof TMonthlySpending;
+  disablePadding: boolean;
   label: string;
 }
 
 export const monthlySpendingHeadCells: readonly HeadCell[] = [
   {
     id: 'id',
-    disablePadding: true,
+    disablePadding: false,
     label: 'id',
   },
   {
@@ -212,13 +212,16 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={handleEditFlag}
         >
-          {edit ? '確定' : '編集'}
+          <Tooltip title={edit ? 'この動作は保存しません。保存するには「保存を押してください」' : undefined} arrow>
+            <span>{edit ? '確定' : '編集'}</span>
+          </Tooltip>
         </Button>
         <Button
           variant="contained"
           disabled={dataLength <= 0 || edit === false}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
+          color="secondary"
         >
           追加
         </Button>
@@ -405,6 +408,14 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     dispatch(setEditMonthlySpending(editValue));
   };
 
+  /**
+   * 削除
+   */
+  const deleteValue = (id: number | null) => {
+    //
+    console.log('クリック');
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[100] }}>
@@ -447,8 +458,20 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell component="th" id={labelId} scope="row">
-                      {row.id}
+                    <TableCell
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      // sx={edit ? { display: 'flex', justifyContent: 'center' } : undefined}
+                    >
+                      <CustomNumberFormat
+                        value={row.id}
+                        edit={edit}
+                        align="center"
+                        onChangeValue={changeValue}
+                        paramKey={'usageFee'}
+                        id={Number(row.id)}
+                      />
                     </TableCell>
                     <TableCell align="center">
                       <CustomDate

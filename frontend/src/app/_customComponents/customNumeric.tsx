@@ -31,7 +31,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
   }, [id, paramKey, numeric, onChangeValue]);
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth }}>
+    <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth, margin: 'auto' }}>
       <NumericFormat
         displayType={edit ? 'input' : 'text'}
         customInput={TextFieldCustomInput}
@@ -43,7 +43,19 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
         onBlur={handleBlur}
         {...other}
       />
-      <Box sx={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: commonFontSize }}>{suffix}</Box>
+      {suffix ? (
+        <Box
+          sx={{
+            color: 'rgba(0, 0, 0, 0.6)',
+            fontSize: commonFontSize,
+            paddingLeft: '0.5rem',
+          }}
+        >
+          {suffix}
+        </Box>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 };
