@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { format } from 'date-fns';
 import { MCategory, TMonthlySpending } from '@prisma/client';
 
 @Injectable()
@@ -41,12 +40,13 @@ export class MonthlySpendingService {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
     }
-
     const now = new Date();
+
     const postDataWithTimestamp = postData.map((data) => ({
       ...data,
-      createdAt: now,
-      updatedAt: now,
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString(),
+      paymentDay: new Date(data.paymentDay).toISOString(),
     }));
 
     try {
