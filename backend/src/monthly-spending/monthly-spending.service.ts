@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { format } from 'date-fns';
-import { MCategory } from '@prisma/client';
+import { MCategory, TMonthlySpending } from '@prisma/client';
 
 @Injectable()
 export class MonthlySpendingService {
@@ -34,5 +34,31 @@ export class MonthlySpendingService {
         category: true,
       },
     });
+  }
+
+  /** データのPOST　データベースに保存作業を行う */
+  async postMonthlySpending(postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
+    if (!Array.isArray(postData)) {
+      throw new Error('postData must be an array');
+    }
+
+    const now = new Date();
+    const postDataWithTimestamp = postData.map((data) => ({
+      ...data,
+      createdAt: now,
+      updatedAt: now,
+    }));
+
+    try {
+      await this.prisma.tMonthlySpending.createMany({
+        data: postDataWithTimestamp,
+        skipDuplicates: true,
+      });
+      const insertedData = await this.prisma.tMonthlySpending.findMany({});
+      return insertedData;
+    } catch (error) {
+      console.error('データベースへの書き込みエラー:', error);
+      throw error;
+    }
   }
 }

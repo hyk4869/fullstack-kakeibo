@@ -1,12 +1,10 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { MonthlySpendingService } from './monthly-spending.service';
 import { MCategory, TMonthlySpending } from '@prisma/client';
 
 @Controller('summaryTable')
 export class MonthlySpendingController {
-  constructor(
-    private readonly monthlySpendingService: MonthlySpendingService,
-  ) {}
+  constructor(private readonly monthlySpendingService: MonthlySpendingService) {}
 
   /** TMonthlyとMCategoryをDBからクライアントに送信 */
   @Get()
@@ -29,11 +27,12 @@ export class MonthlySpendingController {
     const startDateDate = new Date(startDate);
     const endDateDate = new Date(endDate);
 
-    const monthlySpending =
-      await this.monthlySpendingService.getMonthlySpendingByDateRange(
-        startDateDate,
-        endDateDate,
-      );
+    const monthlySpending = await this.monthlySpendingService.getMonthlySpendingByDateRange(startDateDate, endDateDate);
     return monthlySpending;
+  }
+
+  @Post()
+  async postSaveContent(@Body() postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
+    return this.monthlySpendingService.postMonthlySpending(postData);
   }
 }
