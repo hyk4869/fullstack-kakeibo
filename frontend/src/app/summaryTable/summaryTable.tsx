@@ -406,23 +406,51 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * 保存用
    * 後でpost用に変更
    */
-  const saveValue = () => {
+  // const saveValue = () => {
+  //   dispatch(setEditMonthlySpending(editValue));
+  //   const postData = monthlyData.map(({ category, ...data }) => ({
+  //     ...data,
+  //     userId: data.userId || 1,
+  //   }));
+  //   axios
+  //     .post(getMonthlySpending, postData)
+  //     .then((res) => {
+  //       if (res.data) {
+  //         console.log(res.data);
+  //         dispatch(setMonthlySpending(res.data));
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+  const saveValue = async () => {
+    const CHUNK_SIZE = 200;
+
     dispatch(setEditMonthlySpending(editValue));
-    const postData = monthlyData.map(({ category, ...data }) => ({
-      ...data,
-      userId: data.userId || 1,
-    }));
-    axios
-      .post(getMonthlySpending, postData)
-      .then((res) => {
+
+    const chunks = [];
+    for (let i = 0; i < monthlyData.length; i += CHUNK_SIZE) {
+      chunks.push(monthlyData.slice(i, i + CHUNK_SIZE));
+    }
+
+    for (const chunk of chunks) {
+      const postData = chunk.map(({ category, ...data }) => ({
+        ...data,
+        userId: data.userId || 1,
+      }));
+
+      try {
+        const res = await axios.post(getMonthlySpending, postData);
         if (res.data) {
           console.log(res.data);
           dispatch(setMonthlySpending(res.data));
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
-      });
+      }
+    }
   };
 
   /**

@@ -33,8 +33,9 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
 
   useEffect(() => {
-    if (monthlyData) {
+    if (monthlyData && monthlyData.length > 0) {
       const ID: number = monthlyData.map((a) => (a.id ?? 0) as number).slice(-1)[0];
+      // const ID: number = monthlyData[monthlyData.length - 1].id ?? 0;
       setArrayLastId(ID);
       setIncrement(ID);
 
