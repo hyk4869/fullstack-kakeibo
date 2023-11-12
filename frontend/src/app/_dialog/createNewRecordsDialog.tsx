@@ -34,13 +34,14 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
   useEffect(() => {
     if (monthlyData && monthlyData.length > 0) {
-      const ID: number = monthlyData.map((a) => (a.id ?? 0) as number).slice(-1)[0];
-      // const ID: number = monthlyData[monthlyData.length - 1].id ?? 0;
+      const ID: number = monthlyData.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 0);
       setArrayLastId(ID);
       setIncrement(ID);
 
-      const pickLastContent: TMonthlySpending = monthlyData.map((a) => a).slice(-1)[0];
-      setMakeNewArray([pickLastContent]);
+      const pickLastContent: TMonthlySpending | undefined = monthlyData.find((item) => item.id === ID);
+      if (pickLastContent) {
+        setMakeNewArray([pickLastContent]);
+      }
     }
   }, [monthlyData]);
 
