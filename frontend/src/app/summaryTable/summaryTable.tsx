@@ -22,7 +22,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MCategory, TMonthlySpending, setEditMonthlySpending } from '../_store/slice';
+import { MCategory, TMonthlySpending, setEditMonthlySpending, setMonthlySpending } from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
 import CustomTextfield from '../_customComponents/customTextfield';
 import CustomDate from '../_customComponents/customDate';
@@ -31,6 +31,8 @@ import dayjs from 'dayjs';
 import { Button } from '@mui/material';
 import CreateNewRecordsDialog from '../_dialog/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
+import axios from 'axios';
+import { getMonthlySpending } from '../_api/url';
 
 type Order = 'asc' | 'desc';
 
@@ -194,8 +196,8 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       }}
     >
       {numSelected > 0 ? (
-        <Box sx={{ flex: '1 1 100%' }} color="inherit">
-          {numSelected} selected
+        <Box sx={{ padding: '10px', minWidth: '250px', flex: '1 1 100%' }} color="inherit">
+          {numSelected} レコードが選択されました。
         </Box>
       ) : (
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -405,6 +407,28 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * 後でpost用に変更
    */
   const saveValue = () => {
+    dispatch(setEditMonthlySpending(editValue));
+    const postData = monthlyData.map(({ category, ...data }) => ({
+      ...data,
+      userId: data.userId || 1,
+    }));
+    axios
+      .post(getMonthlySpending, postData)
+      .then((res) => {
+        if (res.data) {
+          console.log(res.data);
+          dispatch(setMonthlySpending(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  /**
+   * 確定用
+   */
+  const confirmValue = () => {
     dispatch(setEditMonthlySpending(editValue));
   };
 

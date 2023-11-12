@@ -14,6 +14,8 @@ export interface TMonthlySpending {
   categoryId: number | null;
   /** 利用金額 */
   usageFee: number | null;
+  /** カテゴリーの詳細 */
+  category?: MCategory | null;
 }
 
 /** カテゴリー */
@@ -81,6 +83,13 @@ export const getCategoryContent = createSlice({
     setCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
       return [...action.payload];
     },
+    // setCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
+    //   const newState = { ...state };
+    //   action.payload.forEach((category) => {
+    //     newState[category.categoryId ?? 0] = category;
+    //   });
+    //   return newState;
+    // },
   },
 });
 
