@@ -72,6 +72,13 @@ export const getMonthlySpendingContent = createSlice({
 
       return updatedState;
     },
+
+    /** 値の削除 */
+    setDeleteMonthlySpending: (state, action: PayloadAction<TMonthlySpending[]>) => {
+      const deletedIds = action.payload.map((item) => item.id);
+      const updatedState = state.filter((item) => deletedIds.includes(item.id));
+      return updatedState;
+    },
   },
 });
 
@@ -93,6 +100,6 @@ export const getCategoryContent = createSlice({
   },
 });
 
-export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending } =
+export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending, setDeleteMonthlySpending } =
   getMonthlySpendingContent.actions;
 export const { setCategoryContent } = getCategoryContent.actions;

@@ -22,7 +22,13 @@ import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MCategory, TMonthlySpending, setEditMonthlySpending, setMonthlySpending } from '../_store/slice';
+import {
+  MCategory,
+  TMonthlySpending,
+  setDeleteMonthlySpending,
+  setEditMonthlySpending,
+  setMonthlySpending,
+} from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
 import CustomTextfield from '../_customComponents/customTextfield';
 import CustomDate from '../_customComponents/customDate';
@@ -444,7 +450,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       try {
         const res = await axios.post(getMonthlySpending, postData);
         if (res.data) {
-          console.log(res.data);
           dispatch(setMonthlySpending(res.data));
         }
       } catch (error) {
@@ -452,6 +457,9 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       }
     }
   };
+
+  // console.log({ monthlyData });
+  // console.log({ editValue });
 
   /**
    * 確定用
@@ -464,8 +472,13 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * 削除
    */
   const deleteValue = (id: number | null) => {
-    //
-    console.log('クリック');
+    if (id !== null) {
+      setEditValue((prevData) => {
+        const updatedData = prevData.filter((d) => d.id !== id);
+        dispatch(setDeleteMonthlySpending(updatedData));
+        return updatedData;
+      });
+    }
   };
 
   return (
@@ -564,6 +577,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         onChangeValue={changeValue}
                         paramKey={'usageFee'}
                         id={Number(row.id)}
+                      />
+                    </TableCell>
+                    <TableCell align="center">
+                      <DeleteIcon
+                        onClick={() => deleteValue(row.id)}
+                        sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }}
                       />
                     </TableCell>
                   </TableRow>
