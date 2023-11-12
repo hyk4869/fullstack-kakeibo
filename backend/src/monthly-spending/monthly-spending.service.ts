@@ -8,11 +8,15 @@ export class MonthlySpendingService {
 
   /** TMonthlyとMCategoryをDBからクライアントに送信 */
   async getMonthlySpendingWithCategory() {
-    return this.prisma.tMonthlySpending.findMany({
+    const result = await this.prisma.tMonthlySpending.findMany({
       include: {
         category: true,
       },
+      orderBy: {
+        id: 'asc',
+      },
     });
+    return result;
   }
 
   /** MCategoryをDBからクライアントに送信 */
@@ -50,6 +54,28 @@ export class MonthlySpendingService {
     }));
 
     try {
+      /** DBにある全てのidを取得 */
+      const existingIds = await this.prisma.tMonthlySpending.findMany({
+        select: {
+          id: true,
+        },
+      });
+
+      /** postDataに存在しないidを取得 */
+      const missingIds = existingIds
+        .filter((existingItem) => !postData.some((item) => item.id === existingItem.id))
+        .map((item) => item.id);
+
+      // if (missingIds.length > 0) {
+      //   await this.prisma.tMonthlySpending.deleteMany({
+      //     where: {
+      //       id: {
+      //         in: missingIds,
+      //       },
+      //     },
+      //   });
+      // }
+
       await this.prisma.tMonthlySpending.createMany({
         data: postDataWithTimestamp,
         skipDuplicates: true,
