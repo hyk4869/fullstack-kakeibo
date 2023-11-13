@@ -45,14 +45,6 @@ export class MonthlySpendingService {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
     }
-    const now = new Date();
-
-    const postDataWithTimestamp = postData.map((data) => ({
-      ...data,
-      createdAt: now.toISOString(),
-      updatedAt: now.toISOString(),
-      paymentDay: new Date(data.paymentDay).toISOString(),
-    }));
 
     try {
       /** DBにある全てのidを取得 */
@@ -67,19 +59,24 @@ export class MonthlySpendingService {
         .filter((existingItem) => !postData.some((item) => item.id === existingItem.id))
         .map((item) => item.id);
 
-      console.log(missingIds);
+      if (missingIds.length > 0) {
+        await this.prisma.tMonthlySpending.deleteMany({
+          where: {
+            id: {
+              in: missingIds,
+            },
+          },
+        });
+      }
 
-      // fs.writeFileSync('log.txt', JSON.stringify(missingIds, null, 2));
+      const now = new Date();
 
-      // if (missingIds.length > 0) {
-      //   await this.prisma.tMonthlySpending.deleteMany({
-      //     where: {
-      //       id: {
-      //         in: missingIds,
-      //       },
-      //     },
-      //   });
-      // }
+      const postDataWithTimestamp = postData.map((data) => ({
+        ...data,
+        createdAt: now.toISOString(),
+        updatedAt: now.toISOString(),
+        paymentDay: new Date(data.paymentDay).toISOString(),
+      }));
 
       await this.prisma.tMonthlySpending.createMany({
         data: postDataWithTimestamp,
