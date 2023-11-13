@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MCategory, TMonthlySpending } from '@prisma/client';
+import * as fs from 'fs';
 
 @Injectable()
 export class MonthlySpendingService {
@@ -65,6 +66,10 @@ export class MonthlySpendingService {
       const missingIds = existingIds
         .filter((existingItem) => !postData.some((item) => item.id === existingItem.id))
         .map((item) => item.id);
+
+      console.log(missingIds);
+
+      // fs.writeFileSync('log.txt', JSON.stringify(missingIds, null, 2));
 
       // if (missingIds.length > 0) {
       //   await this.prisma.tMonthlySpending.deleteMany({
