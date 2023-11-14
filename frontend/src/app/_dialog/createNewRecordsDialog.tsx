@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { MCategory, TMonthlySpending } from '../_store/slice';
 import { useSelector } from 'react-redux';
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
 import CustomDate from '../_customComponents/customDate';
 import CustomSelectTab from '../_customComponents/customSelectTab';
 import CustomTextfield from '../_customComponents/customTextfield';
@@ -15,6 +15,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
 import MonthlyNextActionDialog from './monthlyNextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ExportCSV } from '../_util/exportCSV';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -231,33 +232,44 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             </Table>
           </TableContainer>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="outlined"
-              color="error"
-              sx={{
-                margin: '0.75rem 1.5rem',
-                color: red[500],
-                borderColor: red[500],
-              }}
-              onClick={onCloseAddRecords}
-            >
-              キャンセル
+            {/* <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }} onClick={() => addNewArray()}>
+              <Tooltip title={'CSVをインポートするためのテンプレートをダウンロードします。'} arrow>
+                <span>CSVテンプレート</span>
+              </Tooltip>
+            </Button> */}
+            <ExportCSV />
+            <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }} onClick={() => addNewArray()}>
+              <Tooltip title={'CSVをインポートします。'} arrow>
+                <span>CSVインポート</span>
+              </Tooltip>
             </Button>
             <Button
               variant="contained"
               color="secondary"
-              sx={{ margin: '0.75rem 1.5rem' }}
+              sx={{ margin: '0.75rem 0.75rem' }}
               onClick={() => addNewArray()}
             >
               レコード追加
             </Button>
             <Button
               variant="contained"
-              sx={{ margin: '0.75rem 1.5rem' }}
+              sx={{ margin: '0.75rem 0.75rem' }}
               disabled={makeNewArray.length - 1 === 0}
               onClick={showDialog}
             >
               確定
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              sx={{
+                margin: '0.75rem 0.75rem',
+                color: red[500],
+                borderColor: red[500],
+              }}
+              onClick={onCloseAddRecords}
+            >
+              キャンセル
             </Button>
           </Box>
         </Paper>
