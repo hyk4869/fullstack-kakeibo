@@ -3,7 +3,7 @@
 import { Button, Tooltip } from '@mui/material';
 import Papa from 'papaparse';
 import { TMonthlySpending } from '../_store/slice';
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, useRef } from 'react';
 
 type ImportCSVProps = {
   setMakeNewArray: React.Dispatch<SetStateAction<TMonthlySpending[]>>;
@@ -11,8 +11,18 @@ type ImportCSVProps = {
 
 export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
   const { setMakeNewArray } = props;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   * input要素をクリックする
+   */
+  const handleFileUpload = async () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (file) {
@@ -40,8 +50,8 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
     <>
       <Tooltip title={'CSVをインポートします。'} arrow>
         <label>
-          <input type="file" style={{ display: 'none' }} onChange={handleFileUpload} />
-          <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }}>
+          <input type="file" style={{ display: 'none' }} onChange={handleFileChange} ref={fileInputRef} />
+          <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }} onClick={handleFileUpload}>
             CSVのインポート
           </Button>
         </label>

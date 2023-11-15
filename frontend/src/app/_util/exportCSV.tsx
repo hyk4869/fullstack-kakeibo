@@ -1,6 +1,6 @@
 'use client';
 import { Tooltip, Button } from '@mui/material';
-import { CSVDownload, CSVLink } from 'react-csv';
+import { CSVLink } from 'react-csv';
 
 type ExportCSVProps = {
   //
