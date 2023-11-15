@@ -16,6 +16,7 @@ import { grey, red } from '@mui/material/colors';
 import MonthlyNextActionDialog from './monthlyNextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportCSV } from '../_util/exportCSV';
+import { ImportCSV } from '../_util/importCSV';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -232,17 +233,8 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             </Table>
           </TableContainer>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            {/* <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }} onClick={() => addNewArray()}>
-              <Tooltip title={'CSVをインポートするためのテンプレートをダウンロードします。'} arrow>
-                <span>CSVテンプレート</span>
-              </Tooltip>
-            </Button> */}
             <ExportCSV />
-            <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }} onClick={() => addNewArray()}>
-              <Tooltip title={'CSVをインポートします。'} arrow>
-                <span>CSVインポート</span>
-              </Tooltip>
-            </Button>
+            <ImportCSV setMakeNewArray={setMakeNewArray} />
             <Button
               variant="contained"
               color="secondary"

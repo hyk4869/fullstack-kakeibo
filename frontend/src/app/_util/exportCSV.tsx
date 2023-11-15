@@ -19,15 +19,13 @@ export const ExportCSV: React.FC<ExportCSVProps> = () => {
 
   return (
     <>
-      <div>
-        <Tooltip title={'CSVをインポートするためのテンプレートをダウンロードします。'} arrow>
-          <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }}>
-            <CSVLink data={data} headers={headers} filename={filename} style={{ textDecoration: 'none' }}>
-              CSVテンプレート
-            </CSVLink>
-          </Button>
-        </Tooltip>
-      </div>
+      <Tooltip title={'CSVをインポートするためのテンプレートをダウンロードします。'} arrow>
+        <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }}>
+          <CSVLink data={data} headers={headers} filename={filename} style={{ textDecoration: 'none' }}>
+            CSVテンプレート
+          </CSVLink>
+        </Button>
+      </Tooltip>
     </>
   );
 };
