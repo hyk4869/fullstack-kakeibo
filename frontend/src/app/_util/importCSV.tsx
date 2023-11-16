@@ -22,7 +22,7 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
     }
   };
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0];
 
     if (file) {

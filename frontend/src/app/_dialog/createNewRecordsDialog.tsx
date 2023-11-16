@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { MCategory, TMonthlySpending } from '../_store/slice';
 import { useSelector } from 'react-redux';
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import CustomDate from '../_customComponents/customDate';
 import CustomSelectTab from '../_customComponents/customSelectTab';
 import CustomTextfield from '../_customComponents/customTextfield';
