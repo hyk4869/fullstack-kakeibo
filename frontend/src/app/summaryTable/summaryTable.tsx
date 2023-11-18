@@ -179,6 +179,7 @@ type EnhancedTableToolbarProps = {
   dataLength: number;
   handleEditFlag: () => void;
   saveValue: () => void;
+  deleteArrayValue: () => void;
 };
 /**
  *
@@ -186,7 +187,7 @@ type EnhancedTableToolbarProps = {
  *
  */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
-  const { numSelected, edit, dataLength, handleEditFlag, saveValue } = props;
+  const { numSelected, edit, dataLength, handleEditFlag, saveValue, deleteArrayValue } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
 
@@ -216,7 +217,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <Button
           variant="contained"
-          disabled={dataLength <= 0}
+          // disabled={dataLength <= 0}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={handleEditFlag}
         >
@@ -226,7 +227,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         </Button>
         <Button
           variant="contained"
-          disabled={dataLength <= 0 || edit === false}
+          disabled={edit === false}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
           color="secondary"
@@ -235,7 +236,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         </Button>
         <Button
           variant="outlined"
-          disabled={dataLength <= 0 || edit === false}
+          disabled={edit === false}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={saveValue}
         >
@@ -243,7 +244,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         </Button>
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            <IconButton>
+            <IconButton onClick={() => deleteArrayValue()}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -279,7 +280,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
-  const [selected, setSelected] = useState<readonly number[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [edit, setEdit] = useState<boolean>(false);
@@ -331,7 +332,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const handleSelect = useCallback(
     (event: React.MouseEvent<unknown>, id: number) => {
       const selectedIndex = selected.indexOf(id);
-      let newSelected: readonly number[] = [];
+      let newSelected: number[] = [];
 
       if (selectedIndex === -1) {
         newSelected = [...selected, id];
@@ -430,8 +431,32 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       });
   };
 
-  // console.log({ monthlyData });
-  // console.log({ editValue });
+  // const saveValue = async () => {
+  //   const CHUNK_SIZE = 200;
+
+  //   dispatch(setEditMonthlySpending(editValue));
+
+  //   const chunks = [];
+  //   for (let i = 0; i < monthlyData.length; i += CHUNK_SIZE) {
+  //     chunks.push(monthlyData.slice(i, i + CHUNK_SIZE));
+  //   }
+
+  //   for (const chunk of chunks) {
+  //     const postData = chunk.map(({ category, ...data }) => ({
+  //       ...data,
+  //       userId: data.userId || 1,
+  //     }));
+
+  //     try {
+  //       const res = await axios.post(getMonthlySpending, postData);
+  //       if (res.data) {
+  //         dispatch(setMonthlySpending(res.data));
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // };
 
   /**
    * 確定用
@@ -453,6 +478,18 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     }
   };
 
+  /**
+   * 一括削除
+   */
+  const deleteArrayValue = () => {
+    setEditValue((prevValue) => {
+      const updatedData = prevValue.filter((a) => !selected.includes(Number(a.id)));
+      dispatch(setDeleteMonthlySpending(updatedData));
+      return updatedData;
+    });
+    setSelected([]);
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[100] }}>
@@ -462,6 +499,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           dataLength={monthlyData.length}
           handleEditFlag={handleEditFlag}
           saveValue={saveValue}
+          deleteArrayValue={deleteArrayValue}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
