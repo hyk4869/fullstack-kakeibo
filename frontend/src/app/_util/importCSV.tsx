@@ -50,7 +50,7 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
 
   return (
     <>
-      <Tooltip title={'CSVをインポートします。id'} arrow>
+      <Tooltip title={'CSVをインポートします。idが空の場合は追加されません。'} arrow>
         <label>
           <input type="file" style={{ display: 'none' }} onChange={handleFileChange} ref={fileInputRef} />
           <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }} onClick={handleFileUpload}>
