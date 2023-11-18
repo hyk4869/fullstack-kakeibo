@@ -27,7 +27,18 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
     if (file) {
       const parsedResult: TMonthlySpending[] = await parseFile(file);
       setMakeNewArray((prevArray) => {
-        const v = parsedResult.filter((a) => a.id);
+        const findCategoryID = parsedResult.map((s) => {
+          return {
+            ...s,
+            id: s.id !== null ? parseInt(String(s.id)) : null,
+            paymentDay: s.paymentDay !== null ? new Date(s.paymentDay) : null,
+            categoryId: s.categoryId !== null ? parseInt(String(s.categoryId)) : null,
+            usageFee: s.usageFee !== null ? parseInt(String(s.usageFee)) : null,
+          };
+        });
+        const v = findCategoryID.filter((a) => a.id);
+        console.log({ findCategoryID, v });
+
         return [...prevArray, ...v];
       });
     }
