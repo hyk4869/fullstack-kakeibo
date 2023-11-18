@@ -37,8 +37,6 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
           };
         });
         const v = findCategoryID.filter((a) => a.id);
-        console.log({ findCategoryID, v });
-
         return [...prevArray, ...v];
       });
     }
