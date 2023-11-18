@@ -24,10 +24,12 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0];
-
     if (file) {
-      const parsedResult = await parseFile(file);
-      setMakeNewArray(parsedResult as TMonthlySpending[]);
+      const parsedResult: TMonthlySpending[] = await parseFile(file);
+      setMakeNewArray((prevArray) => {
+        const v = parsedResult.filter((a) => a.id);
+        return [...prevArray, ...v];
+      });
     }
   };
 
@@ -48,7 +50,7 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
 
   return (
     <>
-      <Tooltip title={'CSVをインポートします。'} arrow>
+      <Tooltip title={'CSVをインポートします。id'} arrow>
         <label>
           <input type="file" style={{ display: 'none' }} onChange={handleFileChange} ref={fileInputRef} />
           <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }} onClick={handleFileUpload}>
