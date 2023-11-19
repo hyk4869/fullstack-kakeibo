@@ -5,15 +5,21 @@ import { parse } from 'papaparse';
 import { TMonthlySpending } from '../_store/slice';
 import React, { SetStateAction, useRef, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useSelector } from 'react-redux';
+import { RootState } from '../_store/store';
 
 type ImportCSVProps = {
   setMakeNewArray: React.Dispatch<SetStateAction<TMonthlySpending[]>>;
+  setIncrementArray: React.Dispatch<React.SetStateAction<number[]>>;
+  setArrayLastId: React.Dispatch<React.SetStateAction<number>>;
+  setIncrement: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
-  const { setMakeNewArray } = props;
+  const { setMakeNewArray, setIncrementArray, setArrayLastId, setIncrement } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
 
   /**
    * input要素をクリックする
@@ -30,17 +36,44 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
       try {
         const parsedResult: TMonthlySpending[] = await parseFile(file);
         setMakeNewArray((prevArray) => {
-          const findCategoryID = parsedResult.map((s) => {
-            return {
-              ...s,
-              id: s.id !== null ? parseInt(String(s.id)) : null,
-              paymentDay: s.paymentDay !== null ? new Date(s.paymentDay) : null,
-              categoryId: s.categoryId !== null ? parseInt(String(s.categoryId)) : null,
-              usageFee: s.usageFee !== null ? parseInt(String(s.usageFee)) : null,
-            };
+          /** きれいな形にする */
+          const findCategoryID = parsedResult
+            .map((s) => {
+              return {
+                ...s,
+                id: s.id !== null ? parseInt(String(s.id)) : null,
+                paymentDay: s.paymentDay !== null ? new Date(s.paymentDay) : null,
+                categoryId: s.categoryId !== null ? parseInt(String(s.categoryId)) : null,
+                usageFee: s.usageFee !== null ? parseInt(String(s.usageFee)) : null,
+              };
+            })
+            .filter((a) => a.id);
+
+          /** 重複するIDを持つ要素を更新し、新しい要素を追加する */
+          const updatedArray = prevArray.map((a) => {
+            const matchingCategory = findCategoryID.find((s) => a.id === s.id);
+            return matchingCategory ? matchingCategory : a;
           });
-          const v = findCategoryID.filter((a) => a.id);
-          return [...prevArray, ...v];
+
+          /** 重複しないIDを持つ新しい要素を追加する */
+          const newArray = [...updatedArray, ...findCategoryID.filter((s) => !updatedArray.some((a) => a.id === s.id))];
+
+          setIncrementArray((prevValue) => {
+            return monthlyData.length === 0
+              ? newArray.map((a) => Number(a.id))
+              : [...prevValue, ...findCategoryID.map((a) => Number(a.id))];
+          });
+          // setArrayLastId(
+          //   monthlyData.length === 0
+          //     ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
+          //     : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
+          // );
+          setIncrement(
+            monthlyData.length === 0
+              ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
+              : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
+          );
+          return monthlyData.length === 0 ? newArray : [...prevArray, ...findCategoryID];
         });
       } catch (error) {
         console.error(error);
