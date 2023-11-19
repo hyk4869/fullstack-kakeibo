@@ -3,14 +3,24 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { MCategory, TMonthlySpending } from '../_store/slice';
 import { useSelector } from 'react-redux';
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from '@mui/material';
 import CustomDate from '../_customComponents/customDate';
 import CustomSelectTab from '../_customComponents/customSelectTab';
 import CustomTextfield from '../_customComponents/customTextfield';
 import CustomNumberFormat from '../_customComponents/customNumeric';
 import { RootState } from '../_store/store';
 import dayjs from 'dayjs';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
 import MonthlyNextActionDialog from './monthlyNextActionDialog';
@@ -18,12 +28,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportCSV } from '../_util/exportCSV';
 import { ImportCSV } from '../_util/importCSV';
 import { ShowCategoryMaster } from './showCategory';
+import TablePagination from '@mui/material/TablePagination';
+import { newMonthlySpending } from '../_customComponents/customProperties';
+import { Order, getComparator, monthlySpendingHeadCells, stableSort } from '../summaryTable/summaryTable';
+import { visuallyHidden } from '@mui/utils';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
   onCloseAddRecords: () => void;
   edit?: boolean;
 };
+
 const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) => {
   const { openDialog, onCloseAddRecords, edit } = props;
   const [arrayLastId, setArrayLastId] = useState<number>(0);
@@ -32,6 +47,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [makeNewArray, setMakeNewArray] = useState<Array<TMonthlySpending>>([]);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
+
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
 
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
@@ -42,26 +62,18 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         monthlyData.length !== 0 || monthlyData !== undefined
           ? monthlyData.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
           : 1;
-      console.log(ID);
       setArrayLastId(ID);
       setIncrement(ID);
-
-      const newMonthlySpending = {
-        id: 1,
-        userId: null,
-        paymentDay: null,
-        store: '',
-        usageFee: null,
-        categoryId: null,
-      };
 
       const pickLastContent: TMonthlySpending | undefined =
         increment !== 1 ? monthlyData.find((item) => item.id === ID) : newMonthlySpending;
       if (pickLastContent) {
         setMakeNewArray([pickLastContent]);
       }
+      console.log({ pickLastContent });
     }
   }, [monthlyData]);
+  console.log({ monthlyData, arrayLastId, increment, makeNewArray });
 
   useEffect(() => {
     if (increment !== null && increment !== undefined && increment > 0 && incrementArray.slice(-1)[0] !== increment) {
@@ -84,7 +96,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     };
     setIncrement(incrementFromArray);
     setMakeNewArray((prevArray) => [...prevArray, newMonthlySpending]);
-    console.log({ makeNewArray, increment, incrementArray });
   }, [increment, makeNewArray, incrementArray]);
 
   /** 削除機能 */
@@ -145,6 +156,27 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     [makeNewArray],
   );
 
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    },
+    [page, rowsPerPage],
+  );
+
+  const visibleRows = useMemo(
+    () =>
+      stableSort(makeNewArray, getComparator(order, orderBy)).slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage,
+      ),
+    [order, orderBy, page, rowsPerPage, makeNewArray],
+  );
+
   /** 次へ進むためのboolean */
   const showDialog = () => {
     setIsShowDialog(!isShowDialog);
@@ -159,12 +191,19 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         aria-describedby="alert-dialog-description"
         fullScreen={true}
       >
-        <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[100] }}>
+        <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', padding: '1rem', justifyContent: 'center' }}>
             {monthlyData.length > 0 ? <Box>レコードの最終ID：{arrayLastId}</Box> : <></>}
-            <Box sx={{ margin: '0 2rem' }}>
-              {makeNewArray.length > 0 ? makeNewArray.length - 1 : 0} 件のレコードを追加
-            </Box>
+            {monthlyData.length === 0 ? (
+              <Box sx={{ margin: '0 2rem' }}>
+                {makeNewArray.length > 0 ? makeNewArray.length : 0} 件のレコードを追加
+              </Box>
+            ) : (
+              <Box sx={{ margin: '0 2rem' }}>
+                {makeNewArray.length > 0 ? makeNewArray.length - 1 : 0} 件のレコードを追加
+              </Box>
+            )}
+
             <AddCircleOutlineIcon
               onClick={() => addNewArray()}
               sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }}
@@ -173,15 +212,40 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
           <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxHeight: '550px' }}>
             <Table>
+              <TableHead>
+                <TableRow>
+                  {monthlySpendingHeadCells.map((headCell) => (
+                    <TableCell
+                      key={headCell.id}
+                      align={'center'}
+                      padding={headCell.disablePadding ? 'none' : 'normal'}
+                      sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                      <TableSortLabel
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id ? order : 'asc'}
+                      >
+                        {headCell.label}
+                        {orderBy === headCell.id ? (
+                          <Box component="span" sx={visuallyHidden}>
+                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                          </Box>
+                        ) : null}
+                      </TableSortLabel>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+
               <TableBody>
-                {makeNewArray?.map((row) => {
+                {visibleRows?.map((row) => {
                   return (
                     <TableRow
                       tabIndex={-1}
                       key={Number(row?.id)}
                       sx={{
                         cursor: 'pointer',
-                        background: row?.id === arrayLastId && arrayLastId !== 1 ? grey[400] : undefined,
+                        background: row?.id === arrayLastId && arrayLastId !== 1 ? grey[300] : undefined,
                       }}
                     >
                       <TableCell component="th" id={String(row?.id)} scope="row?">
@@ -281,11 +345,29 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
               キャンセル
             </Button>
           </Box>
+          {makeNewArray.length < 20 ? (
+            <></>
+          ) : (
+            <TablePagination
+              rowsPerPageOptions={[20, 50, 100]}
+              component="div"
+              count={makeNewArray.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          )}
         </Paper>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Box sx={{ position: 'absolute', bottom: '0' }}>
             <ExportCSV />
-            <ImportCSV setMakeNewArray={setMakeNewArray} />
+            <ImportCSV
+              setMakeNewArray={setMakeNewArray}
+              setIncrementArray={setIncrementArray}
+              setArrayLastId={setArrayLastId}
+              setIncrement={setIncrement}
+            />
             <Button onClick={() => setIsShowCategoryMaster(true)} variant="outlined" sx={{ margin: '0.75rem 0.75rem' }}>
               カテゴリーIDを参照する
             </Button>
@@ -296,7 +378,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           isShow={isShowDialog}
           onCloseConfirmDialog={() => setIsShowDialog(false)}
           contentNum={makeNewArray.length - 1}
-          content={makeNewArray.filter((a) => a?.id !== arrayLastId)}
+          content={makeNewArray.filter((a) => (arrayLastId === 1 ? a?.id : a?.id !== arrayLastId))}
           onCloseMonthlyDialog={onCloseAddRecords}
         />
         <ShowCategoryMaster
