@@ -10,7 +10,7 @@ import {
   TableContainer,
   TableRow,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { blue, grey } from '@mui/material/colors';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
@@ -31,7 +31,7 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
   return (
     <>
       <Dialog open={isShowCategoryMaster} onClose={onCloseCategoryMaster}>
-        <DialogTitle sx={{ background: grey[300] }}>カテゴリーID</DialogTitle>
+        <DialogTitle sx={{ background: blue[200] }}>カテゴリーID</DialogTitle>
         <DialogContent>
           <Box>
             <TableContainer>
