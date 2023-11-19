@@ -40,9 +40,9 @@ import { grey } from '@mui/material/colors';
 import axios from 'axios';
 import { getMonthlySpending } from '../_api/url';
 
-type Order = 'asc' | 'desc';
+export type Order = 'asc' | 'desc';
 
-interface HeadCell {
+export interface HeadCell {
   id: keyof TMonthlySpending;
   disablePadding: boolean;
   label: string;
@@ -76,7 +76,7 @@ export const monthlySpendingHeadCells: readonly HeadCell[] = [
   },
 ];
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+export function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -86,7 +86,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-const getComparator = (
+export const getComparator = (
   order: Order,
   orderBy: keyof TMonthlySpending,
 ): ((a: TMonthlySpending, b: TMonthlySpending) => number) => {
@@ -95,7 +95,7 @@ const getComparator = (
     : (a, b) => -descendingComparator(a, b, orderBy);
 };
 
-const stableSort = (
+export const stableSort = (
   array: TMonthlySpending[],
   comparator: (a: TMonthlySpending, b: TMonthlySpending) => number,
 ): TMonthlySpending[] => {
@@ -180,6 +180,7 @@ type EnhancedTableToolbarProps = {
   handleEditFlag: () => void;
   saveValue: () => void;
   deleteArrayValue: () => void;
+  enableEdit: boolean;
 };
 /**
  *
@@ -187,7 +188,7 @@ type EnhancedTableToolbarProps = {
  *
  */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
-  const { numSelected, edit, dataLength, handleEditFlag, saveValue, deleteArrayValue } = props;
+  const { numSelected, edit, dataLength, handleEditFlag, saveValue, deleteArrayValue, enableEdit } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
 
@@ -217,7 +218,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <Button
           variant="contained"
-          // disabled={dataLength <= 0}
+          disabled={!enableEdit}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={handleEditFlag}
         >
@@ -277,6 +278,7 @@ type SummaryTableProps = {
 const SummaryTable: React.FC<SummaryTableProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
+  const enableEdit = useSelector((state: RootState) => state.enableEdit);
 
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
@@ -492,7 +494,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[100] }}>
+      <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
           edit={edit}
@@ -500,6 +502,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           handleEditFlag={handleEditFlag}
           saveValue={saveValue}
           deleteArrayValue={deleteArrayValue}
+          enableEdit={enableEdit}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -533,21 +536,18 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      // sx={edit ? { display: 'flex', justifyContent: 'center' } : undefined}
-                    >
-                      <CustomNumberFormat
-                        value={row.id}
-                        edit={edit}
-                        align="center"
-                        onChangeValue={changeValue}
-                        paramKey={'usageFee'}
-                        id={Number(row.id)}
-                      />
-                    </TableCell>
+                    <Tooltip title={'idを変更することはできません'} arrow>
+                      <TableCell component="th" id={labelId} scope="row">
+                        <CustomNumberFormat
+                          value={row.id}
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'usageFee'}
+                          id={Number(row.id)}
+                        />
+                      </TableCell>
+                    </Tooltip>
                     <TableCell align="center">
                       <CustomDate
                         value={dayjs(row.paymentDay)}
