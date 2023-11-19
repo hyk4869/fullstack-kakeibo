@@ -3,7 +3,7 @@ import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../_api/url';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryContent, setMonthlySpending } from '../_store/slice';
+import { enableEdit, setCategoryContent, setEnableEdit, setMonthlySpending } from '../_store/slice';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useCallback, useState } from 'react';
 import CustomDate from '../_customComponents/customDate';
@@ -25,6 +25,7 @@ const ApiButton = () => {
       .then((res) => {
         if (res.data) {
           dispatch(setMonthlySpending(res.data));
+          dispatch(setEnableEdit(true));
         }
         return axios.get(getCategory);
       })
@@ -53,6 +54,7 @@ const ApiButton = () => {
       .then((res) => {
         if (res.data) {
           dispatch(setMonthlySpending(res.data));
+          dispatch(setEnableEdit(true));
         }
         return axios.get(getCategory);
       })

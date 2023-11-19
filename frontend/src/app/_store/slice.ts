@@ -100,6 +100,17 @@ export const getCategoryContent = createSlice({
   },
 });
 
+export const enableEdit = createSlice({
+  name: 'enableEdit',
+  initialState: false,
+  reducers: {
+    setEnableEdit: (state, action: PayloadAction<boolean>) => {
+      return action.payload;
+    },
+  },
+});
+
 export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending, setDeleteMonthlySpending } =
   getMonthlySpendingContent.actions;
 export const { setCategoryContent } = getCategoryContent.actions;
+export const { setEnableEdit } = enableEdit.actions;
