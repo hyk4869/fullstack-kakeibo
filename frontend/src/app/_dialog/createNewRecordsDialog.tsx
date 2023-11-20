@@ -89,8 +89,8 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         return incrementArray.slice(-1)[0] + 1;
       }
     };
-    // const lastId = makeNewArray.slice(-1)[0]?.id;
-    // if (lastId && incrementFromArray === lastId) return;
+    const lastId = makeNewArray.slice(-1)[0]?.id;
+    if (lastId && incrementFromArray() === lastId) return;
     const newMonthlySpending = {
       id: incrementFromArray(),
       userId: null,
@@ -99,6 +99,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
       usageFee: null,
       categoryId: null,
     };
+
     setIncrement(incrementFromArray);
     setMakeNewArray((prevArray) => [...prevArray, newMonthlySpending]);
   }, [increment, makeNewArray, incrementArray]);
