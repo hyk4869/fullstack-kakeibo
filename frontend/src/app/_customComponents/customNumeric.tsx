@@ -18,10 +18,8 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
   const [numeric, setNumeric] = useState<number | null>(value);
 
   useEffect(() => {
-    if (value !== numeric) {
-      setNumeric(value);
-    }
-  }, [value, numeric]);
+    setNumeric(value);
+  }, [value]);
 
   const hadleChangeNumericValue: OnValueChange = useCallback((values) => {
     const floatValue = values.floatValue !== undefined ? values.floatValue : 0;

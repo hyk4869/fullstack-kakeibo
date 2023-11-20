@@ -17,10 +17,8 @@ const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
   const [textValue, setTextValue] = useState<string | null>(value);
 
   useEffect(() => {
-    if (value !== textValue) {
-      setTextValue(value);
-    }
-  }, [value, textValue]);
+    setTextValue(value);
+  }, [value]);
 
   const handleChangeText = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setTextValue(e.target.value);

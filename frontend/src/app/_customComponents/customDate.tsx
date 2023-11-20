@@ -18,10 +18,8 @@ const CustomDate: React.FC<CustomDateProps> = (props) => {
   const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(value);
 
   useEffect(() => {
-    if (value !== selectedDate) {
-      setSelectedDate(value);
-    }
-  }, [value, selectedDate]);
+    setSelectedDate(value);
+  }, [value]);
 
   const handleDateChange = useCallback(
     (e: React.SetStateAction<Date | Dayjs | null>) => {
