@@ -63,16 +63,17 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
               ? newArray.map((a) => Number(a.id))
               : [...prevValue, ...findCategoryID.map((a) => Number(a.id))];
           });
-          // setArrayLastId(
-          //   monthlyData.length === 0
-          //     ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
-          //     : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
-          // );
+          setArrayLastId(
+            monthlyData.length === 0
+              ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
+              : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
+          );
           setIncrement(
             monthlyData.length === 0
               ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
               : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
           );
+          console.log({ parsedResult, findCategoryID, updatedArray, newArray });
           return monthlyData.length === 0 ? newArray : [...prevArray, ...findCategoryID];
         });
       } catch (error) {

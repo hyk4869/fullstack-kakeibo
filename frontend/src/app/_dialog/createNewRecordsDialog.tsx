@@ -55,6 +55,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
+  const enableEdit = useSelector((state: RootState) => state.enableEdit);
 
   useEffect(() => {
     if (monthlyData && monthlyData.length >= 0) {
@@ -64,16 +65,8 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           : 1;
       setArrayLastId(ID);
       setIncrement(ID);
-
-      const pickLastContent: TMonthlySpending | undefined =
-        increment !== 1 ? monthlyData.find((item) => item.id === ID) : newMonthlySpending;
-      if (pickLastContent) {
-        setMakeNewArray([pickLastContent]);
-      }
-      console.log({ pickLastContent });
     }
   }, [monthlyData]);
-  console.log({ monthlyData, arrayLastId, increment, makeNewArray });
 
   useEffect(() => {
     if (increment !== null && increment !== undefined && increment > 0 && incrementArray.slice(-1)[0] !== increment) {
@@ -81,13 +74,25 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     }
   }, [increment]);
 
+  console.log({ arrayLastId, increment, incrementArray, makeNewArray, monthlyData });
+
   /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
-    const incrementFromArray = incrementArray.slice(-1)[0] + 1;
-    const lastId = makeNewArray.slice(-1)[0]?.id;
-    if (lastId && incrementFromArray === lastId) return;
+    const incrementFromArray = () => {
+      if (makeNewArray.length <= 0 && monthlyData.length <= 0) {
+        return 1;
+      } else if (makeNewArray.length !== 0) {
+        return incrementArray.slice(-1)[0] + 1;
+      } else if (monthlyData.length > 0) {
+        return incrementArray.slice(-1)[0] + 1;
+      } else {
+        return incrementArray.slice(-1)[0] + 1;
+      }
+    };
+    // const lastId = makeNewArray.slice(-1)[0]?.id;
+    // if (lastId && incrementFromArray === lastId) return;
     const newMonthlySpending = {
-      id: incrementFromArray,
+      id: incrementFromArray(),
       userId: null,
       paymentDay: null,
       store: '',
@@ -194,15 +199,8 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', padding: '1rem', justifyContent: 'center' }}>
             {monthlyData.length > 0 ? <Box>レコードの最終ID：{arrayLastId}</Box> : <></>}
-            {monthlyData.length === 0 ? (
-              <Box sx={{ margin: '0 2rem' }}>
-                {makeNewArray.length > 0 ? makeNewArray.length : 0} 件のレコードを追加
-              </Box>
-            ) : (
-              <Box sx={{ margin: '0 2rem' }}>
-                {makeNewArray.length > 0 ? makeNewArray.length - 1 : 0} 件のレコードを追加
-              </Box>
-            )}
+
+            <Box sx={{ margin: '0 2rem' }}>{makeNewArray.length > 0 ? makeNewArray.length : 0} 件のレコードを追加</Box>
 
             <AddCircleOutlineIcon
               onClick={() => addNewArray()}
@@ -245,7 +243,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                       key={Number(row?.id)}
                       sx={{
                         cursor: 'pointer',
-                        background: row?.id === arrayLastId && arrayLastId !== 1 ? grey[300] : undefined,
                       }}
                     >
                       <TableCell component="th" id={String(row?.id)} scope="row?">
@@ -262,7 +259,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                       <TableCell align="center">
                         <CustomDate
                           value={dayjs(row?.paymentDay)}
-                          edit={row?.id === arrayLastId && arrayLastId !== 1 ? false : edit}
+                          edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'paymentDay'}
                           id={Number(row?.id)}
@@ -275,7 +272,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           onChangeValue={changeValue}
                           paramKey={'store'}
                           id={Number(row?.id)}
-                          edit={row?.id === arrayLastId && arrayLastId !== 1 ? false : edit}
+                          edit={edit}
                         />
                       </TableCell>
 
@@ -285,7 +282,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                             return { value: Number(a.categoryId), label: String(a.categoryName) };
                           })}
                           value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryId ?? null}
-                          edit={row?.id === arrayLastId && arrayLastId !== 1 ? false : edit}
+                          edit={edit}
                           paramKey={'categoryId'}
                           id={Number(row?.id)}
                           onChangeValue={changeValue}
@@ -296,7 +293,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                         <CustomNumberFormat
                           value={row?.usageFee}
                           suffix=" 円"
-                          edit={row?.id === arrayLastId && arrayLastId !== 1 ? false : edit}
+                          edit={edit}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'usageFee'}
@@ -377,9 +374,10 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         <MonthlyNextActionDialog
           isShow={isShowDialog}
           onCloseConfirmDialog={() => setIsShowDialog(false)}
-          contentNum={makeNewArray.length - 1}
-          content={makeNewArray.filter((a) => (arrayLastId === 1 ? a?.id : a?.id !== arrayLastId))}
+          contentNum={makeNewArray.length}
+          content={makeNewArray}
           onCloseMonthlyDialog={onCloseAddRecords}
+          setMakeNewArray={setMakeNewArray}
         />
         <ShowCategoryMaster
           isShowCategoryMaster={isShowCategoryMaster}

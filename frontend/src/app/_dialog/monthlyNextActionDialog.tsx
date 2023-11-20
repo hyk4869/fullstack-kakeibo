@@ -9,10 +9,11 @@ type MonthlyNextActionDialogProps = {
   contentNum: number;
   content: TMonthlySpending[];
   onCloseMonthlyDialog: () => void;
+  setMakeNewArray: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
 };
 
 const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) => {
-  const { isShow, onCloseConfirmDialog, contentNum, content, onCloseMonthlyDialog } = props;
+  const { isShow, onCloseConfirmDialog, contentNum, content, onCloseMonthlyDialog, setMakeNewArray } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
@@ -49,6 +50,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
         setIsLoading(false);
         onCloseConfirmDialog();
         onCloseMonthlyDialog();
+        setMakeNewArray([]);
       }
     } else {
       window.alert('レコードのいずれかの項目が空です。');
