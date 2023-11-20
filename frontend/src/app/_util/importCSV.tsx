@@ -58,6 +58,10 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
           /** 重複しないIDを持つ新しい要素を追加する */
           const newArray = [...updatedArray, ...findCategoryID.filter((s) => !updatedArray.some((a) => a.id === s.id))];
 
+          const filteredValue = newArray.filter(
+            (a) => a.paymentDay !== null && a.store !== '' && a.usageFee !== null && a.categoryId !== null,
+          );
+
           setIncrementArray((prevValue) => {
             return monthlyData.length === 0
               ? newArray.map((a) => Number(a.id))
@@ -74,7 +78,8 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
               : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
           );
           console.log({ parsedResult, findCategoryID, updatedArray, newArray });
-          return monthlyData.length === 0 ? newArray : [...prevArray, ...findCategoryID];
+
+          return filteredValue;
         });
       } catch (error) {
         console.error(error);
