@@ -77,7 +77,7 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
               ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
               : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
           );
-          console.log({ parsedResult, findCategoryID, updatedArray, newArray });
+          // console.log({ parsedResult, findCategoryID, updatedArray, newArray });
 
           return filteredValue;
         });

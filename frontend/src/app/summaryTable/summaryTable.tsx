@@ -292,7 +292,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   useEffect(() => {
     setEditValue(monthlyData);
-  }, [monthlyData]);
+  }, [enableEdit]);
 
   /**
    * 昇順降順のソート
@@ -366,11 +366,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    */
   const visibleRows = useMemo(
     () =>
-      stableSort(monthlyData, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [order, orderBy, page, rowsPerPage, monthlyData],
+      stableSort(editValue, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [order, orderBy, page, rowsPerPage, editValue],
   );
 
   const handleEditFlag = () => {
@@ -421,10 +418,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       ...data,
       userId: data.userId || 1,
     }));
+
     axios
       .post(getMonthlySpending, postData)
       .then((res) => {
         if (res.data) {
+          console.log(res.data);
           dispatch(setMonthlySpending(res.data));
         }
       })
@@ -432,6 +431,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
         console.error(error);
       });
   };
+  /**
+   *
+   * saveValueメソッド修正する
+   *
+   *
+   */
 
   // const saveValue = async () => {
   //   const CHUNK_SIZE = 200;

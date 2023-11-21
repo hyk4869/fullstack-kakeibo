@@ -29,7 +29,6 @@ import { ExportCSV } from '../_util/exportCSV';
 import { ImportCSV } from '../_util/importCSV';
 import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
-import { newMonthlySpending } from '../_customComponents/customProperties';
 import { Order, getComparator, monthlySpendingHeadCells, stableSort } from '../summaryTable/summaryTable';
 import { visuallyHidden } from '@mui/utils';
 
@@ -74,7 +73,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     }
   }, [increment]);
 
-  console.log({ arrayLastId, increment, incrementArray, makeNewArray, monthlyData });
+  // console.log({ arrayLastId, increment, incrementArray, makeNewArray, monthlyData });
 
   /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
