@@ -1,6 +1,6 @@
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { commonFontSize } from './customProperties';
+import { colorBlack, commonFontSize } from './customProperties';
 
 type CustomSelectTabProps = {
   onChangeValue: (id: number, paramKey: string, value: number | null) => void;
@@ -42,6 +42,7 @@ const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
               fontSize: commonFontSize,
               minWidth: '10rem',
               maxWidth: '13rem',
+              color: colorBlack,
             }}
             inputProps={{ style: { fontSize: commonFontSize } }}
           >
@@ -54,7 +55,9 @@ const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
             })}
           </Select>
         ) : (
-          <Box>{list?.find((a) => a.value === Number(labelNumber))?.label}</Box>
+          <Box sx={{ color: colorBlack, fontSize: commonFontSize }}>
+            {list?.find((a) => a.value === Number(labelNumber))?.label}
+          </Box>
         )}
       </FormControl>
     </>

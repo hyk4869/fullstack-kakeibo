@@ -1,6 +1,6 @@
 import { Box, TextField } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { commonFontSize } from './customProperties';
+import { colorBlack, commonFontSize } from './customProperties';
 
 type CustomTextfieldProps = {
   value: string | null;
@@ -30,21 +30,25 @@ const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: align }}>
-        <TextField
-          variant="standard"
-          value={textValue}
-          disabled={!edit}
-          onChange={(e) => handleChangeText(e)}
-          onBlur={handleBlur}
-          sx={{
-            fontSize: commonFontSize,
-            minWidth: '13rem',
-          }}
-          InputProps={{ style: { fontSize: commonFontSize, minWidth: '13rem' } }}
-          {...other}
-        />
-      </Box>
+      {edit ? (
+        <Box sx={{ display: 'flex', justifyContent: align }}>
+          <TextField
+            variant="standard"
+            value={textValue}
+            disabled={!edit}
+            onChange={(e) => handleChangeText(e)}
+            onBlur={handleBlur}
+            sx={{
+              fontSize: commonFontSize,
+              minWidth: '13rem',
+            }}
+            InputProps={{ style: { fontSize: commonFontSize, minWidth: '13rem', color: colorBlack } }}
+            {...other}
+          />
+        </Box>
+      ) : (
+        <Box sx={{ fontSize: commonFontSize, minWidth: '13rem', color: colorBlack }}>{textValue}</Box>
+      )}
     </>
   );
 };

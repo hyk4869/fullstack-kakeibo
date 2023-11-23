@@ -1,7 +1,7 @@
 import { Box, TextField } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { NumericFormat, OnValueChange } from 'react-number-format';
-import { commonFontSize, minWidth } from './customProperties';
+import { colorBlack, commonFontSize, minWidth } from './customProperties';
 
 type CustomNumberFormatProps = {
   value: number | null;
@@ -32,23 +32,28 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth, margin: 'auto' }}>
-      <NumericFormat
-        displayType={edit ? 'input' : 'text'}
-        customInput={TextFieldCustomInput}
-        value={numeric}
-        thousandSeparator={true}
-        style={{ fontSize: commonFontSize }}
-        onValueChange={hadleChangeNumericValue}
-        decimalScale={0}
-        onBlur={handleBlur}
-        {...other}
-      />
+      {edit ? (
+        <NumericFormat
+          displayType={edit ? 'input' : 'text'}
+          customInput={TextFieldCustomInput}
+          value={numeric}
+          thousandSeparator={true}
+          style={{ fontSize: commonFontSize }}
+          onValueChange={hadleChangeNumericValue}
+          decimalScale={0}
+          onBlur={handleBlur}
+          {...other}
+        />
+      ) : (
+        <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{numeric}</Box>
+      )}
+
       {suffix ? (
         <Box
           sx={{
             color: 'rgba(0, 0, 0, 0.6)',
             fontSize: commonFontSize,
-            paddingLeft: '0.5rem',
+            paddingLeft: '0.7rem',
           }}
         >
           {suffix}
@@ -66,7 +71,11 @@ type TextFieldCustomInputProps = {
 const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
   const { ...other } = props;
   return (
-    <TextField variant="standard" InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth } }} {...other} />
+    <TextField
+      variant="standard"
+      InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth, color: colorBlack } }}
+      {...other}
+    />
   );
 };
 

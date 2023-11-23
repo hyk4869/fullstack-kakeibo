@@ -18,17 +18,3 @@ export const newMonthlySpending: TMonthlySpending = {
   usageFee: null,
   categoryId: null,
 };
-//   const changeValue = useCallback((paramKey: string, value: unknown) => {
-//     setMakeNewArray((prevArray) => {
-//       return prevArray.map((row) => {
-//         if (row.id === Number(paramKey)) {
-//           return {
-//             ...row,
-//             [paramKey]: value === '' ? null : value,
-//           };
-//         } else {
-//           return row;
-//         }
-//       });
-//     });
-//   }, []);

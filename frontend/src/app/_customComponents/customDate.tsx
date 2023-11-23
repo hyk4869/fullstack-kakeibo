@@ -3,7 +3,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
-import { commonFontSize, minWidth } from './customProperties';
+import { colorBlack, commonFontSize, minWidth } from './customProperties';
+import { Box } from '@mui/material';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 type CustomDateProps = {
   value: Date | Dayjs | null;
@@ -32,29 +39,39 @@ const CustomDate: React.FC<CustomDateProps> = (props) => {
     },
     [value, edit, onChangeValue, paramKey],
   );
+  const isDayjs = (value: Date | Dayjs): value is Dayjs => {
+    return (value as Dayjs).tz !== undefined;
+  };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker
-        format="YYYY-MM-DD"
-        value={selectedDate}
-        onChange={(e) => handleDateChange(e)}
-        disabled={!edit}
-        sx={{
-          fontSize: commonFontSize,
-          maxWidth: '7rem',
-          minWidth: minWidth,
-        }}
-        slotProps={{
-          textField: {
-            variant: 'standard',
-            InputProps: {
-              style: { fontSize: commonFontSize },
-            },
-          },
-        }}
-      />
-    </LocalizationProvider>
+    <>
+      {edit ? (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            format="YYYY-MM-DD"
+            value={selectedDate}
+            onChange={(e) => handleDateChange(e)}
+            disabled={!edit}
+            sx={{
+              maxWidth: '7rem',
+              minWidth: minWidth,
+            }}
+            slotProps={{
+              textField: {
+                variant: 'standard',
+                InputProps: {
+                  style: { fontSize: commonFontSize, color: colorBlack },
+                },
+              },
+            }}
+          />
+        </LocalizationProvider>
+      ) : (
+        <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>
+          {isDayjs(selectedDate!) ? selectedDate.tz('Asia/Tokyo').format('YYYY-MM-DD') : ''}
+        </Box>
+      )}
+    </>
   );
 };
 
