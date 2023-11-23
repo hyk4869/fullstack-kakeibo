@@ -2,6 +2,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogAc
 import React, { useState } from 'react';
 import { TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
 import { useDispatch } from 'react-redux';
+import LoadingContent from '../_util/loading';
 
 type MonthlyNextActionDialogProps = {
   isShow: boolean;
@@ -15,7 +16,6 @@ type MonthlyNextActionDialogProps = {
 const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) => {
   const { isShow, onCloseConfirmDialog, contentNum, content, onCloseMonthlyDialog, setMakeNewArray } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
@@ -53,7 +53,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
         setMakeNewArray([]);
       }
     } else {
-      window.alert('レコードのいずれかの項目が空です。');
+      window.alert('いずれかの項目が空です。');
       setIsLoading(false);
       onCloseConfirmDialog();
     }
@@ -86,6 +86,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
           </Button>
         </DialogActions>
       </Dialog>
+      <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
     </>
   );
 };

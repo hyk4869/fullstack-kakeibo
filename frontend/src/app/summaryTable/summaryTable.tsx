@@ -39,6 +39,7 @@ import CreateNewRecordsDialog from '../_dialog/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
 import { getMonthlySpending } from '../_api/url';
+import LoadingContent from '../_util/loading';
 
 export type Order = 'asc' | 'desc';
 
@@ -181,6 +182,8 @@ type EnhancedTableToolbarProps = {
   saveValue: () => void;
   deleteArrayValue: () => void;
   enableEdit: boolean;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 /**
  *
@@ -188,7 +191,17 @@ type EnhancedTableToolbarProps = {
  *
  */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
-  const { numSelected, edit, dataLength, handleEditFlag, saveValue, deleteArrayValue, enableEdit } = props;
+  const {
+    numSelected,
+    edit,
+    dataLength,
+    handleEditFlag,
+    saveValue,
+    deleteArrayValue,
+    enableEdit,
+    isLoading,
+    setIsLoading,
+  } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
 
@@ -262,6 +275,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
         edit={edit}
       />
+      <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
     </Toolbar>
   );
 };
@@ -287,6 +301,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [edit, setEdit] = useState<boolean>(false);
   const [editValue, setEditValue] = useState<Array<TMonthlySpending>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
@@ -415,6 +430,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * 後でpost用に変更
    */
   const saveValue = async () => {
+    setIsLoading(true);
     const postData = editValue.map(({ category, ...data }) => ({
       ...data,
       userId: data.userId || 1,
@@ -429,6 +445,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       .catch((error) => {
         console.error(error);
       });
+    setIsLoading(false);
   };
   /**
    *
@@ -507,6 +524,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           saveValue={saveValue}
           deleteArrayValue={deleteArrayValue}
           enableEdit={enableEdit}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">

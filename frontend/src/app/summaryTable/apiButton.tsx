@@ -3,11 +3,11 @@ import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../_api/url';
 import { useDispatch, useSelector } from 'react-redux';
-import { enableEdit, setCategoryContent, setEnableEdit, setMonthlySpending } from '../_store/slice';
-import CircularProgress from '@mui/material/CircularProgress';
+import { setCategoryContent, setEnableEdit, setMonthlySpending } from '../_store/slice';
 import { useCallback, useState } from 'react';
 import CustomDate from '../_customComponents/customDate';
 import { RootState } from '../_store/store';
+import LoadingContent from '../_util/loading';
 
 const ApiButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -133,22 +133,7 @@ const ApiButton = () => {
         >
           テーブルをクリア
         </Button>
-        {isLoading === false ? (
-          <></>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              margin: '0 2rem',
-              alignItems: 'center',
-              maxHeight: '1px',
-              transform: 'translateX(50px)',
-            }}
-          >
-            <h5>Loading...</h5>
-            <CircularProgress size={20} sx={{ marginLeft: '1rem' }} />
-          </div>
-        )}
+        <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
       </div>
     </>
   );

@@ -26,11 +26,12 @@ import { grey, red } from '@mui/material/colors';
 import MonthlyNextActionDialog from './monthlyNextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportCSV } from '../_util/exportCSV';
-import { ImportCSV } from '../_util/importCSV';
+import { ImportCSV } from '../_util/monthlySpendingUtil/importCSV';
 import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
 import { Order, getComparator, monthlySpendingHeadCells, stableSort } from '../summaryTable/summaryTable';
 import { visuallyHidden } from '@mui/utils';
+import { monthlySpendingHeaders } from '../_util/exportCSVTitleName';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -54,7 +55,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
-  const enableEdit = useSelector((state: RootState) => state.enableEdit);
 
   useEffect(() => {
     if (monthlyData && monthlyData.length >= 0) {
@@ -358,7 +358,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         </Paper>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Box sx={{ position: 'absolute', bottom: '0' }}>
-            <ExportCSV />
+            <ExportCSV headerOption={monthlySpendingHeaders} />
             <ImportCSV
               setMakeNewArray={setMakeNewArray}
               setIncrementArray={setIncrementArray}

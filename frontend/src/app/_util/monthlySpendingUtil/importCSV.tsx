@@ -2,11 +2,11 @@
 
 import { Button, Tooltip } from '@mui/material';
 import { parse } from 'papaparse';
-import { TMonthlySpending } from '../_store/slice';
+import { TMonthlySpending } from '../../_store/slice';
 import React, { SetStateAction, useRef, useState } from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useSelector } from 'react-redux';
-import { RootState } from '../_store/store';
+import { RootState } from '../../_store/store';
+import LoadingContent from '../loading';
 
 type ImportCSVProps = {
   setMakeNewArray: React.Dispatch<SetStateAction<TMonthlySpending[]>>;
@@ -99,7 +99,6 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
           } else {
             reject(new Error('Failed to parse CSV file.'));
           }
-          setIsLoading(false);
         },
         header: true,
       });
@@ -116,22 +115,7 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
           </Button>
         </label>
       </Tooltip>
-      {isLoading === false ? (
-        <></>
-      ) : (
-        <div
-          style={{
-            display: 'flex',
-            margin: '0 2rem',
-            alignItems: 'center',
-            maxHeight: '1px',
-            transform: 'translateX(50px)',
-          }}
-        >
-          <h5>Loading...</h5>
-          <CircularProgress size={20} sx={{ marginLeft: '1rem' }} />
-        </div>
-      )}
+      <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
     </>
   );
 };

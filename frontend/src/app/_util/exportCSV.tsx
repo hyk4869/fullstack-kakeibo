@@ -1,19 +1,20 @@
 'use client';
 import { Tooltip, Button } from '@mui/material';
 import { CSVLink } from 'react-csv';
+import React from 'react';
 
-type ExportCSVProps = {
-  //
+type HeaderOption = {
+  label: string;
+  key: string;
 };
 
-export const ExportCSV: React.FC<ExportCSVProps> = () => {
-  const headers = [
-    { label: 'id', key: 'id' },
-    { label: 'paymentDay', key: 'paymentDay' },
-    { label: 'store', key: 'store' },
-    { label: 'categoryId', key: 'categoryId' },
-    { label: 'usageFee', key: 'usageFee' },
-  ];
+type ExportCSVProps = {
+  headerOption: HeaderOption[];
+};
+
+export const ExportCSV: React.FC<ExportCSVProps> = (props) => {
+  const { headerOption } = props;
+
   const data: string[][] = [];
   const filename = 'example.csv';
 
@@ -21,7 +22,7 @@ export const ExportCSV: React.FC<ExportCSVProps> = () => {
     <>
       <Tooltip title={'CSVをインポートするためのテンプレートをダウンロードします。'} arrow>
         <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }}>
-          <CSVLink data={data} headers={headers} filename={filename} style={{ textDecoration: 'none' }}>
+          <CSVLink data={data} headers={headerOption} filename={filename} style={{ textDecoration: 'none' }}>
             CSVテンプレート
           </CSVLink>
         </Button>
