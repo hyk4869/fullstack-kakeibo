@@ -40,49 +40,80 @@ export class MonthlySpendingService {
     });
   }
 
-  /** データのPOST　データベースに保存作業を行う */
   async postMonthlySpending(postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
     }
 
     try {
-      /** DBにある全てのidを取得 */
-      const existingIds = await this.prisma.tMonthlySpending.findMany({
-        select: {
-          id: true,
-        },
-      });
+      /** トランザクション処理 */
+      const insertedData = await this.prisma.$transaction(async (prisma) => {
+        const now = new Date();
 
-      /** postDataに存在しないidを取得 */
-      const missingIds = existingIds
-        .filter((existingItem) => !postData.some((item) => item.id === existingItem.id))
-        .map((item) => item.id);
-
-      if (missingIds.length > 0) {
-        await this.prisma.tMonthlySpending.deleteMany({
-          where: {
-            id: {
-              in: missingIds,
+        const upsertPromises = postData.map(async (data) => {
+          /** IDで既存のレコードを探す */
+          const existingRecord = await prisma.tMonthlySpending.findUnique({
+            where: {
+              id: data.id,
             },
+          });
+
+          if (existingRecord) {
+            // 既存のレコードがある場合は更新
+            await prisma.tMonthlySpending.update({
+              where: {
+                id: data.id,
+              },
+              data: {
+                ...data,
+                updatedAt: now.toISOString(),
+                paymentDay: new Date(data.paymentDay).toISOString(),
+              },
+            });
+          } else {
+            // 既存のレコードがない場合は新規作成
+            await prisma.tMonthlySpending.create({
+              data: {
+                ...data,
+                createdAt: now.toISOString(),
+                updatedAt: now.toISOString(),
+                paymentDay: new Date(data.paymentDay).toISOString(),
+              },
+            });
+          }
+        });
+
+        // upsert処理がすべて完了するのを待つ
+        await Promise.all(upsertPromises);
+
+        /** DBにある全てのidを取得 */
+        const existingIds = await prisma.tMonthlySpending.findMany({
+          select: {
+            id: true,
           },
         });
-      }
 
-      const now = new Date();
+        /** postDataに存在しないidを取得 */
+        const missingIds = existingIds
+          .filter((existingItem) => !postData.some((item) => item.id === existingItem.id))
+          .map((item) => item.id);
 
-      const postDataWithTimestamp = postData.map((data) => ({
-        ...data,
-        createdAt: now.toISOString(),
-        updatedAt: now.toISOString(),
-        paymentDay: new Date(data.paymentDay).toISOString(),
-      }));
+        if (missingIds.length > 0) {
+          await prisma.tMonthlySpending.deleteMany({
+            where: {
+              id: {
+                in: missingIds,
+              },
+            },
+          });
+        }
 
-      await this.prisma.tMonthlySpending.createMany({
-        data: postDataWithTimestamp,
-        skipDuplicates: true,
+        /** データベースから最新のデータを取得 */
+        const latestData = await prisma.tMonthlySpending.findMany({});
+
+        return latestData;
       });
-      const insertedData = await this.prisma.tMonthlySpending.findMany({});
+
       return insertedData;
     } catch (error) {
       console.error('データベースへの書き込みエラー:', error);

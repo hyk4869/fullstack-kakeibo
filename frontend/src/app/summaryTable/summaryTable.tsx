@@ -291,8 +291,10 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setEditValue(monthlyData);
-  }, [enableEdit]);
+    if (monthlyData.length !== editValue.length) {
+      setEditValue(monthlyData);
+    }
+  }, [monthlyData, enableEdit]);
 
   /**
    * 昇順降順のソート
@@ -412,18 +414,15 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    * 保存用
    * 後でpost用に変更
    */
-  const saveValue = () => {
-    dispatch(setEditMonthlySpending(editValue));
-    const postData = monthlyData.map(({ category, ...data }) => ({
+  const saveValue = async () => {
+    const postData = editValue.map(({ category, ...data }) => ({
       ...data,
       userId: data.userId || 1,
     }));
-
-    axios
+    await axios
       .post(getMonthlySpending, postData)
       .then((res) => {
         if (res.data) {
-          console.log(res.data);
           dispatch(setMonthlySpending(res.data));
         }
       })
