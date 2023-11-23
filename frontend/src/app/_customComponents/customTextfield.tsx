@@ -1,5 +1,5 @@
 import { Box, TextField } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { colorBlack, commonFontSize } from './customProperties';
 
 type CustomTextfieldProps = {
@@ -28,29 +28,61 @@ const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
     onChangeValue(id, paramKey || '', textValue);
   }, [id, paramKey, textValue, onChangeValue]);
 
-  return (
-    <>
-      {edit ? (
-        <Box sx={{ display: 'flex', justifyContent: align }}>
-          <TextField
-            variant="standard"
-            value={textValue}
-            disabled={!edit}
-            onChange={(e) => handleChangeText(e)}
-            onBlur={handleBlur}
-            sx={{
-              fontSize: commonFontSize,
-              minWidth: '13rem',
-            }}
-            InputProps={{ style: { fontSize: commonFontSize, minWidth: '13rem', color: colorBlack } }}
-            {...other}
-          />
-        </Box>
-      ) : (
-        <Box sx={{ fontSize: commonFontSize, minWidth: '13rem', color: colorBlack }}>{textValue}</Box>
-      )}
-    </>
-  );
+  /**
+   *
+   *
+   *
+   */
+  const memoizedComponent = useMemo(() => {
+    return (
+      <>
+        {edit ? (
+          <Box sx={{ display: 'flex', justifyContent: align }}>
+            <TextField
+              variant="standard"
+              value={textValue}
+              disabled={!edit}
+              onChange={(e) => handleChangeText(e)}
+              onBlur={handleBlur}
+              sx={{
+                fontSize: commonFontSize,
+                minWidth: '13rem',
+              }}
+              InputProps={{ style: { fontSize: commonFontSize, minWidth: '13rem', color: colorBlack } }}
+              {...other}
+            />
+          </Box>
+        ) : (
+          <Box sx={{ fontSize: commonFontSize, minWidth: '13rem', color: colorBlack }}>{textValue}</Box>
+        )}
+      </>
+    );
+  }, [edit, textValue, align, handleChangeText, handleBlur]);
+
+  // return (
+  //   <>
+  //     {edit ? (
+  //       <Box sx={{ display: 'flex', justifyContent: align }}>
+  //         <TextField
+  //           variant="standard"
+  //           value={textValue}
+  //           disabled={!edit}
+  //           onChange={(e) => handleChangeText(e)}
+  //           onBlur={handleBlur}
+  //           sx={{
+  //             fontSize: commonFontSize,
+  //             minWidth: '13rem',
+  //           }}
+  //           InputProps={{ style: { fontSize: commonFontSize, minWidth: '13rem', color: colorBlack } }}
+  //           {...other}
+  //         />
+  //       </Box>
+  //     ) : (
+  //       <Box sx={{ fontSize: commonFontSize, minWidth: '13rem', color: colorBlack }}>{textValue}</Box>
+  //     )}
+  //   </>
+  // );
+  return memoizedComponent;
 };
 
 export default React.memo(CustomTextfield);

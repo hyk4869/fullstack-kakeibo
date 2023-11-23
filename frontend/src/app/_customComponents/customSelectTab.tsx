@@ -1,5 +1,5 @@
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { colorBlack, commonFontSize } from './customProperties';
 
 type CustomSelectTabProps = {
@@ -30,38 +30,79 @@ const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
     [list, labelNumber],
   );
 
-  return (
-    <>
-      <FormControl variant="standard" sx={{ justifyContent: align }}>
-        {edit ? (
-          <Select
-            value={labelNumber?.toString() ?? ''}
-            onChange={handleChange}
-            label="category"
-            sx={{
-              fontSize: commonFontSize,
-              minWidth: '10rem',
-              maxWidth: '13rem',
-              color: colorBlack,
-            }}
-            inputProps={{ style: { fontSize: commonFontSize } }}
-          >
-            {list?.map((data, idx) => {
-              return (
-                <MenuItem key={idx} value={data.value}>
-                  <span style={{ whiteSpace: 'pre-wrap' }}>{data.label}</span>
-                </MenuItem>
-              );
-            })}
-          </Select>
-        ) : (
-          <Box sx={{ color: colorBlack, fontSize: commonFontSize }}>
-            {list?.find((a) => a.value === Number(labelNumber))?.label}
-          </Box>
-        )}
-      </FormControl>
-    </>
-  );
+  /**
+   *
+   *
+   *
+   */
+  const memoizedComponent = useMemo(() => {
+    return (
+      <>
+        <FormControl variant="standard" sx={{ justifyContent: align }}>
+          {edit ? (
+            <Select
+              value={labelNumber?.toString() ?? ''}
+              onChange={handleChange}
+              label="category"
+              sx={{
+                fontSize: commonFontSize,
+                minWidth: '10rem',
+                maxWidth: '13rem',
+                color: colorBlack,
+              }}
+              inputProps={{ style: { fontSize: commonFontSize } }}
+            >
+              {list?.map((data, idx) => {
+                return (
+                  <MenuItem key={idx} value={data.value}>
+                    <span style={{ whiteSpace: 'pre-wrap' }}>{data.label}</span>
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          ) : (
+            <Box sx={{ color: colorBlack, fontSize: commonFontSize }}>
+              {list?.find((a) => a.value === Number(labelNumber))?.label}
+            </Box>
+          )}
+        </FormControl>
+      </>
+    );
+  }, [edit, labelNumber, align, handleChange, list, onChangeValue, paramKey, id]);
+
+  // return (
+  //   <>
+  //     <FormControl variant="standard" sx={{ justifyContent: align }}>
+  //       {edit ? (
+  //         <Select
+  //           value={labelNumber?.toString() ?? ''}
+  //           onChange={handleChange}
+  //           label="category"
+  //           sx={{
+  //             fontSize: commonFontSize,
+  //             minWidth: '10rem',
+  //             maxWidth: '13rem',
+  //             color: colorBlack,
+  //           }}
+  //           inputProps={{ style: { fontSize: commonFontSize } }}
+  //         >
+  //           {list?.map((data, idx) => {
+  //             return (
+  //               <MenuItem key={idx} value={data.value}>
+  //                 <span style={{ whiteSpace: 'pre-wrap' }}>{data.label}</span>
+  //               </MenuItem>
+  //             );
+  //           })}
+  //         </Select>
+  //       ) : (
+  //         <Box sx={{ color: colorBlack, fontSize: commonFontSize }}>
+  //           {list?.find((a) => a.value === Number(labelNumber))?.label}
+  //         </Box>
+  //       )}
+  //     </FormControl>
+  //   </>
+  // );
+  return memoizedComponent;
 };
 
 export default React.memo(CustomSelectTab);

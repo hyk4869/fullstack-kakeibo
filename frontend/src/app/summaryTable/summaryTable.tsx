@@ -612,12 +612,16 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         id={Number(row.id)}
                       />
                     </TableCell>
-                    <TableCell align="center">
-                      <DeleteIcon
-                        onClick={() => deleteValue(row.id)}
-                        sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }}
-                      />
-                    </TableCell>
+                    {edit ? (
+                      <TableCell align="center">
+                        <DeleteIcon
+                          onClick={() => deleteValue(row.id)}
+                          sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }}
+                        />
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
                   </TableRow>
                 );
               })}
@@ -625,7 +629,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[20, 50, 100]}
+          rowsPerPageOptions={[20, 50, 75]}
           component="div"
           count={monthlyData.length}
           rowsPerPage={rowsPerPage}
