@@ -40,6 +40,7 @@ export class MonthlySpendingService {
     });
   }
 
+  /** 保存処理 */
   async postMonthlySpending(postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
@@ -83,9 +84,47 @@ export class MonthlySpendingService {
           }
         });
 
-        // upsert処理がすべて完了するのを待つ
         await Promise.all(upsertPromises);
 
+        // /** DBにある全てのidを取得 */
+        // const existingIds = await prisma.tMonthlySpending.findMany({
+        //   select: {
+        //     id: true,
+        //   },
+        // });
+
+        // /** postDataに存在しないidを取得 */
+        // const missingIds = existingIds
+        //   .filter((existingItem) => !postData.some((item) => item.id === existingItem.id))
+        //   .map((item) => item.id);
+
+        // if (missingIds.length > 0) {
+        //   await prisma.tMonthlySpending.deleteMany({
+        //     where: {
+        //       id: {
+        //         in: missingIds,
+        //       },
+        //     },
+        //   });
+        // }
+
+        /** データベースから最新のデータを取得 */
+        const latestData = await prisma.tMonthlySpending.findMany({});
+
+        return latestData;
+      });
+
+      return insertedData;
+    } catch (error) {
+      console.error('データベースへの書き込みエラー:', error);
+      throw error;
+    }
+  }
+
+  /** 削除メソッド */
+  async deleteContent(postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
+    try {
+      const insertedData = await this.prisma.$transaction(async (prisma) => {
         /** DBにある全てのidを取得 */
         const existingIds = await prisma.tMonthlySpending.findMany({
           select: {
@@ -93,9 +132,9 @@ export class MonthlySpendingService {
           },
         });
 
-        /** postDataに存在しないidを取得 */
+        /** postDataに存在するidを取得 */
         const missingIds = existingIds
-          .filter((existingItem) => !postData.some((item) => item.id === existingItem.id))
+          .filter((existingItem) => postData.some((item) => item.id === existingItem.id))
           .map((item) => item.id);
 
         if (missingIds.length > 0) {
@@ -108,12 +147,10 @@ export class MonthlySpendingService {
           });
         }
 
-        /** データベースから最新のデータを取得 */
         const latestData = await prisma.tMonthlySpending.findMany({});
 
         return latestData;
       });
-
       return insertedData;
     } catch (error) {
       console.error('データベースへの書き込みエラー:', error);

@@ -4,3 +4,5 @@ export const getMonthlySpending = 'http://localhost:3005/summaryTable';
 export const getCategory = 'http://localhost:3005/summaryTable/category';
 /** 一部期間のmonthlyを取得 */
 export const getSomeMonthlySpending = 'http://localhost:3005/summaryTable/someContent';
+/** 削除用の POST */
+export const postDeleteMonthlySpending = 'http://localhost:3005/summaryTable/deleteContent';

@@ -35,4 +35,9 @@ export class MonthlySpendingController {
   async postSaveContent(@Body() postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
     return this.monthlySpendingService.postMonthlySpending(postData);
   }
+
+  @Post('/deleteContent')
+  async postDeleteContent(@Body() postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
+    return this.monthlySpendingService.deleteContent(postData);
+  }
 }

@@ -22,13 +22,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  MCategory,
-  TMonthlySpending,
-  setDeleteMonthlySpending,
-  setEditMonthlySpending,
-  setMonthlySpending,
-} from '../_store/slice';
+import { MCategory, TMonthlySpending, setMonthlySpending } from '../_store/slice';
 import CustomNumberFormat from '../_customComponents/customNumeric';
 import CustomTextfield from '../_customComponents/customTextfield';
 import CustomDate from '../_customComponents/customDate';
@@ -38,7 +32,7 @@ import { Button } from '@mui/material';
 import CreateNewRecordsDialog from '../_dialog/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
-import { getMonthlySpending } from '../_api/url';
+import { getMonthlySpending, postDeleteMonthlySpending } from '../_api/url';
 import LoadingContent from '../_util/loading';
 
 export type Order = 'asc' | 'desc';
@@ -231,12 +225,13 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <Button
           variant="contained"
+          color={edit ? 'error' : 'primary'}
           disabled={!enableEdit}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={handleEditFlag}
         >
-          <Tooltip title={edit ? 'この動作は保存しません。保存するには「保存を押してください」' : undefined} arrow>
-            <span>{edit ? '確定' : '編集'}</span>
+          <Tooltip title={edit ? '保存するには「保存を押してください」' : undefined} arrow>
+            <span>{edit ? 'キャンセル' : '編集'}</span>
           </Tooltip>
         </Button>
         <Button
@@ -302,7 +297,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editValue, setEditValue] = useState<Array<TMonthlySpending>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [deleteSomething, setDeleteSomething] = useState<Array<TMonthlySpending>>([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -435,6 +430,10 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       ...data,
       userId: data.userId || 1,
     }));
+    const deleteData = deleteSomething.map(({ category, ...data }) => ({
+      ...data,
+      userId: data.userId || 1,
+    }));
     await axios
       .post(getMonthlySpending, postData)
       .then((res) => {
@@ -445,6 +444,20 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       .catch((error) => {
         console.error(error);
       });
+    if (deleteSomething.length !== 0) {
+      await axios
+        .post(postDeleteMonthlySpending, deleteData)
+        .then((res) => {
+          if (res.data) {
+            console.log('削除するデータあり。');
+            dispatch(setMonthlySpending(res.data));
+            setDeleteSomething([]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
     setIsLoading(false);
   };
   /**
@@ -482,24 +495,26 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   // };
 
   /**
-   * 確定用
-   */
-  const confirmValue = () => {
-    dispatch(setEditMonthlySpending(editValue));
-  };
-
-  /**
    * 削除
    */
-  const deleteValue = (id: number | null) => {
-    if (id !== null) {
-      setEditValue((prevData) => {
-        const updatedData = prevData.filter((d) => d.id !== id);
-        dispatch(setDeleteMonthlySpending(updatedData));
-        return updatedData;
-      });
-    }
-  };
+  const deleteValue = useCallback(
+    (id: number | null) => {
+      if (id !== null) {
+        setEditValue((prevData) => {
+          const updatedData = prevData.filter((d) => d.id !== id);
+          const deleteContent = prevData.filter((d) => d.id === id);
+          setDeleteSomething((prev) => {
+            const uniqueDeleteContent = deleteContent.filter(
+              (item) => !prev.some((existingItem) => existingItem.id === item.id),
+            );
+            return [...prev, ...uniqueDeleteContent];
+          });
+          return updatedData;
+        });
+      }
+    },
+    [editValue, deleteSomething],
+  );
 
   /**
    * 一括削除
@@ -507,7 +522,13 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const deleteArrayValue = () => {
     setEditValue((prevValue) => {
       const updatedData = prevValue.filter((a) => !selected.includes(Number(a.id)));
-      dispatch(setDeleteMonthlySpending(updatedData));
+      const deleteContent = prevValue.filter((a) => selected.includes(Number(a.id)));
+      setDeleteSomething((prev) => {
+        const uniqueDeleteContent = deleteContent.filter(
+          (item) => !prev.some((existingItem) => existingItem.id === item.id),
+        );
+        return [...prev, ...uniqueDeleteContent];
+      });
       return updatedData;
     });
     setSelected([]);
