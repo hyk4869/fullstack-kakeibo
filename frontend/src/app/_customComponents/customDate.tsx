@@ -5,12 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
 import { colorBlack, commonFontSize, minWidth } from './customProperties';
 import { Box } from '@mui/material';
-// import dayjs from 'dayjs';
-// import utc from 'dayjs/plugin/utc';
-// import timezone from 'dayjs/plugin/timezone';
-
-// dayjs.extend(utc);
-// dayjs.extend(timezone);
+import dayjs from 'dayjs';
 
 type CustomDateProps = {
   value: Date | Dayjs | null;
@@ -39,74 +34,68 @@ const CustomDate: React.FC<CustomDateProps> = (props) => {
     },
     [value, edit, onChangeValue, paramKey, id],
   );
-  // const isDayjs = (value: Date | Dayjs): value is Dayjs => {
-  //   return (value as Dayjs).tz !== undefined;
-  // };
 
-  /**
-   *
-   *
-   *
-   */
-  // const memoizedComponent = useMemo(() => {
-  //   return (
-  //     <>
-  //       {edit ? (
-  //         <LocalizationProvider dateAdapter={AdapterDayjs}>
-  //           <DatePicker
-  //             format="YYYY-MM-DD"
-  //             value={selectedDate}
-  //             onChange={(e) => handleDateChange(e)}
-  //             disabled={!edit}
-  //             sx={{
-  //               maxWidth: '7rem',
-  //               minWidth: minWidth,
-  //             }}
-  //             slotProps={{
-  //               textField: {
-  //                 variant: 'standard',
-  //                 InputProps: {
-  //                   style: { fontSize: commonFontSize, color: colorBlack },
-  //                 },
+  const memoizedComponent = useMemo(() => {
+    return (
+      <>
+        {edit ? (
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              format="YYYY-MM-DD"
+              value={selectedDate}
+              onChange={(e) => handleDateChange(e)}
+              disabled={!edit}
+              sx={{
+                maxWidth: '7rem',
+                minWidth: minWidth,
+              }}
+              slotProps={{
+                textField: {
+                  variant: 'standard',
+                  InputProps: {
+                    style: { fontSize: commonFontSize, color: colorBlack },
+                  },
+                },
+              }}
+            />
+          </LocalizationProvider>
+        ) : (
+          <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{dayjs(selectedDate).format('YYYY-MM-DD')}</Box>
+        )}
+      </>
+    );
+  }, [edit, selectedDate, handleDateChange, onChangeValue, id, paramKey]);
+
+  // return (
+  //   <>
+  //     {edit ? (
+  //       <LocalizationProvider dateAdapter={AdapterDayjs}>
+  //         <DatePicker
+  //           format="YYYY-MM-DD"
+  //           value={selectedDate}
+  //           onChange={(e) => handleDateChange(e)}
+  //           disabled={!edit}
+  //           sx={{
+  //             maxWidth: '7rem',
+  //             minWidth: minWidth,
+  //           }}
+  //           slotProps={{
+  //             textField: {
+  //               variant: 'standard',
+  //               InputProps: {
+  //                 style: { fontSize: commonFontSize, color: colorBlack },
   //               },
-  //             }}
-  //           />
-  //         </LocalizationProvider>
-  //       ) : (
-  //         <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>
-  //           {isDayjs(selectedDate!) ? selectedDate.tz('Asia/Tokyo').format('YYYY-MM-DD') : ''}
-  //         </Box>
-  //       )}
-  //     </>
-  //   );
-  // }, [edit, selectedDate, handleDateChange, onChangeValue, id, paramKey]);
+  //             },
+  //           }}
+  //         />
+  //       </LocalizationProvider>
+  //     ) : (
+  //       <Box>{dayjs(selectedDate).format('YYYY-MM-DD')}</Box>
+  //     )}
+  //   </>
+  // );
 
-  return (
-    <>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          format="YYYY-MM-DD"
-          value={selectedDate}
-          onChange={(e) => handleDateChange(e)}
-          disabled={!edit}
-          sx={{
-            maxWidth: '7rem',
-            minWidth: minWidth,
-          }}
-          slotProps={{
-            textField: {
-              variant: 'standard',
-              InputProps: {
-                style: { fontSize: commonFontSize, color: colorBlack },
-              },
-            },
-          }}
-        />
-      </LocalizationProvider>
-    </>
-  );
-
-  // return memoizedComponent;
+  return memoizedComponent;
 };
 
 export default React.memo(CustomDate);
