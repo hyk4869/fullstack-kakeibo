@@ -14,10 +14,13 @@ const MainPage = () => {
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { res } = context;
   if (context.req.url === '/main') {
-    res.writeHead(301, { Location: '/' });
-    res.end();
+    return {
+      redirect: {
+        destination: '/',
+        permanent: true,
+      },
+    };
   }
   return { props: {} };
 }
