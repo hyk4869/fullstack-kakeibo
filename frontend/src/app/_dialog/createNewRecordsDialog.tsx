@@ -29,7 +29,7 @@ import { ExportCSV } from '../_util/exportCSV';
 import { ImportCSV } from '../_util/monthlySpendingUtil/importCSV';
 import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
-import { Order, getComparator, monthlySpendingHeadCells, stableSort } from '../summaryTable/summaryTable';
+import { Order, getComparator, monthlySpendingHeadCells, stableSort } from '../main/summaryTable/summaryTable';
 import { visuallyHidden } from '@mui/utils';
 import { monthlySpendingHeaders } from '../_util/exportCSVTitleName';
 

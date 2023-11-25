@@ -7,8 +7,8 @@ type ListContentType = {
 export const HomeListURL: Array<ListContentType> = [{ label: 'Home', key: 1, link: '/' }];
 
 export const MonthlySpendingListURL: Array<ListContentType> = [
-  { label: 'Detail List', key: 2, link: '/summaryTable' },
-  { label: 'Each Monthly List', key: 3, link: '/' },
+  { label: 'Detail List', key: 2, link: '/main/summaryTable' },
+  { label: 'Each Monthly List', key: 3, link: '/main/monthlyAggregation' },
   { label: 'Category', key: 4, link: '/category' },
   { label: 'ER Figure', key: 5, link: '/erFigure' },
   { label: 'Test', key: 6, link: '/test' },

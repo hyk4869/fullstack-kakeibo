@@ -14,7 +14,10 @@ const Home: React.FC<HomeProps> = () => {
         <Link style={{ paddingRight: '1rem' }} href={'/erFigure'}>
           ER図
         </Link>
-        <Link href={'/summaryTable'}>Summary Table</Link>
+        <Link style={{ paddingRight: '1rem' }} href={'/main/summaryTable'}>
+          Summary Table
+        </Link>
+        <Link href={'/main/monthlyAggregation'}>Monthly Aggregation</Link>
       </div>
     </>
   );

@@ -20,20 +20,20 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../_store/store';
+import { RootState } from '../../_store/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MCategory, TMonthlySpending, setMonthlySpending } from '../_store/slice';
-import CustomNumberFormat from '../_customComponents/customNumeric';
-import CustomTextfield from '../_customComponents/customTextfield';
-import CustomDate from '../_customComponents/customDate';
-import CustomSelectTab from '../_customComponents/customSelectTab';
+import { MCategory, TMonthlySpending, setMonthlySpending } from '../../_store/slice';
+import CustomNumberFormat from '../../_customComponents/customNumeric';
+import CustomTextfield from '../../_customComponents/customTextfield';
+import CustomDate from '../../_customComponents/customDate';
+import CustomSelectTab from '../../_customComponents/customSelectTab';
 import dayjs from 'dayjs';
 import { Button } from '@mui/material';
-import CreateNewRecordsDialog from '../_dialog/createNewRecordsDialog';
+import CreateNewRecordsDialog from '../../_dialog/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
-import { getMonthlySpending, postDeleteMonthlySpending } from '../_api/url';
-import LoadingContent from '../_util/loading';
+import { getMonthlySpending, postDeleteMonthlySpending } from '../../_api/url';
+import LoadingContent from '../../_util/loading';
 
 export type Order = 'asc' | 'desc';
 
@@ -421,8 +421,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   );
 
   /**
-   * 保存用
-   * 後でpost用に変更
+   * 保存
    */
   const saveValue = async () => {
     setIsLoading(true);

@@ -1,7 +1,7 @@
 'use client';
 
 import { Provider } from 'react-redux';
-import { store } from '../_store/store';
+import { store } from '../../_store/store';
 import SummaryTable from './summaryTable';
 import ApiButton from './apiButton';
 
