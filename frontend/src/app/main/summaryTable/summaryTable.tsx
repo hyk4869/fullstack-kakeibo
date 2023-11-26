@@ -458,6 +458,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
         });
     }
     setIsLoading(false);
+    setEdit(false);
   };
   /**
    *
