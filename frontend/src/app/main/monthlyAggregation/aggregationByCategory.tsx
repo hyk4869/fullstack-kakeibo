@@ -3,7 +3,7 @@ import CustomTextfield from '@/app/_customComponents/customTextfield';
 import CustomNumberFormat from '@/app/_customComponents/customNumeric';
 import { RootState } from '@/app/_store/store';
 import { Box, TableBody, TableCell, TableContainer, TableRow, Table, TableHead } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomDate from '@/app/_customComponents/customDate';
 import { commonFontSize } from '@/app/_customComponents/customProperties';
@@ -31,6 +31,11 @@ type sortedDateType = {
   endDate: Date | null;
 };
 
+export type monitorSizeType = {
+  width: number;
+  height: number;
+};
+
 /** ヘッダー */
 const headerList: AggregationByCategoryHeader[] = [
   {
@@ -47,10 +52,19 @@ const headerList: AggregationByCategoryHeader[] = [
 
 /** カテゴリーごとの集計 */
 const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
+  const getWindowDimensions = () => {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+      width,
+      height,
+    };
+  };
+
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const [amount, setAmount] = useState<Array<amoutType>>([]);
   const [sortedDate, setSortedDate] = useState<sortedDateType>();
+  const [monitorSize, setMonitorSize] = useState<monitorSizeType>(getWindowDimensions());
 
   useEffect(() => {
     const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
@@ -92,11 +106,23 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
     });
   }, [categoryData, monthlyData]);
 
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      const onResize = () => {
+        setMonitorSize(getWindowDimensions());
+      };
+      window.addEventListener('resize', onResize);
+      return () => window.removeEventListener('resize', onResize);
+    } else {
+      return;
+    }
+  }, []);
+
+  console.log(monitorSize);
+
   const changeValue = useCallback(() => {
     //
   }, []);
-
-  console.log({ categoryData, amount, monthlyData, sortedDate });
 
   const totalAmount = (): number => {
     // eslint-disable-next-line prefer-const
@@ -206,6 +232,9 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
               format="YYYY年MM月"
             />
           </Box>
+          <Box>{monitorSize.width}</Box>
+          <span>-----</span>
+          <Box>{monitorSize.height}</Box>
         </Box>
       </Box>
     </>

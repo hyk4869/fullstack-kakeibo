@@ -39,17 +39,17 @@ const DoughnutChart: React.FC<DoughnutChartProps<amoutType>> = (props) => {
         position: 'bottom',
       },
       title: { display: true, text: 'カテゴリー別の金額', font: { weight: 'bold', size: 20 } },
-      tooltip: {
-        callbacks: {
-          label: (context: TooltipItem<'doughnut'>) => {
-            const label = context.label || '';
-            const value = context.parsed || 0;
-            const total = context.dataset.data.reduce((acc: number, data: number) => acc + data, 0);
-            const percentage = ((value / total) * 100).toFixed(2);
-            return `${label}: ${percentage}%`;
-          },
-        },
-      },
+      // tooltip: {
+      //   callbacks: {
+      //     label: (context: TooltipItem<'doughnut'>) => {
+      //       const label = context.label || '';
+      //       const value = context.parsed || 0;
+      //       const total = context.dataset.data.reduce((acc: number, data: number) => acc + data, 0);
+      //       const percentage = ((value / total) * 100).toFixed(2);
+      //       return `${label}: ${percentage}%`;
+      //     },
+      //   },
+      // },
     },
     cutout: '40%',
   };
