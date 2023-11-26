@@ -13,10 +13,11 @@ type CustomDateProps = {
   id: number;
   onChangeValue: (id: number, paramKey: string, value: Date | null) => void;
   edit?: boolean;
+  format?: string;
 };
 
 const CustomDate: React.FC<CustomDateProps> = (props) => {
-  const { value, edit, paramKey, onChangeValue, id } = props;
+  const { value, edit, paramKey, onChangeValue, id, format = 'YYYY-MM-DD' } = props;
   const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(value);
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const CustomDate: React.FC<CustomDateProps> = (props) => {
             />
           </LocalizationProvider>
         ) : (
-          <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{dayjs(selectedDate).format('YYYY-MM-DD')}</Box>
+          <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{dayjs(selectedDate).format(format)}</Box>
         )}
       </>
     );

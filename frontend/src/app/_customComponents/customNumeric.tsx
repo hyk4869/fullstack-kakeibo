@@ -30,11 +30,10 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
     onChangeValue(id, paramKey || '', numeric);
   }, [id, paramKey, numeric, onChangeValue]);
 
-  /**
-   *
-   *
-   *
-   */
+  const thousandSeparator = numeric !== null && numeric >= 1000;
+
+  const formattedValue = thousandSeparator ? numeric.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : numeric;
+
   const memoizedComponent = useMemo(() => {
     const CustomInputWrapper: React.FC = (inputProps) => <TextFieldCustomInput {...inputProps} />;
     return (
@@ -52,7 +51,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
             {...other}
           />
         ) : (
-          <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{numeric}</Box>
+          <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{formattedValue}</Box>
         )}
 
         {suffix ? (
@@ -60,7 +59,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
             sx={{
               color: 'rgba(0, 0, 0, 0.6)',
               fontSize: commonFontSize,
-              paddingLeft: '0.7rem',
+              paddingLeft: '0.5rem',
             }}
           >
             {suffix}
