@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomDate from '@/app/_customComponents/customDate';
 import { commonFontSize } from '@/app/_customComponents/customProperties';
+import DoughnutChart from '@/app/_util/doughnutChart';
 
 type AggregationByCategoryProps = {
   //
@@ -19,7 +20,7 @@ type AggregationByCategoryHeader = {
 };
 
 /** 合計金額用の型 */
-type amoutType = {
+export type amoutType = {
   totalAmount: number | null;
   categoryId: number | null;
   categoryName: string | null;
@@ -111,8 +112,8 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   return (
     <>
       <Box>
-        <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '45%' }}>
-          <Table>
+        <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', height: '70vh' }}>
+          <Table sx={{ width: '50%', height: 'minContent' }}>
             <TableHead>
               <TableRow>
                 {headerList.map((a) => {
@@ -178,6 +179,9 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
               </TableRow>
             </TableBody>
           </Table>
+          <Box sx={{ width: '50%', display: 'flex', justifyContent: 'center' }}>
+            <DoughnutChart value={amount} />
+          </Box>
         </TableContainer>
         <Box
           sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '10px', alignItems: 'end' }}
