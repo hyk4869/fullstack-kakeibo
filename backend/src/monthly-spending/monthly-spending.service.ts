@@ -109,7 +109,14 @@ export class MonthlySpendingService {
         // }
 
         /** データベースから最新のデータを取得 */
-        const latestData = await prisma.tMonthlySpending.findMany({});
+        const latestData = await prisma.tMonthlySpending.findMany({
+          include: {
+            category: true,
+          },
+          orderBy: {
+            id: 'asc',
+          },
+        });
 
         return latestData;
       });
@@ -147,7 +154,14 @@ export class MonthlySpendingService {
           });
         }
 
-        const latestData = await prisma.tMonthlySpending.findMany({});
+        const latestData = await prisma.tMonthlySpending.findMany({
+          include: {
+            category: true,
+          },
+          orderBy: {
+            id: 'asc',
+          },
+        });
 
         return latestData;
       });
