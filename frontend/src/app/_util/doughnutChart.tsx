@@ -10,11 +10,12 @@ Chart.register(...registerables);
 
 type DoughnutChartProps<T> = {
   value: T[];
+  title: string;
   //   somethiong?: U[]
 };
 
 const DoughnutChart: React.FC<DoughnutChartProps<amoutType>> = (props) => {
-  const { value } = props;
+  const { value, title } = props;
 
   const sortedChartData = value.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1));
   const chartData = sortedChartData.map((s) => s.totalAmount);
@@ -38,7 +39,7 @@ const DoughnutChart: React.FC<DoughnutChartProps<amoutType>> = (props) => {
         display: true,
         position: 'bottom',
       },
-      title: { display: true, text: 'カテゴリー別の金額', font: { weight: 'bold', size: 20 } },
+      title: { display: true, text: title, font: { weight: 'bold', size: 20 } },
       // tooltip: {
       //   callbacks: {
       //     label: (context: TooltipItem<'doughnut'>) => {

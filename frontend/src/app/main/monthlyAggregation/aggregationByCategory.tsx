@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import CustomDate from '@/app/_customComponents/customDate';
 import { commonFontSize } from '@/app/_customComponents/customProperties';
 import DoughnutChart from '@/app/_util/doughnutChart';
+import useWindowSize, { monitorSizeType } from '@/app/_util/useWindowSize';
 
 type AggregationByCategoryProps = {
   //
@@ -31,11 +32,6 @@ type sortedDateType = {
   endDate: Date | null;
 };
 
-export type monitorSizeType = {
-  width: number;
-  height: number;
-};
-
 /** ヘッダー */
 const headerList: AggregationByCategoryHeader[] = [
   {
@@ -52,19 +48,11 @@ const headerList: AggregationByCategoryHeader[] = [
 
 /** カテゴリーごとの集計 */
 const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
-  const getWindowDimensions = () => {
-    const { innerWidth: width, innerHeight: height } = window;
-    return {
-      width,
-      height,
-    };
-  };
-
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
+  const { width, height } = useWindowSize();
   const [amount, setAmount] = useState<Array<amoutType>>([]);
   const [sortedDate, setSortedDate] = useState<sortedDateType>();
-  const [monitorSize, setMonitorSize] = useState<monitorSizeType>(getWindowDimensions());
 
   useEffect(() => {
     const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
@@ -105,20 +93,6 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
       endDate: getLatestDate(),
     });
   }, [categoryData, monthlyData]);
-
-  useLayoutEffect(() => {
-    if (typeof window !== 'undefined') {
-      const onResize = () => {
-        setMonitorSize(getWindowDimensions());
-      };
-      window.addEventListener('resize', onResize);
-      return () => window.removeEventListener('resize', onResize);
-    } else {
-      return;
-    }
-  }, []);
-
-  console.log(monitorSize);
 
   const changeValue = useCallback(() => {
     //
@@ -206,7 +180,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
             </TableBody>
           </Table>
           <Box sx={{ width: '50%', display: 'flex', justifyContent: 'center' }}>
-            <DoughnutChart value={amount} />
+            <DoughnutChart value={amount} title={'カテゴリー別の金額'} />
           </Box>
         </TableContainer>
         <Box
@@ -232,9 +206,9 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
               format="YYYY年MM月"
             />
           </Box>
-          <Box>{monitorSize.width}</Box>
+          <Box>{width}</Box>
           <span>-----</span>
-          <Box>{monitorSize.height}</Box>
+          <Box>{height}</Box>
         </Box>
       </Box>
     </>
