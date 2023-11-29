@@ -3,12 +3,12 @@ import CustomTextfield from '@/app/_customComponents/customTextfield';
 import CustomNumberFormat from '@/app/_customComponents/customNumeric';
 import { RootState } from '@/app/_store/store';
 import { Box, TableBody, TableCell, TableContainer, TableRow, Table, TableHead } from '@mui/material';
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomDate from '@/app/_customComponents/customDate';
-import { commonFontSize } from '@/app/_customComponents/customProperties';
+import { commonFontSize, commonPadding5 } from '@/app/_customComponents/customProperties';
 import DoughnutChart from '@/app/_util/doughnutChart';
-import useWindowSize, { monitorSizeType } from '@/app/_util/useWindowSize';
+import useWindowSize from '@/app/_util/useWindowSize';
 
 type AggregationByCategoryProps = {
   //
@@ -53,6 +53,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const { width, height } = useWindowSize();
   const [amount, setAmount] = useState<Array<amoutType>>([]);
   const [sortedDate, setSortedDate] = useState<sortedDateType>();
+  const [windowSize, setWindowSize] = useState<boolean>(false);
 
   useEffect(() => {
     const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
@@ -98,7 +99,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
     //
   }, []);
 
-  const totalAmount = (): number => {
+  const sumAmount = useCallback((): number => {
     // eslint-disable-next-line prefer-const
     let sum = 0;
     amount.forEach((d) => {
@@ -107,18 +108,34 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
       }
     });
     return sum;
-  };
+  }, [monthlyData, categoryData, amount]);
+
+  useEffect(() => {
+    if (width < 1100) {
+      setWindowSize(true);
+    } else {
+      setWindowSize(false);
+    }
+  }, [width]);
 
   return (
     <>
       <Box>
-        <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', height: '70vh' }}>
-          <Table sx={{ width: '50%', height: 'minContent' }}>
+        <TableContainer
+          sx={{
+            display: windowSize ? 'block' : 'flex',
+            flexDirection: windowSize ? '' : 'row',
+            justifyContent: 'center',
+            width: '100%',
+            height: windowSize ? `${height - height * 0.25}px` : '70vh',
+          }}
+        >
+          <Table sx={{ width: windowSize ? '100%' : '50%' }}>
             <TableHead>
-              <TableRow>
+              <TableRow sx={{ padding: commonPadding5 }}>
                 {headerList.map((a) => {
                   return (
-                    <TableCell key={a.title} align={'center'}>
+                    <TableCell key={a.title} align={'center'} sx={{ padding: commonPadding5 }}>
                       {a.label}
                     </TableCell>
                   );
@@ -128,8 +145,8 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
             <TableBody>
               {amount.map((a) => {
                 return (
-                  <TableRow key={a.categoryId}>
-                    <TableCell align="center">
+                  <TableRow key={a.categoryId} sx={{ padding: commonPadding5 }}>
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomTextfield
                         value={a.categoryName}
                         edit={false}
@@ -138,7 +155,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
                         id={Number(a.categoryId)}
                       />
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomNumberFormat
                         value={a.totalAmount}
                         suffix=" 円"
@@ -155,8 +172,8 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
             </TableBody>
 
             <TableBody>
-              <TableRow>
-                <TableCell align="center">
+              <TableRow sx={{ padding: commonPadding5 }}>
+                <TableCell align="center" sx={{ padding: commonPadding5 }}>
                   <CustomTextfield
                     value={'合計金額'}
                     edit={false}
@@ -165,9 +182,9 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
                     id={Number(1)}
                   />
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="center" sx={{ padding: commonPadding5 }}>
                   <CustomNumberFormat
-                    value={totalAmount()}
+                    value={sumAmount()}
                     suffix=" 円"
                     edit={false}
                     align="center"
@@ -179,7 +196,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
               </TableRow>
             </TableBody>
           </Table>
-          <Box sx={{ width: '50%', display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ width: windowSize ? '100%' : '50%', display: 'flex', justifyContent: 'center' }}>
             <DoughnutChart value={amount} title={'カテゴリー別の金額'} />
           </Box>
         </TableContainer>
@@ -206,9 +223,6 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
               format="YYYY年MM月"
             />
           </Box>
-          <Box>{width}</Box>
-          <span>-----</span>
-          <Box>{height}</Box>
         </Box>
       </Box>
     </>

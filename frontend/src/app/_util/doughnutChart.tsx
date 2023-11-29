@@ -1,11 +1,12 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { amoutType } from '../main/monthlyAggregation/aggregationByCategory';
 import { Chart, registerables, ChartOptions, TooltipItem } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { color200 } from '../_customComponents/customProperties';
 import { Box } from '@mui/material';
 import 'chartjs-plugin-datalabels';
+import useWindowSize from './useWindowSize';
 Chart.register(...registerables);
 
 type DoughnutChartProps<T> = {
@@ -20,6 +21,8 @@ const DoughnutChart: React.FC<DoughnutChartProps<amoutType>> = (props) => {
   const sortedChartData = value.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1));
   const chartData = sortedChartData.map((s) => s.totalAmount);
   const chartLabel = sortedChartData.map((s) => s.categoryName);
+  const { width, height } = useWindowSize();
+  const [windowSize, setWindowSize] = useState<boolean>(false);
 
   const graphdata = {
     datasets: [
@@ -55,8 +58,16 @@ const DoughnutChart: React.FC<DoughnutChartProps<amoutType>> = (props) => {
     cutout: '40%',
   };
 
+  useEffect(() => {
+    if (width < 640) {
+      setWindowSize(true);
+    } else {
+      setWindowSize(false);
+    }
+  }, [width]);
+
   return (
-    <Box sx={{ width: 520, height: 520 }}>
+    <Box sx={{ width: windowSize ? 300 : 500, height: windowSize ? 300 : 500 }}>
       <Doughnut data={graphdata} options={doughnutOptions} />
     </Box>
   );

@@ -32,6 +32,3 @@ const useWindowSize = (): monitorSizeType => {
 };
 
 export default useWindowSize;
-
-//https://saunabouya.com/2022/10/29/react-hooks-window-size-dynamic/
-//https://megumu.me/article/s0zrmxb4n
