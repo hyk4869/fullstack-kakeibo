@@ -9,14 +9,15 @@ export type valueObjType = {
 type CustomRadioButtonProps = {
   edit: boolean;
   valueObj: valueObjType[];
+  value: string;
   paramkey?: string;
   id?: number;
   onChangeValue?: () => void;
-  defaultValue?: string;
+  row?: boolean;
 };
 
 const CustomRadioButton: React.FC<CustomRadioButtonProps> = (props) => {
-  const { edit, valueObj, paramkey, id, onChangeValue, defaultValue } = props;
+  const { edit, valueObj, value, paramkey, id, onChangeValue, row } = props;
   const [radioValue, setRadioValue] = useState<string>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +27,7 @@ const CustomRadioButton: React.FC<CustomRadioButtonProps> = (props) => {
   return (
     <Box>
       <FormControl>
-        <RadioGroup>
+        <RadioGroup row={row}>
           {valueObj.map((a) => {
             return (
               <>
