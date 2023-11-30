@@ -11,7 +11,7 @@ export const MonthlySpendingListURL: Array<ListContentType> = [
   { label: 'Each Monthly List', key: 3, link: '/main/monthlyAggregation' },
   { label: 'Category', key: 4, link: '/category' },
   { label: 'ER Figure', key: 5, link: '/erFigure' },
-  { label: 'Test', key: 6, link: '/test' },
+  { label: 'Test', key: 6, link: '/main/test' },
 ];
 
 export const SalaryListURL: Array<ListContentType> = [

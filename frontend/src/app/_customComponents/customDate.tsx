@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -36,67 +36,34 @@ const CustomDate: React.FC<CustomDateProps> = (props) => {
     [value, edit, onChangeValue, paramKey, id],
   );
 
-  const memoizedComponent = useMemo(() => {
-    return (
-      <>
-        {edit ? (
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              format="YYYY-MM-DD"
-              value={selectedDate}
-              onChange={(e) => handleDateChange(e)}
-              disabled={!edit}
-              sx={{
-                maxWidth: '7rem',
-                minWidth: minWidth,
-              }}
-              slotProps={{
-                textField: {
-                  variant: 'standard',
-                  InputProps: {
-                    style: { fontSize: commonFontSize, color: colorBlack },
-                  },
+  return (
+    <>
+      {edit ? (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            format="YYYY-MM-DD"
+            value={selectedDate}
+            onChange={(e) => handleDateChange(e)}
+            disabled={!edit}
+            sx={{
+              maxWidth: '7rem',
+              minWidth: minWidth,
+            }}
+            slotProps={{
+              textField: {
+                variant: 'standard',
+                InputProps: {
+                  style: { fontSize: commonFontSize, color: colorBlack },
                 },
-              }}
-            />
-          </LocalizationProvider>
-        ) : (
-          <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{dayjs(selectedDate).format(format)}</Box>
-        )}
-      </>
-    );
-  }, [edit, selectedDate, handleDateChange, onChangeValue, id, paramKey]);
-
-  // return (
-  //   <>
-  //     {edit ? (
-  //       <LocalizationProvider dateAdapter={AdapterDayjs}>
-  //         <DatePicker
-  //           format="YYYY-MM-DD"
-  //           value={selectedDate}
-  //           onChange={(e) => handleDateChange(e)}
-  //           disabled={!edit}
-  //           sx={{
-  //             maxWidth: '7rem',
-  //             minWidth: minWidth,
-  //           }}
-  //           slotProps={{
-  //             textField: {
-  //               variant: 'standard',
-  //               InputProps: {
-  //                 style: { fontSize: commonFontSize, color: colorBlack },
-  //               },
-  //             },
-  //           }}
-  //         />
-  //       </LocalizationProvider>
-  //     ) : (
-  //       <Box>{dayjs(selectedDate).format('YYYY-MM-DD')}</Box>
-  //     )}
-  //   </>
-  // );
-
-  return memoizedComponent;
+              },
+            }}
+          />
+        </LocalizationProvider>
+      ) : (
+        <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{dayjs(selectedDate).format(format)}</Box>
+      )}
+    </>
+  );
 };
 
 export default React.memo(CustomDate);

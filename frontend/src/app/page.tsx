@@ -8,7 +8,7 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <>
       <div className={styles.links}>
-        <Link style={{ paddingRight: '1rem' }} href={'/test'}>
+        <Link style={{ paddingRight: '1rem' }} href={'/main/test'}>
           test
         </Link>
         <Link style={{ paddingRight: '1rem' }} href={'/erFigure'}>

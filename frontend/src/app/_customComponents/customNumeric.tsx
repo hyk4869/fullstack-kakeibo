@@ -1,5 +1,5 @@
 import { Box, TextField } from '@mui/material';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { NumericFormat, OnValueChange } from 'react-number-format';
 import { colorBlack, commonFontSize, minWidth } from './customProperties';
 
@@ -34,77 +34,39 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
 
   const formattedValue = thousandSeparator ? numeric.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : numeric;
 
-  const memoizedComponent = useMemo(() => {
-    const CustomInputWrapper: React.FC = (inputProps) => <TextFieldCustomInput {...inputProps} />;
-    return (
-      <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth, margin: 'auto' }}>
-        {edit ? (
-          <NumericFormat
-            displayType={edit ? 'input' : 'text'}
-            customInput={CustomInputWrapper}
-            value={numeric}
-            thousandSeparator={true}
-            style={{ fontSize: commonFontSize }}
-            onValueChange={hadleChangeNumericValue}
-            decimalScale={0}
-            onBlur={handleBlur}
-            {...other}
-          />
-        ) : (
-          <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{formattedValue}</Box>
-        )}
+  return (
+    <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth, margin: 'auto' }}>
+      {edit ? (
+        <NumericFormat
+          displayType={edit ? 'input' : 'text'}
+          customInput={TextFieldCustomInput}
+          value={numeric}
+          thousandSeparator={true}
+          style={{ fontSize: commonFontSize }}
+          onValueChange={hadleChangeNumericValue}
+          decimalScale={0}
+          onBlur={handleBlur}
+          {...other}
+        />
+      ) : (
+        <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{numeric}</Box>
+      )}
 
-        {suffix ? (
-          <Box
-            sx={{
-              color: 'rgba(0, 0, 0, 0.6)',
-              fontSize: commonFontSize,
-              paddingLeft: '0.5rem',
-            }}
-          >
-            {suffix}
-          </Box>
-        ) : (
-          <></>
-        )}
-      </Box>
-    );
-  }, [edit, numeric, align, hadleChangeNumericValue, handleBlur]);
-
-  // return (
-  //   <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth, margin: 'auto' }}>
-  //     {edit ? (
-  //       <NumericFormat
-  //         displayType={edit ? 'input' : 'text'}
-  //         customInput={TextFieldCustomInput}
-  //         value={numeric}
-  //         thousandSeparator={true}
-  //         style={{ fontSize: commonFontSize }}
-  //         onValueChange={hadleChangeNumericValue}
-  //         decimalScale={0}
-  //         onBlur={handleBlur}
-  //         {...other}
-  //       />
-  //     ) : (
-  //       <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{numeric}</Box>
-  //     )}
-
-  //     {suffix ? (
-  //       <Box
-  //         sx={{
-  //           color: 'rgba(0, 0, 0, 0.6)',
-  //           fontSize: commonFontSize,
-  //           paddingLeft: '0.7rem',
-  //         }}
-  //       >
-  //         {suffix}
-  //       </Box>
-  //     ) : (
-  //       <></>
-  //     )}
-  //   </Box>
-  // );
-  return memoizedComponent;
+      {suffix ? (
+        <Box
+          sx={{
+            color: 'rgba(0, 0, 0, 0.6)',
+            fontSize: commonFontSize,
+            paddingLeft: '0.7rem',
+          }}
+        >
+          {suffix}
+        </Box>
+      ) : (
+        <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{formattedValue}</Box>
+      )}
+    </Box>
+  );
 };
 
 type TextFieldCustomInputProps = {
