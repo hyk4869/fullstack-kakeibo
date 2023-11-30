@@ -12,9 +12,21 @@ type CustomSelectTabProps = {
   align?: 'left' | 'center' | 'right';
   maxWidth?: string;
   width?: string;
+  variant?: 'outlined' | 'filled' | 'standard';
 };
 const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
-  const { list, value, edit, align = 'center', onChangeValue, paramKey, id, maxWidth = '13rem', width } = props;
+  const {
+    list,
+    value,
+    edit,
+    align = 'center',
+    onChangeValue,
+    paramKey,
+    id,
+    maxWidth = '13rem',
+    width,
+    variant = 'standard',
+  } = props;
 
   const [labelNumber, setLabelNumber] = useState<number | null>();
 
@@ -34,7 +46,7 @@ const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
 
   return (
     <>
-      <FormControl variant="standard" sx={{ justifyContent: align, width: width }}>
+      <FormControl variant={variant} sx={{ justifyContent: align, width: width }}>
         {edit ? (
           <Select
             value={labelNumber?.toString() ?? ''}

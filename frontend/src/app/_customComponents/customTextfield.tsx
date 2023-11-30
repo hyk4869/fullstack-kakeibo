@@ -10,9 +10,10 @@ type CustomTextfieldProps = {
   inputRef?: React.Ref<HTMLInputElement>;
   edit?: boolean;
   align?: 'left' | 'center' | 'right';
+  variant?: 'outlined' | 'filled' | 'standard';
 };
 const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
-  const { value, edit, align = 'center', onChangeValue, paramKey, id, ...other } = props;
+  const { value, edit, align = 'center', onChangeValue, paramKey, id, variant = 'standard', ...other } = props;
 
   const [textValue, setTextValue] = useState<string | null>(value);
 
@@ -33,7 +34,7 @@ const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
       {edit ? (
         <Box sx={{ display: 'flex', justifyContent: align }}>
           <TextField
-            variant="standard"
+            variant={variant}
             value={textValue}
             disabled={!edit}
             onChange={(e) => handleChangeText(e)}

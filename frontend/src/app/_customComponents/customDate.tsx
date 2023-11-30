@@ -16,10 +16,21 @@ type CustomDateProps = {
   format?: string;
   maxWidth?: string;
   width?: string;
+  variant?: 'outlined' | 'filled' | 'standard';
 };
 
 const CustomDate: React.FC<CustomDateProps> = (props) => {
-  const { value, edit, paramKey, onChangeValue, id, format = 'YYYY-MM-DD', maxWidth = '7rem', width } = props;
+  const {
+    value,
+    edit,
+    paramKey,
+    onChangeValue,
+    id,
+    format = 'YYYY-MM-DD',
+    maxWidth = '7rem',
+    width,
+    variant = 'standard',
+  } = props;
   const [selectedDate, setSelectedDate] = useState<Date | Dayjs | null>(value);
 
   useEffect(() => {
@@ -53,7 +64,7 @@ const CustomDate: React.FC<CustomDateProps> = (props) => {
             }}
             slotProps={{
               textField: {
-                variant: 'standard',
+                variant: variant,
                 InputProps: {
                   style: { fontSize: commonFontSize, color: colorBlack, width: width },
                 },
