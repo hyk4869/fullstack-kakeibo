@@ -28,7 +28,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
     maxWidth = '7rem',
     width = '7rem',
     margin = 'auto',
-    ...other
+    variant = 'standard',
   } = props;
   const [numeric, setNumeric] = useState<number | null>(value);
 
@@ -54,14 +54,14 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
       {edit ? (
         <NumericFormat
           displayType={edit ? 'input' : 'text'}
-          customInput={TextFieldCustomInput}
+          // customInput={TextFieldCustomInput}
+          customInput={(inputProps) => <TextFieldCustomInput {...inputProps} variant={variant} width={width} />}
           value={numeric}
           thousandSeparator={true}
           style={{ fontSize: commonFontSize, width: width }}
           onValueChange={hadleChangeNumericValue}
           decimalScale={0}
           onBlur={handleBlur}
-          {...other}
         />
       ) : (
         <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{formattedValue}</Box>
@@ -85,15 +85,15 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
 };
 
 type TextFieldCustomInputProps = {
-  // inputRef: React.Ref<HTMLInputElement>;
+  variant?: 'outlined' | 'filled' | 'standard';
+  width?: string;
 };
 const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
-  const { ...other } = props;
+  const { variant = 'standard', width } = props;
   return (
     <TextField
-      variant="standard"
-      InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth, color: colorBlack } }}
-      {...other}
+      variant={variant}
+      InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth, color: colorBlack, width: width } }}
     />
   );
 };
