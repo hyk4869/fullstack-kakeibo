@@ -12,9 +12,24 @@ type CustomNumberFormatProps = {
   edit?: boolean;
   suffix?: string;
   align?: 'left' | 'center' | 'right';
+  maxWidth?: string;
+  width?: string;
+  margin?: string;
 };
 const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
-  const { edit, value, suffix, align = 'center', onChangeValue, paramKey, id, ...other } = props;
+  const {
+    edit,
+    value,
+    suffix,
+    align = 'center',
+    onChangeValue,
+    paramKey,
+    id,
+    maxWidth = '7rem',
+    width = '7rem',
+    margin = 'auto',
+    ...other
+  } = props;
   const [numeric, setNumeric] = useState<number | null>(value);
 
   useEffect(() => {
@@ -35,21 +50,21 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
   const formattedValue = thousandSeparator ? numeric.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : numeric;
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: align, maxWidth: '7rem', minWidth: minWidth, margin: 'auto' }}>
+    <Box sx={{ display: 'flex', justifyContent: align, maxWidth: maxWidth, minWidth: minWidth, margin: margin }}>
       {edit ? (
         <NumericFormat
           displayType={edit ? 'input' : 'text'}
           customInput={TextFieldCustomInput}
           value={numeric}
           thousandSeparator={true}
-          style={{ fontSize: commonFontSize }}
+          style={{ fontSize: commonFontSize, width: width }}
           onValueChange={hadleChangeNumericValue}
           decimalScale={0}
           onBlur={handleBlur}
           {...other}
         />
       ) : (
-        <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{numeric}</Box>
+        <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{formattedValue}</Box>
       )}
 
       {suffix ? (
@@ -63,7 +78,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
           {suffix}
         </Box>
       ) : (
-        <Box sx={{ fontSize: commonFontSize, color: colorBlack }}>{formattedValue}</Box>
+        <></>
       )}
     </Box>
   );
