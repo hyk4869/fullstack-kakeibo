@@ -79,6 +79,7 @@ const FilledContent: React.FC<FilledContentProps> = () => {
             align="left"
             margin="none"
             variant="filled"
+            suffix="Kg"
           />
         </Box>
         <Box>

@@ -79,6 +79,7 @@ const OutlinedContent: React.FC<OutlinedContentProps> = () => {
             align="left"
             margin="none"
             variant="outlined"
+            suffix="Kg"
           />
         </Box>
         <Box>

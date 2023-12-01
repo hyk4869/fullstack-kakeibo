@@ -79,6 +79,7 @@ const StandardContent: React.FC<StandardContentProps> = () => {
             align="left"
             margin="none"
             variant="standard"
+            suffix="Kg"
           />
         </Box>
         <Box>
