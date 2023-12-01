@@ -587,7 +587,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'usageFee'}
+                          paramKey={'id'}
                           id={Number(row.id)}
                         />
                       </TableCell>
