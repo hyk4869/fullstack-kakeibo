@@ -34,6 +34,7 @@ const CustomTextfield: React.FC<CustomTextfieldProps> = (props) => {
       {edit ? (
         <Box sx={{ display: 'flex', justifyContent: align }}>
           <TextField
+            key={id}
             variant={variant}
             value={textValue}
             disabled={!edit}

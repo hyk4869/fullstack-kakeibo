@@ -46,7 +46,7 @@ const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
 
   return (
     <>
-      <FormControl variant={variant} sx={{ justifyContent: align, width: width }}>
+      <FormControl variant={variant} sx={{ justifyContent: align, width: width }} key={id}>
         {edit ? (
           <Select
             value={labelNumber?.toString() ?? ''}

@@ -386,6 +386,14 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     setEdit((edit) => !edit);
   };
 
+  /** listのメモ化 */
+  const generateCategoryList = useCallback(() => {
+    return categoryData.map((a: MCategory) => ({
+      value: Number(a.categoryId),
+      label: String(a.categoryName),
+    }));
+  }, [categoryData]);
+
   /** 値の編集用 */
   const changeValue = useCallback(
     (id: number, paramKey: string, value: unknown) => {
@@ -587,7 +595,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id'}
+                          paramKey={'id '}
                           id={Number(row.id)}
                         />
                       </TableCell>
@@ -612,9 +620,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     </TableCell>
                     <TableCell align="center">
                       <CustomSelectTab
-                        list={categoryData.map((a: MCategory) => {
-                          return { value: Number(a.categoryId), label: String(a.categoryName) };
-                        })}
+                        list={generateCategoryList()}
                         value={categoryData.find((a) => a.categoryId === row.categoryId)?.categoryId ?? null}
                         edit={edit}
                         paramKey={'categoryId'}

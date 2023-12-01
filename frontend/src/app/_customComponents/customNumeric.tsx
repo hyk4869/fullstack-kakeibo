@@ -54,6 +54,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
     <Box sx={{ display: 'flex', justifyContent: align, maxWidth: maxWidth, minWidth: minWidth, margin: margin }}>
       {edit ? (
         <NumericFormat
+          key={id}
           displayType={edit ? 'input' : 'text'}
           // customInput={TextFieldCustomInput}
           customInput={(inputProps) => <TextFieldCustomInput {...inputProps} variant={variant} width={width} />}

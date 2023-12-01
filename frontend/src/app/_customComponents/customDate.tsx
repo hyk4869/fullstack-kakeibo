@@ -54,6 +54,7 @@ const CustomDate: React.FC<CustomDateProps> = (props) => {
       {edit ? (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
+            key={id}
             format="YYYY-MM-DD"
             value={selectedDate}
             onChange={(e) => handleDateChange(e)}
