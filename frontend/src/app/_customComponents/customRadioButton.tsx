@@ -31,17 +31,10 @@ const CustomRadioButton: React.FC<CustomRadioButtonProps> = (props) => {
   return (
     <Box>
       <FormControl>
-        <RadioGroup row={row}>
+        <RadioGroup row={row} onChange={(e) => handleChange(e)} value={radioValue}>
           {valueObj.map((a) => {
             return (
-              <>
-                <FormControlLabel
-                  value={a.value}
-                  label={a.label}
-                  control={<Radio onChange={(e) => handleChange(e)} />}
-                  disabled={!edit}
-                />
-              </>
+              <FormControlLabel key={a.value} value={a.value} label={a.label} control={<Radio />} disabled={!edit} />
             );
           })}
         </RadioGroup>

@@ -1,6 +1,7 @@
 'use client';
 import CustomRadioButton, { valueObjType } from '@/app/_customComponents/customRadioButton';
 import CustomSwitch from '@/app/_customComponents/customSwitch';
+import CustomToggleButton from '@/app/_customComponents/customToggleButton';
 import { Box } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 
@@ -23,10 +24,26 @@ const list: valueObjType[] = [
   },
 ];
 
+const toggleList: valueObjType[] = [
+  {
+    value: 'value1',
+    label: 'android',
+  },
+  {
+    value: 'value2',
+    label: 'iOS',
+  },
+  {
+    value: 'value3',
+    label: 'Windows',
+  },
+];
+
 const OtherUtil: React.FC<OtherUtilProps> = () => {
   const [edit, setEdit] = useState<boolean>(true);
   const [radioContent, setRadioContent] = useState<string>('');
   const [switchValue, setSwitchValue] = useState<boolean>(false);
+  const [toggleContent, setToggleContent] = useState<string>('');
 
   const onChangeValue = useCallback(
     (id: number, paramKey: string, value: unknown) => {
@@ -43,6 +60,7 @@ const OtherUtil: React.FC<OtherUtilProps> = () => {
       <Box>
         <CustomRadioButton edit={edit} valueObj={list} value={radioContent} row={true} />
         <CustomSwitch edit={edit} falseText={'falseの時'} trueText={'trueの時'} value={switchValue} />
+        <CustomToggleButton edit={edit} valueObj={toggleList} value={toggleContent} />
       </Box>
     </Box>
   );
