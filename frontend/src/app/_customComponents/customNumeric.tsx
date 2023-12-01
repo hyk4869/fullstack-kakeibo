@@ -30,6 +30,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
     margin = 'auto',
     variant = 'standard',
   } = props;
+
   const [numeric, setNumeric] = useState<number | null>(value);
 
   useEffect(() => {
@@ -70,6 +71,8 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
       {suffix ? (
         <Box
           sx={{
+            display: variant !== 'standard' ? 'flex' : 'block',
+            alignItems: 'center',
             color: 'rgba(0, 0, 0, 0.6)',
             fontSize: commonFontSize,
             paddingLeft: '0.7rem',
@@ -89,11 +92,12 @@ type TextFieldCustomInputProps = {
   width?: string;
 };
 const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
-  const { variant = 'standard', width } = props;
+  const { variant = 'standard', width, ...other } = props;
   return (
     <TextField
       variant={variant}
       InputProps={{ style: { fontSize: commonFontSize, minWidth: minWidth, color: colorBlack, width: width } }}
+      {...other}
     />
   );
 };
