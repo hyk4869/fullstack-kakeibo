@@ -1,5 +1,5 @@
 import { Box, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export type valueObjType = {
   label: string;
@@ -9,7 +9,7 @@ export type valueObjType = {
 type CustomRadioButtonProps = {
   edit: boolean;
   valueObj: valueObjType[];
-  value: string;
+  value: string | null;
   paramkey?: string;
   id?: number;
   onChangeValue?: () => void;
@@ -18,11 +18,15 @@ type CustomRadioButtonProps = {
 
 const CustomRadioButton: React.FC<CustomRadioButtonProps> = (props) => {
   const { edit, valueObj, value, paramkey, id, onChangeValue, row } = props;
-  const [radioValue, setRadioValue] = useState<string>('');
+  const [radioValue, setRadioValue] = useState<string | null>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRadioValue(event.target.value);
   };
+
+  useEffect(() => {
+    setRadioValue(value);
+  }, [value]);
 
   return (
     <Box>
