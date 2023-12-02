@@ -5,16 +5,18 @@ import React, { useMemo } from 'react';
 import { colorBlack } from '../_customComponents/customProperties';
 import { HomeListURL, MonthlySpendingListURL, SalaryListURL } from './sideBarListContent';
 import { grey } from '@mui/material/colors';
+
 type SideBarListProps = {
   //
 };
+export const linkStyle = {
+  textDecoration: 'none',
+  color: grey[700],
+  cursor: 'pointer',
+  width: '250px',
+};
+
 const SideBarList: React.FC<SideBarListProps> = () => {
-  const linkStyle = {
-    textDecoration: 'none',
-    color: grey[600],
-    cursor: 'pointer',
-    width: '250px',
-  };
   const ListContent = useMemo(() => {
     return (
       <>
