@@ -6,9 +6,9 @@ type CustomToggleButtonProps = {
   edit: boolean;
   valueObj: valueObjType[];
   value: string;
-  paramkey?: string;
+  paramkey: string;
   id?: number;
-  onChangeValue?: () => void;
+  onChangeValue: (id: number, paramKey: string, value: string | null) => void;
 };
 
 const CustomToggleButton: React.FC<CustomToggleButtonProps> = (props) => {
@@ -21,6 +21,7 @@ const CustomToggleButton: React.FC<CustomToggleButtonProps> = (props) => {
 
   const handleChange = (event: React.MouseEvent<HTMLElement, MouseEvent>, newAlignment: string) => {
     setToggleButtonValue(newAlignment);
+    onChangeValue(id !== undefined ? id : 0, paramkey || '', newAlignment);
   };
 
   return (
