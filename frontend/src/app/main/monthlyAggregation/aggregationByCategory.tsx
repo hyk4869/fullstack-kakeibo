@@ -6,9 +6,13 @@ import { Box, TableBody, TableCell, TableContainer, TableRow, Table, TableHead }
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomDate from '@/app/_customComponents/customDate';
-import { commonFontSize, commonPadding5 } from '@/app/_customComponents/customProperties';
+import { commonFontSize, commonPadding5, messageRedirect } from '@/app/_customComponents/customProperties';
 import DoughnutChart from '@/app/_util/doughnutChart';
 import useWindowSize from '@/app/_util/useWindowSize';
+import CustomToggleButton from '@/app/_customComponents/customToggleButton';
+import { valueObjType } from '@/app/_customComponents/customRadioButton';
+import BarGraph from '@/app/_util/barGraph';
+import RedirectDialog from '@/app/_util/redirectDialog';
 
 type AggregationByCategoryProps = {
   //
@@ -46,6 +50,17 @@ const headerList: AggregationByCategoryHeader[] = [
   },
 ];
 
+const toggleButtonList: valueObjType[] = [
+  {
+    label: '円グラフ',
+    value: '1',
+  },
+  {
+    label: '棒グラフ',
+    value: '2',
+  },
+];
+
 /** カテゴリーごとの集計 */
 const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
@@ -54,6 +69,15 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const [amount, setAmount] = useState<Array<amoutType>>([]);
   const [sortedDate, setSortedDate] = useState<sortedDateType>();
   const [windowSize, setWindowSize] = useState<boolean>(false);
+  const [displayGraph, setDisplayGraph] = useState<string>('1');
+  const [redirectTo, setRedirectTo] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (monthlyData.length === 0) {
+      setRedirectTo(true);
+    }
+  }, [monthlyData]);
+  console.log(monthlyData);
 
   useEffect(() => {
     const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
@@ -95,9 +119,24 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
     });
   }, [categoryData, monthlyData]);
 
-  const changeValue = useCallback(() => {
-    //
-  }, []);
+  useEffect(() => {
+    if (width < 1100) {
+      setWindowSize(true);
+    } else {
+      setWindowSize(false);
+    }
+  }, [width]);
+
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      switch (paramKey) {
+        case 'toggleValue':
+          typeof value === 'string' ? setDisplayGraph(value) : setDisplayGraph(String(value));
+          break;
+      }
+    },
+    [displayGraph],
+  );
 
   const sumAmount = useCallback((): number => {
     // eslint-disable-next-line prefer-const
@@ -109,14 +148,6 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
     });
     return sum;
   }, [monthlyData, categoryData, amount]);
-
-  useEffect(() => {
-    if (width < 1100) {
-      setWindowSize(true);
-    } else {
-      setWindowSize(false);
-    }
-  }, [width]);
 
   return (
     <>
@@ -196,8 +227,22 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
               </TableRow>
             </TableBody>
           </Table>
-          <Box sx={{ width: windowSize ? '100%' : '50%', display: 'flex', justifyContent: 'center' }}>
-            <DoughnutChart value={amount} title={'カテゴリー別の金額'} />
+          <Box sx={{ width: windowSize ? '100%' : '50%', display: 'grid', justifyContent: 'center' }}>
+            {displayGraph === '1' ? (
+              <DoughnutChart value={amount} title={'カテゴリー別の金額'} />
+            ) : (
+              <BarGraph value={amount} title={'カテゴリー別の金額'} />
+            )}
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CustomToggleButton
+                edit={true}
+                valueObj={toggleButtonList}
+                value={displayGraph}
+                onChangeValue={changeValue}
+                paramkey="toggleValue"
+                id={1}
+              />
+            </Box>
           </Box>
         </TableContainer>
         <Box
@@ -225,6 +270,12 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           </Box>
         </Box>
       </Box>
+      <RedirectDialog
+        openRedirect={redirectTo}
+        closeRedirect={() => setRedirectTo(false)}
+        url="/main/summaryTable"
+        message={messageRedirect}
+      />
     </>
   );
 };
