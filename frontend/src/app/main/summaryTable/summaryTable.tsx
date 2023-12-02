@@ -29,11 +29,13 @@ import CustomDate from '../../_customComponents/customDate';
 import CustomSelectTab from '../../_customComponents/customSelectTab';
 import dayjs from 'dayjs';
 import { Button } from '@mui/material';
-import CreateNewRecordsDialog from '../../_dialog/createNewRecordsDialog';
+import CreateNewRecordsDialog from '../../_dialog/monthlySpending/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
 import { getMonthlySpending, postDeleteMonthlySpending } from '../../_api/url';
 import LoadingContent from '../../_util/loading';
+import FetchDataDialog from './fetchDataDialog';
+import useWindowSize from '@/app/_util/useWindowSize';
 
 export type Order = 'asc' | 'desc';
 
@@ -115,6 +117,7 @@ type EnhancedTableProps = {
   order: Order;
   orderBy: string;
   rowCount: number;
+  windowSize: boolean;
 };
 
 /**
@@ -123,7 +126,7 @@ type EnhancedTableProps = {
  *
  */
 const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, windowSize } = props;
   const createSortHandler = (property: keyof TMonthlySpending) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
@@ -178,7 +181,9 @@ type EnhancedTableToolbarProps = {
   enableEdit: boolean;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  windowSize: boolean;
 };
+
 /**
  *
  * 上のソート
@@ -195,6 +200,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
     enableEdit,
     isLoading,
     setIsLoading,
+    windowSize,
   } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
@@ -215,11 +221,9 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           {numSelected} レコードが選択されました。
         </Box>
       ) : (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ padding: '10px', minWidth: '250px', fontSize: '1.3rem' }}>クレジットカード明細</Box>
-          <Box sx={{ padding: '10px', minWidth: '250px', display: 'flex', justifyContent: 'flex-end' }}>
-            レコード数：{dataLength}件
-          </Box>
+        <Box sx={{ display: windowSize ? 'block' : 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ padding: '1rem', minWidth: '250px', fontSize: '1.3rem' }}>クレジットカード明細</Box>
+          <Box sx={{ padding: '1rem', minWidth: '190px', fontSize: '0.8rem' }}>レコード数：{dataLength}件</Box>
         </Box>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
@@ -239,7 +243,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           disabled={edit === false}
           sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
           onClick={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
-          color="secondary"
+          color="primary"
         >
           追加
         </Button>
@@ -298,7 +302,19 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [editValue, setEditValue] = useState<Array<TMonthlySpending>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [deleteSomething, setDeleteSomething] = useState<Array<TMonthlySpending>>([]);
+  const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
+  const [windowSize, setWindowSize] = useState<boolean>(false);
+
+  const { width, height } = useWindowSize();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (width < 840) {
+      setWindowSize(true);
+    } else {
+      setWindowSize(false);
+    }
+  }, [width, height]);
 
   useEffect(() => {
     if (monthlyData.length !== editValue.length) {
@@ -544,6 +560,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '95%', margin: '1rem auto' }}>
+        <Button color="primary" variant="outlined" onClick={() => setOpenFetchDialog(true)}>
+          データ取得
+        </Button>
+      </Box>
+
       <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
@@ -555,6 +577,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           enableEdit={enableEdit}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
+          windowSize={windowSize}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -565,6 +588,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={monthlyData.length}
+              windowSize={windowSize}
             />
 
             <TableBody>
@@ -595,7 +619,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id '}
+                          paramKey={'id'}
                           id={Number(row.id)}
                         />
                       </TableCell>
@@ -664,6 +688,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} />
       </Paper>
     </Box>
   );

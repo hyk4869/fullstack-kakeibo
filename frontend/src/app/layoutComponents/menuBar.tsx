@@ -19,7 +19,7 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
   return (
     <>
-      <Box sx={{ flexGrow: 1, margin: '80px' }}>
+      <Box sx={{ marginBottom: '80px' }}>
         <AppBar style={{ position: 'fixed', maxHeight: 'min-content', width: '100vw', background: blue[400] }}>
           <Toolbar>
             <IconButton

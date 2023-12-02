@@ -77,7 +77,6 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
       setRedirectTo(true);
     }
   }, [monthlyData]);
-  console.log(monthlyData);
 
   useEffect(() => {
     const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};

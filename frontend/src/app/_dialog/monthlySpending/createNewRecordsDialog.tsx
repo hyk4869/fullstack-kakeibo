@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { MCategory, TMonthlySpending } from '../_store/slice';
+import { MCategory, TMonthlySpending } from '../../_store/slice';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -14,24 +14,24 @@ import {
   TableRow,
   TableSortLabel,
 } from '@mui/material';
-import CustomDate from '../_customComponents/customDate';
-import CustomSelectTab from '../_customComponents/customSelectTab';
-import CustomTextfield from '../_customComponents/customTextfield';
-import CustomNumberFormat from '../_customComponents/customNumeric';
-import { RootState } from '../_store/store';
+import CustomDate from '../../_customComponents/customDate';
+import CustomSelectTab from '../../_customComponents/customSelectTab';
+import CustomTextfield from '../../_customComponents/customTextfield';
+import CustomNumberFormat from '../../_customComponents/customNumeric';
+import { RootState } from '../../_store/store';
 import dayjs from 'dayjs';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
 import MonthlyNextActionDialog from './monthlyNextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ExportCSV } from '../_util/exportCSV';
-import { ImportCSV } from '../_util/monthlySpendingUtil/importCSV';
+import { ExportCSV } from '../../_util/exportCSV';
+import { ImportCSV } from '../../_util/monthlySpendingUtil/importCSV';
 import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
-import { Order, getComparator, monthlySpendingHeadCells, stableSort } from '../main/summaryTable/summaryTable';
+import { Order, getComparator, monthlySpendingHeadCells, stableSort } from '../../main/summaryTable/summaryTable';
 import { visuallyHidden } from '@mui/utils';
-import { monthlySpendingHeaders } from '../_util/exportCSVTitleName';
+import { monthlySpendingHeaders } from '../../_util/exportCSVTitleName';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -199,9 +199,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', padding: '1rem', justifyContent: 'center' }}>
             {monthlyData.length > 0 ? <Box>レコードの最終ID：{arrayLastId}</Box> : <></>}
-
             <Box sx={{ margin: '0 2rem' }}>{makeNewArray.length > 0 ? makeNewArray.length : 0} 件のレコードを追加</Box>
-
             <AddCircleOutlineIcon
               onClick={() => addNewArray()}
               sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }}
@@ -315,14 +313,14 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               variant="contained"
-              color="secondary"
+              color="primary"
               sx={{ margin: '0.75rem 0.75rem' }}
               onClick={() => addNewArray()}
             >
               レコード追加
             </Button>
             <Button
-              variant="contained"
+              variant="outlined"
               sx={{ margin: '0.75rem 0.75rem' }}
               disabled={makeNewArray.length - 1 === 0}
               onClick={showDialog}

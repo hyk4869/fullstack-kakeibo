@@ -13,7 +13,7 @@ const SideBar: React.FC<SideBarProps> = (props) => {
   return (
     <>
       <Drawer open={openSideBar} onClose={onCloseSideBar}>
-        <SideBarList />
+        <SideBarList onCloseSideBar={onCloseSideBar} />
       </Drawer>
     </>
   );

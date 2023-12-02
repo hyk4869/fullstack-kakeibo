@@ -1,8 +1,8 @@
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import React, { useState } from 'react';
-import { TMonthlySpending, setCreateMonthlySpending } from '../_store/slice';
+import { TMonthlySpending, setCreateMonthlySpending } from '../../_store/slice';
 import { useDispatch } from 'react-redux';
-import LoadingContent from '../_util/loading';
+import LoadingContent from '../../_util/loading';
 
 type MonthlyNextActionDialogProps = {
   isShow: boolean;

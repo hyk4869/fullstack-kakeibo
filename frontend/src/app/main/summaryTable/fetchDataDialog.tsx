@@ -1,15 +1,23 @@
 'use client';
-import { Box, Button } from '@mui/material';
+
+import { Box, Button, Dialog, IconButton, Tooltip } from '@mui/material';
 import axios from 'axios';
 import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../../_api/url';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryContent, setEnableEdit, setMonthlySpending } from '../../_store/slice';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CustomDate from '../../_customComponents/customDate';
 import { RootState } from '../../_store/store';
 import LoadingContent from '../../_util/loading';
+import CloseIcon from '@mui/icons-material/Close';
 
-const ApiButton = () => {
+type FetchDataDialogProps = {
+  openFetchDialog: boolean;
+  onCloseDialog: () => void;
+};
+
+const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
+  const { openFetchDialog, onCloseDialog } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -33,11 +41,13 @@ const ApiButton = () => {
         if (res.data) {
           dispatch(setCategoryContent(res.data));
           setIsLoading(false);
+          onCloseDialog();
         }
       })
       .catch((error) => {
         console.error(error);
         setIsLoading(false);
+        onCloseDialog();
       });
   };
 
@@ -62,11 +72,13 @@ const ApiButton = () => {
         if (res.data) {
           dispatch(setCategoryContent(res.data));
           setIsLoading(false);
+          onCloseDialog();
         }
       })
       .catch((error) => {
         console.error(error);
         setIsLoading(false);
+        onCloseDialog();
       });
   };
 
@@ -100,37 +112,53 @@ const ApiButton = () => {
     (endDate instanceof Date && isNaN(endDate.getTime()));
 
   return (
-    <>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Box sx={{ display: 'flex', margin: '0.75rem' }}>
-          <Box>
-            <CustomDate value={startDate} edit={true} onChangeValue={changeValue} paramKey="startDate" id={0} />
-          </Box>
-          <span style={{ transform: 'translateX(7px)' }}>{'~'}</span>
-          <Box sx={{ margin: ' 0 1rem' }}>
-            <CustomDate value={endDate} edit={true} onChangeValue={changeValue} paramKey="endDate" id={1} />
-          </Box>
+    <Dialog open={openFetchDialog} onClose={onCloseDialog} maxWidth="lg">
+      <Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '0 10px' }}>
+          <h4>データ取得</h4>
+          <IconButton onClick={onCloseDialog} sx={{ cursor: 'pointer' }}>
+            <CloseIcon />
+          </IconButton>
         </Box>
 
-        <Button variant="contained" disabled={disable} onClick={getSomeContent}>
-          期間を指定して取得
-        </Button>
-        <Button variant="contained" onClick={getAllContent} sx={{ marginLeft: '30px' }}>
-          全取得
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={clearAllContent}
-          sx={{ marginLeft: '30px' }}
-          disabled={monthlyData.length <= 0}
-        >
-          テーブルをクリア
-        </Button>
-        <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
-      </div>
-    </>
+        <Box sx={{ padding: '2rem' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box>
+              <CustomDate value={startDate} edit={true} onChangeValue={changeValue} paramKey="startDate" id={0} />
+            </Box>
+            <span style={{ transform: 'translateX(7px)' }}>{'~'}</span>
+            <Box sx={{ margin: ' 0 1rem' }}>
+              <CustomDate value={endDate} edit={true} onChangeValue={changeValue} paramKey="endDate" id={1} />
+            </Box>
+            <Tooltip title={'取得する日付を選んでください'} arrow>
+              <Box>
+                <Button variant="outlined" disabled={disable} onClick={getSomeContent}>
+                  期間を指定して取得
+                </Button>
+              </Box>
+            </Tooltip>
+          </Box>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '20px', marginTop: '2rem' }}>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={clearAllContent}
+              sx={{}}
+              disabled={monthlyData.length <= 0}
+            >
+              テーブルをクリア
+            </Button>
+            <Button variant="contained" onClick={getAllContent} sx={{}}>
+              全取得
+            </Button>
+          </Box>
+
+          <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
+        </Box>
+      </Box>
+    </Dialog>
   );
 };
 
-export default ApiButton;
+export default React.memo(FetchDataDialog);

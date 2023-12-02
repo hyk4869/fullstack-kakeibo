@@ -7,7 +7,7 @@ import { HomeListURL, MonthlySpendingListURL, SalaryListURL } from './sideBarLis
 import { grey } from '@mui/material/colors';
 
 type SideBarListProps = {
-  //
+  onCloseSideBar: () => void;
 };
 export const linkStyle = {
   textDecoration: 'none',
@@ -16,7 +16,8 @@ export const linkStyle = {
   width: '250px',
 };
 
-const SideBarList: React.FC<SideBarListProps> = () => {
+const SideBarList: React.FC<SideBarListProps> = (props) => {
+  const { onCloseSideBar } = props;
   const ListContent = useMemo(() => {
     return (
       <>
@@ -35,7 +36,18 @@ const SideBarList: React.FC<SideBarListProps> = () => {
               return (
                 <ListItem key={a.key}>
                   <Link href={a.link} style={linkStyle}>
-                    <Box sx={{ width: '100%' }}>{a.label}</Box>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        '&:hover': {
+                          backgroundColor: grey[200],
+                          borderRadius: '50px',
+                        },
+                      }}
+                      onClick={onCloseSideBar}
+                    >
+                      {a.label}
+                    </Box>
                   </Link>
                 </ListItem>
               );
@@ -48,7 +60,18 @@ const SideBarList: React.FC<SideBarListProps> = () => {
               return (
                 <ListItem key={a.key}>
                   <Link href={a.link} style={linkStyle}>
-                    <Box sx={{ width: '100%' }}>{a.label}</Box>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        '&:hover': {
+                          backgroundColor: grey[200],
+                          borderRadius: '50px',
+                        },
+                      }}
+                      onClick={onCloseSideBar}
+                    >
+                      {a.label}
+                    </Box>
                   </Link>
                 </ListItem>
               );
@@ -61,7 +84,18 @@ const SideBarList: React.FC<SideBarListProps> = () => {
               return (
                 <ListItem key={a.key}>
                   <Link href={a.link} style={linkStyle}>
-                    <Box sx={{ width: '100%' }}>{a.label}</Box>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        '&:hover': {
+                          backgroundColor: grey[200],
+                          borderRadius: '50px',
+                        },
+                      }}
+                      onClick={onCloseSideBar}
+                    >
+                      {a.label}
+                    </Box>
                   </Link>
                 </ListItem>
               );

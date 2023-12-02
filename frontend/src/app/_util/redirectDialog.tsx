@@ -29,7 +29,7 @@ const RedirectDialog: React.FC<RedirectDialogProps> = (props) => {
             </Button>
           </Link>
           <Link href={'/'}>
-            <Button color="error" variant="contained">
+            <Button color="primary" variant="contained">
               TOPへ戻る
             </Button>
           </Link>

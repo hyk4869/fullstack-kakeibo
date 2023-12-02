@@ -13,9 +13,9 @@ import {
 import { blue, grey } from '@mui/material/colors';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../_store/store';
-import CustomTextfield from '../_customComponents/customTextfield';
-import CustomNumberFormat from '../_customComponents/customNumeric';
+import { RootState } from '../../_store/store';
+import CustomTextfield from '../../_customComponents/customTextfield';
+import CustomNumberFormat from '../../_customComponents/customNumeric';
 
 type ShowCategoryMasterPrpos = {
   isShowCategoryMaster: boolean;
