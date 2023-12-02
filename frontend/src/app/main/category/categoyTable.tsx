@@ -12,6 +12,23 @@ import { messageRedirect } from '@/app/_customComponents/customProperties';
 type CategoryTableProps = {
   //
 };
+
+type categoryHeaderType = {
+  label: string;
+  value: string;
+};
+
+const categoryHeader: categoryHeaderType[] = [
+  {
+    label: 'id',
+    value: 'categoryId',
+  },
+  {
+    label: 'カテゴリー名',
+    value: 'categoryName',
+  },
+];
+
 const CategoryTable: React.FC<CategoryTableProps> = () => {
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
@@ -37,6 +54,16 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <Box></Box>
+          <TableContainer>
+            <Table>
+              <TableRow>
+                {categoryHeader.map((a) => {
+                  return <TableCell key={a.value}>{a.label}</TableCell>;
+                })}
+              </TableRow>
+            </Table>
+          </TableContainer>
+
           <TableContainer>
             <Table>
               {categoryData.map((a) => {
