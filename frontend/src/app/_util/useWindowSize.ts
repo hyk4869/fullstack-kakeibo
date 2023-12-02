@@ -5,19 +5,19 @@ export type monitorSizeType = {
   height: number;
 };
 
-const getWindowDimensions = () => {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-};
-
 const useWindowSize = (): monitorSizeType => {
-  const [monitorSize, setMonitorSize] = useState<monitorSizeType>(getWindowDimensions());
+  const [monitorSize, setMonitorSize] = useState<monitorSizeType>({ width: 0, height: 0 });
 
   useLayoutEffect(() => {
     if (typeof window !== 'undefined') {
+      const getWindowDimensions = () => {
+        const { innerWidth: width, innerHeight: height } = window;
+        return {
+          width,
+          height,
+        };
+      };
+
       const onResize = () => {
         setMonitorSize(getWindowDimensions());
       };
