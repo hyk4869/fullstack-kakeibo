@@ -25,3 +25,5 @@ export const color100 = [red[100], blue[100], purple[100], pink[100], green[100]
 export const color200 = [red[200], blue[200], purple[200], pink[200], green[200], yellow[200], orange[200], grey[200]];
 
 export const commonPadding5 = '5px';
+
+export const messageRedirect = 'お探しのページにデータがないため開くことができません。\n以下のページに遷移します。';
