@@ -56,8 +56,8 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
         <NumericFormat
           key={id}
           displayType={edit ? 'input' : 'text'}
-          // customInput={TextFieldCustomInput}
-          customInput={(inputProps) => <TextFieldCustomInput {...inputProps} variant={variant} width={width} />}
+          customInput={TextFieldCustomInput}
+          // customInput={(inputProps) => <TextFieldCustomInput {...inputProps} variant={variant} width={width} />}
           value={numeric}
           thousandSeparator={true}
           style={{ fontSize: commonFontSize, width: width }}
