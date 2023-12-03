@@ -5,6 +5,7 @@ import { grey } from '@mui/material/colors';
 import React, { useEffect, useState } from 'react';
 import AggregationByCategory from './aggregationByCategory';
 import useWindowSize from '@/app/_util/useWindowSize';
+import AggregationByMonth from './aggregationByMonth';
 
 type MonthlyAggregationProps = {
   //
@@ -14,6 +15,7 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
 
   const { width, height } = useWindowSize();
+
   const hamdleChangePage = (e: React.SyntheticEvent, newValue: string) => {
     setChangePage(newValue);
   };
@@ -40,7 +42,9 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
             <TabPanel value="1" sx={{ padding: windowSize ? '0px' : '' }}>
               <AggregationByCategory />
             </TabPanel>
-            <TabPanel value="2">item two</TabPanel>
+            <TabPanel value="2">
+              <AggregationByMonth />
+            </TabPanel>
           </TabContext>
         </Paper>
       </Box>
