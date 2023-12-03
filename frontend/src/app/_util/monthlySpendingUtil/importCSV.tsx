@@ -77,7 +77,6 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
               ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
               : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
           );
-          // console.log({ parsedResult, findCategoryID, updatedArray, newArray });
 
           return filteredValue;
         });
@@ -110,7 +109,7 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
       <Tooltip title={'CSVをインポートします。idが空の場合は追加されません。'} arrow>
         <label>
           <input type="file" style={{ display: 'none' }} onChange={handleFileChange} ref={fileInputRef} />
-          <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }} onClick={handleFileUpload}>
+          <Button variant="outlined" color="primary" onClick={handleFileUpload} sx={{ width: '100%' }}>
             CSVのインポート
           </Button>
         </label>

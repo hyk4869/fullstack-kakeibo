@@ -23,15 +23,17 @@ import dayjs from 'dayjs';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
-import MonthlyNextActionDialog from './monthlyNextActionDialog';
+import MonthlyNextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportCSV } from '../../_util/exportCSV';
 import { ImportCSV } from '../../_util/monthlySpendingUtil/importCSV';
 import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
-import { Order, getComparator, monthlySpendingHeadCells, stableSort } from '../../main/summaryTable/summaryTable';
+import { monthlySpendingHeadCells } from '../../main/summaryTable/summaryTable';
 import { visuallyHidden } from '@mui/utils';
 import { monthlySpendingHeaders } from '../../_util/exportCSVTitleName';
+import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
+import useWindowSize from '@/app/_util/useWindowSize';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -52,9 +54,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
+  const [windowSize, setWindowSize] = useState<boolean>(false);
 
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
+  const { width, height } = useWindowSize();
 
   useEffect(() => {
     if (monthlyData && monthlyData.length >= 0) {
@@ -73,7 +77,13 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     }
   }, [increment]);
 
-  // console.log({ arrayLastId, increment, incrementArray, makeNewArray, monthlyData });
+  useEffect(() => {
+    if (width < 640) {
+      setWindowSize(true);
+    } else {
+      setWindowSize(false);
+    }
+  }, [width]);
 
   /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
@@ -354,19 +364,30 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             />
           )}
         </Paper>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Box sx={{ position: 'absolute', bottom: '0' }}>
-            <ExportCSV headerOption={monthlySpendingHeaders} />
-            <ImportCSV
-              setMakeNewArray={setMakeNewArray}
-              setIncrementArray={setIncrementArray}
-              setArrayLastId={setArrayLastId}
-              setIncrement={setIncrement}
-            />
-            <Button onClick={() => setIsShowCategoryMaster(true)} variant="outlined" sx={{ margin: '0.75rem 0.75rem' }}>
-              カテゴリーIDを参照する
-            </Button>
-          </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '1rem',
+            margin: '1rem auto',
+            width: '95%',
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            flexDirection: windowSize ? 'column' : 'row',
+          }}
+        >
+          <ExportCSV headerOption={monthlySpendingHeaders} />
+          <ImportCSV
+            setMakeNewArray={setMakeNewArray}
+            setIncrementArray={setIncrementArray}
+            setArrayLastId={setArrayLastId}
+            setIncrement={setIncrement}
+          />
+          <Button onClick={() => setIsShowCategoryMaster(true)} variant="outlined">
+            カテゴリーIDを参照する
+          </Button>
         </Box>
 
         <MonthlyNextActionDialog

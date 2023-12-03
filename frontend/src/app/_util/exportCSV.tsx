@@ -21,7 +21,7 @@ export const ExportCSV: React.FC<ExportCSVProps> = (props) => {
   return (
     <>
       <Tooltip title={'CSVをインポートするためのテンプレートをダウンロードします。'} arrow>
-        <Button variant="outlined" color="primary" sx={{ margin: '0.75rem 0.75rem' }}>
+        <Button variant="outlined" color="primary">
           <CSVLink data={data} headers={headerOption} filename={filename} style={{ textDecoration: 'none' }}>
             CSVテンプレート
           </CSVLink>
