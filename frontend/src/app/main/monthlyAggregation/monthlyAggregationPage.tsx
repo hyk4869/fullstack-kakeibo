@@ -33,8 +33,8 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
           <TabContext value={changePage}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={hamdleChangePage}>
-                <Tab label="カテゴリーごとの集計" value="1" />
-                <Tab label="全期間の合計" value="2" />
+                <Tab label="カテゴリー毎の集計" value="1" />
+                <Tab label="各期間の集計" value="2" />
               </TabList>
             </Box>
             <TabPanel value="1" sx={{ padding: windowSize ? '0px' : '' }}>

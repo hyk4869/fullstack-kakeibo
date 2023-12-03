@@ -432,7 +432,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
         .post(postDeleteMonthlySpending, deleteData)
         .then((res) => {
           if (res.data) {
-            console.log('削除するデータあり。');
             dispatch(setMonthlySpending(res.data));
             setDeleteSomething([]);
           }
