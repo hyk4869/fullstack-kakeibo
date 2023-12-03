@@ -19,19 +19,13 @@ export interface TMonthlySpending {
 }
 
 /** カテゴリー */
-export interface Mcategory {
+export interface MCategory {
   /** カテゴリーID */
   categoryId: number | null;
   /** カテゴリー名 */
   categoryName: string | null;
   /** ユーザーID */
   userId: number | null;
-}
-
-export interface MCategory {
-  categoryId: number | null;
-  userId: number | null;
-  categoryName: string | null;
 }
 
 export const getMonthlySpendingContent = createSlice({
