@@ -3,7 +3,7 @@ import CustomTextfield from '@/app/_customComponents/customTextfield';
 import CustomNumberFormat from '@/app/_customComponents/customNumeric';
 import { RootState } from '@/app/_store/store';
 import { Box, TableBody, TableCell, TableContainer, TableRow, Table, TableHead } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomDate from '@/app/_customComponents/customDate';
 import { commonFontSize, commonPadding5, messageRedirect } from '@/app/_customComponents/customProperties';
@@ -72,7 +72,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [redirectTo, setRedirectTo] = useState<boolean>(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (monthlyData.length === 0) {
       setRedirectTo(true);
     }
@@ -99,6 +99,8 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
       totalAmount: total ?? null,
       categoryName: categoryName ?? null,
     }));
+
+    newAmount.sort((a, b) => (a.totalAmount || 0) - (b.totalAmount || 0)).reverse();
 
     setAmount(newAmount);
 
