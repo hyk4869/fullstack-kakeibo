@@ -36,8 +36,7 @@ import { getMonthlySpending, postDeleteMonthlySpending } from '../../_api/url';
 import LoadingContent from '../../_util/loading';
 import FetchDataDialog from './fetchDataDialog';
 import useWindowSize from '@/app/_util/useWindowSize';
-
-export type Order = 'asc' | 'desc';
+import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
 
 export interface HeadCell {
   id: keyof TMonthlySpending;
@@ -72,40 +71,6 @@ export const monthlySpendingHeadCells: readonly HeadCell[] = [
     label: '利用金額',
   },
 ];
-
-export function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-export const getComparator = (
-  order: Order,
-  orderBy: keyof TMonthlySpending,
-): ((a: TMonthlySpending, b: TMonthlySpending) => number) => {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-};
-
-export const stableSort = (
-  array: TMonthlySpending[],
-  comparator: (a: TMonthlySpending, b: TMonthlySpending) => number,
-): TMonthlySpending[] => {
-  const stabilizedThis = array.map((el, index) => [el, index] as [TMonthlySpending, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-};
 
 type EnhancedTableProps = {
   /** 選択されたID */
@@ -226,12 +191,12 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           <Box sx={{ padding: '1rem', minWidth: '190px', fontSize: '0.8rem' }}>レコード数：{dataLength}件</Box>
         </Box>
       )}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '1rem' }}>
         <Button
           variant="contained"
           color={edit ? 'error' : 'primary'}
           disabled={!enableEdit}
-          sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
+          sx={{ cursor: 'pointer' }}
           onClick={handleEditFlag}
         >
           <Tooltip title={edit ? '保存するには「保存を押してください」' : undefined} arrow>
@@ -241,18 +206,13 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         <Button
           variant="contained"
           disabled={edit === false}
-          sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
+          sx={{ cursor: 'pointer' }}
           onClick={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
           color="primary"
         >
           追加
         </Button>
-        <Button
-          variant="outlined"
-          disabled={edit === false}
-          sx={{ margin: '0.75rem 0.75rem', cursor: 'pointer' }}
-          onClick={saveValue}
-        >
+        <Button variant="outlined" disabled={edit === false} sx={{ cursor: 'pointer' }} onClick={saveValue}>
           保存
         </Button>
         {numSelected > 0 ? (
