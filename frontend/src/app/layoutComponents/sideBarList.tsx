@@ -34,22 +34,23 @@ const SideBarList: React.FC<SideBarListProps> = (props) => {
           <List>
             {HomeListURL.map((a) => {
               return (
-                <ListItem key={a.key}>
-                  <Link href={a.link} style={linkStyle}>
-                    <Box
-                      sx={{
-                        width: '100%',
-                        '&:hover': {
-                          backgroundColor: grey[200],
-                          borderRadius: '50px',
-                        },
-                      }}
-                      onClick={onCloseSideBar}
-                    >
+                <Box
+                  sx={{
+                    width: '100%',
+                    '&:hover': {
+                      backgroundColor: grey[300],
+                      borderRadius: '50px',
+                    },
+                  }}
+                  onClick={onCloseSideBar}
+                  key={a.key}
+                >
+                  <ListItem>
+                    <Link href={a.link} style={linkStyle}>
                       {a.label}
-                    </Box>
-                  </Link>
-                </ListItem>
+                    </Link>
+                  </ListItem>
+                </Box>
               );
             })}
           </List>
@@ -58,22 +59,23 @@ const SideBarList: React.FC<SideBarListProps> = (props) => {
           <List>
             {MonthlySpendingListURL.map((a) => {
               return (
-                <ListItem key={a.key}>
-                  <Link href={a.link} style={linkStyle}>
-                    <Box
-                      sx={{
-                        width: '100%',
-                        '&:hover': {
-                          backgroundColor: grey[200],
-                          borderRadius: '50px',
-                        },
-                      }}
-                      onClick={onCloseSideBar}
-                    >
+                <Box
+                  sx={{
+                    width: '100%',
+                    '&:hover': {
+                      backgroundColor: grey[300],
+                      borderRadius: '50px',
+                    },
+                  }}
+                  onClick={onCloseSideBar}
+                  key={a.key}
+                >
+                  <ListItem key={a.key}>
+                    <Link href={a.link} style={linkStyle}>
                       {a.label}
-                    </Box>
-                  </Link>
-                </ListItem>
+                    </Link>
+                  </ListItem>
+                </Box>
               );
             })}
           </List>
@@ -82,22 +84,23 @@ const SideBarList: React.FC<SideBarListProps> = (props) => {
           <List>
             {SalaryListURL.map((a) => {
               return (
-                <ListItem key={a.key}>
-                  <Link href={a.link} style={linkStyle}>
-                    <Box
-                      sx={{
-                        width: '100%',
-                        '&:hover': {
-                          backgroundColor: grey[200],
-                          borderRadius: '50px',
-                        },
-                      }}
-                      onClick={onCloseSideBar}
-                    >
+                <Box
+                  sx={{
+                    width: '100%',
+                    '&:hover': {
+                      backgroundColor: grey[300],
+                      borderRadius: '50px',
+                    },
+                  }}
+                  onClick={onCloseSideBar}
+                  key={a.key}
+                >
+                  <ListItem>
+                    <Link href={a.link} style={linkStyle}>
                       {a.label}
-                    </Box>
-                  </Link>
-                </ListItem>
+                    </Link>
+                  </ListItem>
+                </Box>
               );
             })}
           </List>
