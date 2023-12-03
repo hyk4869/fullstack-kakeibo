@@ -332,7 +332,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             <Button
               variant="outlined"
               sx={{ margin: '0.75rem 0.75rem' }}
-              disabled={makeNewArray.length - 1 === 0}
+              disabled={makeNewArray.length <= 0}
               onClick={showDialog}
             >
               確定

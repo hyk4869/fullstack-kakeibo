@@ -20,14 +20,13 @@ import { RootState } from '../../_store/store';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { grey, red } from '@mui/material/colors';
-import MonthlyNextActionDialog from './nextActionDialog';
+import NextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportCSV } from '../../_util/exportCSV';
 import { ImportCSV } from '../../_util/monthlySpendingUtil/importCSV';
-import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
 import { visuallyHidden } from '@mui/utils';
-import { monthlySpendingHeaders } from '../../_util/exportCSVTitleName';
+import { categoryHeaders } from '../../_util/exportCSVTitleName';
 import { categoryHeaderList } from '@/app/main/category/categoyTable';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
@@ -280,7 +279,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             <Button
               variant="outlined"
               sx={{ margin: '0.75rem 0.75rem' }}
-              disabled={makeNewArray.length - 1 === 0}
+              disabled={makeNewArray.length <= 0}
               onClick={showDialog}
             >
               確定
@@ -326,7 +325,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             flexDirection: windowSize ? 'column' : 'row',
           }}
         >
-          <ExportCSV headerOption={monthlySpendingHeaders} />
+          <ExportCSV headerOption={categoryHeaders} />
           {/* <ImportCSV
               setMakeNewArray={setMakeNewArray}
               setIncrementArray={setIncrementArray}
@@ -335,7 +334,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             /> */}
         </Box>
 
-        <MonthlyNextActionDialog
+        <NextActionDialog
           isShow={isShowDialog}
           onCloseConfirmDialog={() => setIsShowDialog(false)}
           contentNum={makeNewArray.length}

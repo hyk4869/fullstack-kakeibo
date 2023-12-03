@@ -50,10 +50,11 @@ export const getMonthlySpendingContent = createSlice({
 
       newItems.forEach((a) => {
         if (valueCheck.includes(a.id)) {
-          console.log('idが重複しています。');
+          console.error('idが重複しています。');
           return state;
         }
       });
+
       return [...state, ...action.payload];
     },
 
@@ -84,6 +85,17 @@ export const getCategoryContent = createSlice({
     setCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
       return [...action.payload];
     },
+    setCreateCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
+      const newValue = action.payload.filter((a) => a.categoryId !== null && a.categoryId > 0);
+      const valueCheck = state.map((a) => a.categoryId);
+      newValue.forEach((a) => {
+        if (valueCheck.includes(a.categoryId)) {
+          console.error('idが重複しています。');
+          return state;
+        }
+      });
+      return [...state, ...action.payload];
+    },
     // setCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
     //   const newState = { ...state };
     //   action.payload.forEach((category) => {
@@ -106,5 +118,5 @@ export const enableEdit = createSlice({
 
 export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending, setDeleteMonthlySpending } =
   getMonthlySpendingContent.actions;
-export const { setCategoryContent } = getCategoryContent.actions;
+export const { setCategoryContent, setCreateCategoryContent } = getCategoryContent.actions;
 export const { setEnableEdit } = enableEdit.actions;

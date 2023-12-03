@@ -6,3 +6,9 @@ export const monthlySpendingHeaders = [
   { label: 'categoryId', key: 'categoryId' },
   { label: 'usageFee', key: 'usageFee' },
 ];
+
+/** カテゴリーマスタ用 */
+export const categoryHeaders = [
+  { label: 'categoryId', key: 'categoryId' },
+  { label: 'categoryName', key: 'categoryName' },
+];

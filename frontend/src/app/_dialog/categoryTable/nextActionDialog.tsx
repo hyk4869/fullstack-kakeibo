@@ -1,10 +1,10 @@
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import React, { useState } from 'react';
-import { MCategory } from '../../_store/slice';
+import { MCategory, setCreateCategoryContent } from '../../_store/slice';
 import { useDispatch } from 'react-redux';
 import LoadingContent from '../../_util/loading';
 
-type MonthlyNextActionDialogProps = {
+type NextActionDialogProps = {
   isShow: boolean;
   onCloseConfirmDialog: () => void;
   contentNum: number;
@@ -13,50 +13,41 @@ type MonthlyNextActionDialogProps = {
   setMakeNewArray: React.Dispatch<React.SetStateAction<MCategory[]>>;
 };
 
-const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) => {
+const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
   const { isShow, onCloseConfirmDialog, contentNum, content, onCloseMonthlyDialog, setMakeNewArray } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
   const saveValue = async (): Promise<void> => {
-    // setIsLoading(true);
-    // if (
-    //   content.every(
-    //     (d) =>
-    //       d.id !== null &&
-    //       d.paymentDay !== null &&
-    //       !isNaN(d.paymentDay.getTime()) &&
-    //       d.store !== null &&
-    //       d.usageFee !== null,
-    //   )
-    // ) {
-    //   try {
-    //     const idSet = new Set<number | null>();
-    //     const hasDuplicate = content.some((d) => {
-    //       if (idSet.has(d.id)) {
-    //         return true;
-    //       } else {
-    //         idSet.add(d.id);
-    //         return false;
-    //       }
-    //     });
-    //     if (!hasDuplicate) {
-    //       dispatch(setCreateMonthlySpending(content));
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   } finally {
-    //     setIsLoading(false);
-    //     onCloseConfirmDialog();
-    //     onCloseMonthlyDialog();
-    //     setMakeNewArray([]);
-    //   }
-    // } else {
-    //   window.alert('いずれかの項目が空です。');
-    //   setIsLoading(false);
-    //   onCloseConfirmDialog();
-    // }
+    setIsLoading(true);
+    if (content.every((d) => d.categoryId !== null && d.categoryName !== null)) {
+      try {
+        const idSet = new Set<number | null>();
+        const hasDuplicate = content.some((d) => {
+          if (idSet.has(d.categoryId)) {
+            return true;
+          } else {
+            idSet.add(d.categoryId);
+            return false;
+          }
+        });
+        if (!hasDuplicate) {
+          dispatch(setCreateCategoryContent(content));
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+        onCloseConfirmDialog();
+        onCloseMonthlyDialog();
+        setMakeNewArray([]);
+      }
+    } else {
+      window.alert('いずれかの項目が空です。');
+      setIsLoading(false);
+      onCloseConfirmDialog();
+    }
   };
 
   return (
@@ -91,4 +82,4 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
   );
 };
 
-export default React.memo(MonthlyNextActionDialog);
+export default React.memo(NextActionDialog);

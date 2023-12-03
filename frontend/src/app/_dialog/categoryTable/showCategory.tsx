@@ -3,7 +3,6 @@ import {
   Box,
   Dialog,
   DialogContent,
-  DialogTitle,
   Table,
   TableBody,
   TableCell,
@@ -11,18 +10,16 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { blue, grey } from '@mui/material/colors';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../_store/store';
+import React from 'react';
 import CustomTextfield from '../../_customComponents/customTextfield';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
-import { amoutType } from '@/app/main/monthlyAggregation/aggregationByCategory';
+import { referenceType } from '@/app/main/category/categoyTable';
 
 type ShowCategoryMasterPrpos = {
   isShowCategoryMaster: boolean;
   onCloseCategoryMaster: () => void;
+  amount: referenceType[];
 };
 
 const categoryHeaderList: commonTableHeaderType[] = [
@@ -41,14 +38,12 @@ const categoryHeaderList: commonTableHeaderType[] = [
 ];
 
 export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => {
-  const { isShowCategoryMaster, onCloseCategoryMaster } = props;
-  const categoryData = useSelector((state: RootState) => state.getCategoryContent);
-  const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
-  const [amount, setAmount] = useState<Array<amoutType>>([]);
+  const { isShowCategoryMaster, onCloseCategoryMaster, amount } = props;
 
   const changeValue = () => {
     //
   };
+
   return (
     <>
       <Dialog open={isShowCategoryMaster} onClose={onCloseCategoryMaster}>
@@ -60,25 +55,35 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
                   <CommonTableHeader categoryHeaderList={categoryHeaderList} />
                 </TableHead>
                 <TableBody>
-                  {categoryData.map((content) => {
+                  {amount.map((content) => {
                     return (
                       <TableRow key={content.categoryId}>
-                        <TableCell>
+                        <TableCell align="center">
                           <CustomNumberFormat
                             value={content?.categoryId}
                             onChangeValue={changeValue}
-                            paramKey={'store'}
+                            paramKey={'categoryId'}
                             id={Number(content?.categoryId)}
                             edit={false}
                           />
                         </TableCell>
-                        <TableCell>
+                        <TableCell align="center">
                           <CustomTextfield
                             value={content?.categoryName}
                             onChangeValue={changeValue}
-                            paramKey={'store'}
+                            paramKey={'categoryName'}
                             id={Number(content?.categoryId)}
                             edit={false}
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <CustomNumberFormat
+                            value={content?.totalCategoryName}
+                            onChangeValue={changeValue}
+                            paramKey={'totalCategoryName'}
+                            id={Number(content?.categoryId)}
+                            edit={false}
+                            suffix="件"
                           />
                         </TableCell>
                       </TableRow>

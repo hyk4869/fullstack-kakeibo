@@ -45,7 +45,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
           dispatch(setCreateMonthlySpending(content));
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsLoading(false);
         onCloseConfirmDialog();

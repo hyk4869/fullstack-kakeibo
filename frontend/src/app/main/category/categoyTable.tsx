@@ -1,19 +1,8 @@
 'use client';
 import { RootState } from '@/app/_store/store';
-import {
-  Box,
-  Paper,
-  Table,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TableHead,
-  TableBody,
-  Toolbar,
-  Button,
-} from '@mui/material';
+import { Box, Paper, Table, TableCell, TableContainer, TableRow, TableHead, TableBody, Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomTextfield from '../../_customComponents/customTextfield';
@@ -21,7 +10,7 @@ import RedirectDialog from '@/app/_util/redirectDialog';
 import { messageRedirect, commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditButton from '@/app/_util/commonEditButton';
 import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
-import { MCategory } from '@/app/_store/slice';
+import { MCategory, TMonthlySpending } from '@/app/_store/slice';
 import CreateNewRecordsDialog from '@/app/_dialog/categoryTable/createNewRecordsDialog';
 import { ShowCategoryMaster } from '@/app/_dialog/categoryTable/showCategory';
 
@@ -40,6 +29,12 @@ export const categoryHeaderList: commonTableHeaderType[] = [
   },
 ];
 
+export type referenceType = {
+  totalCategoryName: number | null;
+  categoryId: number | null;
+  categoryName: string | null;
+};
+
 const CategoryTable: React.FC<CategoryTableProps> = () => {
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
@@ -49,8 +44,9 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
   const [editCategoryValue, setEditCategoryValue] = useState<Array<MCategory>>([]);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
+  const [amount, setAmount] = useState<Array<referenceType>>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (monthlyData.length === 0) {
       setRedirectTo(true);
     }
@@ -60,11 +56,55 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
     if (categoryData.length !== editCategoryValue.length) {
       setEditCategoryValue(categoryData);
     }
-  }, [categoryData, monthlyData]);
+  }, [categoryData]);
 
-  const changeValue = () => {
-    //
-  };
+  useEffect(() => {
+    if (monthlyData.length !== 0 && categoryData.length !== 0) {
+      const calclatedAmount: Array<referenceType> = [];
+
+      categoryData.forEach((category: MCategory) => {
+        const categoryName = category.categoryName;
+        const categoryId = category.categoryId;
+
+        const findMonthlyData = monthlyData.filter(
+          (monthly: TMonthlySpending) => monthly.category?.categoryName === categoryName,
+        );
+        const countEachCategory = findMonthlyData.length;
+
+        calclatedAmount.push({
+          categoryName: categoryName,
+          categoryId: categoryId,
+          totalCategoryName: countEachCategory,
+        });
+      });
+
+      setAmount(calclatedAmount);
+    }
+  }, [monthlyData, categoryData]);
+
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      setEditCategoryValue((prevArray) => {
+        return prevArray.map((d) => {
+          if (d.categoryId === id) {
+            const updateValue = { ...d };
+            switch (paramKey) {
+              case 'categoryId':
+                updateValue.categoryId = value === '' ? null : (value as number);
+                break;
+              case 'categoryName':
+                updateValue.categoryName = value === '' ? null : (value as string);
+                break;
+            }
+            return updateValue;
+          } else {
+            return d;
+          }
+        });
+      });
+    },
+    [editCategoryValue],
+  );
 
   const handleEditFlag = () => {
     setEdit((edit) => !edit);
@@ -152,6 +192,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
       <ShowCategoryMaster
         isShowCategoryMaster={isShowCategoryMaster}
         onCloseCategoryMaster={() => setIsShowCategoryMaster(false)}
+        amount={amount}
       />
     </>
   );
