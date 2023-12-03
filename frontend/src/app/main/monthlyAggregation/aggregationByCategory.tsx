@@ -38,7 +38,7 @@ const headerList: commonTableHeaderType[] = [
     label: 'カテゴリー名',
   },
   {
-    id: 'Amount',
+    id: 'amount',
     label: '金額',
   },
 ];

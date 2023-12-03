@@ -42,7 +42,7 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
             <TabPanel value="1" sx={{ padding: windowSize ? '0px' : '' }}>
               <AggregationByCategory />
             </TabPanel>
-            <TabPanel value="2">
+            <TabPanel value="2" sx={{ padding: windowSize ? '0px' : '' }}>
               <AggregationByMonth />
             </TabPanel>
           </TabContext>

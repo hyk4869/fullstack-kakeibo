@@ -10,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { blue } from '@mui/material/colors';
 import PersonIcon from '@mui/icons-material/Person';
 import SideBar from './sideBar';
+import useWindowSize from '../_util/useWindowSize';
 
 type CustomMenuBarProps = {
   TitleName?: string;
@@ -17,6 +18,8 @@ type CustomMenuBarProps = {
 const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
   const { TitleName } = props;
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
+  const { width, height } = useWindowSize();
+
   return (
     <>
       <Box sx={{ marginBottom: '80px' }}>
@@ -35,6 +38,7 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {TitleName ?? ''}
             </Typography>
+            {`width: ${width}`} - {`height: ${height}`}
             <Button color="inherit">
               <PersonIcon />
               {/* <div style={{ paddingLeft: '1rem' }}>{userDataValue.username ?? ''}</div> */}
