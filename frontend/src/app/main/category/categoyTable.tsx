@@ -127,9 +127,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
           </Box>
           <TableContainer>
             <Table>
-              <TableHead>
-                <CommonTableHeader categoryHeaderList={categoryHeaderList} />
-              </TableHead>
+              <CommonTableHeader categoryHeaderList={categoryHeaderList} />
               <TableBody>
                 {editCategoryValue.map((a) => {
                   return (

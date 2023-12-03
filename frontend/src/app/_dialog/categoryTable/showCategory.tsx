@@ -51,9 +51,7 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
           <Box>
             <TableContainer>
               <Table>
-                <TableHead>
-                  <CommonTableHeader categoryHeaderList={categoryHeaderList} />
-                </TableHead>
+                <CommonTableHeader categoryHeaderList={categoryHeaderList} />
                 <TableBody>
                   {amount.map((content) => {
                     return (

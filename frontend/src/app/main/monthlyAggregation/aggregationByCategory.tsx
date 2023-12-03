@@ -2,7 +2,7 @@
 import CustomTextfield from '@/app/_customComponents/customTextfield';
 import CustomNumberFormat from '@/app/_customComponents/customNumeric';
 import { RootState } from '@/app/_store/store';
-import { Box, TableBody, TableCell, TableContainer, TableRow, Table, TableHead } from '@mui/material';
+import { Box, TableBody, TableCell, TableContainer, TableRow, Table } from '@mui/material';
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomDate from '@/app/_customComponents/customDate';
@@ -13,15 +13,10 @@ import CustomToggleButton from '@/app/_customComponents/customToggleButton';
 import { valueObjType } from '@/app/_customComponents/customRadioButton';
 import BarGraph from '@/app/_util/barGraph';
 import RedirectDialog from '@/app/_util/redirectDialog';
+import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
 
 type AggregationByCategoryProps = {
   //
-};
-/** ヘッダー用の型 */
-type AggregationByCategoryHeader = {
-  title: string;
-  disablePadding: boolean;
-  label: string;
 };
 
 /** 合計金額用の型 */
@@ -37,15 +32,13 @@ type sortedDateType = {
 };
 
 /** ヘッダー */
-const headerList: AggregationByCategoryHeader[] = [
+const headerList: commonTableHeaderType[] = [
   {
-    title: 'category',
-    disablePadding: false,
+    id: 'category',
     label: 'カテゴリー名',
   },
   {
-    title: 'Amount',
-    disablePadding: false,
+    id: 'Amount',
     label: '金額',
   },
 ];
@@ -163,17 +156,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           }}
         >
           <Table sx={{ width: windowSize ? '100%' : '50%' }}>
-            <TableHead>
-              <TableRow sx={{ padding: commonPadding5 }}>
-                {headerList.map((a) => {
-                  return (
-                    <TableCell key={a.title} align={'center'} sx={{ padding: commonPadding5 }}>
-                      {a.label}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </TableHead>
+            <CommonTableHeader categoryHeaderList={headerList} />
             <TableBody>
               {amount.map((a) => {
                 return (
@@ -246,6 +229,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
             </Box>
           </Box>
         </TableContainer>
+
         <Box
           sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '10px', alignItems: 'end' }}
         >
@@ -271,6 +255,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           </Box>
         </Box>
       </Box>
+
       <RedirectDialog
         openRedirect={redirectTo}
         closeRedirect={() => setRedirectTo(false)}

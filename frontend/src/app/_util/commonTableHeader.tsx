@@ -1,6 +1,6 @@
 'use client';
 
-import { TableCell, TableRow } from '@mui/material';
+import { TableCell, TableRow, TableHead } from '@mui/material';
 import React from 'react';
 import { commonPadding5 } from '../_customComponents/customProperties';
 
@@ -17,15 +17,17 @@ const CommonTableHeader: React.FC<CommonTableHeaderProps> = (props) => {
   const { categoryHeaderList } = props;
   return (
     <>
-      <TableRow sx={{ padding: commonPadding5 }}>
-        {categoryHeaderList.map((a) => {
-          return (
-            <TableCell key={a.id} align={'center'} sx={{ padding: commonPadding5 }}>
-              {a.label}
-            </TableCell>
-          );
-        })}
-      </TableRow>
+      <TableHead sx={{ padding: commonPadding5 }}>
+        <TableRow sx={{ padding: commonPadding5 }}>
+          {categoryHeaderList.map((a) => {
+            return (
+              <TableCell key={a.id} align={'center'} sx={{ padding: commonPadding5 }}>
+                {a.label}
+              </TableCell>
+            );
+          })}
+        </TableRow>
+      </TableHead>
     </>
   );
 };
