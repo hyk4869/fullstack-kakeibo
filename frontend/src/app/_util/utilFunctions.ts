@@ -1,3 +1,6 @@
+import { TMonthlySpending } from '../_store/slice';
+import { MonthlyGrouping } from '../main/monthlyAggregation/aggregationByMonth';
+
 export type Order = 'asc' | 'desc';
 
 export function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -35,3 +38,51 @@ export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number): T
     return el[0];
   });
 }
+
+/** 月ごとに合計を集計 */
+export const monthlyArray = (monthlyData: TMonthlySpending[]) => {
+  const groupedByMonth: MonthlyGrouping = {};
+
+  for (const entry of monthlyData) {
+    const paymentDay = entry.paymentDay;
+
+    if (paymentDay) {
+      const monthKey = `${paymentDay.getFullYear()}-${paymentDay.getMonth() + 1}`;
+
+      if (!groupedByMonth[monthKey]) {
+        groupedByMonth[monthKey] = { data: [], totalUsageFee: 0 };
+      }
+
+      groupedByMonth[monthKey].data.push(entry);
+      groupedByMonth[monthKey].totalUsageFee += entry.usageFee || 0;
+    }
+  }
+
+  return groupedByMonth;
+};
+
+// const groupingArray = () => {
+//   const groups: any[] = [];
+//   let currentGroup: any[] = [];
+
+//   for (let i = 0; i < monthlyData.length; i++) {
+//     const stringVal = monthlyData[i];
+//     const storeName = stringVal.store;
+//     const paymentDay = stringVal.paymentDay;
+
+//     if (storeName?.includes('ユーネクスト')) {
+//       groups.push([...currentGroup]);
+//       currentGroup = [];
+//     }
+
+//     if (paymentDay !== null) {
+//       currentGroup.push(stringVal);
+//     }
+//   }
+
+//   if (currentGroup.length > 0) {
+//     groups.push([...currentGroup]);
+//   }
+
+//   console.log(groups);
+// };

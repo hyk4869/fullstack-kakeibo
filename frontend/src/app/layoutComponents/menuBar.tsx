@@ -38,7 +38,7 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {TitleName ?? ''}
             </Typography>
-            {`width: ${width}`} - {`height: ${height}`}
+            {`確認用 width: ${width}`} - {`height: ${height}`}
             <Button color="inherit">
               <PersonIcon />
               {/* <div style={{ paddingLeft: '1rem' }}>{userDataValue.username ?? ''}</div> */}
