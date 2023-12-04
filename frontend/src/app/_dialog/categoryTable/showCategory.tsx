@@ -14,12 +14,12 @@ import React from 'react';
 import CustomTextfield from '../../_customComponents/customTextfield';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
-import { referenceType } from '@/app/main/category/categoyTable';
+import { ReferenceType } from '@/app/main/category/categoyTable';
 
 type ShowCategoryMasterPrpos = {
   isShowCategoryMaster: boolean;
   onCloseCategoryMaster: () => void;
-  amount: referenceType[];
+  amount: ReferenceType[];
 };
 
 const categoryHeaderList: commonTableHeaderType[] = [

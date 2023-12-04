@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomDate from '../../_customComponents/customDate';
 import dayjs from 'dayjs';
-import { monthlyArray } from '@/app/_util/utilFunctions';
+import { sumEachMonthlyArray } from '@/app/_util/utilFunctions';
 
 type AggregationByMonthProps = {
   //
@@ -35,7 +35,7 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
   }, [width]);
 
   useEffect(() => {
-    setGroupingMonthly(monthlyArray(monthlyData));
+    setGroupingMonthly(sumEachMonthlyArray(monthlyData));
   }, [monthlyData]);
 
   /** ヘッダー */

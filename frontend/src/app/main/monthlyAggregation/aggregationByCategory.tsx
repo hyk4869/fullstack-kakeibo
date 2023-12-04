@@ -14,13 +14,14 @@ import { valueObjType } from '@/app/_customComponents/customRadioButton';
 import BarGraph from '@/app/_util/barGraph';
 import RedirectDialog from '@/app/_util/redirectDialog';
 import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
+import { sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utilFunctions';
 
 type AggregationByCategoryProps = {
   //
 };
 
 /** 合計金額用の型 */
-export type amoutType = {
+export type AmoutType = {
   totalAmount: number | null;
   categoryId: number | null;
   categoryName: string | null;
@@ -59,7 +60,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const { width, height } = useWindowSize();
-  const [amount, setAmount] = useState<Array<amoutType>>([]);
+  const [amount, setAmount] = useState<Array<AmoutType>>([]);
   const [sortedDate, setSortedDate] = useState<sortedDateType>();
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [displayGraph, setDisplayGraph] = useState<string>('1');
@@ -72,30 +73,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   }, [monthlyData]);
 
   useEffect(() => {
-    const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
-
-    monthlyData.forEach((d) => {
-      const categoryId = d.categoryId;
-      const usageFee = d.usageFee || 0;
-      const categoryName = d.category?.categoryName;
-
-      if (categoryId !== null) {
-        categoryTotal[categoryId] = {
-          total: (categoryTotal[categoryId]?.total || 0) + usageFee,
-          categoryName: categoryName ?? '',
-        };
-      }
-    });
-
-    const newAmount: amoutType[] = Object.entries(categoryTotal).map(([categoryId, { total, categoryName }]) => ({
-      categoryId: parseInt(categoryId, 10) ?? null,
-      totalAmount: total ?? null,
-      categoryName: categoryName ?? null,
-    }));
-
-    newAmount.sort((a, b) => (a.totalAmount || 0) - (b.totalAmount || 0)).reverse();
-
-    setAmount(newAmount);
+    setAmount(sumEachCategoryByMonthly(monthlyData));
 
     const getLatestDate = (): Date => {
       const latestDate = new Date(Math.max(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
@@ -131,17 +109,6 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
     },
     [displayGraph],
   );
-
-  const sumAmount = useCallback((): number => {
-    // eslint-disable-next-line prefer-const
-    let sum = 0;
-    amount.forEach((d) => {
-      if (d.totalAmount !== null) {
-        sum += d.totalAmount;
-      }
-    });
-    return sum;
-  }, [monthlyData, categoryData, amount]);
 
   return (
     <>
@@ -199,7 +166,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
                 </TableCell>
                 <TableCell align="center" sx={{ padding: commonPadding5 }}>
                   <CustomNumberFormat
-                    value={sumAmount()}
+                    value={sumAmount(amount)}
                     suffix=" 円"
                     edit={false}
                     align="center"

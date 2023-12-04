@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { amoutType } from '../main/monthlyAggregation/aggregationByCategory';
+import { AmoutType } from '../main/monthlyAggregation/aggregationByCategory';
 import { Chart, registerables, ChartOptions, TooltipItem } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { color200 } from '../_customComponents/customProperties';
@@ -15,7 +15,7 @@ type DoughnutChartProps<T> = {
   //   somethiong?: U[]
 };
 
-const DoughnutChart: React.FC<DoughnutChartProps<amoutType>> = (props) => {
+const DoughnutChart: React.FC<DoughnutChartProps<AmoutType>> = (props) => {
   const { value, title } = props;
 
   const sortedChartData = value.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1));

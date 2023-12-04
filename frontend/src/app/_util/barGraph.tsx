@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { amoutType } from '../main/monthlyAggregation/aggregationByCategory';
+import { AmoutType } from '../main/monthlyAggregation/aggregationByCategory';
 import { Chart, registerables, ChartOptions } from 'chart.js';
 import { color200 } from '../_customComponents/customProperties';
 import { Bar } from 'react-chartjs-2';
@@ -12,7 +12,7 @@ type BarGraphProps<T> = {
   value: T[];
   title: string;
 };
-const BarGraph: React.FC<BarGraphProps<amoutType>> = (props) => {
+const BarGraph: React.FC<BarGraphProps<AmoutType>> = (props) => {
   const { value, title } = props;
   const { width, height } = useWindowSize();
   const [windowSize, setWindowSize] = useState<boolean>(false);

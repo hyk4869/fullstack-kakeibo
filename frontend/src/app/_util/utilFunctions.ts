@@ -1,4 +1,6 @@
-import { TMonthlySpending } from '../_store/slice';
+import { MCategory, TMonthlySpending } from '../_store/slice';
+import { ReferenceType } from '../main/category/categoyTable';
+import { AmoutType } from '../main/monthlyAggregation/aggregationByCategory';
 import { MonthlyGrouping } from '../main/monthlyAggregation/aggregationByMonth';
 
 export type Order = 'asc' | 'desc';
@@ -39,8 +41,8 @@ export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number): T
   });
 }
 
-/** 月ごとに合計を集計 */
-export const monthlyArray = (monthlyData: TMonthlySpending[]) => {
+/** 月毎に合計を集計 */
+export const sumEachMonthlyArray = (monthlyData: TMonthlySpending[]): MonthlyGrouping => {
   const groupedByMonth: MonthlyGrouping = {};
 
   for (const entry of monthlyData) {
@@ -61,28 +63,62 @@ export const monthlyArray = (monthlyData: TMonthlySpending[]) => {
   return groupedByMonth;
 };
 
-// const groupingArray = () => {
-//   const groups: any[] = [];
-//   let currentGroup: any[] = [];
+/** カテゴリーが使われている数を算出 */
+export const sumEachCategory = (categoryData: MCategory[], monthlyData: TMonthlySpending[]) => {
+  const calclatedAmount: Array<ReferenceType> = [];
 
-//   for (let i = 0; i < monthlyData.length; i++) {
-//     const stringVal = monthlyData[i];
-//     const storeName = stringVal.store;
-//     const paymentDay = stringVal.paymentDay;
+  categoryData.forEach((category: MCategory) => {
+    const categoryName = category.categoryName;
+    const categoryId = category.categoryId;
 
-//     if (storeName?.includes('ユーネクスト')) {
-//       groups.push([...currentGroup]);
-//       currentGroup = [];
-//     }
+    const findMonthlyData = monthlyData.filter(
+      (monthly: TMonthlySpending) => monthly.category?.categoryName === categoryName,
+    );
+    const countEachCategory = findMonthlyData.length;
 
-//     if (paymentDay !== null) {
-//       currentGroup.push(stringVal);
-//     }
-//   }
+    calclatedAmount.push({
+      categoryName: categoryName,
+      categoryId: categoryId,
+      totalCategoryName: countEachCategory,
+    });
+  });
 
-//   if (currentGroup.length > 0) {
-//     groups.push([...currentGroup]);
-//   }
+  return calclatedAmount;
+};
 
-//   console.log(groups);
-// };
+/** カテゴリー毎に合計を集計 */
+export const sumEachCategoryByMonthly = (monthlyData: TMonthlySpending[]): AmoutType[] => {
+  const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
+
+  monthlyData.forEach((d) => {
+    const categoryId = d.categoryId;
+    const usageFee = d.usageFee || 0;
+    const categoryName = d.category?.categoryName;
+
+    if (categoryId !== null) {
+      categoryTotal[categoryId] = {
+        total: (categoryTotal[categoryId]?.total || 0) + usageFee,
+        categoryName: categoryName ?? '',
+      };
+    }
+  });
+
+  const newAmount: AmoutType[] = Object.entries(categoryTotal).map(([categoryId, { total, categoryName }]) => ({
+    categoryId: parseInt(categoryId, 10) ?? null,
+    totalAmount: total ?? null,
+    categoryName: categoryName ?? null,
+  }));
+
+  return newAmount.sort((a, b) => (a.totalAmount || 0) - (b.totalAmount || 0)).reverse();
+};
+
+/** 配列内の要素を合計 */
+export const sumAmount = (amount: AmoutType[]): number => {
+  let sum = 0;
+  amount.forEach((d) => {
+    if (d.totalAmount !== null) {
+      sum += d.totalAmount;
+    }
+  });
+  return sum;
+};

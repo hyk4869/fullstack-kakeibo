@@ -13,6 +13,7 @@ import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTabl
 import { MCategory, TMonthlySpending } from '@/app/_store/slice';
 import CreateNewRecordsDialog from '@/app/_dialog/categoryTable/createNewRecordsDialog';
 import { ShowCategoryMaster } from '@/app/_dialog/categoryTable/showCategory';
+import { sumEachCategory } from '@/app/_util/utilFunctions';
 
 type CategoryTableProps = {
   //
@@ -29,7 +30,7 @@ export const categoryHeaderList: commonTableHeaderType[] = [
   },
 ];
 
-export type referenceType = {
+export type ReferenceType = {
   totalCategoryName: number | null;
   categoryId: number | null;
   categoryName: string | null;
@@ -44,7 +45,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
   const [editCategoryValue, setEditCategoryValue] = useState<Array<MCategory>>([]);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
-  const [amount, setAmount] = useState<Array<referenceType>>([]);
+  const [amount, setAmount] = useState<Array<ReferenceType>>([]);
 
   useLayoutEffect(() => {
     if (monthlyData.length === 0) {
@@ -60,25 +61,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
 
   useEffect(() => {
     if (monthlyData.length !== 0 && categoryData.length !== 0) {
-      const calclatedAmount: Array<referenceType> = [];
-
-      categoryData.forEach((category: MCategory) => {
-        const categoryName = category.categoryName;
-        const categoryId = category.categoryId;
-
-        const findMonthlyData = monthlyData.filter(
-          (monthly: TMonthlySpending) => monthly.category?.categoryName === categoryName,
-        );
-        const countEachCategory = findMonthlyData.length;
-
-        calclatedAmount.push({
-          categoryName: categoryName,
-          categoryId: categoryId,
-          totalCategoryName: countEachCategory,
-        });
-      });
-
-      setAmount(calclatedAmount);
+      setAmount(sumEachCategory(categoryData, monthlyData));
     }
   }, [monthlyData, categoryData]);
 
