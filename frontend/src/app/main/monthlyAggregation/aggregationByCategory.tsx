@@ -160,18 +160,18 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
                     value={'合計金額'}
                     edit={false}
                     onChangeValue={changeValue}
-                    paramKey={'categoryName'}
+                    paramKey={'sumAmountString'}
                     id={Number(1)}
                   />
                 </TableCell>
                 <TableCell align="center" sx={{ padding: commonPadding5 }}>
                   <CustomNumberFormat
-                    value={sumAmount(amount)}
+                    value={sumAmount(amount.map((a) => a.totalAmount))}
                     suffix=" 円"
                     edit={false}
                     align="center"
                     onChangeValue={changeValue}
-                    paramKey={'totalAmount'}
+                    paramKey={'sumAmount'}
                     id={Number(2)}
                   />
                 </TableCell>

@@ -113,12 +113,30 @@ export const sumEachCategoryByMonthly = (monthlyData: TMonthlySpending[]): Amout
 };
 
 /** 配列内の要素を合計 */
-export const sumAmount = (amount: AmoutType[]): number => {
+export const sumAmount = (amount: (number | null)[]): number => {
+  if (amount === null || amount.length === 0) return 0;
   let sum = 0;
   amount.forEach((d) => {
-    if (d.totalAmount !== null) {
-      sum += d.totalAmount;
+    if (d !== null) {
+      sum += d;
     }
   });
   return sum;
+};
+
+/** 平均計算 */
+export const calcAvg = (numberArray: (number | null)[]): number => {
+  if (numberArray === null || numberArray.length === 0) return 0;
+  let sum = 0;
+  let denominator = 0;
+
+  numberArray.forEach((d) => {
+    if (d !== null) {
+      sum += d;
+      denominator++;
+    }
+  });
+  if (denominator === 0) return 0;
+  const result = (Math.round(sum / denominator) * 10) / 10;
+  return result;
 };

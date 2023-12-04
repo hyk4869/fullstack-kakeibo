@@ -10,7 +10,9 @@ import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomDate from '../../_customComponents/customDate';
 import dayjs from 'dayjs';
-import { sumEachMonthlyArray } from '@/app/_util/utilFunctions';
+import { calcAvg, sumAmount, sumEachMonthlyArray } from '@/app/_util/utilFunctions';
+import CustomTextfield from '@/app/_customComponents/customTextfield';
+import { commonPadding5 } from '@/app/_customComponents/customProperties';
 
 type AggregationByMonthProps = {
   //
@@ -79,18 +81,18 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
               {Object.entries(groupingMonthly).map(([monthKey, data]) => {
                 return (
                   <React.Fragment key={monthKey}>
-                    <TableRow>
-                      <TableCell align="center">
+                    <TableRow sx={{ padding: commonPadding5 }}>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomDate
                           value={dayjs(monthKey)}
                           edit={false}
                           onChangeValue={changeValue}
                           paramKey={'paymentDay'}
-                          id={Number(0)}
+                          id={monthKey.length}
                           format="YYYY年MM月"
                         />
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={data.totalUsageFee}
                           suffix=" 円"
@@ -98,13 +100,59 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'totalAmount'}
-                          id={Number(1)}
+                          id={monthKey.length}
                         />
                       </TableCell>
                     </TableRow>
                   </React.Fragment>
                 );
               })}
+            </TableBody>
+            <TableBody>
+              <TableRow sx={{ padding: commonPadding5 }}>
+                <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                  <CustomTextfield
+                    value={'平均金額'}
+                    edit={false}
+                    onChangeValue={changeValue}
+                    paramKey={'averageString'}
+                    id={Number(1)}
+                  />
+                </TableCell>
+                <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                  <CustomNumberFormat
+                    value={calcAvg(Object.entries(groupingMonthly).map(([_, b]) => b.totalUsageFee))}
+                    suffix=" 円"
+                    edit={false}
+                    align="center"
+                    onChangeValue={changeValue}
+                    paramKey={'averageAmount'}
+                    id={Number(2)}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ padding: commonPadding5 }}>
+                <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                  <CustomTextfield
+                    value={'合計金額'}
+                    edit={false}
+                    onChangeValue={changeValue}
+                    paramKey={'sumAmountString'}
+                    id={Number(1)}
+                  />
+                </TableCell>
+                <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                  <CustomNumberFormat
+                    value={sumAmount(Object.entries(groupingMonthly).map(([_, b]) => b.totalUsageFee))}
+                    suffix=" 円"
+                    edit={false}
+                    align="center"
+                    onChangeValue={changeValue}
+                    paramKey={'sumAmount'}
+                    id={Number(2)}
+                  />
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
