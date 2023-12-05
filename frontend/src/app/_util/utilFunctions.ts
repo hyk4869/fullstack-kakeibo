@@ -140,3 +140,13 @@ export const calcAvg = (numberArray: (number | null)[]): number => {
   const result = (Math.round(sum / denominator) * 10) / 10;
   return result;
 };
+
+export const getLatestDate = (monthlyData: TMonthlySpending[]): Date => {
+  const latestDate = new Date(Math.max(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
+  return latestDate;
+};
+
+export const getOldDate = (monthlyData: TMonthlySpending[]): Date => {
+  const latestDate = new Date(Math.min(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
+  return latestDate;
+};

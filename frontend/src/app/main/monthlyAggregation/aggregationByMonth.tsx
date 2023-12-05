@@ -5,14 +5,17 @@ import { RootState } from '@/app/_store/store';
 import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { Box, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomDate from '../../_customComponents/customDate';
 import dayjs from 'dayjs';
-import { calcAvg, sumAmount, sumEachMonthlyArray } from '@/app/_util/utilFunctions';
+import { calcAvg, getLatestDate, getOldDate, sumAmount, sumEachMonthlyArray } from '@/app/_util/utilFunctions';
 import CustomTextfield from '@/app/_customComponents/customTextfield';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
+import CommonFooterAggregation from './commonFooter';
+import { SortedDateType } from './aggregationByCategory';
+import BarGraph from '@/app/_util/barGraph';
 
 type AggregationByMonthProps = {
   //
@@ -27,6 +30,8 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [groupingMonthly, setGroupingMonthly] = useState<MonthlyGrouping>({});
+  const [sortedDate, setSortedDate] = useState<SortedDateType>();
+  const [displayGraph, setDisplayGraph] = useState<string>('1');
 
   useEffect(() => {
     if (width < 1100) {
@@ -38,6 +43,11 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
 
   useEffect(() => {
     setGroupingMonthly(sumEachMonthlyArray(monthlyData));
+
+    setSortedDate({
+      startDate: getOldDate(monthlyData),
+      endDate: getLatestDate(monthlyData),
+    });
   }, [monthlyData]);
 
   /** ヘッダー */
@@ -58,9 +68,16 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
     // }),
   ];
 
-  const changeValue = () => {
-    //
-  };
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      switch (paramKey) {
+        case 'toggleValue':
+          typeof value === 'string' ? setDisplayGraph(value) : setDisplayGraph(String(value));
+          break;
+      }
+    },
+    [displayGraph],
+  );
 
   return (
     <>
@@ -72,10 +89,9 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
             justifyContent: 'center',
             width: '100%',
             height: windowSize ? `${height - height * 0.25}px` : '70vh',
-            gap: '30px',
           }}
         >
-          <Table sx={{ width: windowSize ? '100%' : '100%' }}>
+          <Table sx={{ width: windowSize ? '100%' : '50%' }}>
             <CommonTableHeader categoryHeaderList={headerList} />
             <TableBody>
               {Object.entries(groupingMonthly).map(([monthKey, data]) => {
@@ -107,8 +123,7 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
                   </React.Fragment>
                 );
               })}
-            </TableBody>
-            <TableBody>
+
               <TableRow sx={{ padding: commonPadding5 }}>
                 <TableCell align="center" sx={{ padding: commonPadding5 }}>
                   <CustomTextfield
@@ -155,7 +170,16 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
               </TableRow>
             </TableBody>
           </Table>
+
+          <Box sx={{ width: windowSize ? '100%' : '50%', display: 'grid', justifyContent: 'center' }}>
+            {displayGraph === '1' ? (
+              <BarGraph MonthlyGrouping={groupingMonthly} title={'一ヶ月の支出'} label={'paymentDay'} />
+            ) : (
+              <></>
+            )}
+          </Box>
         </TableContainer>
+        <CommonFooterAggregation sortedDate={sortedDate} />
       </Box>
     </>
   );

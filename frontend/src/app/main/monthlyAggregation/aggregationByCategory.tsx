@@ -5,16 +5,16 @@ import { RootState } from '@/app/_store/store';
 import { Box, TableBody, TableCell, TableContainer, TableRow, Table } from '@mui/material';
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import CustomDate from '@/app/_customComponents/customDate';
-import { commonFontSize, commonPadding5, messageRedirect } from '@/app/_customComponents/customProperties';
+import { commonPadding5, messageRedirect } from '@/app/_customComponents/customProperties';
 import DoughnutChart from '@/app/_util/doughnutChart';
 import useWindowSize from '@/app/_util/useWindowSize';
 import CustomToggleButton from '@/app/_customComponents/customToggleButton';
-import { valueObjType } from '@/app/_customComponents/customRadioButton';
+import { ValueObjType } from '@/app/_customComponents/customRadioButton';
 import BarGraph from '@/app/_util/barGraph';
 import RedirectDialog from '@/app/_util/redirectDialog';
 import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
-import { sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utilFunctions';
+import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utilFunctions';
+import CommonFooterAggregation from './commonFooter';
 
 type AggregationByCategoryProps = {
   //
@@ -27,7 +27,7 @@ export type AmoutType = {
   categoryName: string | null;
 };
 
-type sortedDateType = {
+export type SortedDateType = {
   startDate: Date | null;
   endDate: Date | null;
 };
@@ -44,7 +44,7 @@ const headerList: commonTableHeaderType[] = [
   },
 ];
 
-const toggleButtonList: valueObjType[] = [
+export const toggleButtonList: ValueObjType[] = [
   {
     label: '円グラフ',
     value: '1',
@@ -61,7 +61,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const { width, height } = useWindowSize();
   const [amount, setAmount] = useState<Array<AmoutType>>([]);
-  const [sortedDate, setSortedDate] = useState<sortedDateType>();
+  const [sortedDate, setSortedDate] = useState<SortedDateType>();
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [redirectTo, setRedirectTo] = useState<boolean>(false);
@@ -75,19 +75,9 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   useEffect(() => {
     setAmount(sumEachCategoryByMonthly(monthlyData));
 
-    const getLatestDate = (): Date => {
-      const latestDate = new Date(Math.max(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
-      return latestDate;
-    };
-
-    const getOldDate = (): Date => {
-      const latestDate = new Date(Math.min(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
-      return latestDate;
-    };
-
     setSortedDate({
-      startDate: getOldDate(),
-      endDate: getLatestDate(),
+      startDate: getOldDate(monthlyData),
+      endDate: getLatestDate(monthlyData),
     });
   }, [categoryData, monthlyData]);
 
@@ -182,7 +172,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
             {displayGraph === '1' ? (
               <DoughnutChart value={amount} title={'カテゴリー別の金額'} />
             ) : (
-              <BarGraph value={amount} title={'カテゴリー別の金額'} />
+              <BarGraph AmoutType={amount} title={'カテゴリー別の金額'} label={'categoryName'} />
             )}
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <CustomToggleButton
@@ -196,31 +186,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
             </Box>
           </Box>
         </TableContainer>
-
-        <Box
-          sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '10px', alignItems: 'end' }}
-        >
-          <Box sx={{ fontSize: commonFontSize, marginRight: '1rem' }}>データの抽出期間</Box>
-          <Box sx={{ marginRight: '0.5rem' }}>
-            <CustomDate
-              value={sortedDate?.startDate !== undefined ? sortedDate?.startDate : null}
-              paramKey="startDate"
-              id={Number(1)}
-              onChangeValue={changeValue}
-              format="YYYY年MM月"
-            />
-          </Box>
-          <Box>-</Box>
-          <Box sx={{ marginLeft: '0.5rem' }}>
-            <CustomDate
-              value={sortedDate?.endDate !== undefined ? sortedDate?.endDate : null}
-              paramKey="endDate"
-              id={Number(2)}
-              onChangeValue={changeValue}
-              format="YYYY年MM月"
-            />
-          </Box>
-        </Box>
+        <CommonFooterAggregation sortedDate={sortedDate} />
       </Box>
 
       <RedirectDialog
