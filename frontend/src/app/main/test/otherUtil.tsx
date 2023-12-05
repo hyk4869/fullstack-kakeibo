@@ -1,5 +1,5 @@
 'use client';
-import CustomRadioButton, { valueObjType } from '@/app/_customComponents/customRadioButton';
+import CustomRadioButton, { ValueObjType } from '@/app/_customComponents/customRadioButton';
 import CustomSwitch from '@/app/_customComponents/customSwitch';
 import CustomToggleButton from '@/app/_customComponents/customToggleButton';
 import { Box } from '@mui/material';
@@ -9,7 +9,7 @@ type OtherUtilProps = {
   //
 };
 
-const list: valueObjType[] = [
+const list: ValueObjType[] = [
   {
     value: 'value1',
     label: 'ラジオボタン値1',
@@ -24,7 +24,7 @@ const list: valueObjType[] = [
   },
 ];
 
-const toggleList: valueObjType[] = [
+const toggleList: ValueObjType[] = [
   {
     value: 'value1',
     label: 'android',
@@ -60,7 +60,13 @@ const OtherUtil: React.FC<OtherUtilProps> = () => {
       <Box>
         <CustomRadioButton edit={edit} valueObj={list} value={radioContent} row={true} />
         <CustomSwitch edit={edit} falseText={'falseの時'} trueText={'trueの時'} value={switchValue} />
-        <CustomToggleButton edit={edit} valueObj={toggleList} value={toggleContent} />
+        <CustomToggleButton
+          edit={edit}
+          valueObj={toggleList}
+          value={toggleContent}
+          paramkey={'toggle'}
+          onChangeValue={onChangeValue}
+        />
       </Box>
     </Box>
   );
