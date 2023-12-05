@@ -2,23 +2,25 @@ type ListContentType = {
   label: string;
   key: number;
   link: string;
+  isMaster: boolean;
 };
 
-export const HomeListURL: Array<ListContentType> = [{ label: 'Home', key: 1, link: '/' }];
+export const HomeListURL: Array<ListContentType> = [
+  { label: 'Home', key: 1, link: '/', isMaster: false },
+  { label: 'Sample Form', key: 2, link: '/main/test', isMaster: false },
+];
 
 export const MonthlySpendingListURL: Array<ListContentType> = [
-  { label: 'Detail List', key: 2, link: '/main/summaryTable' },
-  { label: 'Each Monthly List', key: 3, link: '/main/monthlyAggregation' },
-  { label: 'Category', key: 4, link: '/main/category' },
-  { label: 'ER Figure', key: 5, link: '/erFigure' },
-  { label: 'Test', key: 6, link: '/main/test' },
+  { label: '毎月の出費入力', key: 3, link: '/main/summaryTable', isMaster: false },
+  { label: '各種集計', key: 4, link: '/main/monthlyAggregation', isMaster: false },
+  { label: 'カテゴリーマスタ', key: 5, link: '/main/category', isMaster: true },
 ];
 
 export const SalaryListURL: Array<ListContentType> = [
-  { label: 'Salary', key: 7, link: '/' },
-  { label: 'Tax Related Salary', key: 8, link: '/' },
-  { label: 'Bonus', key: 9, link: '/' },
-  { label: 'Tax Related Bonus', key: 10, link: '/' },
-  { label: 'Company', key: 11, link: '/' },
-  { label: 'Hire Date', key: 12, link: '/' },
+  { label: '給与明細', key: 6, link: '/', isMaster: false },
+  { label: '給与に対する税金', key: 7, link: '/', isMaster: false },
+  { label: '賞与明細', key: 8, link: '/', isMaster: false },
+  { label: '賞与に対する税金', key: 9, link: '/', isMaster: false },
+  { label: '職歴マスタ', key: 10, link: '/', isMaster: true },
+  { label: '入退社マスタ', key: 11, link: '/', isMaster: true },
 ];

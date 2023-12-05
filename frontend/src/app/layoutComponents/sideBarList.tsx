@@ -9,11 +9,9 @@ import { grey } from '@mui/material/colors';
 type SideBarListProps = {
   onCloseSideBar: () => void;
 };
-export const linkStyle = {
-  textDecoration: 'none',
-  color: grey[700],
-  cursor: 'pointer',
-  width: '250px',
+
+const linkStyle = (isMaster: boolean) => {
+  return { textDecoration: 'none', color: isMaster ? grey[500] : grey[700], cursor: 'pointer', width: '250px' };
 };
 
 const SideBarList: React.FC<SideBarListProps> = (props) => {
@@ -46,7 +44,7 @@ const SideBarList: React.FC<SideBarListProps> = (props) => {
                   key={a.key}
                 >
                   <ListItem>
-                    <Link href={a.link} style={linkStyle}>
+                    <Link href={a.link} style={linkStyle(a.isMaster)}>
                       {a.label}
                     </Link>
                   </ListItem>
@@ -71,7 +69,7 @@ const SideBarList: React.FC<SideBarListProps> = (props) => {
                   key={a.key}
                 >
                   <ListItem key={a.key}>
-                    <Link href={a.link} style={linkStyle}>
+                    <Link href={a.link} style={linkStyle(a.isMaster)}>
                       {a.label}
                     </Link>
                   </ListItem>
@@ -96,7 +94,7 @@ const SideBarList: React.FC<SideBarListProps> = (props) => {
                   key={a.key}
                 >
                   <ListItem>
-                    <Link href={a.link} style={linkStyle}>
+                    <Link href={a.link} style={linkStyle(a.isMaster)}>
                       {a.label}
                     </Link>
                   </ListItem>
