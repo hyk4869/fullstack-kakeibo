@@ -5,15 +5,18 @@ import { color200 } from '../_customComponents/customProperties';
 import { Bar } from 'react-chartjs-2';
 import { Box } from '@mui/material';
 import useWindowSize from './useWindowSize';
+import { MonthlyGrouping } from '../main/monthlyAggregation/aggregationByMonth';
 
 Chart.register(...registerables);
 
-type BarGraphProps<T> = {
-  value: T[];
+type BarGraphProps<T, U> = {
+  AmoutType?: T[];
+  MonthlyGrouping?: U;
   title: string;
+  label?: 'categoryName' | 'paymentDay';
 };
-const BarGraph: React.FC<BarGraphProps<AmoutType>> = (props) => {
-  const { value, title } = props;
+const BarGraph: React.FC<BarGraphProps<AmoutType, MonthlyGrouping>> = (props) => {
+  const { AmoutType, MonthlyGrouping, title, label } = props;
   const { width, height } = useWindowSize();
   const [windowSize, setWindowSize] = useState<boolean>(false);
 
@@ -26,11 +29,19 @@ const BarGraph: React.FC<BarGraphProps<AmoutType>> = (props) => {
   }, [width]);
 
   const graphData = {
-    labels: value.map((a) => a.categoryName),
+    labels:
+      label === 'categoryName'
+        ? AmoutType?.map((a) => a.categoryName ?? '')
+        : Object.entries(MonthlyGrouping ?? {}).map(([a, b]) => a),
+
     datasets: [
       {
         label: title,
-        data: value.map((a) => a.totalAmount),
+        data:
+          label === 'categoryName'
+            ? AmoutType?.map((a) => a.totalAmount ?? null)
+            : Object.entries(MonthlyGrouping ?? {}).map(([a, b]) => b?.totalUsageFee),
+
         backgroundColor: color200.map((a) => a),
       },
     ],
@@ -41,7 +52,10 @@ const BarGraph: React.FC<BarGraphProps<AmoutType>> = (props) => {
     scales: {
       x: {
         type: 'category',
-        labels: value.map((a) => a.categoryName!),
+        labels:
+          label === 'categoryName'
+            ? AmoutType?.map((a) => a.categoryName ?? '')
+            : Object.entries(MonthlyGrouping ?? {}).map(([a, b]) => a),
       },
       y: {
         beginAtZero: true,
