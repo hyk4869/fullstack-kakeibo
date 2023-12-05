@@ -1,10 +1,10 @@
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { valueObjType } from './customRadioButton';
+import { ValueObjType } from './customRadioButton';
 
 type CustomToggleButtonProps = {
   edit: boolean;
-  valueObj: valueObjType[];
+  valueObj: ValueObjType[];
   value: string;
   paramkey: string;
   id?: number;

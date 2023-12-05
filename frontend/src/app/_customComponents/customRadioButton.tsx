@@ -1,14 +1,14 @@
 import { Box, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-export type valueObjType = {
+export type ValueObjType = {
   label: string;
   value: string;
 };
 
 type CustomRadioButtonProps = {
   edit: boolean;
-  valueObj: valueObjType[];
+  valueObj: ValueObjType[];
   value: string | null;
   paramkey?: string;
   id?: number;
