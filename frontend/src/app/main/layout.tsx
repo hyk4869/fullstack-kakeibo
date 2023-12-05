@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <CustomMenuBar TitleName={'Monthly Spending'} />
+      <CustomMenuBar TitleName={'ようこそ'} />
       {children}
     </>
   );
