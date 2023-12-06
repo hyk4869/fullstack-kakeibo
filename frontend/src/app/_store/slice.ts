@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-/**月の出費 */
+/** 月の出費 */
 export interface TMonthlySpending {
   /** id番号 */
   id: number | null;
@@ -28,6 +28,29 @@ export interface MCategory {
   userId: number | null;
 }
 
+/** 会社 */
+export interface MCompany {
+  /** id番号 */
+  id: number;
+  /** 会社名 */
+  name: string;
+  /** 大分類 */
+  majorSector: string;
+}
+
+/** 入退社日 */
+export interface MHireDate {
+  /** id番号 */
+  id: number;
+  /** 会社ID */
+  companyId: number;
+  /** 入社日 */
+  hireDate: Date | null;
+  /** 退職日 */
+  retirementDate: Date | null;
+}
+
+/** 月の出費関連 */
 export const getMonthlySpendingContent = createSlice({
   name: 'getMonthlySpendingContent',
   initialState: [] as TMonthlySpending[],
@@ -77,6 +100,7 @@ export const getMonthlySpendingContent = createSlice({
   },
 });
 
+/** カテゴリマスタ */
 export const getCategoryContent = createSlice({
   name: 'getCategoryContent',
   initialState: [] as MCategory[],
@@ -85,6 +109,7 @@ export const getCategoryContent = createSlice({
     setCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
       return [...action.payload];
     },
+    /** 値の作成 */
     setCreateCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
       const newValue = action.payload.filter((a) => a.categoryId !== null && a.categoryId > 0);
       const valueCheck = state.map((a) => a.categoryId);
@@ -96,20 +121,39 @@ export const getCategoryContent = createSlice({
       });
       return [...state, ...action.payload];
     },
-    // setCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
-    //   const newState = { ...state };
-    //   action.payload.forEach((category) => {
-    //     newState[category.categoryId ?? 0] = category;
-    //   });
-    //   return newState;
-    // },
   },
 });
 
+/** 会社マスタ */
+export const getCompanyContent = createSlice({
+  name: 'getCompanyContent',
+  initialState: [] as MCompany[],
+  reducers: {
+    /** 値の格納 */
+    setCompanyContent: (state, action: PayloadAction<MCompany[]>) => {
+      return [...state, ...action.payload];
+    },
+  },
+});
+
+/** 入退社マスタ */
+export const getHireDate = createSlice({
+  name: 'getHireDate',
+  initialState: [] as MHireDate[],
+  reducers: {
+    /** 値の格納 */
+    setHireDateContent: (state, action: PayloadAction<MHireDate[]>) => {
+      return [...state, ...action.payload];
+    },
+  },
+});
+
+/** edit */
 export const enableEdit = createSlice({
   name: 'enableEdit',
   initialState: false,
   reducers: {
+    /** editのフラグ */
     setEnableEdit: (state, action: PayloadAction<boolean>) => {
       return action.payload;
     },
@@ -119,4 +163,6 @@ export const enableEdit = createSlice({
 export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending, setDeleteMonthlySpending } =
   getMonthlySpendingContent.actions;
 export const { setCategoryContent, setCreateCategoryContent } = getCategoryContent.actions;
+export const { setCompanyContent } = getCompanyContent.actions;
+export const { setHireDateContent } = getHireDate.actions;
 export const { setEnableEdit } = enableEdit.actions;
