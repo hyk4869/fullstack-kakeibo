@@ -40,14 +40,15 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
       .then((res) => {
         if (res.data) {
           dispatch(setCategoryContent(res.data));
-          setIsLoading(false);
           onCloseDialog();
         }
       })
       .catch((error) => {
         console.error(error);
-        setIsLoading(false);
         onCloseDialog();
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
