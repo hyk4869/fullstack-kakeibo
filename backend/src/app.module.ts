@@ -4,11 +4,13 @@ import { AppService } from './app.service';
 import { MonthlySpendingModule } from './monthly-spending/monthly-spending.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { SalaryInfoModule } from './salary-info/salary-info.module';
 
 @Module({
   imports: [
     MonthlySpendingModule,
     PrismaModule,
+    SalaryInfoModule,
     // ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
