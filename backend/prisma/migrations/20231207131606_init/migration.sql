@@ -93,10 +93,10 @@ CREATE TABLE "MCategory" (
 -- CreateTable
 CREATE TABLE "MCompany" (
     "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
-    "major_sector" TEXT NOT NULL,
-    "subsector" TEXT,
+    "majorSector" TEXT NOT NULL,
+    "subSector" TEXT,
     "industry" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -107,10 +107,10 @@ CREATE TABLE "MCompany" (
 -- CreateTable
 CREATE TABLE "Mhire_date" (
     "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "company_id" INTEGER NOT NULL,
-    "hire_date" TIMESTAMP(3) NOT NULL,
-    "retirement_date" TIMESTAMP(3),
+    "userId" INTEGER NOT NULL,
+    "companyId" INTEGER NOT NULL,
+    "hireDate" TIMESTAMP(3) NOT NULL,
+    "retirementDate" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -139,4 +139,4 @@ ALTER TABLE "TBonus" ADD CONSTRAINT "TBonus_id_fkey" FOREIGN KEY ("id") REFERENC
 ALTER TABLE "TTaxBonus" ADD CONSTRAINT "TTaxBonus_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "MCompany"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Mhire_date" ADD CONSTRAINT "Mhire_date_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "MCompany"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Mhire_date" ADD CONSTRAINT "Mhire_date_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "MCompany"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

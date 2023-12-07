@@ -100,14 +100,14 @@ model MCategory {
 
 model MCompany {
   id Int @id @default(autoincrement())
-  user_id Int
+  userId Int
   name String
-  major_sector String
-  subsector String?
+  majorSector String
+  subSector String?
   industry String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Mhire_date Mhire_date[]
+  MhireDate Mhire_date[]
   TTaxBonus TTaxBonus[]
   TTax TTax[]
   TSalary TSalary[]
@@ -116,13 +116,13 @@ model MCompany {
 
 model Mhire_date {
   id Int @id @default(autoincrement())
-  user_id Int
-  company_id Int
-  hire_date DateTime
-  retirement_date DateTime?
+  userId Int
+  companyId Int
+  hireDate DateTime
+  retirementDate DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  MCompany MCompany @relation(fields: [company_id], references: [id])
+  MCompany MCompany @relation(fields: [companyId], references: [id])
 }
 
 generator erd {
