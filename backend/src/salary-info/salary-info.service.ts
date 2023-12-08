@@ -13,4 +13,12 @@ export class SalaryInfoService {
     });
     return result;
   }
+  async getHireDateContent() {
+    const result = await this.prisma.mHireDate.findMany({
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return result;
+  }
 }

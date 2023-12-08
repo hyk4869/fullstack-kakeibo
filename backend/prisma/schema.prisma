@@ -107,14 +107,14 @@ model MCompany {
   industry String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  MhireDate Mhire_date[]
+  MhireDate MHireDate[]
   TTaxBonus TTaxBonus[]
   TTax TTax[]
   TSalary TSalary[]
   TBonus TBonus[]
 }
 
-model Mhire_date {
+model MHireDate {
   id Int @id @default(autoincrement())
   userId Int
   companyId Int

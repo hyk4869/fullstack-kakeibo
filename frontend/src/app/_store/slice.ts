@@ -115,8 +115,7 @@ export const getCategoryContent = createSlice({
       const valueCheck = state.map((a) => a.categoryId);
       newValue.forEach((a) => {
         if (valueCheck.includes(a.categoryId)) {
-          console.error('idが重複しています。');
-          return state;
+          throw new Error('idが重複しています。');
         }
       });
       return [...state, ...action.payload];
@@ -131,7 +130,7 @@ export const getCompanyContent = createSlice({
   reducers: {
     /** 値の格納 */
     setCompanyContent: (state, action: PayloadAction<MCompany[]>) => {
-      return [...state, ...action.payload];
+      return [...action.payload];
     },
   },
 });
@@ -143,7 +142,7 @@ export const getHireDate = createSlice({
   reducers: {
     /** 値の格納 */
     setHireDateContent: (state, action: PayloadAction<MHireDate[]>) => {
-      return [...state, ...action.payload];
+      return [...action.payload];
     },
   },
 });

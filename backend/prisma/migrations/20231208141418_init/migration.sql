@@ -105,7 +105,7 @@ CREATE TABLE "MCompany" (
 );
 
 -- CreateTable
-CREATE TABLE "Mhire_date" (
+CREATE TABLE "MHireDate" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "companyId" INTEGER NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE "Mhire_date" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Mhire_date_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "MHireDate_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey
@@ -139,4 +139,4 @@ ALTER TABLE "TBonus" ADD CONSTRAINT "TBonus_id_fkey" FOREIGN KEY ("id") REFERENC
 ALTER TABLE "TTaxBonus" ADD CONSTRAINT "TTaxBonus_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "MCompany"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Mhire_date" ADD CONSTRAINT "Mhire_date_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "MCompany"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MHireDate" ADD CONSTRAINT "MHireDate_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "MCompany"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

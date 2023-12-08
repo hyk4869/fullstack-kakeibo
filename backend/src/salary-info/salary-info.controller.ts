@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { SalaryInfoService } from './salary-info.service';
-import { MCompany } from '@prisma/client';
+import { MCompany, MHireDate } from '@prisma/client';
 
 @Controller('salaryInfo')
 export class SalaryInfoController {
@@ -9,5 +9,9 @@ export class SalaryInfoController {
   @Get('/companyName')
   async getCompanyContent(): Promise<MCompany[]> {
     return this.salaryInfoService.getCompanyContent();
+  }
+  @Get('/hireDate')
+  async getHireDateContenc(): Promise<MHireDate[]> {
+    return this.salaryInfoService.getHireDateContent();
   }
 }

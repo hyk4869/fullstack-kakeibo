@@ -9,7 +9,7 @@ const nextConfig = {
       },
     ];
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
 };
 
 // eslint-disable-next-line no-undef
