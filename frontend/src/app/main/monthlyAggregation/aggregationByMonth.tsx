@@ -1,6 +1,5 @@
 'use client';
 
-import { TMonthlySpending } from '@/app/_store/slice';
 import { RootState } from '@/app/_store/store';
 import CommonTableHeader from '@/app/_util/commonTableHeader';
 import useWindowSize from '@/app/_util/useWindowSize';
@@ -17,6 +16,7 @@ import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
 import BarGraph from '@/app/_util/barGraph';
 import { aggregationMonthlyHeaderList } from '@/app/_util/headerList';
+import { TMonthlySpending } from '@/app/_store/interfacesInfo';
 
 type AggregationByMonthProps = {
   //

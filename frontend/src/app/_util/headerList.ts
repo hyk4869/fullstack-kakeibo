@@ -79,7 +79,7 @@ export const aggregationMonthlyHeaderList: commonTableHeaderType[] = [
   // }),
 ];
 
-/** 月間の収支ヘッダー */
+/** 月間の支出ヘッダー */
 export const monthlySpendingHeaderList: HeadCell[] = [
   {
     id: 'id',
@@ -123,3 +123,32 @@ export const workExperienceHeaderList: commonTableHeaderType[] = [
     label: '大分類',
   },
 ];
+
+/** 給料に対する税金ヘッダー */
+// export const monthlyTaxHeaderList: HeadCell[] = [
+//   {
+//     id: 'id',
+//     disablePadding: false,
+//     label: 'id',
+//   },
+//   {
+//     id: 'companyId',
+//     disablePadding: false,
+//     label: '会社ID',
+//   },
+//   {
+//     id: 'store',
+//     disablePadding: false,
+//     label: '利用店',
+//   },
+//   {
+//     id: 'categoryId',
+//     disablePadding: false,
+//     label: 'カテゴリー',
+//   },
+//   {
+//     id: 'usageFee',
+//     disablePadding: false,
+//     label: '利用金額',
+//   },
+// ];

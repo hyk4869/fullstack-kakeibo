@@ -1,8 +1,9 @@
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import React, { useState } from 'react';
-import { MCategory, setCreateCategoryContent } from '../../_store/slice';
+import { setCreateCategoryContent } from '../../_store/slice';
 import { useDispatch } from 'react-redux';
 import LoadingContent from '../../_util/loading';
+import { MCategory } from '@/app/_store/interfacesInfo';
 
 type NextActionDialogProps = {
   isShow: boolean;

@@ -1,7 +1,7 @@
 'use client';
 
 import { getCompany, getHireDate } from '@/app/_api/url';
-import { MCompany, setCompanyContent, setHireDateContent } from '@/app/_store/slice';
+import { setCompanyContent, setHireDateContent } from '@/app/_store/slice';
 import { RootState } from '@/app/_store/store';
 import CommonTableHeader from '@/app/_util/commonTableHeader';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
@@ -19,6 +19,7 @@ import { ShowWorkExperienceMaster } from '@/app/_dialog/workExperienceMasterTabl
 import { ReferenceType } from '../category/categoyTable';
 import { sumEachCategory } from '@/app/_util/utilFunctions';
 import { workExperienceHeaderList } from '@/app/_util/headerList';
+import { MCompany } from '@/app/_store/interfacesInfo';
 
 type WorkExperienceTableProps = {
   //

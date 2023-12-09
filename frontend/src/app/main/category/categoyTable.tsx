@@ -10,11 +10,11 @@ import RedirectDialog from '@/app/_util/redirectDialog';
 import { messageRedirect, commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditButton from '@/app/_util/commonEditButton';
 import CommonTableHeader from '@/app/_util/commonTableHeader';
-import { MCategory } from '@/app/_store/slice';
 import CreateNewRecordsDialog from '@/app/_dialog/categoryMasterTable/createNewRecordsDialog';
 import { ShowCategoryMaster } from '@/app/_dialog/categoryMasterTable/showCategory';
 import { sumEachCategory } from '@/app/_util/utilFunctions';
 import { categoryHeaderList } from '@/app/_util/headerList';
+import { MCategory } from '@/app/_store/interfacesInfo';
 
 type CategoryTableProps = {
   //

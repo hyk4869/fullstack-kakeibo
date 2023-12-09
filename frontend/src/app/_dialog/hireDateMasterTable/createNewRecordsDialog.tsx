@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { MHireDate } from '../../_store/slice';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -33,6 +32,7 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import { hireDateHeaderList } from '@/app/_util/headerList';
+import { MHireDate } from '@/app/_store/interfacesInfo';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;

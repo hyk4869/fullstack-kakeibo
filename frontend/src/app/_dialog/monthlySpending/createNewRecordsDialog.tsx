@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { MCategory, TMonthlySpending } from '../../_store/slice';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -34,6 +33,7 @@ import { monthlySpendingHeaders } from '../../_util/exportCSVTitleName';
 import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { monthlySpendingHeaderList } from '@/app/_util/headerList';
+import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;

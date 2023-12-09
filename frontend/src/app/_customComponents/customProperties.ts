@@ -1,5 +1,5 @@
 import { red, blue, purple, pink, green, yellow, orange, grey } from '@mui/material/colors';
-import { TMonthlySpending } from '../_store/slice';
+import { TMonthlySpending } from '../_store/interfacesInfo';
 
 /**共通のフォントサイズ */
 export const commonFontSize: string = '12px';

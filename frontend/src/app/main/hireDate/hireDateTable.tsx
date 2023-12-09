@@ -2,7 +2,7 @@
 
 import { getCompany, getHireDate } from '@/app/_api/url';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
-import { MHireDate, setCompanyContent, setHireDateContent } from '@/app/_store/slice';
+import { setCompanyContent, setHireDateContent } from '@/app/_store/slice';
 import { RootState } from '@/app/_store/store';
 import CommonEditButton from '@/app/_util/commonEditButton';
 import CommonTableHeader from '@/app/_util/commonTableHeader';
@@ -17,6 +17,7 @@ import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import CreateNewRecordsDialog from '@/app/_dialog/hireDateMasterTable/createNewRecordsDialog';
 import { hireDateHeaderList } from '@/app/_util/headerList';
+import { MHireDate } from '@/app/_store/interfacesInfo';
 
 type HireDateTableProps = {
   //

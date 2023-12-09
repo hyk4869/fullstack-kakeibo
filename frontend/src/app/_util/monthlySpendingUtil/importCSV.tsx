@@ -2,11 +2,11 @@
 
 import { Button, Tooltip } from '@mui/material';
 import { parse } from 'papaparse';
-import { TMonthlySpending } from '../../_store/slice';
 import React, { SetStateAction, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../_store/store';
 import LoadingContent from '../loading';
+import { TMonthlySpending } from '@/app/_store/interfacesInfo';
 
 type ImportCSVProps = {
   setMakeNewArray: React.Dispatch<SetStateAction<TMonthlySpending[]>>;

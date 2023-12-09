@@ -16,98 +16,95 @@ const linkStyle = (isMaster: boolean) => {
 
 const SideBarList: React.FC<SideBarListProps> = (props) => {
   const { onCloseSideBar } = props;
-  const ListContent = useMemo(() => {
-    return (
-      <>
-        <Box
-          sx={{
-            width: '250px',
-            maxWidth: '300px',
-            padding: '30px 10px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <List>
-            {HomeListURL.map((a) => {
-              return (
-                <Box
-                  sx={{
-                    width: '100%',
-                    '&:hover': {
-                      backgroundColor: grey[300],
-                      borderRadius: '50px',
-                    },
-                  }}
-                  onClick={onCloseSideBar}
-                  key={a.key}
-                >
-                  <ListItem>
-                    <Link href={a.link} style={linkStyle(a.isMaster)}>
-                      {a.label}
-                    </Link>
-                  </ListItem>
-                </Box>
-              );
-            })}
-          </List>
-          <Divider />
-          <Box sx={{ paddingTop: '10px', color: colorBlack }}>Monthly Spending</Box>
-          <List>
-            {MonthlySpendingListURL.map((a) => {
-              return (
-                <Box
-                  sx={{
-                    width: '100%',
-                    '&:hover': {
-                      backgroundColor: grey[300],
-                      borderRadius: '50px',
-                    },
-                  }}
-                  onClick={onCloseSideBar}
-                  key={a.key}
-                >
-                  <ListItem key={a.key}>
-                    <Link href={a.link} style={linkStyle(a.isMaster)}>
-                      {a.label}
-                    </Link>
-                  </ListItem>
-                </Box>
-              );
-            })}
-          </List>
-          <Divider />
-          <Box sx={{ paddingTop: '10px', color: colorBlack }}>Salay & Tax & Company Info</Box>
-          <List>
-            {SalaryListURL.map((a) => {
-              return (
-                <Box
-                  sx={{
-                    width: '100%',
-                    '&:hover': {
-                      backgroundColor: grey[300],
-                      borderRadius: '50px',
-                    },
-                  }}
-                  onClick={onCloseSideBar}
-                  key={a.key}
-                >
-                  <ListItem>
-                    <Link href={a.link} style={linkStyle(a.isMaster)}>
-                      {a.label}
-                    </Link>
-                  </ListItem>
-                </Box>
-              );
-            })}
-          </List>
-        </Box>
-      </>
-    );
-  }, []);
+  return (
+    <>
+      <Box
+        sx={{
+          width: '250px',
+          maxWidth: '300px',
+          padding: '30px 10px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <List onClick={onCloseSideBar}>
+          {HomeListURL.map((a) => {
+            return (
+              <Box
+                sx={{
+                  width: '100%',
+                  '&:hover': {
+                    backgroundColor: grey[300],
+                    borderRadius: '50px',
+                  },
+                }}
+                key={a.key}
+              >
+                <ListItem>
+                  <Link href={a.link} style={linkStyle(a.isMaster)}>
+                    {a.label}
+                  </Link>
+                </ListItem>
+              </Box>
+            );
+          })}
+        </List>
 
-  return ListContent;
+        <Divider />
+
+        <Box sx={{ paddingTop: '10px', color: colorBlack }}>Monthly Spending</Box>
+        <List onClick={onCloseSideBar}>
+          {MonthlySpendingListURL.map((a) => {
+            return (
+              <Box
+                sx={{
+                  width: '100%',
+                  '&:hover': {
+                    backgroundColor: grey[300],
+                    borderRadius: '50px',
+                  },
+                }}
+                key={a.key}
+              >
+                <ListItem key={a.key}>
+                  <Link href={a.link} style={linkStyle(a.isMaster)}>
+                    {a.label}
+                  </Link>
+                </ListItem>
+              </Box>
+            );
+          })}
+        </List>
+
+        <Divider />
+
+        <Box sx={{ paddingTop: '10px', color: colorBlack }}>Salay & Tax & Company Info</Box>
+        <List onClick={onCloseSideBar}>
+          {SalaryListURL.map((a) => {
+            return (
+              <Box
+                sx={{
+                  width: '100%',
+                  '&:hover': {
+                    backgroundColor: grey[300],
+                    borderRadius: '50px',
+                  },
+                }}
+                key={a.key}
+              >
+                <ListItem>
+                  <Link href={a.link} style={linkStyle(a.isMaster)}>
+                    {a.label}
+                  </Link>
+                </ListItem>
+              </Box>
+            );
+          })}
+        </List>
+      </Box>
+    </>
+  );
 };
 
 export default React.memo(SideBarList);

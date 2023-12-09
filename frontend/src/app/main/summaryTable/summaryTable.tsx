@@ -22,7 +22,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../_store/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MCategory, TMonthlySpending, setMonthlySpending } from '../../_store/slice';
+import { setMonthlySpending } from '../../_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomTextfield from '../../_customComponents/customTextfield';
 import CustomDate from '../../_customComponents/customDate';
@@ -38,6 +38,7 @@ import FetchDataDialog from './fetchDataDialog';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
 import { monthlySpendingHeaderList } from '@/app/_util/headerList';
+import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
 
 export interface HeadCell {
   id: keyof TMonthlySpending;
@@ -45,7 +46,7 @@ export interface HeadCell {
   label: string;
 }
 
-type EnhancedTableProps = {
+export type EnhancedTableProps = {
   /** 選択されたID */
   numSelected: number;
   /** 昇順降順の選択 */
@@ -109,7 +110,7 @@ const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
   );
 };
 
-type EnhancedTableToolbarProps = {
+export type EnhancedTableToolbarProps = {
   numSelected: number;
   edit: boolean;
   dataLength: number;

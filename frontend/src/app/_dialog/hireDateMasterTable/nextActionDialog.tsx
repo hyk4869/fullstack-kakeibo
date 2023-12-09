@@ -1,8 +1,9 @@
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import React, { useState } from 'react';
-import { MHireDate, setCreateHireDateContent } from '../../_store/slice';
+import { setCreateHireDateContent } from '../../_store/slice';
 import { useDispatch } from 'react-redux';
 import LoadingContent from '../../_util/loading';
+import { MHireDate } from '@/app/_store/interfacesInfo';
 
 type NextActionDialogProps = {
   isShow: boolean;

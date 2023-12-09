@@ -1,4 +1,4 @@
-import { MCategory, TMonthlySpending } from '../_store/slice';
+import { MCategory, TMonthlySpending } from '../_store/interfacesInfo';
 import { ReferenceType } from '../main/category/categoyTable';
 import { AmoutType } from '../main/monthlyAggregation/aggregationByCategory';
 import { MonthlyGrouping } from '../main/monthlyAggregation/aggregationByMonth';

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { MCategory } from '../../_store/slice';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -30,6 +29,7 @@ import { categoryHeaders } from '../../_util/exportCSVTitleName';
 import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { categoryHeaderList } from '@/app/_util/headerList';
+import { MCategory } from '@/app/_store/interfacesInfo';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
