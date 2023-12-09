@@ -22,5 +22,5 @@ export const SalaryListURL: Array<ListContentType> = [
   { label: '賞与明細', key: 8, link: '/main/', isMaster: false },
   { label: '賞与に対する税金', key: 9, link: '/main/', isMaster: false },
   { label: '職歴マスタ', key: 10, link: '/main/workExperience', isMaster: true },
-  { label: '入退社マスタ', key: 11, link: '/main/JoinAndLeavingCompany', isMaster: true },
+  { label: '入退社マスタ', key: 11, link: '/main/hireDate', isMaster: true },
 ];
