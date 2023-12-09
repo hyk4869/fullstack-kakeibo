@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from '../../_store/store';
 import WorkExperienceTable from './workExperienceTable';
 
-const EntryPageSummaryTable = () => {
+const EntryPageCompanyTable = () => {
   return (
     <Provider store={store}>
       <WorkExperienceTable />
@@ -12,4 +12,4 @@ const EntryPageSummaryTable = () => {
   );
 };
 
-export default EntryPageSummaryTable;
+export default EntryPageCompanyTable;
