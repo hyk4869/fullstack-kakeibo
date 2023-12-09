@@ -27,9 +27,9 @@ import { ImportCSV } from '../../_util/monthlySpendingUtil/importCSV';
 import TablePagination from '@mui/material/TablePagination';
 import { visuallyHidden } from '@mui/utils';
 import { categoryHeaders } from '../../_util/exportCSVTitleName';
-import { categoryHeaderList } from '@/app/main/category/categoyTable';
-import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
+import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
+import { categoryHeaderList } from '@/app/_util/headerList';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -81,26 +81,17 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
   /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
-    const incrementFromArray = () => {
-      if (makeNewArray.length <= 0 && categoryData.length <= 0) {
-        return 1;
-      } else if (makeNewArray.length !== 0) {
-        return incrementArray.slice(-1)[0] + 1;
-      } else if (categoryData.length > 0) {
-        return incrementArray.slice(-1)[0] + 1;
-      } else {
-        return incrementArray.slice(-1)[0] + 1;
-      }
-    };
+    const incrementIdFromArray = incrementFromArray(makeNewArray, categoryData, incrementArray);
+
     const lastId = makeNewArray.slice(-1)[0]?.categoryId;
-    if (lastId && incrementFromArray() === lastId) return;
+    if (lastId && incrementIdFromArray === lastId) return;
     const newCategory = {
-      categoryId: incrementFromArray(),
+      categoryId: incrementIdFromArray,
       categoryName: '',
       userId: null,
     };
 
-    setIncrement(incrementFromArray);
+    setIncrement(incrementIdFromArray);
     setMakeNewArray((prevArray) => [...prevArray, newCategory]);
   }, [increment, makeNewArray, incrementArray]);
 

@@ -1,41 +1,17 @@
 'use client';
-import {
-  Box,
-  Dialog,
-  DialogContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Box, Dialog, DialogContent, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React from 'react';
 import CustomTextfield from '../../_customComponents/customTextfield';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
-import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
 import { ReferenceType } from '@/app/main/category/categoyTable';
+import { numberOfCategoryHeaderList } from '@/app/_util/headerList';
+import CommonTableHeader from '../../_util/commonTableHeader';
 
 type ShowCategoryMasterPrpos = {
   isShowCategoryMaster: boolean;
   onCloseCategoryMaster: () => void;
   amount: ReferenceType[];
 };
-
-const categoryHeaderList: commonTableHeaderType[] = [
-  {
-    label: 'id',
-    id: 'categoryId',
-  },
-  {
-    label: 'カテゴリー名',
-    id: 'categoryName',
-  },
-  {
-    label: '参照されている数',
-    id: 'amount',
-  },
-];
 
 export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => {
   const { isShowCategoryMaster, onCloseCategoryMaster, amount } = props;
@@ -51,7 +27,7 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
           <Box>
             <TableContainer>
               <Table>
-                <CommonTableHeader categoryHeaderList={categoryHeaderList} />
+                <CommonTableHeader categoryHeaderList={numberOfCategoryHeaderList} />
                 <TableBody>
                   {amount.map((content) => {
                     return (
