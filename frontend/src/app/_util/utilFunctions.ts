@@ -141,12 +141,29 @@ export const calcAvg = (numberArray: (number | null)[]): number => {
   return result;
 };
 
+/** 最新の日付を取得 */
 export const getLatestDate = (monthlyData: TMonthlySpending[]): Date => {
   const latestDate = new Date(Math.max(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
   return latestDate;
 };
 
+/** 最も古い日付を取得 */
 export const getOldDate = (monthlyData: TMonthlySpending[]): Date => {
   const latestDate = new Date(Math.min(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
   return latestDate;
+};
+
+/**
+ * 新しい値を作成する際にidのincrementを返す
+ * @param makeNewArray 更新用の配列
+ * @param arrayFormRedux reduxからの配列
+ * @param incrementArray idを格納する配列
+ * @returns number
+ */
+export const incrementFromArray = <T, U>(makeNewArray: T[], arrayFormRedux: U[], incrementArray: number[]): number => {
+  if (makeNewArray.length !== 0 || arrayFormRedux.length > 0) {
+    return incrementArray.slice(-1)[0] + 1;
+  } else {
+    return 1;
+  }
 };
