@@ -31,23 +31,27 @@ export interface MCategory {
 /** 会社 */
 export interface MCompany {
   /** id番号 */
-  id: number;
+  id: number | null;
   /** 会社名 */
-  name: string;
+  name: string | null;
   /** 大分類 */
-  majorSector: string;
+  majorSector: string | null;
+  /** ユーザーID */
+  userId: number | null;
 }
 
 /** 入退社日 */
 export interface MHireDate {
   /** id番号 */
-  id: number;
+  id: number | null;
   /** 会社ID */
-  companyId: number;
+  companyId: number | null;
   /** 入社日 */
   hireDate: Date | null;
   /** 退職日 */
   retirementDate: Date | null;
+  /** ユーザーID */
+  userId: number | null;
 }
 
 /** 月の出費関連 */
@@ -132,6 +136,17 @@ export const getCompanyContent = createSlice({
     setCompanyContent: (state, action: PayloadAction<MCompany[]>) => {
       return [...action.payload];
     },
+    /** 値の作成 */
+    setCreateCompanyContent: (state, action: PayloadAction<MCompany[]>) => {
+      const newValue = action.payload.filter((a) => a.id !== null && a.id > 0);
+      const valueCheck = state.map((a) => a.id);
+      newValue.forEach((a) => {
+        if (valueCheck.includes(a.id)) {
+          throw new Error('idが重複しています。');
+        }
+      });
+      return [...state, ...action.payload];
+    },
   },
 });
 
@@ -143,6 +158,17 @@ export const getHireDate = createSlice({
     /** 値の格納 */
     setHireDateContent: (state, action: PayloadAction<MHireDate[]>) => {
       return [...action.payload];
+    },
+    /** 値の作成 */
+    setCreateHireDateContent: (state, action: PayloadAction<MHireDate[]>) => {
+      const newValue = action.payload.filter((a) => a.id !== null && a.id > 0);
+      const valueCheck = state.map((a) => a.id);
+      newValue.forEach((a) => {
+        if (valueCheck.includes(a.id)) {
+          throw new Error('idが重複しています。');
+        }
+      });
+      return [...state, ...action.payload];
     },
   },
 });
@@ -162,6 +188,6 @@ export const enableEdit = createSlice({
 export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending, setDeleteMonthlySpending } =
   getMonthlySpendingContent.actions;
 export const { setCategoryContent, setCreateCategoryContent } = getCategoryContent.actions;
-export const { setCompanyContent } = getCompanyContent.actions;
-export const { setHireDateContent } = getHireDate.actions;
+export const { setCompanyContent, setCreateCompanyContent } = getCompanyContent.actions;
+export const { setHireDateContent, setCreateHireDateContent } = getHireDate.actions;
 export const { setEnableEdit } = enableEdit.actions;
