@@ -1,7 +1,6 @@
 import { MCategory, TMonthlySpending } from '../_store/interfacesInfo';
 import { ReferenceType } from '../main/category/categoyTable';
-import { AmoutType } from '../main/monthlyAggregation/aggregationByCategory';
-import { MonthlyGrouping } from '../main/monthlyAggregation/aggregationByMonth';
+import { AmoutType, MonthlyGrouping } from './barGraph';
 
 export type Order = 'asc' | 'desc';
 

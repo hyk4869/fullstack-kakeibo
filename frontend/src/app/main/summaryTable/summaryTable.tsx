@@ -7,18 +7,13 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../_store/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -39,76 +34,8 @@ import useWindowSize from '@/app/_util/useWindowSize';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
 import { monthlySpendingHeaderList } from '@/app/_util/headerList';
 import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
-
-export interface HeadCell {
-  id: keyof TMonthlySpending;
-  disablePadding: boolean;
-  label: string;
-}
-
-export type EnhancedTableProps = {
-  /** 選択されたID */
-  numSelected: number;
-  /** 昇順降順の選択 */
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TMonthlySpending) => void;
-  /** 全選択のクリック関数 */
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  windowSize: boolean;
-};
-
-/**
- *
- * ヘッダー
- *
- */
-const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, windowSize } = props;
-  const createSortHandler = (property: keyof TMonthlySpending) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
-        {monthlySpendingHeaderList.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={'center'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-};
+import CommonEditButton from '@/app/_util/commonEditButton';
+import CommonTDataTableHeader from '@/app/_util/commonTDataTableHeader';
 
 export type EnhancedTableToolbarProps = {
   numSelected: number;
@@ -123,11 +50,7 @@ export type EnhancedTableToolbarProps = {
   windowSize: boolean;
 };
 
-/**
- *
- * 上のソート
- *
- */
+/** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
   const {
     numSelected,
@@ -155,54 +78,18 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         display: 'block',
       }}
     >
-      {numSelected > 0 ? (
-        <Box sx={{ padding: '10px', minWidth: '250px', flex: '1 1 100%' }} color="inherit">
-          {numSelected} レコードが選択されました。
-        </Box>
-      ) : (
-        <Box sx={{ display: windowSize ? 'block' : 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ padding: '1rem', minWidth: '250px', fontSize: '1.3rem' }}>クレジットカード明細</Box>
-          <Box sx={{ padding: '1rem', minWidth: '190px', fontSize: '0.8rem' }}>レコード数：{dataLength}件</Box>
-        </Box>
-      )}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '1rem' }}>
-        <Button
-          variant="contained"
-          color={edit ? 'error' : 'primary'}
-          disabled={!enableEdit}
-          sx={{ cursor: 'pointer' }}
-          onClick={handleEditFlag}
-        >
-          <Tooltip title={edit ? '保存するには「保存を押してください」' : undefined} arrow>
-            <span>{edit ? 'キャンセル' : '編集'}</span>
-          </Tooltip>
-        </Button>
-        <Button
-          variant="contained"
-          disabled={edit === false}
-          sx={{ cursor: 'pointer' }}
-          onClick={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
-          color="primary"
-        >
-          追加
-        </Button>
-        <Button variant="outlined" disabled={edit === false} sx={{ cursor: 'pointer' }} onClick={saveValue}>
-          保存
-        </Button>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton onClick={() => deleteArrayValue()}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Box>
+      <CommonEditButton
+        edit={edit}
+        handleEditFlag={handleEditFlag}
+        title={'クレジットカード明細'}
+        setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
+        saveValue={saveValue}
+        numSelected={numSelected}
+        windowSize={windowSize}
+        dataLength={dataLength}
+        deleteArrayValue={() => deleteArrayValue()}
+        enableEdit={enableEdit}
+      />
       <CreateNewRecordsDialog
         openDialog={openAddRecordsDialog}
         onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
@@ -514,14 +401,15 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            <EnhancedTableHead
+            <CommonTDataTableHeader<TMonthlySpending>
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
               rowCount={monthlyData.length}
-              windowSize={windowSize}
+              setOrder={setOrder}
+              setOrderBy={setOrderBy}
+              labelList={monthlySpendingHeaderList}
             />
 
             <TableBody>

@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { AmoutType } from '../main/monthlyAggregation/aggregationByCategory';
 import { Chart, registerables, ChartOptions } from 'chart.js';
 import { color200 } from '../_customComponents/customProperties';
 import { Bar } from 'react-chartjs-2';
 import { Box } from '@mui/material';
 import useWindowSize from './useWindowSize';
-import { MonthlyGrouping } from '../main/monthlyAggregation/aggregationByMonth';
+import { TMonthlySpending } from '../_store/interfacesInfo';
 
 Chart.register(...registerables);
+
+/** 合計金額用の型 */
+export type AmoutType = {
+  totalAmount: number | null;
+  categoryId: number | null;
+  categoryName: string | null;
+};
+
+export type MonthlyGrouping = {
+  [month: string]: { data: TMonthlySpending[]; totalUsageFee: number };
+};
 
 type BarGraphProps<T, U> = {
   AmoutType?: T[];
@@ -17,7 +27,7 @@ type BarGraphProps<T, U> = {
 };
 
 /** ジェネリクスで書いた共通のグラフ（修正必要） */
-const BarGraph: React.FC<BarGraphProps<AmoutType, MonthlyGrouping>> = (props) => {
+const BarGraph = <T extends AmoutType, U extends MonthlyGrouping>(props: BarGraphProps<T, U>) => {
   const { AmoutType, MonthlyGrouping, title, label } = props;
   const { width, height } = useWindowSize();
   const [windowSize, setWindowSize] = useState<boolean>(false);
@@ -80,4 +90,4 @@ const BarGraph: React.FC<BarGraphProps<AmoutType, MonthlyGrouping>> = (props) =>
   );
 };
 
-export default React.memo(BarGraph);
+export default BarGraph;

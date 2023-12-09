@@ -10,7 +10,7 @@ import DoughnutChart from '@/app/_util/doughnutChart';
 import useWindowSize from '@/app/_util/useWindowSize';
 import CustomToggleButton from '@/app/_customComponents/customToggleButton';
 import { ValueObjType } from '@/app/_customComponents/customRadioButton';
-import BarGraph from '@/app/_util/barGraph';
+import BarGraph, { AmoutType } from '@/app/_util/barGraph';
 import RedirectDialog from '@/app/_util/redirectDialog';
 import CommonTableHeader from '@/app/_util/commonTableHeader';
 import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utilFunctions';
@@ -19,13 +19,6 @@ import { aggregationHeaderList } from '@/app/_util/headerList';
 
 type AggregationByCategoryProps = {
   //
-};
-
-/** 合計金額用の型 */
-export type AmoutType = {
-  totalAmount: number | null;
-  categoryId: number | null;
-  categoryName: string | null;
 };
 
 export type SortedDateType = {
@@ -159,7 +152,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           </Table>
           <Box sx={{ width: windowSize ? '100%' : '50%', display: 'grid', justifyContent: 'center' }}>
             {displayGraph === '1' ? (
-              <DoughnutChart value={amount} title={'カテゴリー別の金額'} />
+              <DoughnutChart<AmoutType> value={amount} title={'カテゴリー別の金額'} />
             ) : (
               <BarGraph AmoutType={amount} title={'カテゴリー別の金額'} label={'categoryName'} />
             )}

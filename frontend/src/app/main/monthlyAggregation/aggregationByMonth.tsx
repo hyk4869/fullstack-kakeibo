@@ -14,16 +14,11 @@ import CustomTextfield from '@/app/_customComponents/customTextfield';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
-import BarGraph from '@/app/_util/barGraph';
+import BarGraph, { MonthlyGrouping } from '@/app/_util/barGraph';
 import { aggregationMonthlyHeaderList } from '@/app/_util/headerList';
-import { TMonthlySpending } from '@/app/_store/interfacesInfo';
 
 type AggregationByMonthProps = {
   //
-};
-
-export type MonthlyGrouping = {
-  [month: string]: { data: TMonthlySpending[]; totalUsageFee: number };
 };
 
 const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {

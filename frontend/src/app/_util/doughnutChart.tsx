@@ -1,28 +1,27 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { AmoutType } from '../main/monthlyAggregation/aggregationByCategory';
-import { Chart, registerables, ChartOptions, TooltipItem } from 'chart.js';
+import { Chart, registerables, ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { color200 } from '../_customComponents/customProperties';
 import { Box } from '@mui/material';
 import 'chartjs-plugin-datalabels';
 import useWindowSize from './useWindowSize';
+import { AmoutType } from './barGraph';
 Chart.register(...registerables);
 
 type DoughnutChartProps<T> = {
   value: T[];
   title: string;
-  //   somethiong?: U[]
 };
 
-/** ジェネリクスで書いた共通のグラフ（修正必要） */
-const DoughnutChart: React.FC<DoughnutChartProps<AmoutType>> = (props) => {
+/** ジェネリクスで書いた共通のグラフ */
+const DoughnutChart = <T extends AmoutType>(props: DoughnutChartProps<T>): React.ReactElement => {
   const { value, title } = props;
 
   const sortedChartData = value.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1));
   const chartData = sortedChartData.map((s) => s.totalAmount);
   const chartLabel = sortedChartData.map((s) => s.categoryName);
-  const { width, height } = useWindowSize();
+  const { width } = useWindowSize();
   const [windowSize, setWindowSize] = useState<boolean>(false);
 
   const graphdata = {
@@ -74,4 +73,4 @@ const DoughnutChart: React.FC<DoughnutChartProps<AmoutType>> = (props) => {
   );
 };
 
-export default React.memo(DoughnutChart);
+export default DoughnutChart;

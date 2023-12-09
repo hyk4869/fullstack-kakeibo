@@ -8,7 +8,6 @@ export type CommonTDataTableHeaderProps<T> = {
   numSelected: number;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   rowCount: number;
-  windowSize: boolean;
   labelList: commonTableHeaderType[];
   setOrder: React.Dispatch<React.SetStateAction<Order>>;
   order: Order;
@@ -18,8 +17,7 @@ export type CommonTDataTableHeaderProps<T> = {
 
 /** ジェネリクスで書いた共通のヘッダー */
 const CommonTDataTableHeader = <T,>(props: CommonTDataTableHeaderProps<T>): React.ReactElement => {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, windowSize, labelList, setOrder, setOrderBy } =
-    props;
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, labelList, setOrder, setOrderBy } = props;
 
   const onRequestSort = (event: React.MouseEvent<unknown>, property: keyof T) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -68,4 +66,4 @@ const CommonTDataTableHeader = <T,>(props: CommonTDataTableHeaderProps<T>): Reac
   );
 };
 
-export default React.memo(CommonTDataTableHeader);
+export default CommonTDataTableHeader;
