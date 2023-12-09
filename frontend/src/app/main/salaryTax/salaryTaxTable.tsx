@@ -1,14 +1,29 @@
 'use client';
 
-import { Box, Checkbox, TableCell, TableHead, TableRow } from '@mui/material';
-import React from 'react';
-import { EnhancedTableProps } from '../summaryTable/summaryTable';
+import {
+  Box,
+  Button,
+  Checkbox,
+  IconButton,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Tooltip,
+} from '@mui/material';
+import React, { useState } from 'react';
+import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
+import { TSalaryTax } from '@/app/_store/interfacesInfo';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { alpha } from '@mui/material/styles';
 
-// export interface HeadCell {
-//     id: keyof ;
-//     disablePadding: boolean;
-//     label: string;
-//   }
+export interface HeadCell {
+  id: keyof TSalaryTax;
+  disablePadding: boolean;
+  label: string;
+}
 
 // /**
 //  *
@@ -17,7 +32,7 @@ import { EnhancedTableProps } from '../summaryTable/summaryTable';
 //  */
 // const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
 //   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, windowSize } = props;
-//   const createSortHandler = (property: keyof TMonthlySpending) => (event: React.MouseEvent<unknown>) => {
+//   const createSortHandler = (property: keyof TSalaryTax) => (event: React.MouseEvent<unknown>) => {
 //     onRequestSort(event, property);
 //   };
 

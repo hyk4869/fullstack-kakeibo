@@ -1,4 +1,3 @@
-import { HeadCell } from '../main/summaryTable/summaryTable';
 import { commonTableHeaderType } from './commonTableHeader';
 
 /** カテゴリマスタのヘッダー */
@@ -80,30 +79,25 @@ export const aggregationMonthlyHeaderList: commonTableHeaderType[] = [
 ];
 
 /** 月間の支出ヘッダー */
-export const monthlySpendingHeaderList: HeadCell[] = [
+export const monthlySpendingHeaderList: commonTableHeaderType[] = [
   {
     id: 'id',
-    disablePadding: false,
     label: 'id',
   },
   {
     id: 'paymentDay',
-    disablePadding: false,
     label: '利用日',
   },
   {
     id: 'store',
-    disablePadding: false,
     label: '利用店',
   },
   {
     id: 'categoryId',
-    disablePadding: false,
     label: 'カテゴリー',
   },
   {
     id: 'usageFee',
-    disablePadding: false,
     label: '利用金額',
   },
 ];

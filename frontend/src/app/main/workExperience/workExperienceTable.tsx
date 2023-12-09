@@ -20,6 +20,7 @@ import { ReferenceType } from '../category/categoyTable';
 import { sumEachCategory } from '@/app/_util/utilFunctions';
 import { workExperienceHeaderList } from '@/app/_util/headerList';
 import { MCompany } from '@/app/_store/interfacesInfo';
+import useWindowSize from '@/app/_util/useWindowSize';
 
 type WorkExperienceTableProps = {
   //
@@ -35,7 +36,19 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
   // const [amount, setAmount] = useState<Array<ReferenceType>>([]);
 
+  const [selected, setSelected] = useState<number[]>([]);
+  const [windowSize, setWindowSize] = useState<boolean>(false);
+  const { width, height } = useWindowSize();
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (width < 840) {
+      setWindowSize(true);
+    } else {
+      setWindowSize(false);
+    }
+  }, [width, height]);
 
   useEffect(() => {
     try {
@@ -88,6 +101,8 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
 
   const saveValue = useCallback(() => {}, []);
 
+  const deleteArrayValue = () => {};
+
   return (
     <>
       <Box sx={{ width: '100%' }}>
@@ -99,6 +114,10 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
               title={'職歴マスタの編集'}
               setOpenAddContent={() => setOpenAddContent(!openAddContent)}
               saveValue={saveValue}
+              numSelected={selected.length}
+              windowSize={windowSize}
+              dataLength={companyData.length}
+              deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
           <TableContainer>

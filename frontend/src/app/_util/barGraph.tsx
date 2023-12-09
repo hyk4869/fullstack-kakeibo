@@ -15,6 +15,8 @@ type BarGraphProps<T, U> = {
   title: string;
   label?: 'categoryName' | 'paymentDay';
 };
+
+/** ジェネリクスで書いた共通のグラフ（修正必要） */
 const BarGraph: React.FC<BarGraphProps<AmoutType, MonthlyGrouping>> = (props) => {
   const { AmoutType, MonthlyGrouping, title, label } = props;
   const { width, height } = useWindowSize();

@@ -15,6 +15,7 @@ import { ShowCategoryMaster } from '@/app/_dialog/categoryMasterTable/showCatego
 import { sumEachCategory } from '@/app/_util/utilFunctions';
 import { categoryHeaderList } from '@/app/_util/headerList';
 import { MCategory } from '@/app/_store/interfacesInfo';
+import useWindowSize from '@/app/_util/useWindowSize';
 
 type CategoryTableProps = {
   //
@@ -36,6 +37,18 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
   const [editCategoryValue, setEditCategoryValue] = useState<Array<MCategory>>([]);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
   const [amount, setAmount] = useState<Array<ReferenceType>>([]);
+
+  const [selected, setSelected] = useState<number[]>([]);
+  const [windowSize, setWindowSize] = useState<boolean>(false);
+  const { width, height } = useWindowSize();
+
+  useEffect(() => {
+    if (width < 840) {
+      setWindowSize(true);
+    } else {
+      setWindowSize(false);
+    }
+  }, [width, height]);
 
   useLayoutEffect(() => {
     if (monthlyData.length === 0) {
@@ -85,6 +98,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
 
   const saveValue = useCallback(() => {}, [categoryData, monthlyData]);
 
+  const deleteArrayValue = () => {};
   return (
     <>
       <Box sx={{ width: '100%' }}>
@@ -96,6 +110,10 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
               title={'カテゴリーマスタの編集'}
               setOpenAddContent={() => setOpenAddContent(!openAddContent)}
               saveValue={saveValue}
+              numSelected={selected.length}
+              windowSize={windowSize}
+              dataLength={editCategoryValue.length}
+              deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
           <TableContainer>

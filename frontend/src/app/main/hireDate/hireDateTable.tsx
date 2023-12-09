@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import CreateNewRecordsDialog from '@/app/_dialog/hireDateMasterTable/createNewRecordsDialog';
 import { hireDateHeaderList } from '@/app/_util/headerList';
 import { MHireDate } from '@/app/_store/interfacesInfo';
+import useWindowSize from '@/app/_util/useWindowSize';
 
 type HireDateTableProps = {
   //
@@ -31,7 +32,19 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editHireDateValue, setEditHireDateValue] = useState<Array<MHireDate>>([]);
 
+  const [selected, setSelected] = useState<number[]>([]);
+  const [windowSize, setWindowSize] = useState<boolean>(false);
+  const { width, height } = useWindowSize();
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (width < 840) {
+      setWindowSize(true);
+    } else {
+      setWindowSize(false);
+    }
+  }, [width, height]);
 
   useEffect(() => {
     try {
@@ -77,6 +90,8 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
   };
   const saveValue = useCallback(() => {}, []);
 
+  const deleteArrayValue = () => {};
+
   return (
     <>
       <Box sx={{ width: '100%' }}>
@@ -88,6 +103,10 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
               title={'入退社マスタの編集'}
               setOpenAddContent={() => setOpenAddContent(!openAddContent)}
               saveValue={saveValue}
+              numSelected={selected.length}
+              windowSize={windowSize}
+              dataLength={editHireDateValue.length}
+              deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
           <TableContainer>

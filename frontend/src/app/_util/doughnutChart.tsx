@@ -15,6 +15,7 @@ type DoughnutChartProps<T> = {
   //   somethiong?: U[]
 };
 
+/** ジェネリクスで書いた共通のグラフ（修正必要） */
 const DoughnutChart: React.FC<DoughnutChartProps<AmoutType>> = (props) => {
   const { value, title } = props;
 
