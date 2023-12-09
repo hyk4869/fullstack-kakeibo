@@ -12,9 +12,10 @@ import CustomToggleButton from '@/app/_customComponents/customToggleButton';
 import { ValueObjType } from '@/app/_customComponents/customRadioButton';
 import BarGraph from '@/app/_util/barGraph';
 import RedirectDialog from '@/app/_util/redirectDialog';
-import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
+import CommonTableHeader from '@/app/_util/commonTableHeader';
 import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utilFunctions';
 import CommonFooterAggregation from './commonFooter';
+import { aggregationHeaderList } from '@/app/_util/headerList';
 
 type AggregationByCategoryProps = {
   //
@@ -31,18 +32,6 @@ export type SortedDateType = {
   startDate: Date | null;
   endDate: Date | null;
 };
-
-/** ヘッダー */
-const headerList: commonTableHeaderType[] = [
-  {
-    id: 'category',
-    label: 'カテゴリー名',
-  },
-  {
-    id: 'amount',
-    label: '金額',
-  },
-];
 
 export const toggleButtonList: ValueObjType[] = [
   {
@@ -113,7 +102,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           }}
         >
           <Table sx={{ width: windowSize ? '100%' : '50%' }}>
-            <CommonTableHeader categoryHeaderList={headerList} />
+            <CommonTableHeader categoryHeaderList={aggregationHeaderList} />
             <TableBody>
               {amount.map((a) => {
                 return (

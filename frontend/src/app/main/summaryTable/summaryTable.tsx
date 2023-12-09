@@ -37,40 +37,13 @@ import LoadingContent from '../../_util/loading';
 import FetchDataDialog from './fetchDataDialog';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
+import { monthlySpendingHeaderList } from '@/app/_util/headerList';
 
 export interface HeadCell {
   id: keyof TMonthlySpending;
   disablePadding: boolean;
   label: string;
 }
-
-export const monthlySpendingHeadCells: readonly HeadCell[] = [
-  {
-    id: 'id',
-    disablePadding: false,
-    label: 'id',
-  },
-  {
-    id: 'paymentDay',
-    disablePadding: false,
-    label: '利用日',
-  },
-  {
-    id: 'store',
-    disablePadding: false,
-    label: '利用店',
-  },
-  {
-    id: 'categoryId',
-    disablePadding: false,
-    label: 'カテゴリー',
-  },
-  {
-    id: 'usageFee',
-    disablePadding: false,
-    label: '利用金額',
-  },
-];
 
 type EnhancedTableProps = {
   /** 選択されたID */
@@ -110,7 +83,7 @@ const EnhancedTableHead: React.FC<EnhancedTableProps> = (props) => {
             }}
           />
         </TableCell>
-        {monthlySpendingHeadCells.map((headCell) => (
+        {monthlySpendingHeaderList.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={'center'}

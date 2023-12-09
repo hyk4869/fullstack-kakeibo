@@ -29,11 +29,11 @@ import { ExportCSV } from '../../_util/exportCSV';
 import { ImportCSV } from '../../_util/monthlySpendingUtil/importCSV';
 import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
-import { monthlySpendingHeadCells } from '../../main/summaryTable/summaryTable';
 import { visuallyHidden } from '@mui/utils';
 import { monthlySpendingHeaders } from '../../_util/exportCSVTitleName';
-import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
+import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
+import { monthlySpendingHeaderList } from '@/app/_util/headerList';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -87,21 +87,12 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
   /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
-    const incrementFromArray = () => {
-      if (makeNewArray.length <= 0 && monthlyData.length <= 0) {
-        return 1;
-      } else if (makeNewArray.length !== 0) {
-        return incrementArray.slice(-1)[0] + 1;
-      } else if (monthlyData.length > 0) {
-        return incrementArray.slice(-1)[0] + 1;
-      } else {
-        return incrementArray.slice(-1)[0] + 1;
-      }
-    };
+    const incrementIdFromArray = incrementFromArray(makeNewArray, monthlyData, incrementArray);
+
     const lastId = makeNewArray.slice(-1)[0]?.id;
-    if (lastId && incrementFromArray() === lastId) return;
+    if (lastId && incrementIdFromArray === lastId) return;
     const newMonthlySpending = {
-      id: incrementFromArray(),
+      id: incrementIdFromArray,
       userId: null,
       paymentDay: null,
       store: '',
@@ -109,7 +100,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
       categoryId: null,
     };
 
-    setIncrement(incrementFromArray);
+    setIncrement(incrementIdFromArray);
     setMakeNewArray((prevArray) => [...prevArray, newMonthlySpending]);
   }, [increment, makeNewArray, incrementArray]);
 
@@ -220,7 +211,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             <Table>
               <TableHead>
                 <TableRow>
-                  {monthlySpendingHeadCells.map((headCell) => (
+                  {monthlySpendingHeaderList.map((headCell) => (
                     <TableCell
                       key={headCell.id}
                       align={'center'}

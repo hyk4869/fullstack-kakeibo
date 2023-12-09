@@ -1,6 +1,6 @@
 'use client';
 import { RootState } from '@/app/_store/store';
-import { Box, Paper, Table, TableCell, TableContainer, TableRow, TableHead, TableBody, Button } from '@mui/material';
+import { Box, Paper, Table, TableCell, TableContainer, TableRow, TableBody, Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,26 +9,16 @@ import CustomTextfield from '../../_customComponents/customTextfield';
 import RedirectDialog from '@/app/_util/redirectDialog';
 import { messageRedirect, commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditButton from '@/app/_util/commonEditButton';
-import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
-import { MCategory, TMonthlySpending } from '@/app/_store/slice';
-import CreateNewRecordsDialog from '@/app/_dialog/categoryTable/createNewRecordsDialog';
-import { ShowCategoryMaster } from '@/app/_dialog/categoryTable/showCategory';
+import CommonTableHeader from '@/app/_util/commonTableHeader';
+import { MCategory } from '@/app/_store/slice';
+import CreateNewRecordsDialog from '@/app/_dialog/categoryMasterTable/createNewRecordsDialog';
+import { ShowCategoryMaster } from '@/app/_dialog/categoryMasterTable/showCategory';
 import { sumEachCategory } from '@/app/_util/utilFunctions';
+import { categoryHeaderList } from '@/app/_util/headerList';
 
 type CategoryTableProps = {
   //
 };
-
-export const categoryHeaderList: commonTableHeaderType[] = [
-  {
-    label: 'id',
-    id: 'categoryId',
-  },
-  {
-    label: 'カテゴリー名',
-    id: 'categoryName',
-  },
-];
 
 export type ReferenceType = {
   totalCategoryName: number | null;

@@ -2,7 +2,7 @@
 
 import { TMonthlySpending } from '@/app/_store/slice';
 import { RootState } from '@/app/_store/store';
-import CommonTableHeader, { commonTableHeaderType } from '@/app/_util/commonTableHeader';
+import CommonTableHeader from '@/app/_util/commonTableHeader';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { Box, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
 import BarGraph from '@/app/_util/barGraph';
+import { aggregationMonthlyHeaderList } from '@/app/_util/headerList';
 
 type AggregationByMonthProps = {
   //
@@ -50,24 +51,6 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
     });
   }, [monthlyData]);
 
-  /** ヘッダー */
-  const headerList: commonTableHeaderType[] = [
-    {
-      id: 'date',
-      label: '日付',
-    },
-    {
-      id: 'amount',
-      label: '金額',
-    },
-    // ...categoryData.map((a) => {
-    //   return {
-    //     id: a.categoryId !== undefined && a.categoryId !== null ? a.categoryId.toString() : String(a.categoryId),
-    //     label: a.categoryName as string,
-    //   };
-    // }),
-  ];
-
   const changeValue = useCallback(
     (id: number, paramKey: string, value: unknown) => {
       switch (paramKey) {
@@ -92,7 +75,7 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
           }}
         >
           <Table sx={{ width: windowSize ? '100%' : '50%' }}>
-            <CommonTableHeader categoryHeaderList={headerList} />
+            <CommonTableHeader categoryHeaderList={aggregationMonthlyHeaderList} />
             <TableBody>
               {Object.entries(groupingMonthly).map(([monthKey, data]) => {
                 return (
