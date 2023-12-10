@@ -1,12 +1,12 @@
 import React, { useLayoutEffect, useState } from 'react';
 
-export type monitorSizeType = {
+export type MonitorSizeType = {
   width: number;
   height: number;
 };
 
-const useWindowSize = (): monitorSizeType => {
-  const [monitorSize, setMonitorSize] = useState<monitorSizeType>({ width: 0, height: 0 });
+const useWindowSize = (): MonitorSizeType => {
+  const [monitorSize, setMonitorSize] = useState<MonitorSizeType>({ width: 0, height: 0 });
 
   useLayoutEffect(() => {
     if (typeof window !== 'undefined') {
