@@ -103,4 +103,6 @@ const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
   );
 };
 
-export default React.memo(CustomNumberFormat);
+export default React.memo(CustomNumberFormat, (prevProps, nextProps) => {
+  return prevProps.value === nextProps.value;
+});
