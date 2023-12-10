@@ -118,31 +118,50 @@ export const workExperienceHeaderList: commonTableHeaderType[] = [
   },
 ];
 
-/** 給料に対する税金ヘッダー */
-// export const monthlyTaxHeaderList: HeadCell[] = [
-//   {
-//     id: 'id',
-//     disablePadding: false,
-//     label: 'id',
-//   },
-//   {
-//     id: 'companyId',
-//     disablePadding: false,
-//     label: '会社ID',
-//   },
-//   {
-//     id: 'store',
-//     disablePadding: false,
-//     label: '利用店',
-//   },
-//   {
-//     id: 'categoryId',
-//     disablePadding: false,
-//     label: 'カテゴリー',
-//   },
-//   {
-//     id: 'usageFee',
-//     disablePadding: false,
-//     label: '利用金額',
-//   },
-// ];
+/** 給与に対する税金ヘッダー */
+export const monthlyTaxHeaderList: commonTableHeaderType[] = [
+  {
+    id: 'id',
+    label: 'id',
+  },
+  {
+    id: 'companyId',
+    label: '会社ID',
+  },
+  {
+    id: 'healthInsuranceExpense',
+    label: '健康保険料',
+  },
+  {
+    id: 'employeePensionInsuranceExpense',
+    label: '厚生年金保険料',
+  },
+  {
+    id: 'nationalPensionInsuranceExpense',
+    label: '国民年金保険料',
+  },
+  {
+    id: 'employeeInsuranceExpense',
+    label: '雇用保険料',
+  },
+  {
+    id: 'longTermCareInsurance',
+    label: '介護保険料',
+  },
+  {
+    id: 'incomeTax',
+    label: '所得税',
+  },
+  {
+    id: 'residenceTax',
+    label: '住民税',
+  },
+  {
+    id: 'yearEndAdjustment',
+    label: '年末調整額',
+  },
+  {
+    id: 'notes',
+    label: 'その他',
+  },
+];
