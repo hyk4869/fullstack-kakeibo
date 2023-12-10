@@ -2,6 +2,7 @@
 
 - `react-virtualized`
 - `react-window`
+- `react-virtuoso`
 
 どちらもReactで仮想化リストを実現するためのもの。
 
@@ -20,4 +21,5 @@
 - react-window は、レンダリングパフォーマンスに焦点を当てて設計されています。最小限のDOMノードしか作成せず、スクロールパフォーマンスを最大化することが目標です。
 - react-virtualized も高パフォーマンスですが、react-window がよりシンプルで効率的なアーキテクチャを持っています。
 
-とりあえずreact-windowを採用。
+
+TableVirtuoso、TableComponentsを検討してみる

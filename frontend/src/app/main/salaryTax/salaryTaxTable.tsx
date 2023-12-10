@@ -33,6 +33,7 @@ import { setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { TableVirtuoso, TableComponents } from 'react-virtuoso';
 
 export interface HeadCell {
   id: keyof TSalaryTax;
