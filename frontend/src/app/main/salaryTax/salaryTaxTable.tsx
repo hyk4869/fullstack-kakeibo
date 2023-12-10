@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
-import { MCompany, TSalaryTax } from '@/app/_store/interfacesInfo';
+import { TSalaryTax } from '@/app/_store/interfacesInfo';
 import { alpha } from '@mui/material/styles';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
@@ -33,7 +33,6 @@ import { setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ListChildComponentProps, VariableSizeList } from 'react-window';
 
 export interface HeadCell {
   id: keyof TSalaryTax;
@@ -91,190 +90,6 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
   );
 };
 
-type RowType = {
-  visibleRows: TSalaryTax[];
-  edit: boolean;
-  selectedData: (id: number) => boolean;
-  changeValue: () => void;
-  selectContent: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: number) => void;
-  companyData: MCompany[];
-  deleteValue: (id: number) => void;
-};
-
-const Row: React.FC<RowType & ListChildComponentProps> = (props) => {
-  const { visibleRows, edit, selectedData, changeValue, selectContent, companyData, deleteValue } = props;
-  return (
-    <>
-      {visibleRows.map((a, idx) => {
-        const isItemSelected = a.id !== null ? selectedData(a.id as number) : undefined;
-        const labelId = `enhanced-table-checkbox-${idx}`;
-        return (
-          <TableRow hover role="checkbox" tabIndex={-1} key={a.id} sx={{ cursor: 'pointer' }}>
-            <TableCell padding="checkbox">
-              <Checkbox
-                color="primary"
-                checked={isItemSelected}
-                inputProps={{
-                  'aria-labelledby': labelId,
-                }}
-                onClick={(event) => {
-                  if (a.id !== null) {
-                    selectContent(event, a.id as number);
-                  }
-                }}
-              />
-            </TableCell>
-
-            <Tooltip title={'idを変更することはできません'} arrow>
-              <TableCell component="th" id={labelId} scope="row">
-                <CustomNumberFormat
-                  value={a.id}
-                  edit={false}
-                  align="center"
-                  onChangeValue={changeValue}
-                  paramKey={'id'}
-                  id={Number(a.id)}
-                />
-              </TableCell>
-            </Tooltip>
-
-            <Tooltip title={companyData.find((s) => s.id === a.companyId)?.name} arrow>
-              <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                <CustomNumberFormat
-                  value={a.companyId}
-                  edit={edit}
-                  align="center"
-                  onChangeValue={changeValue}
-                  paramKey={'companyId'}
-                  id={Number(a.id)}
-                />
-              </TableCell>
-            </Tooltip>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.healthInsuranceExpense}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'healthInsuranceExpense'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.employeePensionInsuranceExpense}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'employeePensionInsuranceExpense'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.nationalPensionInsuranceExpense}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'nationalPensionInsuranceExpense'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.employeeInsuranceExpense}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'employeeInsuranceExpense'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.longTermCareInsurance}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'longTermCareInsurance'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.incomeTax}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'incomeTax'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.residenceTax}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'residenceTax'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.yearEndAdjustment}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'yearEndAdjustment'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            <TableCell align="center" sx={{ padding: commonPadding5 }}>
-              <CustomNumberFormat
-                value={a.notes}
-                edit={edit}
-                align="center"
-                onChangeValue={changeValue}
-                paramKey={'notes'}
-                id={Number(a.id)}
-                suffix={'円'}
-              />
-            </TableCell>
-
-            {edit ? (
-              <TableCell align="center">
-                <DeleteIcon
-                  onClick={() => deleteValue(a.id as number)}
-                  sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }}
-                />
-              </TableCell>
-            ) : (
-              <></>
-            )}
-          </TableRow>
-        );
-      })}
-    </>
-  );
-};
 type SalaryTaxProps = {
   //
 };
@@ -580,20 +395,6 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                   );
                 })}
               </TableBody>
-              {/* <VariableSizeList height={500} width="100%" itemSize={(index) => 20} itemCount={visibleRows.length}>
-                {(props) => (
-                  <Row
-                    {...props}
-                    visibleRows={visibleRows}
-                    edit={edit}
-                    selectedData={selectedData}
-                    changeValue={changeValue}
-                    selectContent={selectContent}
-                    companyData={companyData}
-                    deleteValue={deleteValue}
-                  />
-                )}
-              </VariableSizeList> */}
             </Table>
           </TableContainer>
           <TablePagination

@@ -33,8 +33,17 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
 
   const [numeric, setNumeric] = useState<number | null>(value);
 
+  // useEffect(() => {
+  //   setNumeric(value);
+  // }, [value]);
+
   useEffect(() => {
-    setNumeric(value);
+    setNumeric((prevNumeric) => {
+      if (prevNumeric !== value) {
+        return value;
+      }
+      return prevNumeric;
+    });
   }, [value]);
 
   const hadleChangeNumericValue: OnValueChange = useCallback((values) => {
@@ -94,6 +103,7 @@ type TextFieldCustomInputProps = {
 };
 const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
   const { variant = 'standard', width, ...other } = props;
+
   return (
     <TextField
       variant={variant}
@@ -103,6 +113,10 @@ const TextFieldCustomInput: React.FC<TextFieldCustomInputProps> = (props) => {
   );
 };
 
-export default React.memo(CustomNumberFormat, (prevProps, nextProps) => {
-  return prevProps.value === nextProps.value;
-});
+// export default React.memo(CustomNumberFormat, (prevProps, nextProps) => {
+//   // React.memo の第二引数は、コンポーネントが再描画されるかどうかを決定するオプションの比較関数
+//   // コンポーネントが再描画されるべきでない場合は true。再描画されるべき場合は false を返す。
+//   return prevProps.edit === nextProps.edit;
+// });
+
+export default React.memo(CustomNumberFormat);
