@@ -5,16 +5,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SalaryInfoService {
   constructor(private prisma: PrismaService) {}
 
-  async getCompanyContent() {
-    const result = await this.prisma.mCompany.findMany({
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
-  }
-  async getHireDateContent() {
-    const result = await this.prisma.mHireDate.findMany({
+  async getSalaryTax() {
+    const result = await this.prisma.tTax.findMany({
       orderBy: {
         id: 'asc',
       },
