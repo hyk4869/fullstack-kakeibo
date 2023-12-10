@@ -19,6 +19,12 @@ export type CommonTDataTableHeaderProps<T> = {
 const CommonTDataTableHeader = <T,>(props: CommonTDataTableHeaderProps<T>): React.ReactElement => {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, labelList, setOrder, setOrderBy } = props;
 
+  /**
+   * 昇順降順のソート
+   * @param event
+   * @param property どの列がクリックされたか
+   * @return テーブルの列のクリックに応じて、ソート対象の列とソート順を切り替える役割
+   */
   const onRequestSort = (event: React.MouseEvent<unknown>, property: keyof T) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
