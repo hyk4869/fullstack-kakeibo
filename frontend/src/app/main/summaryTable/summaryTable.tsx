@@ -36,6 +36,7 @@ import { monthlySpendingHeaderList } from '@/app/_util/headerList';
 import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
 import CommonEditButton from '@/app/_util/commonEditButton';
 import CommonTDataTableHeader from '@/app/_util/commonTDataTableHeader';
+import useCommonFunctions from '@/app/_util/useCommonFunctions';
 
 export type EnhancedTableToolbarProps = {
   numSelected: number;
@@ -127,6 +128,17 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
 
   const { width, height } = useWindowSize();
+  const {
+    handleSelectAllClick,
+    handleSelect,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    isSelected,
+    handleEditFlag,
+    handledeleteValue,
+    handleDeleteArrayValue,
+  } = useCommonFunctions<TMonthlySpending>();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -143,72 +155,32 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     }
   }, [monthlyData, enableEdit]);
 
-  /**
-   * 昇順降順のソート
-   * @param event
-   * @param property どの列がクリックされたか
-   * @return テーブルの列のクリックに応じて、ソート対象の列とソート順を切り替える役割
-   */
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TMonthlySpending) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  /** 全選択のクリック関数 */
+  const selectAllClick = (event: React.ChangeEvent<HTMLInputElement>) =>
+    handleSelectAllClick(setSelected, editValue, event);
 
-  /**
-   * 全選択のクリック関数
-   * @param event boolean event
-   * @returns
-   */
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelected([]);
-    if (event.target.checked) {
-      setSelected((setNum) => {
-        if (monthlyData) {
-          const filteredData: number[] = monthlyData.filter((d) => d.id !== null).map((d) => d.id as number);
-          return [...setNum, ...filteredData];
-        }
-        return setNum;
-      });
-      return;
-    }
-    setSelected([]);
-  };
+  /** 行または項目の選択に対しての判定 */
+  const selectContent = (event: React.MouseEvent<unknown>, id: number) =>
+    handleSelect(event, id, setSelected, selected);
 
-  /**
-   * 行または項目の選択に対しての判定
-   * @param event
-   * @param id
-   */
-  const handleSelect = useCallback(
-    (event: React.MouseEvent<unknown>, id: number) => {
-      const selectedIndex = selected.indexOf(id);
-      let newSelected: number[] = [];
+  /** ページの移動 */
+  const changePage = (event: unknown, newPage: number) => handleChangePage(event, newPage, setPage);
 
-      if (selectedIndex === -1) {
-        newSelected = [...selected, id];
-      } else {
-        newSelected = selected.filter((itemId) => itemId !== id);
-      }
+  /** テーブルごとの表示数 */
+  const changeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) =>
+    handleChangeRowsPerPage(event, setRowsPerPage, setPage);
 
-      setSelected(newSelected);
-    },
-    [selected],
-  );
+  /** 要素の選択 */
+  const selectedData = (id: number) => isSelected(id, selected);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  /** edit関数 */
+  const editFlag = () => handleEditFlag(setEdit);
 
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      setPage(0);
-    },
-    [page, rowsPerPage],
-  );
+  /** 削除 */
+  const deleteValue = (id: number) => handledeleteValue(id, setEditValue, setDeleteSomething);
 
-  const isSelected = (id: number) => selected.indexOf(id) !== -1;
+  /** 一括削除 */
+  const deleteArrayValue = () => handleDeleteArrayValue(setEditValue, setDeleteSomething, setSelected, selected);
 
   /**
    * テーブルやリストの表示に必要なデータを計算し、最適化
@@ -218,10 +190,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       stableSort(editValue, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [order, orderBy, page, rowsPerPage, editValue],
   );
-
-  const handleEditFlag = () => {
-    setEdit((edit) => !edit);
-  };
 
   /** listのメモ化 */
   const generateCategoryList = useCallback(() => {
@@ -338,46 +306,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   //   }
   // };
 
-  /**
-   * 削除
-   */
-  const deleteValue = useCallback(
-    (id: number | null) => {
-      if (id !== null) {
-        setEditValue((prevData) => {
-          const updatedData = prevData.filter((d) => d.id !== id);
-          const deleteContent = prevData.filter((d) => d.id === id);
-          setDeleteSomething((prev) => {
-            const uniqueDeleteContent = deleteContent.filter(
-              (item) => !prev.some((existingItem) => existingItem.id === item.id),
-            );
-            return [...prev, ...uniqueDeleteContent];
-          });
-          return updatedData;
-        });
-      }
-    },
-    [editValue, deleteSomething],
-  );
-
-  /**
-   * 一括削除
-   */
-  const deleteArrayValue = () => {
-    setEditValue((prevValue) => {
-      const updatedData = prevValue.filter((a) => !selected.includes(Number(a.id)));
-      const deleteContent = prevValue.filter((a) => selected.includes(Number(a.id)));
-      setDeleteSomething((prev) => {
-        const uniqueDeleteContent = deleteContent.filter(
-          (item) => !prev.some((existingItem) => existingItem.id === item.id),
-        );
-        return [...prev, ...uniqueDeleteContent];
-      });
-      return updatedData;
-    });
-    setSelected([]);
-  };
-
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '95%', margin: '1rem auto' }}>
@@ -391,7 +319,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           numSelected={selected.length}
           edit={edit}
           dataLength={monthlyData.length}
-          handleEditFlag={handleEditFlag}
+          handleEditFlag={editFlag}
           saveValue={saveValue}
           deleteArrayValue={deleteArrayValue}
           enableEdit={enableEdit}
@@ -405,7 +333,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
+              onSelectAllClick={selectAllClick}
               rowCount={monthlyData.length}
               setOrder={setOrder}
               setOrderBy={setOrderBy}
@@ -414,7 +342,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = row.id !== null ? isSelected(row.id as number) : undefined;
+                const isItemSelected = row.id !== null ? selectedData(row.id as number) : undefined;
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
@@ -428,7 +356,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         }}
                         onClick={(event) => {
                           if (row.id !== null) {
-                            handleSelect(event, row.id as number);
+                            selectContent(event, row.id as number);
                           }
                         }}
                       />
@@ -487,7 +415,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     {edit ? (
                       <TableCell align="center">
                         <DeleteIcon
-                          onClick={() => deleteValue(row.id)}
+                          onClick={() => deleteValue(row.id as number)}
                           sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }}
                         />
                       </TableCell>
@@ -506,8 +434,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           count={monthlyData.length}
           rowsPerPage={rowsPerPage}
           page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+          onPageChange={changePage}
+          onRowsPerPageChange={changeRowsPerPage}
         />
         <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} />
       </Paper>
