@@ -7,6 +7,8 @@ export const getSomeMonthlySpending = 'http://localhost:3005/summaryTable/someCo
 /** 削除用の POST */
 export const postDeleteMonthlySpending = 'http://localhost:3005/summaryTable/deleteContent';
 /** 会社情報を取ってくる */
-export const getCompany = 'http://localhost:3005/salaryInfo/companyName';
+export const getCompany = 'http://localhost:3005/companyInfo/companyName';
 /** 入退社情報を取ってくる */
-export const getHireDate = 'http://localhost:3005/salaryInfo/hireDate';
+export const getHireDate = 'http://localhost:3005/companyInfo/hireDate';
+/** 給与に対する税金情報を取ってくる */
+export const getSalaryTax = 'http://localhost:3005/salaryInfo/salaryTax';
