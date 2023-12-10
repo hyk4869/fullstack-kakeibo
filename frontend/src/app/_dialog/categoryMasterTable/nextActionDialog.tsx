@@ -2,7 +2,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogAc
 import React, { useState } from 'react';
 import { setCreateCategoryContent } from '../../_store/slice';
 import { useDispatch } from 'react-redux';
-import LoadingContent from '../../_util/loading';
+import LoadingContent from '../../_util/commonLayouts/loading';
 import { MCategory } from '@/app/_store/interfacesInfo';
 
 type NextActionDialogProps = {

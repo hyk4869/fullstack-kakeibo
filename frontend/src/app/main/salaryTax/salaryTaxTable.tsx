@@ -20,15 +20,16 @@ import React, { useEffect, useState } from 'react';
 import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
 import { TSalaryTax } from '@/app/_store/interfacesInfo';
 import { alpha } from '@mui/material/styles';
-import CommonTDataTableHeader from '@/app/_util/commonTDataTableHeader';
+import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import { Order } from '@/app/_util/utilFunctions';
 import { monthlyTaxHeaderList } from '@/app/_util/headerList';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/_store/store';
 import { grey } from '@mui/material/colors';
-import CommonEditButton from '@/app/_util/commonEditButton';
-import LoadingContent from '../../_util/loading';
+import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
+import LoadingContent from '../../_util/commonLayouts/loading';
 import useWindowSize from '@/app/_util/useWindowSize';
+import useCommonFunctions from '@/app/_util/useCommonFunctions';
 
 export interface HeadCell {
   id: keyof TSalaryTax;
@@ -103,6 +104,19 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const [deleteSomething, setDeleteSomething] = useState<Array<TSalaryTax>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [windowSize, setWindowSize] = useState<boolean>(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
+
+  const {
+    handleSelectAllClick,
+    handleSelect,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    isSelected,
+    handleEditFlag,
+    handledeleteValue,
+    handleDeleteArrayValue,
+  } = useCommonFunctions<TSalaryTax>();
 
   useEffect(() => {
     if (width < 840) {
@@ -112,49 +126,34 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     }
   }, [width, height]);
 
-  /**
-   * 全選択のクリック関数
-   * @param event boolean event
-   * @returns
-   */
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelected([]);
-    if (event.target.checked) {
-      setSelected((setNum) => {
-        if (SalaryTaxData) {
-          const filteredData: number[] = SalaryTaxData.filter((d) => d.id !== null).map((d) => d.id as number);
-          return [...setNum, ...filteredData];
-        }
-        return setNum;
-      });
-      return;
-    }
-    setSelected([]);
-  };
+  /** 全選択のクリック関数 */
+  const selectAllClick = (event: React.ChangeEvent<HTMLInputElement>) =>
+    handleSelectAllClick(setSelected, editValue, event);
 
-  const handleEditFlag = () => {
-    setEdit((edit) => !edit);
-  };
+  /** 行または項目の選択に対しての判定 */
+  const selectContent = (event: React.MouseEvent<unknown>, id: number) =>
+    handleSelect(event, id, setSelected, selected);
+
+  /** ページの移動 */
+  const changePage = (event: unknown, newPage: number) => handleChangePage(event, newPage, setPage);
+
+  /** テーブルごとの表示数 */
+  const changeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) =>
+    handleChangeRowsPerPage(event, setRowsPerPage, setPage);
+
+  /** 要素の選択 */
+  const selectedData = (id: number) => isSelected(id, selected);
+
+  /** edit関数 */
+  const editFlag = () => handleEditFlag(setEdit);
+
+  /** 削除 */
+  const deleteValue = (id: number) => handledeleteValue(id, setEditValue, setDeleteSomething);
+
+  /** 一括削除 */
+  const deleteArrayValue = () => handleDeleteArrayValue(setEditValue, setDeleteSomething, setSelected, selected);
 
   const saveValue = async () => {};
-
-  /**
-   * 一括削除
-   */
-  const deleteArrayValue = () => {
-    setEditValue((prevValue) => {
-      const updatedData = prevValue.filter((a) => !selected.includes(Number(a.id)));
-      const deleteContent = prevValue.filter((a) => selected.includes(Number(a.id)));
-      setDeleteSomething((prev) => {
-        const uniqueDeleteContent = deleteContent.filter(
-          (item) => !prev.some((existingItem) => existingItem.id === item.id),
-        );
-        return [...prev, ...uniqueDeleteContent];
-      });
-      return updatedData;
-    });
-    setSelected([]);
-  };
 
   return (
     <>
@@ -164,7 +163,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
             numSelected={selected.length}
             edit={edit}
             dataLength={SalaryTaxData.length}
-            handleEditFlag={handleEditFlag}
+            handleEditFlag={editFlag}
             saveValue={saveValue}
             deleteArrayValue={deleteArrayValue}
             enableEdit={enableEdit}
@@ -178,7 +177,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
+                onSelectAllClick={selectAllClick}
                 rowCount={SalaryTaxData.length}
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}

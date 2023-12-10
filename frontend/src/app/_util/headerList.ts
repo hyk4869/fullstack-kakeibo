@@ -1,4 +1,4 @@
-import { commonTableHeaderType } from './commonTableHeader';
+import { commonTableHeaderType } from './commonLayouts/commonTableHeader';
 
 /** カテゴリマスタのヘッダー */
 export const categoryHeaderList: commonTableHeaderType[] = [

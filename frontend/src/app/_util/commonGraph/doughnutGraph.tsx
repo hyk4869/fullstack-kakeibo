@@ -2,20 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { Chart, registerables, ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { color200 } from '../_customComponents/customProperties';
+import { color200 } from '../../_customComponents/customProperties';
 import { Box } from '@mui/material';
 import 'chartjs-plugin-datalabels';
-import useWindowSize from './useWindowSize';
+import useWindowSize from '../useWindowSize';
 import { AmoutType } from './barGraph';
 Chart.register(...registerables);
 
-type DoughnutChartProps<T> = {
+type DoughnutGraphProps<T> = {
   value: T[];
   title: string;
 };
 
 /** ジェネリクスで書いた共通のグラフ */
-const DoughnutChart = <T extends AmoutType>(props: DoughnutChartProps<T>): React.ReactElement => {
+const DoughnutGraph = <T extends AmoutType>(props: DoughnutGraphProps<T>): React.ReactElement => {
   const { value, title } = props;
 
   const sortedChartData = value.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1));
@@ -73,4 +73,4 @@ const DoughnutChart = <T extends AmoutType>(props: DoughnutChartProps<T>): React
   );
 };
 
-export default DoughnutChart;
+export default DoughnutGraph;

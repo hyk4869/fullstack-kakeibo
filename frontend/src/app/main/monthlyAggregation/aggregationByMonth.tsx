@@ -1,7 +1,7 @@
 'use client';
 
 import { RootState } from '@/app/_store/store';
-import CommonTableHeader from '@/app/_util/commonTableHeader';
+import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { Box, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import CustomTextfield from '@/app/_customComponents/customTextfield';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
-import BarGraph, { MonthlyGrouping } from '@/app/_util/barGraph';
+import BarGraph, { MonthlyGrouping } from '@/app/_util/commonGraph/barGraph';
 import { aggregationMonthlyHeaderList } from '@/app/_util/headerList';
 
 type AggregationByMonthProps = {

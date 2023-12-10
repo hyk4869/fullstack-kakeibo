@@ -5,7 +5,7 @@ import CustomTextfield from '../../_customComponents/customTextfield';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { ReferenceType } from '@/app/main/category/categoyTable';
 import { numberOfCategoryHeaderList } from '@/app/_util/headerList';
-import CommonTableHeader from '../../_util/commonTableHeader';
+import CommonTableHeader from '../../_util/commonLayouts/commonTableHeader';
 
 type ShowCategoryMasterPrpos = {
   isShowCategoryMaster: boolean;

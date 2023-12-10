@@ -3,7 +3,7 @@ import { Box, Dialog, DialogContent, Table, TableBody, TableCell, TableContainer
 import React from 'react';
 import CustomTextfield from '../../_customComponents/customTextfield';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
-import CommonTableHeader from '@/app/_util/commonTableHeader';
+import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import { ReferenceType } from '@/app/main/category/categoyTable';
 import { numberOfCategoryHeaderList } from '@/app/_util/headerList';
 

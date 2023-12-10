@@ -8,7 +8,7 @@ import { setCategoryContent, setEnableEdit, setMonthlySpending } from '../../_st
 import React, { useCallback, useState } from 'react';
 import CustomDate from '../../_customComponents/customDate';
 import { RootState } from '../../_store/store';
-import LoadingContent from '../../_util/loading';
+import LoadingContent from '../../_util/commonLayouts/loading';
 import CloseIcon from '@mui/icons-material/Close';
 
 type FetchDataDialogProps = {

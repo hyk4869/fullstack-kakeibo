@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Chart, registerables, ChartOptions } from 'chart.js';
-import { color200 } from '../_customComponents/customProperties';
+import { color200 } from '../../_customComponents/customProperties';
 import { Bar } from 'react-chartjs-2';
 import { Box } from '@mui/material';
-import useWindowSize from './useWindowSize';
-import { TMonthlySpending } from '../_store/interfacesInfo';
+import useWindowSize from '../useWindowSize';
+import { TMonthlySpending } from '../../_store/interfacesInfo';
 
 Chart.register(...registerables);
 

@@ -1,39 +1,4 @@
-type ItemWithId = {
-  id: number | null;
-};
-
-type CommonUtils<T extends ItemWithId> = {
-  handleSelectAllClick: (
-    setSelected: React.Dispatch<React.SetStateAction<number[]>>,
-    arrayContent: T[],
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => void;
-  handleSelect: (
-    event: React.MouseEvent<unknown>,
-    id: number,
-    setSelected: React.Dispatch<React.SetStateAction<number[]>>,
-    selected: number[],
-  ) => void;
-  handleChangePage: (event: unknown, newPage: number, setPage: React.Dispatch<React.SetStateAction<number>>) => void;
-  handleChangeRowsPerPage: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setRowsPerPage: React.Dispatch<React.SetStateAction<number>>,
-    setPage: React.Dispatch<React.SetStateAction<number>>,
-  ) => void;
-  isSelected: (id: number, selected: number[]) => boolean;
-  handleEditFlag: (setEdit: React.Dispatch<React.SetStateAction<boolean>>) => void;
-  handledeleteValue: (
-    id: number | null,
-    setEditValue: React.Dispatch<React.SetStateAction<T[]>>,
-    setDeleteSomething: React.Dispatch<React.SetStateAction<T[]>>,
-  ) => void;
-  handleDeleteArrayValue: (
-    setEditValue: React.Dispatch<React.SetStateAction<T[]>>,
-    setDeleteSomething: React.Dispatch<React.SetStateAction<T[]>>,
-    setSelected: React.Dispatch<React.SetStateAction<number[]>>,
-    selected: number[],
-  ) => void;
-};
+import { CommonUtils, ItemWithId } from './commonFunctionTypes';
 
 /** Tテーブルで使う共通の関数 */
 const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {

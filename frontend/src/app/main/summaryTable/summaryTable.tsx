@@ -28,14 +28,14 @@ import CreateNewRecordsDialog from '../../_dialog/monthlySpending/createNewRecor
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
 import { getMonthlySpending, postDeleteMonthlySpending } from '../../_api/url';
-import LoadingContent from '../../_util/loading';
+import LoadingContent from '../../_util/commonLayouts/loading';
 import FetchDataDialog from './fetchDataDialog';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
 import { monthlySpendingHeaderList } from '@/app/_util/headerList';
 import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
-import CommonEditButton from '@/app/_util/commonEditButton';
-import CommonTDataTableHeader from '@/app/_util/commonTDataTableHeader';
+import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
+import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 
 export type EnhancedTableToolbarProps = {

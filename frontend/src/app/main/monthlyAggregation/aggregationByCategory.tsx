@@ -6,13 +6,13 @@ import { Box, TableBody, TableCell, TableContainer, TableRow, Table } from '@mui
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { commonPadding5, messageRedirect } from '@/app/_customComponents/customProperties';
-import DoughnutChart from '@/app/_util/doughnutChart';
+import DoughnutGraph from '@/app/_util/commonGraph/doughnutGraph';
 import useWindowSize from '@/app/_util/useWindowSize';
 import CustomToggleButton from '@/app/_customComponents/customToggleButton';
 import { ValueObjType } from '@/app/_customComponents/customRadioButton';
-import BarGraph, { AmoutType } from '@/app/_util/barGraph';
-import RedirectDialog from '@/app/_util/redirectDialog';
-import CommonTableHeader from '@/app/_util/commonTableHeader';
+import BarGraph, { AmoutType } from '@/app/_util/commonGraph/barGraph';
+import RedirectDialog from '@/app/_util/commonLayouts/redirectDialog';
+import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utilFunctions';
 import CommonFooterAggregation from './commonFooter';
 import { aggregationHeaderList } from '@/app/_util/headerList';
@@ -152,7 +152,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           </Table>
           <Box sx={{ width: windowSize ? '100%' : '50%', display: 'grid', justifyContent: 'center' }}>
             {displayGraph === '1' ? (
-              <DoughnutChart<AmoutType> value={amount} title={'カテゴリー別の金額'} />
+              <DoughnutGraph<AmoutType> value={amount} title={'カテゴリー別の金額'} />
             ) : (
               <BarGraph AmoutType={amount} title={'カテゴリー別の金額'} label={'categoryName'} />
             )}

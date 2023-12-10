@@ -2,7 +2,7 @@
 
 import { TableCell, TableRow, TableHead } from '@mui/material';
 import React from 'react';
-import { commonPadding5 } from '../_customComponents/customProperties';
+import { commonPadding5 } from '../../_customComponents/customProperties';
 
 export type commonTableHeaderType = {
   id: string;

@@ -5,7 +5,7 @@ import { parse } from 'papaparse';
 import React, { SetStateAction, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../_store/store';
-import LoadingContent from '../loading';
+import LoadingContent from '../commonLayouts/loading';
 import { TMonthlySpending } from '@/app/_store/interfacesInfo';
 
 type ImportCSVProps = {

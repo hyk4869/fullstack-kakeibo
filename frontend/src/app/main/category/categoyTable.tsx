@@ -6,10 +6,10 @@ import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomTextfield from '../../_customComponents/customTextfield';
-import RedirectDialog from '@/app/_util/redirectDialog';
+import RedirectDialog from '@/app/_util/commonLayouts/redirectDialog';
 import { messageRedirect, commonPadding5 } from '@/app/_customComponents/customProperties';
-import CommonEditButton from '@/app/_util/commonEditButton';
-import CommonTableHeader from '@/app/_util/commonTableHeader';
+import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
+import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import CreateNewRecordsDialog from '@/app/_dialog/categoryMasterTable/createNewRecordsDialog';
 import { ShowCategoryMaster } from '@/app/_dialog/categoryMasterTable/showCategory';
 import { sumEachCategory } from '@/app/_util/utilFunctions';
