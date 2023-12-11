@@ -55,9 +55,13 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
     onChangeValue(id, paramKey || '', numeric);
   }, [id, paramKey, numeric, onChangeValue]);
 
-  const thousandSeparator = numeric !== null && numeric >= 1000;
-
-  const formattedValue = thousandSeparator ? numeric.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : numeric;
+  const formattedValue =
+    numeric !== null
+      ? (numeric < 0 ? '-' : '') +
+        Math.abs(numeric)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      : null;
 
   return (
     <Box sx={{ display: 'flex', justifyContent: align, maxWidth: maxWidth, minWidth: minWidth, margin: margin }}>
