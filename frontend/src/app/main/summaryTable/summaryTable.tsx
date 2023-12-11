@@ -147,13 +147,13 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     } else {
       setWindowSize(false);
     }
-    if (height > 930 && windowSize) {
+    if (height > 930) {
       const subtractionHeigh = height * 0.35;
       setMaxHeightState(height - subtractionHeigh);
-    } else if (height > 800 && windowSize) {
+    } else if (height > 800) {
       const subtractionHeigh = height * 0.4;
       setMaxHeightState(height - subtractionHeigh);
-    } else if (height <= 795 && windowSize) {
+    } else if (height <= 795) {
       const subtractionHeigh = height * 0.5;
       setMaxHeightState(height - subtractionHeigh);
     }
