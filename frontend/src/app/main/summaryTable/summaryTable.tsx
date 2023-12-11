@@ -126,7 +126,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [deleteSomething, setDeleteSomething] = useState<Array<TMonthlySpending>>([]);
   const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
   const [windowSize, setWindowSize] = useState<boolean>(false);
-
+  const [maxHeightState, setMaxHeightState] = useState<number>(0);
   const { width, height } = useWindowSize();
   const {
     handleSelectAllClick,
@@ -146,6 +146,16 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       setWindowSize(true);
     } else {
       setWindowSize(false);
+    }
+    if (height > 930 && windowSize) {
+      const subtractionHeigh = height * 0.35;
+      setMaxHeightState(height - subtractionHeigh);
+    } else if (height > 800 && windowSize) {
+      const subtractionHeigh = height * 0.4;
+      setMaxHeightState(height - subtractionHeigh);
+    } else if (height <= 795 && windowSize) {
+      const subtractionHeigh = height * 0.5;
+      setMaxHeightState(height - subtractionHeigh);
     }
   }, [width, height]);
 
@@ -327,8 +337,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           setIsLoading={setIsLoading}
           windowSize={windowSize}
         />
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+        <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
+          <Table stickyHeader aria-label="sticky table">
             <CommonTDataTableHeader<TMonthlySpending>
               numSelected={selected.length}
               order={order}
