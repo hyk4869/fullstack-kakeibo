@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Button,
   Checkbox,
   Paper,
   Table,
@@ -112,6 +113,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [maxHeightState, setMaxHeightState] = useState<number>(0);
 
   const {
     handleSelectAllClick,
@@ -129,6 +131,16 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
       setWindowSize(true);
     } else {
       setWindowSize(false);
+    }
+    if (height > 930) {
+      const subtractionHeigh = height * 0.35;
+      setMaxHeightState(height - subtractionHeigh);
+    } else if (height > 800) {
+      const subtractionHeigh = height * 0.4;
+      setMaxHeightState(height - subtractionHeigh);
+    } else if (height <= 795) {
+      const subtractionHeigh = height * 0.5;
+      setMaxHeightState(height - subtractionHeigh);
     }
   }, [width, height]);
 
@@ -202,6 +214,11 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '95%', margin: '1rem auto' }}>
+          <Button color="primary" variant="outlined">
+            データ取得
+          </Button>
+        </Box>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <EnhancedTableToolbar
             numSelected={selected.length}
@@ -215,8 +232,8 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
             setIsLoading={setIsLoading}
             windowSize={windowSize}
           />
-          <TableContainer>
-            <Table>
+          <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
+            <Table stickyHeader aria-label="sticky table">
               <CommonTDataTableHeader<TSalaryTax>
                 numSelected={selected.length}
                 order={order}

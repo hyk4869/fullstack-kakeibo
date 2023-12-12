@@ -100,6 +100,10 @@ export const monthlySpendingHeaderList: commonTableHeaderType[] = [
     id: 'usageFee',
     label: '利用金額',
   },
+  {
+    id: '',
+    label: '',
+  },
 ];
 
 /** 職歴マスタのヘッダー */
@@ -163,5 +167,9 @@ export const monthlyTaxHeaderList: commonTableHeaderType[] = [
   {
     id: 'notes',
     label: 'その他',
+  },
+  {
+    id: '',
+    label: '',
   },
 ];
