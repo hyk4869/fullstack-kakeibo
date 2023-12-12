@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -399,16 +400,11 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                         />
                       </TableCell>
 
-                      {edit ? (
-                        <TableCell align="center">
-                          <DeleteIcon
-                            onClick={() => deleteValue(a.id as number)}
-                            sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }}
-                          />
-                        </TableCell>
-                      ) : (
-                        <></>
-                      )}
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <IconButton onClick={() => deleteValue(a.id)} disabled={!edit}>
+                          <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}

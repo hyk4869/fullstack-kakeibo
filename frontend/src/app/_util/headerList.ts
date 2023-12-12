@@ -10,6 +10,10 @@ export const categoryHeaderList: commonTableHeaderType[] = [
     label: 'カテゴリー名',
     id: 'categoryName',
   },
+  {
+    label: '',
+    id: '',
+  },
 ];
 
 /** カテゴリーマスタがどれだけ参照されているかのヘッダー */
@@ -45,6 +49,10 @@ export const hireDateHeaderList: commonTableHeaderType[] = [
   {
     id: 'retirementDate',
     label: '退職日',
+  },
+  {
+    label: '',
+    id: '',
   },
 ];
 
@@ -119,6 +127,10 @@ export const workExperienceHeaderList: commonTableHeaderType[] = [
   {
     id: 'majorSector',
     label: '大分類',
+  },
+  {
+    label: '',
+    id: '',
   },
 ];
 

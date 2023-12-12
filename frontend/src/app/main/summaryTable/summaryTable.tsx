@@ -23,7 +23,7 @@ import CustomTextfield from '../../_customComponents/customTextfield';
 import CustomDate from '../../_customComponents/customDate';
 import CustomSelectTab from '../../_customComponents/customSelectTab';
 import dayjs from 'dayjs';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import CreateNewRecordsDialog from '../../_dialog/monthlySpending/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
@@ -37,6 +37,7 @@ import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
 import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
+import { commonPadding5 } from '@/app/_customComponents/customProperties';
 
 export type EnhancedTableToolbarProps = {
   numSelected: number;
@@ -357,7 +358,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
-                    <TableCell padding="checkbox">
+                    <TableCell padding="checkbox" sx={{ padding: commonPadding5 }}>
                       <Checkbox
                         color="primary"
                         checked={isItemSelected}
@@ -372,7 +373,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       />
                     </TableCell>
                     <Tooltip title={'idを変更することはできません'} arrow>
-                      <TableCell component="th" id={labelId} scope="row">
+                      <TableCell component="th" id={labelId} scope="row" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={row.id}
                           edit={false}
@@ -383,7 +384,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         />
                       </TableCell>
                     </Tooltip>
-                    <TableCell align="center">
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomDate
                         value={dayjs(row.paymentDay)}
                         edit={edit}
@@ -392,7 +393,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         id={Number(row.id)}
                       />
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomTextfield
                         value={row.store}
                         edit={edit}
@@ -401,7 +402,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         id={Number(row.id)}
                       />
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomSelectTab
                         list={generateCategoryList()}
                         value={categoryData.find((a) => a.categoryId === row.categoryId)?.categoryId ?? null}
@@ -411,7 +412,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         onChangeValue={changeValue}
                       />
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomNumberFormat
                         value={row.usageFee}
                         suffix=" 円"
@@ -422,16 +423,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                         id={Number(row.id)}
                       />
                     </TableCell>
-                    {edit ? (
-                      <TableCell align="center">
-                        <DeleteIcon
-                          onClick={() => deleteValue(row.id as number)}
-                          sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }}
-                        />
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )}
+
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                      <IconButton onClick={() => deleteValue(row.id as number)} disabled={!edit}>
+                        <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 );
               })}

@@ -4,6 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import { useSelector } from 'react-redux';
 import {
   Box,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -261,10 +262,9 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                       </TableCell>
 
                       <TableCell align="center">
-                        <DeleteIcon
-                          onClick={() => deleteValue(row.id)}
-                          sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }}
-                        />
+                        <IconButton onClick={() => deleteValue(row.id as number)} disabled={!edit}>
+                          <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );

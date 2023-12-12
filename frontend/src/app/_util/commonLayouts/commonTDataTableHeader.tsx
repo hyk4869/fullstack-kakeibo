@@ -3,6 +3,7 @@ import { Order } from '../utilFunctions';
 import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { commonTableHeaderType } from './commonTableHeader';
+import { grey } from '@mui/material/colors';
 
 export type CommonTDataTableHeaderProps<T> = {
   numSelected: number;
@@ -40,7 +41,7 @@ const CommonTDataTableHeader = <T,>(props: CommonTDataTableHeaderProps<T>): Reac
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell padding="checkbox" sx={{ background: grey[50] }}>
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -52,7 +53,12 @@ const CommonTDataTableHeader = <T,>(props: CommonTDataTableHeaderProps<T>): Reac
           />
         </TableCell>
         {labelList.map((a) => (
-          <TableCell key={a.id} align={'center'} sortDirection={orderBy === a.id ? order : false}>
+          <TableCell
+            key={a.id}
+            align={'center'}
+            sortDirection={orderBy === a.id ? order : false}
+            sx={{ background: grey[50] }}
+          >
             <TableSortLabel
               active={orderBy === a.id}
               direction={orderBy === a.id ? order : 'asc'}
