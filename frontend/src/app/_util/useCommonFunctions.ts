@@ -93,6 +93,27 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
   };
 
   /**
+   * 個別のedit関数
+   * @param setEdit
+   * @param id
+   * @param arraySomething
+   */
+  const handleIndividualEdit = (
+    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
+    id: number,
+    arraySomething: T[],
+  ) => {
+    setEdit((edit) => {
+      if (arraySomething.filter((a) => a.id === id)) {
+        console.log(arraySomething.filter((a) => a.id === id));
+        return !edit;
+      } else {
+        return false;
+      }
+    });
+  };
+
+  /**
    * 削除関数
    * @param id
    * @param setEditValue
@@ -154,6 +175,7 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
     handleEditFlag,
     handledeleteValue,
     handleDeleteArrayValue,
+    handleIndividualEdit,
   };
 };
 

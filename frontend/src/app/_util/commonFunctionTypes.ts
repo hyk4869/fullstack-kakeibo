@@ -41,4 +41,10 @@ export type CommonUtils<T extends ItemWithId> = {
     setSelected: React.Dispatch<React.SetStateAction<number[]>>,
     selected: number[],
   ) => void;
+  /** 個別のedit関数 */
+  handleIndividualEdit: (
+    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
+    id: number,
+    arraySomething: T[],
+  ) => void;
 };

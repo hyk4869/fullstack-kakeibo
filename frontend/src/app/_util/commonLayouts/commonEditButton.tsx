@@ -49,7 +49,7 @@ const CommonEditButton: React.FC<CommonEditButtopnProps> = (props) => {
           <Box sx={{ padding: '1rem', minWidth: '190px', fontSize: '0.8rem' }}>レコード数：{dataLength}件</Box>
         </Box>
       )}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '1rem' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '1rem', paddingBottom: '5px' }}>
         <Button
           color={edit ? 'error' : 'primary'}
           variant="contained"

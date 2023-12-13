@@ -38,6 +38,7 @@ import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
+import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 
 export type EnhancedTableToolbarProps = {
   numSelected: number;
@@ -128,7 +129,12 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [maxHeightState, setMaxHeightState] = useState<number>(0);
+  const [selectedRow, setSelectedRow] = useState<number>(0);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
   const { width, height } = useWindowSize();
+  console.log(selectedRow);
+
   const {
     handleSelectAllClick,
     handleSelect,
@@ -138,6 +144,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     handleEditFlag,
     handledeleteValue,
     handleDeleteArrayValue,
+    handleIndividualEdit,
   } = useCommonFunctions<TMonthlySpending>();
 
   const dispatch = useDispatch();
@@ -192,6 +199,9 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   /** 一括削除 */
   const deleteArrayValue = () => handleDeleteArrayValue(setEditValue, setDeleteSomething, setSelected, selected);
+
+  /** 個別のedit関数 */
+  const individualEdit = (id: number) => handleIndividualEdit(setIsEditable, id, editValue);
 
   /**
    * テーブルやリストの表示に必要なデータを計算し、最適化
@@ -387,7 +397,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomDate
                         value={dayjs(row.paymentDay)}
-                        edit={edit}
+                        edit={isEditable}
                         onChangeValue={changeValue}
                         paramKey={'paymentDay'}
                         id={Number(row.id)}
@@ -396,7 +406,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomTextfield
                         value={row.store}
-                        edit={edit}
+                        edit={isEditable}
                         onChangeValue={changeValue}
                         paramKey={'store'}
                         id={Number(row.id)}
@@ -406,7 +416,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       <CustomSelectTab
                         list={generateCategoryList()}
                         value={categoryData.find((a) => a.categoryId === row.categoryId)?.categoryId ?? null}
-                        edit={edit}
+                        edit={isEditable}
                         paramKey={'categoryId'}
                         id={Number(row?.id)}
                         onChangeValue={changeValue}
@@ -416,7 +426,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       <CustomNumberFormat
                         value={row.usageFee}
                         suffix=" 円"
-                        edit={edit}
+                        edit={isEditable}
                         align="center"
                         onChangeValue={changeValue}
                         paramKey={'usageFee'}
@@ -424,11 +434,17 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       />
                     </TableCell>
 
-                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                    {/* <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <IconButton onClick={() => deleteValue(row.id as number)} disabled={!edit}>
                         <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
                       </IconButton>
-                    </TableCell>
+                    </TableCell> */}
+                    <CommonEditDeleteIcon
+                      deleteValue={() => deleteValue(row.id as number)}
+                      edit={edit}
+                      individualEdit={() => individualEdit(row.id as number)}
+                      setSelectedRow={setSelectedRow}
+                    />
                   </TableRow>
                 );
               })}
