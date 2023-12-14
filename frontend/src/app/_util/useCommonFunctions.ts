@@ -99,18 +99,16 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
    * @param arraySomething
    */
   const handleIndividualEdit = (
-    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
     id: number,
     arraySomething: T[],
+    setRowNumber: React.Dispatch<React.SetStateAction<number>>,
+    setIsEditable: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
-    setEdit((edit) => {
-      if (arraySomething.filter((a) => a.id === id)) {
-        console.log(arraySomething.filter((a) => a.id === id));
-        return !edit;
-      } else {
-        return false;
-      }
-    });
+    if (arraySomething) {
+      const result = arraySomething.find((a) => a.id === id)?.id;
+      setRowNumber(result as number);
+      setIsEditable((prev) => !prev);
+    }
   };
 
   /**

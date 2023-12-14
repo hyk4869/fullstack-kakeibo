@@ -43,8 +43,9 @@ export type CommonUtils<T extends ItemWithId> = {
   ) => void;
   /** 個別のedit関数 */
   handleIndividualEdit: (
-    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
     id: number,
     arraySomething: T[],
+    setRowNumber: React.Dispatch<React.SetStateAction<number>>,
+    setIsEditable: React.Dispatch<React.SetStateAction<boolean>>,
   ) => void;
 };

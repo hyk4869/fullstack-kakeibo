@@ -1,25 +1,24 @@
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import { IconButton, TableCell } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import Edit from '@mui/icons-material/Edit';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 type CommonEditDeleteIconProps = {
   individualEdit: () => void;
   deleteValue: () => void;
   edit: boolean;
-  setSelectedRow: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const CommonEditDeleteIcon: React.FC<CommonEditDeleteIconProps> = (props) => {
-  const { deleteValue, edit, individualEdit, setSelectedRow } = props;
+  const { deleteValue, edit, individualEdit } = props;
 
   return (
     <>
       <TableCell align="center" sx={{ padding: commonPadding5 }}>
         <IconButton onClick={() => individualEdit()} disabled={!edit}>
-          <EditIcon sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }} />
+          <Edit sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }} />
         </IconButton>
 
         <IconButton onClick={() => deleteValue()} disabled={!edit}>
