@@ -13,7 +13,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../_store/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -23,7 +22,7 @@ import CustomTextfield from '../../_customComponents/customTextfield';
 import CustomDate from '../../_customComponents/customDate';
 import CustomSelectTab from '../../_customComponents/customSelectTab';
 import dayjs from 'dayjs';
-import { Button, IconButton } from '@mui/material';
+import { Button } from '@mui/material';
 import CreateNewRecordsDialog from '../../_dialog/monthlySpending/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
@@ -116,6 +115,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
+  const { width, height } = useWindowSize();
+  const dispatch = useDispatch();
 
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
@@ -131,7 +132,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [maxHeightState, setMaxHeightState] = useState<number>(0);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
-  const { width, height } = useWindowSize();
 
   const {
     handleSelectAllClick,
@@ -144,8 +144,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     handleDeleteArrayValue,
     handleIndividualEdit,
   } = useCommonFunctions<TMonthlySpending>();
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (width < 840) {
