@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Checkbox,
-  IconButton,
   Paper,
   Table,
   TableBody,
@@ -34,8 +33,8 @@ import { getSalaryTax } from '@/app/_api/url';
 import { setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { TableVirtuoso, TableComponents } from 'react-virtuoso';
+import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 
 export interface HeadCell {
   id: keyof TSalaryTax;
@@ -115,6 +114,8 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [maxHeightState, setMaxHeightState] = useState<number>(0);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [rowNumber, setRowNumber] = useState<number>(0);
 
   const {
     handleSelectAllClick,
@@ -125,6 +126,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     handleEditFlag,
     handledeleteValue,
     handleDeleteArrayValue,
+    handleIndividualEdit,
   } = useCommonFunctions<TSalaryTax>();
 
   useEffect(() => {
@@ -200,6 +202,9 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
 
   /** 一括削除 */
   const deleteArrayValue = () => handleDeleteArrayValue(setEditValue, setDeleteSomething, setSelected, selected);
+
+  /** 個別のedit関数 */
+  const individualEdit = (id: number) => handleIndividualEdit(id, editValue, setRowNumber, setIsEditable);
 
   /**
    * テーブルやリストの表示に必要なデータを計算し、最適化
@@ -283,7 +288,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                         <TableCell align="center" sx={{ padding: commonPadding5 }}>
                           <CustomNumberFormat
                             value={a.companyId}
-                            edit={edit}
+                            edit={a.id === rowNumber ? isEditable : false}
                             align="center"
                             onChangeValue={changeValue}
                             paramKey={'companyId'}
@@ -295,7 +300,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.healthInsuranceExpense}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'healthInsuranceExpense'}
@@ -307,7 +312,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.employeePensionInsuranceExpense}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'employeePensionInsuranceExpense'}
@@ -319,7 +324,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.nationalPensionInsuranceExpense}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'nationalPensionInsuranceExpense'}
@@ -331,7 +336,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.employeeInsuranceExpense}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'employeeInsuranceExpense'}
@@ -343,7 +348,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.longTermCareInsurance}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'longTermCareInsurance'}
@@ -355,7 +360,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.incomeTax}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'incomeTax'}
@@ -367,7 +372,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.residenceTax}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'residenceTax'}
@@ -379,7 +384,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.yearEndAdjustment}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'yearEndAdjustment'}
@@ -391,7 +396,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.notes}
-                          edit={edit}
+                          edit={a.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'notes'}
@@ -400,11 +405,11 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                         />
                       </TableCell>
 
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <IconButton onClick={() => deleteValue(a.id)} disabled={!edit}>
-                          <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
-                        </IconButton>
-                      </TableCell>
+                      <CommonEditDeleteIcon
+                        individualEdit={() => individualEdit(a.id as number)}
+                        deleteValue={() => deleteValue(a.id as number)}
+                        edit={edit}
+                      />
                     </TableRow>
                   );
                 })}
