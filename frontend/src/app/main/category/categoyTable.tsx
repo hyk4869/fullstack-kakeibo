@@ -8,7 +8,7 @@ import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomTextfield from '../../_customComponents/customTextfield';
 import RedirectDialog from '@/app/_util/commonLayouts/redirectDialog';
 import { messageRedirect, commonPadding5 } from '@/app/_customComponents/customProperties';
-import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
+import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import CreateNewRecordsDialog from '@/app/_dialog/categoryMasterTable/createNewRecordsDialog';
 import { ShowCategoryMaster } from '@/app/_dialog/categoryMasterTable/showCategory';
@@ -104,7 +104,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <Box>
-            <CommonEditButton
+            <CommonTopEditButton
               edit={edit}
               handleEditFlag={handleEditFlag}
               title={'カテゴリーマスタの編集'}

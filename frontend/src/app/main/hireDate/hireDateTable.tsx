@@ -4,7 +4,7 @@ import { getCompany, getHireDate } from '@/app/_api/url';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import { setCompanyContent, setHireDateContent } from '@/app/_store/slice';
 import { RootState } from '@/app/_store/store';
-import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
+import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -97,7 +97,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '95%', margin: '0.5rem auto', background: grey[50] }}>
           <Box>
-            <CommonEditButton
+            <CommonTopEditButton
               edit={edit}
               handleEditFlag={handleEditFlag}
               title={'入退社マスタの編集'}

@@ -14,9 +14,10 @@ type CommonEditButtopnProps = {
   windowSize: boolean;
   dataLength: number;
   deleteArrayValue: () => void;
+  setOpenFetchDialog?: () => void;
   enableEdit?: boolean;
 };
-const CommonEditButton: React.FC<CommonEditButtopnProps> = (props) => {
+const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
   const {
     edit,
     handleEditFlag,
@@ -27,6 +28,7 @@ const CommonEditButton: React.FC<CommonEditButtopnProps> = (props) => {
     windowSize,
     dataLength,
     deleteArrayValue,
+    setOpenFetchDialog,
     enableEdit,
   } = props;
 
@@ -50,6 +52,9 @@ const CommonEditButton: React.FC<CommonEditButtopnProps> = (props) => {
         </Box>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '1rem', paddingBottom: '5px' }}>
+        <Button color="primary" variant="outlined" onClick={setOpenFetchDialog}>
+          データ取得
+        </Button>
         <Button
           color={edit ? 'error' : 'primary'}
           variant="contained"
@@ -90,4 +95,4 @@ const CommonEditButton: React.FC<CommonEditButtopnProps> = (props) => {
   );
 };
 
-export default React.memo(CommonEditButton);
+export default React.memo(CommonTopEditButton);

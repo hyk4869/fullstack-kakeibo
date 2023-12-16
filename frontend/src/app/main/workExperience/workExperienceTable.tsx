@@ -13,7 +13,7 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import { grey } from '@mui/material/colors';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomTextfield from '../../_customComponents/customTextfield';
-import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
+import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CreateNewRecordsDialog from '@/app/_dialog/workExperienceMasterTable/createNewRecordsDialog';
 import { ShowWorkExperienceMaster } from '@/app/_dialog/workExperienceMasterTable/showWorkExperience';
 import { ReferenceType } from '../category/categoyTable';
@@ -108,7 +108,7 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '95%', margin: '0.5rem auto', background: grey[50] }}>
           <Box>
-            <CommonEditButton
+            <CommonTopEditButton
               edit={edit}
               handleEditFlag={handleEditFlag}
               title={'職歴マスタの編集'}

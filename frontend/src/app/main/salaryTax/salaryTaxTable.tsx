@@ -24,7 +24,7 @@ import { monthlyTaxHeaderList } from '@/app/_util/headerList';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/_store/store';
 import { grey } from '@mui/material/colors';
-import CommonEditButton from '@/app/_util/commonLayouts/commonEditButton';
+import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
@@ -58,6 +58,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
   } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
+  const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
 
   return (
     <Toolbar
@@ -70,7 +71,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         display: 'block',
       }}
     >
-      <CommonEditButton
+      <CommonTopEditButton
         edit={edit}
         handleEditFlag={handleEditFlag}
         title={'給与に対する税金関係'}
@@ -81,6 +82,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         dataLength={dataLength}
         deleteArrayValue={() => deleteArrayValue()}
         enableEdit={enableEdit}
+        setOpenFetchDialog={() => setOpenFetchDialog(true)}
       />
       {/* <CreateNewRecordsDialog
         openDialog={openAddRecordsDialog}
@@ -117,17 +119,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
 
-  const {
-    handleSelectAllClick,
-    handleSelect,
-    handleChangePage,
-    handleChangeRowsPerPage,
-    isSelected,
-    handleEditFlag,
-    handledeleteValue,
-    handleDeleteArrayValue,
-    handleIndividualEdit,
-  } = useCommonFunctions<TSalaryTax>();
+  const utilMethods = useCommonFunctions<TSalaryTax>();
 
   useEffect(() => {
     if (width < 840) {
@@ -136,10 +128,10 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
       setWindowSize(false);
     }
     if (height > 930) {
-      const subtractionHeigh = height * 0.35;
+      const subtractionHeigh = height * 0.3;
       setMaxHeightState(height - subtractionHeigh);
     } else if (height > 800) {
-      const subtractionHeigh = height * 0.4;
+      const subtractionHeigh = height * 0.35;
       setMaxHeightState(height - subtractionHeigh);
     } else if (height <= 795) {
       const subtractionHeigh = height * 0.5;
@@ -178,33 +170,34 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
 
   /** 全選択のクリック関数 */
   const selectAllClick = (event: React.ChangeEvent<HTMLInputElement>) =>
-    handleSelectAllClick(setSelected, editValue, event);
+    utilMethods.handleSelectAllClick(setSelected, editValue, event);
 
   /** 行または項目の選択に対しての判定 */
   const selectContent = (event: React.MouseEvent<unknown>, id: number) =>
-    handleSelect(event, id, setSelected, selected);
+    utilMethods.handleSelect(event, id, setSelected, selected);
 
   /** ページの移動 */
-  const changePage = (event: unknown, newPage: number) => handleChangePage(event, newPage, setPage);
+  const changePage = (event: unknown, newPage: number) => utilMethods.handleChangePage(event, newPage, setPage);
 
   /** テーブルごとの表示数 */
   const changeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) =>
-    handleChangeRowsPerPage(event, setRowsPerPage, setPage);
+    utilMethods.handleChangeRowsPerPage(event, setRowsPerPage, setPage);
 
   /** 要素の選択 */
-  const selectedData = (id: number) => isSelected(id, selected);
+  const selectedData = (id: number) => utilMethods.isSelected(id, selected);
 
   /** edit関数 */
-  const editFlag = () => handleEditFlag(setEdit);
+  const editFlag = () => utilMethods.handleEditFlag(setEdit);
 
   /** 削除 */
-  const deleteValue = (id: number) => handledeleteValue(id, setEditValue, setDeleteSomething);
+  const deleteValue = (id: number) => utilMethods.handledeleteValue(id, setEditValue, setDeleteSomething);
 
   /** 一括削除 */
-  const deleteArrayValue = () => handleDeleteArrayValue(setEditValue, setDeleteSomething, setSelected, selected);
+  const deleteArrayValue = () =>
+    utilMethods.handleDeleteArrayValue(setEditValue, setDeleteSomething, setSelected, selected);
 
   /** 個別のedit関数 */
-  const individualEdit = (id: number) => handleIndividualEdit(id, editValue, setRowNumber, setIsEditable);
+  const individualEdit = (id: number) => utilMethods.handleIndividualEdit(id, editValue, setRowNumber, setIsEditable);
 
   /**
    * テーブルやリストの表示に必要なデータを計算し、最適化
@@ -220,11 +213,6 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '95%', margin: '1rem auto' }}>
-          <Button color="primary" variant="outlined">
-            データ取得
-          </Button>
-        </Box>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <EnhancedTableToolbar
             numSelected={selected.length}
