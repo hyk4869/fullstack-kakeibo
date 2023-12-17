@@ -13,7 +13,7 @@ import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import CreateNewRecordsDialog from '@/app/_dialog/categoryMasterTable/createNewRecordsDialog';
 import { ShowCategoryMaster } from '@/app/_dialog/categoryMasterTable/showCategory';
 import { sumEachCategory } from '@/app/_util/utilFunctions';
-import { categoryHeaderList } from '@/app/_util/headerList';
+import { categoryHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCategory } from '@/app/_store/interfacesInfo';
 import useWindowSize from '@/app/_util/useWindowSize';
 

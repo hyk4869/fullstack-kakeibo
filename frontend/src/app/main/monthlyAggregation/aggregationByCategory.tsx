@@ -15,7 +15,7 @@ import RedirectDialog from '@/app/_util/commonLayouts/redirectDialog';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utilFunctions';
 import CommonFooterAggregation from './commonFooter';
-import { aggregationHeaderList } from '@/app/_util/headerList';
+import { aggregationHeaderList } from '@/app/_util/commonLayouts/headerList';
 
 type AggregationByCategoryProps = {
   //

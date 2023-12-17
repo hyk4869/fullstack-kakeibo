@@ -13,10 +13,10 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { grey } from '@mui/material/colors';
 import MonthlyNextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ExportCSV } from '../../_util/exportCSV';
+import { ExportCSV } from '../../_util/CSV/exportCSV';
 import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
-import { monthlySpendingHeaders } from '../../_util/exportCSVTitleName';
+import { monthlySpendingHeaders } from '../../_util/CSV/exportCSVTitleName';
 import {
   Order,
   getComparator,
@@ -26,9 +26,9 @@ import {
   monthlySpendingNullCheck,
 } from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
-import { monthlySpendingHeaderList } from '@/app/_util/headerList';
+import { monthlySpendingHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
-import { ImportCSV } from '@/app/_util/monthlySpendingUtil/importCSV';
+import { ImportCSV } from '@/app/_util/CSV/importCSV';
 import { CommonEditButton } from '../commonContent/commonEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 

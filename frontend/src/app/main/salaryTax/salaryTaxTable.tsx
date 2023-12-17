@@ -2,7 +2,6 @@
 
 import {
   Box,
-  Button,
   Checkbox,
   Paper,
   Table,
@@ -20,7 +19,7 @@ import { TSalaryTax } from '@/app/_store/interfacesInfo';
 import { alpha } from '@mui/material/styles';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
-import { monthlyTaxHeaderList } from '@/app/_util/headerList';
+import { monthlyTaxHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/_store/store';
 import { grey } from '@mui/material/colors';
@@ -33,7 +32,6 @@ import { getSalaryTax } from '@/app/_api/url';
 import { setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
-import { TableVirtuoso, TableComponents } from 'react-virtuoso';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 
 export interface HeadCell {

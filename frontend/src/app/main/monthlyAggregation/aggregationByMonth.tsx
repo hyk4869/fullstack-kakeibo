@@ -15,7 +15,7 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
 import BarGraph, { MonthlyGrouping } from '@/app/_util/commonGraph/barGraph';
-import { aggregationMonthlyHeaderList } from '@/app/_util/headerList';
+import { aggregationMonthlyHeaderList } from '@/app/_util/commonLayouts/headerList';
 
 type AggregationByMonthProps = {
   //

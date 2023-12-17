@@ -16,7 +16,7 @@ import CustomNumberFormat from '@/app/_customComponents/customNumeric';
 import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import CreateNewRecordsDialog from '@/app/_dialog/hireDateMasterTable/createNewRecordsDialog';
-import { hireDateHeaderList } from '@/app/_util/headerList';
+import { hireDateHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MHireDate } from '@/app/_store/interfacesInfo';
 import useWindowSize from '@/app/_util/useWindowSize';
 

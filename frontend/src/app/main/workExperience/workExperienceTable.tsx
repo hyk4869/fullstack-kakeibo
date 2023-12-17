@@ -18,7 +18,7 @@ import CreateNewRecordsDialog from '@/app/_dialog/workExperienceMasterTable/crea
 import { ShowWorkExperienceMaster } from '@/app/_dialog/workExperienceMasterTable/showWorkExperience';
 import { ReferenceType } from '../category/categoyTable';
 import { sumEachCategory } from '@/app/_util/utilFunctions';
-import { workExperienceHeaderList } from '@/app/_util/headerList';
+import { workExperienceHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCompany } from '@/app/_store/interfacesInfo';
 import useWindowSize from '@/app/_util/useWindowSize';
 
