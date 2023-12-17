@@ -1,6 +1,6 @@
 import { CommonUtils, ItemWithId } from './commonFunctionTypes';
 
-/** Tテーブルで使う共通の関数 */
+/** ジェネリクスで書いた共通の処理 */
 const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
   /**
    * 全選択のクリック関数

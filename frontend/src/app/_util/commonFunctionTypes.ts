@@ -1,7 +1,7 @@
 export type ItemWithId = {
   id: number | null;
 };
-
+/** ジェネリクスで書いた共通の処理 */
 export type CommonUtils<T extends ItemWithId> = {
   /** 全選択のクリック関数 */
   handleSelectAllClick: (
