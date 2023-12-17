@@ -9,8 +9,8 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  TableHead,
 } from '@mui/material';
-import { blue, grey } from '@mui/material/colors';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../_store/store';
@@ -31,16 +31,22 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
   return (
     <>
       <Dialog open={isShowCategoryMaster} onClose={onCloseCategoryMaster}>
-        <DialogTitle sx={{ background: blue[200] }}>カテゴリーID</DialogTitle>
+        <DialogTitle>カテゴリーID</DialogTitle>
         <DialogContent>
           <Box>
             <TableContainer>
               <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">id</TableCell>
+                    <TableCell align="center">カテゴリー名</TableCell>
+                  </TableRow>
+                </TableHead>
                 <TableBody>
                   {categoryData.map((content) => {
                     return (
                       <TableRow key={content.categoryId}>
-                        <TableCell>
+                        <TableCell align="center">
                           <CustomNumberFormat
                             value={content?.categoryId}
                             onChangeValue={changeValue}
@@ -49,7 +55,7 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
                             edit={false}
                           />
                         </TableCell>
-                        <TableCell>
+                        <TableCell align="center">
                           <CustomTextfield
                             value={content?.categoryName}
                             onChangeValue={changeValue}

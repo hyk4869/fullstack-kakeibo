@@ -1,30 +1,15 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { useSelector } from 'react-redux';
-import {
-  Box,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Tooltip,
-} from '@mui/material';
+import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { RootState } from '../../_store/store';
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { grey, red } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import NextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportCSV } from '../../_util/exportCSV';
 import TablePagination from '@mui/material/TablePagination';
-import { visuallyHidden } from '@mui/utils';
 import { categoryHeaders } from '../../_util/exportCSVTitleName';
 import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
@@ -33,6 +18,8 @@ import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import { hireDateHeaderList } from '@/app/_util/headerList';
 import { MHireDate } from '@/app/_store/interfacesInfo';
+import { CommonEditButton } from '../commonContent/commonEditButton';
+import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -188,40 +175,18 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
         fullScreen={true}
       >
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row', padding: '1rem', justifyContent: 'center' }}>
-            {hireDateData.length > 0 ? <Box>レコードの最終ID：{arrayLastId}</Box> : <></>}
-            <Box sx={{ margin: '0 2rem' }}>{makeNewArray.length > 0 ? makeNewArray.length : 0} 件のレコードを追加</Box>
-            <AddCircleOutlineIcon
-              onClick={() => addNewArray()}
-              sx={{ cursor: 'pointer', opacity: '0.5', '&:hover': { opacity: '1' } }}
-            />
-          </Box>
+          <CommonEditButton
+            reduxArray={hireDateData}
+            arrayLastId={arrayLastId}
+            makeNewArray={makeNewArray}
+            addNewArray={addNewArray}
+            showDialog={showDialog}
+            onCloseAddRecords={onCloseAddRecords}
+          />
 
           <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxHeight: '550px' }}>
             <Table>
-              <TableHead>
-                <TableRow>
-                  {hireDateHeaderList.map((headCell) => (
-                    <TableCell
-                      key={headCell.id}
-                      align={'center'}
-                      sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                      <TableSortLabel
-                        active={orderBy === headCell.id}
-                        direction={orderBy === headCell.id ? order : 'asc'}
-                      >
-                        {headCell.label}
-                        {orderBy === headCell.id ? (
-                          <Box component="span" sx={visuallyHidden}>
-                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                          </Box>
-                        ) : null}
-                      </TableSortLabel>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
+              <CommonTableHeader categoryHeaderList={hireDateHeaderList} />
 
               <TableBody>
                 {visibleRows?.map((row) => {
@@ -288,36 +253,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ margin: '0.75rem 0.75rem' }}
-              onClick={() => addNewArray()}
-            >
-              レコード追加
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{ margin: '0.75rem 0.75rem' }}
-              disabled={makeNewArray.length <= 0}
-              onClick={showDialog}
-            >
-              確定
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              sx={{
-                margin: '0.75rem 0.75rem',
-                color: red[500],
-                borderColor: red[500],
-              }}
-              onClick={onCloseAddRecords}
-            >
-              キャンセル
-            </Button>
-          </Box>
+
           {makeNewArray.length < 20 ? (
             <></>
           ) : (

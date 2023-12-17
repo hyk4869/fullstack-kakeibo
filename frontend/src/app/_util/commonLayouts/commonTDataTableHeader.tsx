@@ -52,6 +52,7 @@ const CommonTDataTableHeader = <T,>(props: CommonTDataTableHeaderProps<T>): Reac
             }}
           />
         </TableCell>
+
         {labelList.map((a) => (
           <TableCell
             key={a.id}
