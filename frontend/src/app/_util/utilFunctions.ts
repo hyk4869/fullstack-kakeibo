@@ -166,3 +166,33 @@ export const incrementFromArray = <T, U>(makeNewArray: T[], arrayFormRedux: U[],
     return 1;
   }
 };
+
+/**
+ * CSVをインポートした際にきれいな形に成型する
+ * @param array TMonthlySpending
+ * @returns
+ */
+export const convertMonthlySpendingTypes = <T extends TMonthlySpending>(array: T[]): TMonthlySpending[] => {
+  return array
+    .map((s) => {
+      return {
+        ...s,
+        id: s.id !== null ? parseInt(String(s.id)) : null,
+        paymentDay: s.paymentDay !== null ? new Date(s.paymentDay) : null,
+        categoryId: s.categoryId !== null ? parseInt(String(s.categoryId)) : null,
+        usageFee: s.usageFee !== null ? parseInt(String(s.usageFee)) : null,
+      };
+    })
+    .filter((a) => a.id);
+};
+
+/**
+ * setStateする前にnullCheckを行う。
+ * @param array TMonthlySpending
+ * @returns
+ */
+export const monthlySpendingNullCheck = <T extends TMonthlySpending>(array: T[]): TMonthlySpending[] => {
+  return array.filter(
+    (a) => a.id !== null && a.paymentDay !== null && a.store !== '' && a.usageFee !== null && a.categoryId !== null,
+  );
+};

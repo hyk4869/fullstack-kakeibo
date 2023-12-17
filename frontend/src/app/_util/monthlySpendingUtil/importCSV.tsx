@@ -6,17 +6,20 @@ import React, { SetStateAction, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../_store/store';
 import LoadingContent from '../commonLayouts/loading';
-import { TMonthlySpending } from '@/app/_store/interfacesInfo';
+import { ItemWithId } from '../commonFunctionTypes';
 
-type ImportCSVProps = {
-  setMakeNewArray: React.Dispatch<SetStateAction<TMonthlySpending[]>>;
+type ImportCSVProps<T extends ItemWithId> = {
+  setMakeNewArray: React.Dispatch<SetStateAction<T[]>>;
   setIncrementArray: React.Dispatch<React.SetStateAction<number[]>>;
   setArrayLastId: React.Dispatch<React.SetStateAction<number>>;
   setIncrement: React.Dispatch<React.SetStateAction<number>>;
+  convertTypes: (array: T[]) => T[];
+  nullCheck: (array: T[]) => T[];
 };
 
-export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
-  const { setMakeNewArray, setIncrementArray, setArrayLastId, setIncrement } = props;
+/** ジェネリクスで書いた共通のインポートCSV */
+export const ImportCSV = <T extends ItemWithId>(props: ImportCSVProps<T>): React.ReactElement => {
+  const { setMakeNewArray, setIncrementArray, setArrayLastId, setIncrement, convertTypes, nullCheck } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
@@ -34,20 +37,10 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
     const file = event.target.files?.[0];
     if (file) {
       try {
-        const parsedResult: TMonthlySpending[] = await parseFile(file);
+        const parsedResult: T[] = await parseFile(file);
         setMakeNewArray((prevArray) => {
-          /** きれいな形にする */
-          const findCategoryID = parsedResult
-            .map((s) => {
-              return {
-                ...s,
-                id: s.id !== null ? parseInt(String(s.id)) : null,
-                paymentDay: s.paymentDay !== null ? new Date(s.paymentDay) : null,
-                categoryId: s.categoryId !== null ? parseInt(String(s.categoryId)) : null,
-                usageFee: s.usageFee !== null ? parseInt(String(s.usageFee)) : null,
-              };
-            })
-            .filter((a) => a.id);
+          /**型変換 */
+          const findCategoryID = convertTypes(parsedResult);
 
           /** 重複するIDを持つ要素を更新し、新しい要素を追加する */
           const updatedArray = prevArray.map((a) => {
@@ -58,25 +51,25 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
           /** 重複しないIDを持つ新しい要素を追加する */
           const newArray = [...updatedArray, ...findCategoryID.filter((s) => !updatedArray.some((a) => a.id === s.id))];
 
-          const filteredValue = newArray.filter(
-            (a) => a.paymentDay !== null && a.store !== '' && a.usageFee !== null && a.categoryId !== null,
-          );
+          /**nullチェック */
+          const filteredValue = nullCheck(newArray);
 
           setIncrementArray((prevValue) => {
             return monthlyData.length === 0
               ? newArray.map((a) => Number(a.id))
               : [...prevValue, ...findCategoryID.map((a) => Number(a.id))];
           });
-          setArrayLastId(
-            monthlyData.length === 0
-              ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
-              : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
-          );
-          setIncrement(
-            monthlyData.length === 0
-              ? newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
-              : findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1),
-          );
+
+          const resetID = (): number => {
+            if (monthlyData.length === 0) {
+              return newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1);
+            } else {
+              return findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1);
+            }
+          };
+
+          setArrayLastId(resetID());
+          setIncrement(resetID());
 
           return filteredValue;
         });
@@ -88,13 +81,13 @@ export const ImportCSV: React.FC<ImportCSVProps> = (props) => {
     }
   };
 
-  const parseFile = (file: File): Promise<TMonthlySpending[]> => {
+  const parseFile = (file: File): Promise<T[]> => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       parse(file, {
         complete: (result) => {
           if (result && result.data) {
-            resolve(result.data as TMonthlySpending[]);
+            resolve(result.data as T[]);
           } else {
             reject(new Error('Failed to parse CSV file.'));
           }

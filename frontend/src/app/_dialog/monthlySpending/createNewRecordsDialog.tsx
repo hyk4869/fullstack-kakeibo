@@ -30,7 +30,14 @@ import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
 import { visuallyHidden } from '@mui/utils';
 import { monthlySpendingHeaders } from '../../_util/exportCSVTitleName';
-import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
+import {
+  Order,
+  getComparator,
+  incrementFromArray,
+  stableSort,
+  convertMonthlySpendingTypes,
+  monthlySpendingNullCheck,
+} from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { monthlySpendingHeaderList } from '@/app/_util/headerList';
 import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
@@ -369,11 +376,13 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           }}
         >
           <ExportCSV headerOption={monthlySpendingHeaders} />
-          <ImportCSV
+          <ImportCSV<TMonthlySpending>
             setMakeNewArray={setMakeNewArray}
             setIncrementArray={setIncrementArray}
             setArrayLastId={setArrayLastId}
             setIncrement={setIncrement}
+            convertTypes={convertMonthlySpendingTypes}
+            nullCheck={monthlySpendingNullCheck}
           />
           <Button onClick={() => setIsShowCategoryMaster(true)} variant="outlined">
             カテゴリーIDを参照する
