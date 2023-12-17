@@ -9,7 +9,7 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { grey } from '@mui/material/colors';
 import NextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ExportCSV } from '../../_util/CSV/exportCSV';
+import { ExportExampleCSV } from '../../_util/CSV/exportExampleCSV';
 import TablePagination from '@mui/material/TablePagination';
 import { categoryHeaders } from '../../_util/CSV/exportCSVTitleName';
 import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
@@ -251,7 +251,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             flexDirection: windowSize ? 'column' : 'row',
           }}
         >
-          <ExportCSV headerOption={categoryHeaders} />
+          <ExportExampleCSV headerOption={categoryHeaders} />
           {/* <ImportCSV
               setMakeNewArray={setMakeNewArray}
               setIncrementArray={setIncrementArray}

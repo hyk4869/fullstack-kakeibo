@@ -17,7 +17,7 @@ export const MonthlySpendingListURL: Array<ListContentType> = [
 ];
 
 export const SalaryListURL: Array<ListContentType> = [
-  { label: '給与明細', key: 6, link: '/main/', isMaster: false },
+  { label: '給与明細', key: 6, link: '/main/salary', isMaster: false },
   { label: '給与に対する税金', key: 7, link: '/main/salaryTax', isMaster: false },
   { label: '賞与明細', key: 8, link: '/main/', isMaster: false },
   { label: '賞与に対する税金', key: 9, link: '/main/', isMaster: false },

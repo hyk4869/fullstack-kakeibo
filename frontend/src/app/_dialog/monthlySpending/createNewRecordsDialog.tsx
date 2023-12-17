@@ -13,7 +13,7 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { grey } from '@mui/material/colors';
 import MonthlyNextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ExportCSV } from '../../_util/CSV/exportCSV';
+import { ExportExampleCSV } from '../../_util/CSV/exportExampleCSV';
 import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
 import { monthlySpendingHeaders } from '../../_util/CSV/exportCSVTitleName';
@@ -313,7 +313,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             flexDirection: windowSize ? 'column' : 'row',
           }}
         >
-          <ExportCSV headerOption={monthlySpendingHeaders} />
+          <ExportExampleCSV headerOption={monthlySpendingHeaders} />
           <ImportCSV<TMonthlySpending>
             setMakeNewArray={setMakeNewArray}
             setIncrementArray={setIncrementArray}

@@ -8,11 +8,11 @@ type HeaderOption = {
   key: string;
 };
 
-type ExportCSVProps = {
+type ExportExampleCSVProps = {
   headerOption: HeaderOption[];
 };
 
-export const ExportCSV: React.FC<ExportCSVProps> = (props) => {
+export const ExportExampleCSV: React.FC<ExportExampleCSVProps> = (props) => {
   const { headerOption } = props;
 
   const data: string[][] = [];
