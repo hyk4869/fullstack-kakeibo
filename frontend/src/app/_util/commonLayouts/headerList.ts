@@ -134,6 +134,30 @@ export const workExperienceHeaderList: commonTableHeaderType[] = [
   },
 ];
 
+/** 給与ヘッダー */
+export const saLaryHeaderList: commonTableHeaderType[] = [
+  {
+    id: 'id',
+    label: 'id',
+  },
+  {
+    id: 'companyId',
+    label: '会社ID',
+  },
+  {
+    id: 'payday',
+    label: '支給日',
+  },
+  {
+    id: 'salary',
+    label: '給与',
+  },
+  {
+    id: '',
+    label: '',
+  },
+];
+
 /** 給与に対する税金ヘッダー */
 export const monthlyTaxHeaderList: commonTableHeaderType[] = [
   {

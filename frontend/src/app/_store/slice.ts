@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { MCategory, MCompany, MHireDate, TMonthlySpending, TSalaryTax } from './interfacesInfo';
+import { MCategory, MCompany, MHireDate, TMonthlySpending, TSalary, TSalaryTax } from './interfacesInfo';
 
 /** 月の出費関連 */
 export const getMonthlySpendingContent = createSlice({
@@ -132,6 +132,18 @@ export const getSalaryTax = createSlice({
   },
 });
 
+/** 給与 */
+export const getSalary = createSlice({
+  name: 'getSalary',
+  initialState: [] as TSalary[],
+  reducers: {
+    /** 値の格納 */
+    setSalaryContent: (state, action: PayloadAction<TSalary[]>) => {
+      return [...action.payload];
+    },
+  },
+});
+
 /** edit */
 export const enableEdit = createSlice({
   name: 'enableEdit',
@@ -150,4 +162,5 @@ export const { setCategoryContent, setCreateCategoryContent } = getCategoryConte
 export const { setCompanyContent, setCreateCompanyContent } = getCompanyContent.actions;
 export const { setHireDateContent, setCreateHireDateContent } = getHireDate.actions;
 export const { setSalaryTaxContent } = getSalaryTax.actions;
+export const { setSalaryContent } = getSalary.actions;
 export const { setEnableEdit } = enableEdit.actions;

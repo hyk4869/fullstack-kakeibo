@@ -52,29 +52,44 @@ export interface MHireDate {
   userId: number | null;
 }
 
+/** 給与 */
+export interface TSalary {
+  /** id番号 */
+  id: number | null;
+  /** ユーザーID */
+  userId: number | null;
+  /** 支給日 */
+  payDay: Date | null;
+  /** 給与 */
+  salary: number | null;
+  /** 会社ID */
+  companyId: number | null;
+}
+
+/** 給与に対する税金 */
 export interface TSalaryTax {
   /** id番号 */
-  id: number;
+  id: number | null;
   /** ユーザーID */
-  userId: number;
+  userId: number | null;
   /** 会社ID */
-  companyId: number;
+  companyId: number | null;
   /** 健康保険料 */
-  healthInsuranceExpense: number;
+  healthInsuranceExpense: number | null;
   /** 厚生年金保険料 */
-  employeePensionInsuranceExpense: number;
+  employeePensionInsuranceExpense: number | null;
   /** 国民年金保険料 */
-  nationalPensionInsuranceExpense: number;
+  nationalPensionInsuranceExpense: number | null;
   /** 雇用保険料 */
-  employeeInsuranceExpense: number;
+  employeeInsuranceExpense: number | null;
   /** 介護保険料 */
-  longTermCareInsurance: number;
+  longTermCareInsurance: number | null;
   /** 所得税 */
-  incomeTax: number;
+  incomeTax: number | null;
   /** 住民税 */
-  residenceTax: number;
+  residenceTax: number | null;
   /** 年末調整額 */
-  yearEndAdjustment: number;
+  yearEndAdjustment: number | null;
   /** その他 */
-  notes: number;
+  notes: number | null;
 }

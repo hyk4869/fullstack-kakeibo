@@ -5,6 +5,7 @@ import {
   getCompanyContent,
   getHireDate,
   getMonthlySpendingContent,
+  getSalary,
   getSalaryTax,
 } from './slice';
 
@@ -16,6 +17,7 @@ export const store = configureStore({
     getHireDate: getHireDate.reducer,
     enableEdit: enableEdit.reducer,
     getSalaryTax: getSalaryTax.reducer,
+    getSalary: getSalary.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
