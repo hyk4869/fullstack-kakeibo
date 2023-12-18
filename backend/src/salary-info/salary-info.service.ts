@@ -13,4 +13,13 @@ export class SalaryInfoService {
     });
     return result;
   }
+
+  async getSalary() {
+    const result = await this.prisma.tSalary.findMany({
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return result;
+  }
 }
