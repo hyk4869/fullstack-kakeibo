@@ -59,7 +59,7 @@ export interface TSalary {
   /** ユーザーID */
   userId: number | null;
   /** 支給日 */
-  payDay: Date | null;
+  payday: Date | null;
   /** 給与 */
   salary: number | null;
   /** 会社ID */

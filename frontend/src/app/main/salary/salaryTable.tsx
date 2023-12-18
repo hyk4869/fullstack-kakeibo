@@ -1,6 +1,17 @@
 'use client';
 
-import { Box, Paper, Table, TableBody, TableContainer, Toolbar } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TablePagination,
+  TableRow,
+  Toolbar,
+} from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
@@ -15,6 +26,14 @@ import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import { TSalary } from '@/app/_store/interfacesInfo';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import { saLaryHeaderList } from '@/app/_util/commonLayouts/headerList';
+import { commonPadding5 } from '@/app/_customComponents/customProperties';
+import CustomNumberFormat from '../../_customComponents/customNumeric';
+import CustomDate from '@/app/_customComponents/customDate';
+import dayjs from 'dayjs';
+import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
+import axios from 'axios';
+import { setSalaryContent } from '@/app/_store/slice';
+import { getSalary } from '@/app/_api/url';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -115,10 +134,34 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
   }, [width, height]);
 
   useEffect(() => {
+    try {
+      if (salaryData.length === 0) {
+        setIsLoading(true);
+        axios
+          .get(getSalary)
+          .then((res) => {
+            if (res.data) {
+              dispatch(setSalaryContent(res.data));
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [salaryData]);
+
+  console.log(salaryData, editValue);
+  useEffect(() => {
     if (salaryData.length !== editValue.length) {
       setEditValue(salaryData);
     }
-  }, [salaryData, enableEdit]);
+  }, [salaryData]);
 
   /** 全選択のクリック関数 */
   const selectAllClick = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -181,7 +224,7 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
             windowSize={windowSize}
           />
           <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
-            <Table>
+            <Table stickyHeader aria-label="sticky table">
               <CommonTDataTableHeader<TSalary>
                 numSelected={selected.length}
                 order={order}
@@ -192,9 +235,85 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
                 setOrderBy={setOrderBy}
                 labelList={saLaryHeaderList}
               />
-              <TableBody></TableBody>
+              <TableBody>
+                {visibleRows.map((row, index) => {
+                  const isItemSelected = row.id !== null ? selectedData(row.id as number) : undefined;
+                  const labelId = `enhanced-table-checkbox-${index}`;
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            'aria-labelledby': labelId,
+                          }}
+                          onClick={(event) => {
+                            if (row.id !== null) {
+                              selectContent(event, row.id as number);
+                            }
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell component="th" id={labelId} scope="row" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={row.id}
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'id'}
+                          id={Number(row.id)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={row.companyId}
+                          edit={row.id === rowNumber ? isEditable : false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'companyId'}
+                          id={Number(row.id)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomDate
+                          value={dayjs(row.payday)}
+                          edit={row.id === rowNumber ? isEditable : false}
+                          onChangeValue={changeValue}
+                          paramKey={'payday'}
+                          id={Number(row.id)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={row.salary}
+                          edit={row.id === rowNumber ? isEditable : false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'salary'}
+                          id={Number(row.id)}
+                        />
+                      </TableCell>
+                      <CommonEditDeleteIcon
+                        individualEdit={() => individualEdit(row.id as number)}
+                        deleteValue={() => deleteValue(row.id as number)}
+                        edit={edit}
+                      />
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
             </Table>
           </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[20, 50, 100]}
+            component="div"
+            count={salaryData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={changePage}
+            onRowsPerPageChange={changeRowsPerPage}
+          />
         </Paper>
       </Box>
     </>

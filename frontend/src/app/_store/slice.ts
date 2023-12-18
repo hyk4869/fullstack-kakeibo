@@ -139,7 +139,13 @@ export const getSalary = createSlice({
   reducers: {
     /** 値の格納 */
     setSalaryContent: (state, action: PayloadAction<TSalary[]>) => {
-      return [...action.payload];
+      const v = action.payload.map((a) => {
+        return {
+          ...a,
+          payday: a.payday ? new Date(a.payday) : null,
+        };
+      });
+      return [...v];
     },
   },
 });

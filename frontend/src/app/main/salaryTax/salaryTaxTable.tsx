@@ -97,7 +97,7 @@ type SalaryTaxProps = {
 };
 
 const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
-  const SalaryTaxData = useSelector((state: RootState) => state.getSalaryTax);
+  const salaryTaxData = useSelector((state: RootState) => state.getSalaryTax);
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
   const { width, height } = useWindowSize();
@@ -139,7 +139,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
 
   useEffect(() => {
     try {
-      if (SalaryTaxData.length === 0) {
+      if (salaryTaxData.length === 0) {
         setIsLoading(true);
         axios
           .get(getSalaryTax)
@@ -158,13 +158,13 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [SalaryTaxData]);
+  }, [salaryTaxData]);
 
   useEffect(() => {
-    if (SalaryTaxData.length !== editValue.length) {
-      setEditValue(SalaryTaxData);
+    if (salaryTaxData.length !== editValue.length) {
+      setEditValue(salaryTaxData);
     }
-  }, [SalaryTaxData]);
+  }, [salaryTaxData]);
 
   /** 全選択のクリック関数 */
   const selectAllClick = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -215,7 +215,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
           <EnhancedTableToolbar
             numSelected={selected.length}
             edit={edit}
-            dataLength={SalaryTaxData.length}
+            dataLength={salaryTaxData.length}
             handleEditFlag={editFlag}
             saveValue={saveValue}
             deleteArrayValue={deleteArrayValue}
@@ -231,7 +231,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                 order={order}
                 orderBy={orderBy}
                 onSelectAllClick={selectAllClick}
-                rowCount={SalaryTaxData.length}
+                rowCount={salaryTaxData.length}
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
                 labelList={monthlyTaxHeaderList}
@@ -405,7 +405,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
           <TablePagination
             rowsPerPageOptions={[20, 50, 75]}
             component="div"
-            count={SalaryTaxData.length}
+            count={salaryTaxData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={changePage}
