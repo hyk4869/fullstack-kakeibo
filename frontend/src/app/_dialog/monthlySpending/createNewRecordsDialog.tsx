@@ -171,6 +171,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     [page, rowsPerPage],
   );
 
+  /** 次へ進むためのboolean */
+  const showDialog = () => {
+    setIsShowDialog(!isShowDialog);
+  };
+
   const visibleRows = useMemo(
     () =>
       stableSort(makeNewArray, getComparator(order, orderBy)).slice(
@@ -179,11 +184,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
       ),
     [order, orderBy, page, rowsPerPage, makeNewArray],
   );
-
-  /** 次へ進むためのboolean */
-  const showDialog = () => {
-    setIsShowDialog(!isShowDialog);
-  };
 
   return (
     <Box sx={{ width: '100%' }}>
