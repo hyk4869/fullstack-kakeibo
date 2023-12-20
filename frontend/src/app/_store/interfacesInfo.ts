@@ -19,7 +19,7 @@ export interface TMonthlySpending {
 /** カテゴリー */
 export interface MCategory {
   /** カテゴリーID */
-  categoryId: number | null;
+  id: number | null;
   /** カテゴリー名 */
   categoryName: string | null;
   /** ユーザーID */

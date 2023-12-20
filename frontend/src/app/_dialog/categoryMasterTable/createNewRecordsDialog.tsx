@@ -12,12 +12,20 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportExampleCSV } from '../../_util/CSV/exportExampleCSV';
 import TablePagination from '@mui/material/TablePagination';
 import { categoryHeaders } from '../../_util/CSV/exportCSVTitleName';
-import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
+import {
+  Order,
+  categoryNullCheck,
+  convertCategoryTypes,
+  getComparator,
+  incrementFromArray,
+  stableSort,
+} from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { categoryHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCategory } from '@/app/_store/interfacesInfo';
 import { CommonEditButton } from '../commonContent/commonEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
+import { ImportCSV } from '@/app/_util/CSV/importCSV';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -36,7 +44,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof MCategory>('categoryId');
+  const [orderBy, setOrderBy] = useState<keyof MCategory>('id');
   const [windowSize, setWindowSize] = useState<boolean>(false);
 
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
@@ -46,7 +54,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     if (categoryData && categoryData.length >= 0) {
       const ID: number =
         categoryData.length !== 0 || categoryData !== undefined
-          ? categoryData.reduce((maxId, item) => Math.max(maxId, item.categoryId ?? 0), 1)
+          ? categoryData.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
           : 1;
       setArrayLastId(ID);
       setIncrement(ID);
@@ -71,10 +79,10 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const addNewArray = useCallback(() => {
     const incrementIdFromArray = incrementFromArray(makeNewArray, categoryData, incrementArray);
 
-    const lastId = makeNewArray.slice(-1)[0]?.categoryId;
+    const lastId = makeNewArray.slice(-1)[0]?.id;
     if (lastId && incrementIdFromArray === lastId) return;
     const newCategory = {
-      categoryId: incrementIdFromArray,
+      id: incrementIdFromArray,
       categoryName: '',
       userId: null,
     };
@@ -87,7 +95,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const deleteValue = useCallback(
     (id: number | null) => {
       if (id === arrayLastId) return;
-      const deletedArray = makeNewArray.filter((a) => a.categoryId !== id);
+      const deletedArray = makeNewArray.filter((a) => a.id !== id);
       setMakeNewArray(deletedArray);
 
       if (id !== null) {
@@ -97,7 +105,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           prevId.map((a) => {
             return {
               ...a,
-              categoryId: a.categoryId && a.categoryId > id ? a.categoryId - 1 : a.categoryId,
+              categoryId: a.id && a.id > id ? a.id - 1 : a.id,
             };
           }),
         );
@@ -112,11 +120,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     (id: number, paramKey: string, value: unknown) => {
       setMakeNewArray((prevArray) => {
         return prevArray.map((row) => {
-          if (row.categoryId === id) {
+          if (row.id === id) {
             const updatedRow = { ...row };
             switch (paramKey) {
-              case 'categoryId':
-                updatedRow.categoryId = value === '' ? null : (value as number);
+              case 'id':
+                updatedRow.id = value === '' ? null : (value as number);
                 break;
               case 'categoryName':
                 updatedRow.categoryName = value === '' ? null : (value as string);
@@ -185,19 +193,19 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                   return (
                     <TableRow
                       tabIndex={-1}
-                      key={Number(row?.categoryId)}
+                      key={Number(row?.id)}
                       sx={{
                         cursor: 'pointer',
                       }}
                     >
-                      <TableCell component="th" id={String(row?.categoryId)} scope="row?">
+                      <TableCell component="th" id={String(row?.id)} scope="row?">
                         <CustomNumberFormat
-                          value={row?.categoryId}
+                          value={row?.id}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'categoryId'}
-                          id={Number(row?.categoryId)}
+                          paramKey={'id'}
+                          id={Number(row?.id)}
                         />
                       </TableCell>
 
@@ -206,13 +214,13 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           value={row?.categoryName}
                           onChangeValue={changeValue}
                           paramKey={'categoryName'}
-                          id={Number(row?.categoryId)}
+                          id={Number(row?.id)}
                           edit={edit}
                         />
                       </TableCell>
 
                       <TableCell align="center">
-                        <IconButton onClick={() => deleteValue(row.categoryId)} disabled={!edit}>
+                        <IconButton onClick={() => deleteValue(row.id)} disabled={!edit}>
                           <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
                         </IconButton>
                       </TableCell>
@@ -252,12 +260,14 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           }}
         >
           <ExportExampleCSV headerOption={categoryHeaders} />
-          {/* <ImportCSV
-              setMakeNewArray={setMakeNewArray}
-              setIncrementArray={setIncrementArray}
-              setArrayLastId={setArrayLastId}
-              setIncrement={setIncrement}
-            /> */}
+          <ImportCSV<MCategory>
+            setMakeNewArray={setMakeNewArray}
+            setIncrementArray={setIncrementArray}
+            setArrayLastId={setArrayLastId}
+            setIncrement={setIncrement}
+            convertTypes={convertCategoryTypes}
+            nullCheck={categoryNullCheck}
+          />
         </Box>
 
         <NextActionDialog

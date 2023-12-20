@@ -8,4 +8,13 @@ export type CommonFunctionsTypes<T extends ItemWithId> = {
     setPage: React.Dispatch<React.SetStateAction<number>>,
   ) => void;
   showDialog: (setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>, isShowDialog: boolean) => void;
+  handleDeleteValue: (
+    id: number | null,
+    arrayLastId: number,
+    makeNewArray: T[],
+    setMakeNewArray: React.Dispatch<React.SetStateAction<T[]>>,
+    incrementArray: number[],
+    setIncrementArray: React.Dispatch<React.SetStateAction<number[]>>,
+    setIncrement: React.Dispatch<React.SetStateAction<number>>,
+  ) => void;
 };

@@ -72,11 +72,11 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
     (id: number, paramKey: string, value: unknown) => {
       setEditCategoryValue((prevArray) => {
         return prevArray.map((d) => {
-          if (d.categoryId === id) {
+          if (d.id === id) {
             const updateValue = { ...d };
             switch (paramKey) {
               case 'categoryId':
-                updateValue.categoryId = value === '' ? null : (value as number);
+                updateValue.id = value === '' ? null : (value as number);
                 break;
               case 'categoryName':
                 updateValue.categoryName = value === '' ? null : (value as string);
@@ -122,15 +122,15 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
               <TableBody>
                 {editCategoryValue.map((a) => {
                   return (
-                    <TableRow key={a.categoryId} sx={{ padding: commonPadding5 }}>
+                    <TableRow key={a.id} sx={{ padding: commonPadding5 }}>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={a.categoryId}
+                          value={a.id}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'categoryId'}
-                          id={Number(a.categoryId)}
+                          paramKey={'id'}
+                          id={Number(a.id)}
                         />
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
@@ -139,7 +139,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'categoryName'}
-                          id={Number(a.categoryId)}
+                          id={Number(a.id)}
                         />
                       </TableCell>
                     </TableRow>

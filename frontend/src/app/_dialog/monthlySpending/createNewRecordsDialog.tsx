@@ -252,9 +252,9 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                       <TableCell align="center">
                         <CustomSelectTab
                           list={categoryData.map((a: MCategory) => {
-                            return { value: Number(a.categoryId), label: String(a.categoryName) };
+                            return { value: Number(a.id), label: String(a.categoryName) };
                           })}
-                          value={categoryData.find((a) => a.categoryId === row?.categoryId)?.categoryId ?? null}
+                          value={categoryData.find((a) => a.id === row?.categoryId)?.id ?? null}
                           edit={edit}
                           paramKey={'categoryId'}
                           id={Number(row?.id)}

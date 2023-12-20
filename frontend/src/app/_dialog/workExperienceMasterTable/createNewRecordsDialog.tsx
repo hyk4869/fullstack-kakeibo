@@ -11,13 +11,21 @@ import NextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportExampleCSV } from '../../_util/CSV/exportExampleCSV';
 import TablePagination from '@mui/material/TablePagination';
-import { categoryHeaders } from '../../_util/CSV/exportCSVTitleName';
-import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
+import { companyHeaders } from '../../_util/CSV/exportCSVTitleName';
+import {
+  Order,
+  companyNullCheck,
+  convertCompanyTypes,
+  getComparator,
+  incrementFromArray,
+  stableSort,
+} from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { workExperienceHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCompany } from '@/app/_store/interfacesInfo';
 import { CommonEditButton } from '../commonContent/commonEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
+import { ImportCSV } from '@/app/_util/CSV/importCSV';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -265,13 +273,15 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             flexDirection: windowSize ? 'column' : 'row',
           }}
         >
-          <ExportExampleCSV headerOption={categoryHeaders} />
-          {/* <ImportCSV
-              setMakeNewArray={setMakeNewArray}
-              setIncrementArray={setIncrementArray}
-              setArrayLastId={setArrayLastId}
-              setIncrement={setIncrement}
-            /> */}
+          <ExportExampleCSV headerOption={companyHeaders} />
+          <ImportCSV<MCompany>
+            setMakeNewArray={setMakeNewArray}
+            setIncrementArray={setIncrementArray}
+            setArrayLastId={setArrayLastId}
+            setIncrement={setIncrement}
+            convertTypes={convertCompanyTypes}
+            nullCheck={companyNullCheck}
+          />
         </Box>
 
         <NextActionDialog

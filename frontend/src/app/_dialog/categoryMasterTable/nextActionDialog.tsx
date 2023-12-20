@@ -22,14 +22,14 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
 
   const saveValue = async (): Promise<void> => {
     setIsLoading(true);
-    if (content.every((d) => d.categoryId !== null && d.categoryName !== null)) {
+    if (content.every((d) => d.id !== null && d.categoryName !== null)) {
       try {
         const idSet = new Set<number | null>();
         const hasDuplicate = content.some((d) => {
-          if (idSet.has(d.categoryId)) {
+          if (idSet.has(d.id)) {
             return true;
           } else {
-            idSet.add(d.categoryId);
+            idSet.add(d.id);
             return false;
           }
         });
@@ -66,7 +66,7 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
           </DialogContentText>
           <br />
           <DialogContentText id="alert-dialog-description">
-            {`レコードid ${content.map((a) => a.categoryId).join(' , ')} が追加の対象となります。`}
+            {`レコードid ${content.map((a) => a.id).join(' , ')} が追加の対象となります。`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

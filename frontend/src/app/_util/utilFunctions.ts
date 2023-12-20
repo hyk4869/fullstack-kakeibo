@@ -1,4 +1,4 @@
-import { MCategory, TMonthlySpending } from '../_store/interfacesInfo';
+import { MCategory, MCompany, MHireDate, TMonthlySpending } from '../_store/interfacesInfo';
 import { ReferenceType } from '../main/category/categoyTable';
 import { AmoutType, MonthlyGrouping } from './commonGraph/barGraph';
 
@@ -68,7 +68,7 @@ export const sumEachCategory = (categoryData: MCategory[], monthlyData: TMonthly
 
   categoryData.forEach((category: MCategory) => {
     const categoryName = category.categoryName;
-    const categoryId = category.categoryId;
+    const categoryId = category.id;
 
     const findMonthlyData = monthlyData.filter(
       (monthly: TMonthlySpending) => monthly.category?.categoryName === categoryName,
@@ -195,4 +195,85 @@ export const monthlySpendingNullCheck = <T extends TMonthlySpending>(array: T[])
   return array.filter(
     (a) => a.id !== null && a.paymentDay !== null && a.store !== '' && a.usageFee !== null && a.categoryId !== null,
   );
+};
+
+/**
+ * CSVをインポートした際にきれいな形に成型する
+ * @param array MCategory
+ * @returns
+ */
+export const convertCategoryTypes = <T extends MCategory>(array: T[]): MCategory[] => {
+  return array
+    .map((s) => {
+      return {
+        ...s,
+        id: s.id !== null ? parseInt(String(s.id)) : null,
+        categoryName: s.categoryName !== null ? String(s.categoryName) : null,
+      };
+    })
+    .filter((a) => a.id);
+};
+
+/**
+ * setStateする前にnullCheckを行う。
+ * @param array MCategory
+ * @returns
+ */
+export const categoryNullCheck = <T extends MCategory>(array: T[]): MCategory[] => {
+  return array.filter((a) => a.id !== null && a.categoryName !== '');
+};
+
+/**
+ * CSVをインポートした際にきれいな形に成型する
+ * @param array MCompany
+ * @returns
+ */
+export const convertCompanyTypes = <T extends MCompany>(array: T[]): MCompany[] => {
+  return array
+    .map((s) => {
+      return {
+        ...s,
+        categoryId: s.id !== null ? parseInt(String(s.id)) : null,
+        categoryName: s.name !== null ? String(s.name) : null,
+        majorSector: s.majorSector !== null ? String(s.majorSector) : null,
+      };
+    })
+    .filter((a) => a.categoryId);
+};
+
+/**
+ * setStateする前にnullCheckを行う。
+ * @param array MCompany
+ * @returns
+ */
+export const companyNullCheck = <T extends MCompany>(array: T[]): MCompany[] => {
+  return array.filter((a) => a.id !== null && a.name !== '' && a.majorSector !== '');
+};
+
+/**
+ * CSVをインポートした際にきれいな形に成型する
+ * @param array MHireDate
+ * @returns
+ */
+export const convertHireDateTypes = <T extends MHireDate>(array: T[]): MHireDate[] => {
+  return array
+    .map((s) => {
+      return {
+        ...s,
+        id: s.id !== null ? parseInt(String(s.id)) : null,
+        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
+        hireDate: s.hireDate !== null ? new Date(s.hireDate) : null,
+        retirementDate: s.retirementDate !== null ? new Date(s.retirementDate) : null,
+      };
+    })
+    .filter((a) => a.id);
+};
+
+/**
+ * setStateする前にnullCheckを行う。
+ * @param array MHireDate
+ * @returns
+ */
+export const hireDateNullCheck = <T extends MHireDate>(array: T[]): MHireDate[] => {
+  return array.filter((a) => a.id !== null && a.companyId !== null && a.hireDate !== null);
 };

@@ -10,8 +10,15 @@ import NextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportExampleCSV } from '../../_util/CSV/exportExampleCSV';
 import TablePagination from '@mui/material/TablePagination';
-import { categoryHeaders } from '../../_util/CSV/exportCSVTitleName';
-import { Order, getComparator, incrementFromArray, stableSort } from '@/app/_util/utilFunctions';
+import { hireDateHeaders } from '../../_util/CSV/exportCSVTitleName';
+import {
+  Order,
+  convertHireDateTypes,
+  getComparator,
+  hireDateNullCheck,
+  incrementFromArray,
+  stableSort,
+} from '@/app/_util/utilFunctions';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CustomDate from '@/app/_customComponents/customDate';
@@ -20,6 +27,7 @@ import { hireDateHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MHireDate } from '@/app/_store/interfacesInfo';
 import { CommonEditButton } from '../commonContent/commonEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
+import { ImportCSV } from '@/app/_util/CSV/importCSV';
 
 type CreateNewRecordsDialogProps = {
   openDialog: boolean;
@@ -282,13 +290,15 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             flexDirection: windowSize ? 'column' : 'row',
           }}
         >
-          <ExportExampleCSV headerOption={categoryHeaders} />
-          {/* <ImportCSV
-              setMakeNewArray={setMakeNewArray}
-              setIncrementArray={setIncrementArray}
-              setArrayLastId={setArrayLastId}
-              setIncrement={setIncrement}
-            /> */}
+          <ExportExampleCSV headerOption={hireDateHeaders} />
+          <ImportCSV<MHireDate>
+            setMakeNewArray={setMakeNewArray}
+            setIncrementArray={setIncrementArray}
+            setArrayLastId={setArrayLastId}
+            setIncrement={setIncrement}
+            convertTypes={convertHireDateTypes}
+            nullCheck={hireDateNullCheck}
+          />
         </Box>
 
         <NextActionDialog

@@ -156,7 +156,6 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
     }
   }, [salaryData]);
 
-  console.log(salaryData, editValue);
   useEffect(() => {
     if (salaryData.length !== editValue.length) {
       setEditValue(salaryData);

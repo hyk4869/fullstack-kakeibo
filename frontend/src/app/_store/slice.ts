@@ -62,10 +62,10 @@ export const getCategoryContent = createSlice({
     },
     /** 値の作成 */
     setCreateCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
-      const newValue = action.payload.filter((a) => a.categoryId !== null && a.categoryId > 0);
-      const valueCheck = state.map((a) => a.categoryId);
+      const newValue = action.payload.filter((a) => a.id !== null && a.id > 0);
+      const valueCheck = state.map((a) => a.id);
       newValue.forEach((a) => {
-        if (valueCheck.includes(a.categoryId)) {
+        if (valueCheck.includes(a.id)) {
           throw new Error('idが重複しています。');
         }
       });

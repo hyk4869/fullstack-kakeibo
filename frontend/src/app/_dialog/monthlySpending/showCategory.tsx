@@ -45,13 +45,13 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
                 <TableBody>
                   {categoryData.map((content) => {
                     return (
-                      <TableRow key={content.categoryId}>
+                      <TableRow key={content.id}>
                         <TableCell align="center">
                           <CustomNumberFormat
-                            value={content?.categoryId}
+                            value={content?.id}
                             onChangeValue={changeValue}
                             paramKey={'store'}
-                            id={Number(content?.categoryId)}
+                            id={Number(content?.id)}
                             edit={false}
                           />
                         </TableCell>
@@ -60,7 +60,7 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
                             value={content?.categoryName}
                             onChangeValue={changeValue}
                             paramKey={'store'}
-                            id={Number(content?.categoryId)}
+                            id={Number(content?.id)}
                             edit={false}
                           />
                         </TableCell>

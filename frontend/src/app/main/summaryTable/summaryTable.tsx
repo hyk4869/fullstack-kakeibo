@@ -203,7 +203,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   /** listのメモ化 */
   const generateCategoryList = useCallback(() => {
     return categoryData.map((a: MCategory) => ({
-      value: Number(a.categoryId),
+      value: Number(a.id),
       label: String(a.categoryName),
     }));
   }, [categoryData]);
@@ -397,7 +397,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomSelectTab
                         list={generateCategoryList()}
-                        value={categoryData.find((a) => a.categoryId === row.categoryId)?.categoryId ?? null}
+                        value={categoryData.find((a) => a.id === row.categoryId)?.id ?? null}
                         edit={row.id === rowNumber ? isEditable : false}
                         paramKey={'categoryId'}
                         id={Number(row?.id)}
