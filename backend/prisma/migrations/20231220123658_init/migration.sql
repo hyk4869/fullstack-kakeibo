@@ -81,13 +81,13 @@ CREATE TABLE "TTaxBonus" (
 
 -- CreateTable
 CREATE TABLE "MCategory" (
-    "categoryId" SERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "categoryName" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "MCategory_pkey" PRIMARY KEY ("categoryId")
+    CONSTRAINT "MCategory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -118,7 +118,7 @@ CREATE TABLE "MHireDate" (
 );
 
 -- AddForeignKey
-ALTER TABLE "TMonthlySpending" ADD CONSTRAINT "TMonthlySpending_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "MCategory"("categoryId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "TMonthlySpending" ADD CONSTRAINT "TMonthlySpending_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "MCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TSalary" ADD CONSTRAINT "TSalary_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "MCompany"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

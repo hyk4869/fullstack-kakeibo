@@ -20,7 +20,7 @@ model TMonthlySpending {
   notes     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  category  MCategory?  @relation(fields: [categoryId], references: [categoryId])
+  category  MCategory?  @relation(fields: [categoryId], references: [id])
 }
 
 model TSalary {
@@ -89,7 +89,7 @@ model TTaxBonus {
 }
 
 model MCategory {
-  categoryId   Int      @id @default(autoincrement())
+  id   Int      @id @default(autoincrement())
   userId       Int
   categoryName String
   createdAt    DateTime @default(now())
