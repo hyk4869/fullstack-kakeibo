@@ -28,7 +28,7 @@ import LoadingContent from '../../_util/commonLayouts/loading';
 import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import axios from 'axios';
-import { getSalaryTax } from '@/app/_api/url';
+import { getBonusTax } from '@/app/_api/url';
 import { setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
@@ -136,7 +136,7 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
       if (bonusTaxData.length === 0) {
         setIsLoading(true);
         axios
-          .get(getSalaryTax)
+          .get(getBonusTax)
           .then((res) => {
             if (res.data) {
               dispatch(setSalaryTaxContent(res.data));
