@@ -17,7 +17,7 @@ import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CreateNewRecordsDialog from '@/app/_dialog/workExperienceMasterTable/createNewRecordsDialog';
 import { ShowWorkExperienceMaster } from '@/app/_dialog/workExperienceMasterTable/showWorkExperience';
 import { ReferenceType } from '../category/categoyTable';
-import { sumEachCategory } from '@/app/_util/utilFunctions';
+import { sumEachCategory } from '@/app/_util/utils';
 import { workExperienceHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCompany } from '@/app/_store/interfacesInfo';
 import useWindowSize from '@/app/_util/useWindowSize';

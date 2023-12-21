@@ -19,7 +19,7 @@ import {
   getComparator,
   incrementFromArray,
   stableSort,
-} from '@/app/_util/utilFunctions';
+} from '@/app/_util/utils';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { workExperienceHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCompany } from '@/app/_store/interfacesInfo';

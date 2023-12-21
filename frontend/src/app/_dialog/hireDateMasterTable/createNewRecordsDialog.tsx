@@ -18,7 +18,7 @@ import {
   hireDateNullCheck,
   incrementFromArray,
   stableSort,
-} from '@/app/_util/utilFunctions';
+} from '@/app/_util/utils';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CustomDate from '@/app/_customComponents/customDate';

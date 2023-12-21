@@ -29,7 +29,7 @@ import { getMonthlySpending, postDeleteMonthlySpending } from '../../_api/url';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import FetchDataDialog from './fetchDataDialog';
 import useWindowSize from '@/app/_util/useWindowSize';
-import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
+import { Order, getComparator, stableSort } from '@/app/_util/utils';
 import { monthlySpendingHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';

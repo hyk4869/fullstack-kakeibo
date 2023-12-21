@@ -24,7 +24,7 @@ import {
   stableSort,
   convertMonthlySpendingTypes,
   monthlySpendingNullCheck,
-} from '@/app/_util/utilFunctions';
+} from '@/app/_util/utils';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { monthlySpendingHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { TMonthlySpending, MCategory } from '@/app/_store/interfacesInfo';

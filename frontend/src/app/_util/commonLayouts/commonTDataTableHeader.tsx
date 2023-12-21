@@ -1,5 +1,5 @@
 import React from 'react';
-import { Order } from '../utilFunctions';
+import { Order } from '../utils';
 import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { commonTableHeaderType } from './commonTableHeader';

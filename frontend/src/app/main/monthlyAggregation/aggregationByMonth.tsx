@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomDate from '../../_customComponents/customDate';
 import dayjs from 'dayjs';
-import { calcAvg, getLatestDate, getOldDate, sumAmount, sumEachMonthlyArray } from '@/app/_util/utilFunctions';
+import { calcAvg, getLatestDate, getOldDate, sumAmount, sumEachMonthlyArray } from '@/app/_util/utils';
 import CustomTextfield from '@/app/_customComponents/customTextfield';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonFooterAggregation from './commonFooter';

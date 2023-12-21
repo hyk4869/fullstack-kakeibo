@@ -13,7 +13,7 @@ import { ValueObjType } from '@/app/_customComponents/customRadioButton';
 import BarGraph, { AmoutType } from '@/app/_util/commonGraph/barGraph';
 import RedirectDialog from '@/app/_util/commonLayouts/redirectDialog';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
-import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utilFunctions';
+import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utils';
 import CommonFooterAggregation from './commonFooter';
 import { aggregationHeaderList } from '@/app/_util/commonLayouts/headerList';
 

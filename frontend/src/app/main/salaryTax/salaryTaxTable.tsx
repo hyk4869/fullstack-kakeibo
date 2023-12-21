@@ -18,7 +18,7 @@ import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
 import { TSalaryTax } from '@/app/_store/interfacesInfo';
 import { alpha } from '@mui/material/styles';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
-import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
+import { Order, getComparator, stableSort } from '@/app/_util/utils';
 import { monthlyTaxHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/_store/store';

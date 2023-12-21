@@ -18,7 +18,7 @@ import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import { alpha } from '@mui/material/styles';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import { grey } from '@mui/material/colors';
-import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
+import { Order, getComparator, stableSort } from '@/app/_util/utils';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/_store/store';
