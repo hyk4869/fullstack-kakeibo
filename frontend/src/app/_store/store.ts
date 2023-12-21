@@ -1,6 +1,8 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import {
   enableEdit,
+  getBonus,
+  getBonusTax,
   getCategoryContent,
   getCompanyContent,
   getHireDate,
@@ -18,6 +20,8 @@ export const store = configureStore({
     enableEdit: enableEdit.reducer,
     getSalaryTax: getSalaryTax.reducer,
     getSalary: getSalary.reducer,
+    getBonusTax: getBonusTax.reducer,
+    getBonus: getBonus.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

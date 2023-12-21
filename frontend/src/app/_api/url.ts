@@ -17,3 +17,7 @@ export const getHireDate = `${commonURL}/companyInfo/hireDate`;
 export const getSalaryTax = `${commonURL}/salaryInfo/salaryTax`;
 /** 給与情報を取ってくる */
 export const getSalary = `${commonURL}/salaryInfo/salary`;
+/** 賞与に対する税金情報を取ってくる */
+export const getBonusTax = `${commonURL}/salaryInfo/bonusTax`;
+/** 賞与情報を取ってくる */
+export const getBonus = `${commonURL}/salaryInfo/bonus`;

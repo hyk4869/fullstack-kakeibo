@@ -1,7 +1,7 @@
 'use client';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Paper, Tab } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { grey, yellow } from '@mui/material/colors';
 import React, { useEffect, useState } from 'react';
 import AggregationByCategory from './aggregationByCategory';
 import useWindowSize from '@/app/_util/useWindowSize';
@@ -35,8 +35,9 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
           <TabContext value={changePage}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={hamdleChangePage}>
-                <Tab label="カテゴリー毎の集計" value="1" />
-                <Tab label="各期間の集計" value="2" />
+                <Tab label="カテゴリー毎の集計" value="1" sx={{ background: grey[200] }} />
+                <Tab label="各期間の集計" value="2" sx={{ background: grey[200] }} />
+                <Tab label="一ヶ月毎の内訳" value="3" sx={{ background: grey[200] }} />
               </TabList>
             </Box>
             <TabPanel value="1" sx={{ padding: windowSize ? '0px' : '' }}>
@@ -45,6 +46,7 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
             <TabPanel value="2" sx={{ padding: windowSize ? '0px' : '' }}>
               <AggregationByMonth />
             </TabPanel>
+            <TabPanel value="3" sx={{ padding: windowSize ? '0px' : '' }}></TabPanel>
           </TabContext>
         </Paper>
       </Box>

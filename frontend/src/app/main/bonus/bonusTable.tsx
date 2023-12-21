@@ -11,28 +11,29 @@ import {
   TablePagination,
   TableRow,
   Toolbar,
-  Tooltip,
 } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
-import { TSalaryTax } from '@/app/_store/interfacesInfo';
+import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import { alpha } from '@mui/material/styles';
-import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
+import LoadingContent from '../../_util/commonLayouts/loading';
+import { grey } from '@mui/material/colors';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
-import { monthlyTaxHeaderList } from '@/app/_util/commonLayouts/headerList';
+import useWindowSize from '@/app/_util/useWindowSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/_store/store';
-import { grey } from '@mui/material/colors';
-import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
-import LoadingContent from '../../_util/commonLayouts/loading';
-import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
-import axios from 'axios';
-import { getSalaryTax } from '@/app/_api/url';
-import { setSalaryTaxContent } from '@/app/_store/slice';
-import CustomNumberFormat from '../../_customComponents/customNumeric';
+import { TBonus } from '@/app/_store/interfacesInfo';
+import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
+import { saLaryHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
+import CustomNumberFormat from '../../_customComponents/customNumeric';
+import CustomDate from '@/app/_customComponents/customDate';
+import dayjs from 'dayjs';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
+import axios from 'axios';
+import { setBonusContent } from '@/app/_store/slice';
+import { getBonus } from '@/app/_api/url';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -66,7 +67,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       <CommonTopEditButton
         edit={edit}
         handleEditFlag={handleEditFlag}
-        title={'給与に対する税金関係'}
+        title={'賞与明細'}
         setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
         saveValue={saveValue}
         numSelected={numSelected}
@@ -77,41 +78,42 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         setOpenFetchDialog={() => setOpenFetchDialog(true)}
       />
       {/* <CreateNewRecordsDialog
-        openDialog={openAddRecordsDialog}
-        onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
-        edit={edit}
-      /> */}
+          openDialog={openAddRecordsDialog}
+          onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
+          edit={edit}
+        /> */}
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
+      {/* <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} /> */}
     </Toolbar>
   );
 };
 
-type SalaryTaxProps = {
+type BonusTableProps = {
   //
 };
 
-const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
-  const salaryTaxData = useSelector((state: RootState) => state.getSalaryTax);
-  const companyData = useSelector((state: RootState) => state.getCompanyContent);
+const BonusTable: React.FC<BonusTableProps> = () => {
+  const bonusData = useSelector((state: RootState) => state.getBonus);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
+
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof TSalaryTax>('id');
+  const [orderBy, setOrderBy] = useState<keyof TBonus>('id');
   const [selected, setSelected] = useState<number[]>([]);
-  const [edit, setEdit] = useState<boolean>(false);
-  const [editValue, setEditValue] = useState<Array<TSalaryTax>>([]);
-  const [deleteSomething, setDeleteSomething] = useState<Array<TSalaryTax>>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [windowSize, setWindowSize] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [edit, setEdit] = useState<boolean>(false);
+  const [editValue, setEditValue] = useState<Array<TBonus>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [deleteSomething, setDeleteSomething] = useState<Array<TBonus>>([]);
+  const [windowSize, setWindowSize] = useState<boolean>(false);
   const [maxHeightState, setMaxHeightState] = useState<number>(0);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
 
-  const utilMethods = useCommonFunctions<TSalaryTax>();
+  const utilMethods = useCommonFunctions<TBonus>();
 
   useEffect(() => {
     if (width < 840) {
@@ -133,13 +135,13 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
 
   useEffect(() => {
     try {
-      if (salaryTaxData.length === 0) {
+      if (bonusData.length === 0) {
         setIsLoading(true);
         axios
-          .get(getSalaryTax)
+          .get(getBonus)
           .then((res) => {
             if (res.data) {
-              dispatch(setSalaryTaxContent(res.data));
+              dispatch(setBonusContent(res.data));
             }
           })
           .catch((error) => {
@@ -152,13 +154,13 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [salaryTaxData]);
+  }, [bonusData]);
 
   useEffect(() => {
-    if (salaryTaxData.length !== editValue.length) {
-      setEditValue(salaryTaxData);
+    if (bonusData.length !== editValue.length) {
+      setEditValue(bonusData);
     }
-  }, [salaryTaxData]);
+  }, [bonusData]);
 
   /** 全選択のクリック関数 */
   const selectAllClick = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -199,7 +201,9 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
       stableSort(editValue, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [order, orderBy, page, rowsPerPage, editValue],
   );
-  const changeValue = () => {};
+
+  const changeValue = useCallback(() => {}, []);
+
   const saveValue = async () => {};
 
   return (
@@ -209,7 +213,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
           <EnhancedTableToolbar
             numSelected={selected.length}
             edit={edit}
-            dataLength={salaryTaxData.length}
+            dataLength={bonusData.length}
             handleEditFlag={editFlag}
             saveValue={saveValue}
             deleteArrayValue={deleteArrayValue}
@@ -220,22 +224,22 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
           />
           <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
             <Table stickyHeader aria-label="sticky table">
-              <CommonTDataTableHeader<TSalaryTax>
+              <CommonTDataTableHeader<TBonus>
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
                 onSelectAllClick={selectAllClick}
-                rowCount={salaryTaxData.length}
+                rowCount={bonusData.length}
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
-                labelList={monthlyTaxHeaderList}
+                labelList={saLaryHeaderList}
               />
               <TableBody>
-                {visibleRows.map((a, idx) => {
-                  const isItemSelected = a.id !== null ? selectedData(a.id as number) : undefined;
-                  const labelId = `enhanced-table-checkbox-${idx}`;
+                {visibleRows.map((row, index) => {
+                  const isItemSelected = row.id !== null ? selectedData(row.id as number) : undefined;
+                  const labelId = `enhanced-table-checkbox-${index}`;
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={a.id} sx={{ cursor: 'pointer' }}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
@@ -244,150 +248,54 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                             'aria-labelledby': labelId,
                           }}
                           onClick={(event) => {
-                            if (a.id !== null) {
-                              selectContent(event, a.id as number);
+                            if (row.id !== null) {
+                              selectContent(event, row.id as number);
                             }
                           }}
                         />
                       </TableCell>
-
-                      <Tooltip title={'idを変更することはできません'} arrow>
-                        <TableCell component="th" id={labelId} scope="row">
-                          <CustomNumberFormat
-                            value={a.id}
-                            edit={false}
-                            align="center"
-                            onChangeValue={changeValue}
-                            paramKey={'id'}
-                            id={Number(a.id)}
-                          />
-                        </TableCell>
-                      </Tooltip>
-
-                      <Tooltip title={companyData.find((s) => s.id === a.companyId)?.name} arrow>
-                        <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                          <CustomNumberFormat
-                            value={a.companyId}
-                            edit={a.id === rowNumber ? isEditable : false}
-                            align="center"
-                            onChangeValue={changeValue}
-                            paramKey={'companyId'}
-                            id={Number(a.id)}
-                          />
-                        </TableCell>
-                      </Tooltip>
-
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                      <TableCell component="th" id={labelId} scope="row" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={a.healthInsuranceExpense}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          value={row.id}
+                          edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'healthInsuranceExpense'}
-                          id={Number(a.id)}
-                          suffix={'円'}
+                          paramKey={'id'}
+                          id={Number(row.id)}
                         />
                       </TableCell>
-
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={a.employeePensionInsuranceExpense}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          value={row.companyId}
+                          edit={row.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'employeePensionInsuranceExpense'}
-                          id={Number(a.id)}
-                          suffix={'円'}
+                          paramKey={'companyId'}
+                          id={Number(row.id)}
                         />
                       </TableCell>
-
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomDate
+                          value={dayjs(row.payday)}
+                          edit={row.id === rowNumber ? isEditable : false}
+                          onChangeValue={changeValue}
+                          paramKey={'payday'}
+                          id={Number(row.id)}
+                        />
+                      </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={a.nationalPensionInsuranceExpense}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          value={row.bonusAmount}
+                          edit={row.id === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'nationalPensionInsuranceExpense'}
-                          id={Number(a.id)}
-                          suffix={'円'}
+                          paramKey={'bonusAmount'}
+                          id={Number(row.id)}
                         />
                       </TableCell>
-
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <CustomNumberFormat
-                          value={a.employeeInsuranceExpense}
-                          edit={a.id === rowNumber ? isEditable : false}
-                          align="center"
-                          onChangeValue={changeValue}
-                          paramKey={'employeeInsuranceExpense'}
-                          id={Number(a.id)}
-                          suffix={'円'}
-                        />
-                      </TableCell>
-
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <CustomNumberFormat
-                          value={a.longTermCareInsurance}
-                          edit={a.id === rowNumber ? isEditable : false}
-                          align="center"
-                          onChangeValue={changeValue}
-                          paramKey={'longTermCareInsurance'}
-                          id={Number(a.id)}
-                          suffix={'円'}
-                        />
-                      </TableCell>
-
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <CustomNumberFormat
-                          value={a.incomeTax}
-                          edit={a.id === rowNumber ? isEditable : false}
-                          align="center"
-                          onChangeValue={changeValue}
-                          paramKey={'incomeTax'}
-                          id={Number(a.id)}
-                          suffix={'円'}
-                        />
-                      </TableCell>
-
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <CustomNumberFormat
-                          value={a.residenceTax}
-                          edit={a.id === rowNumber ? isEditable : false}
-                          align="center"
-                          onChangeValue={changeValue}
-                          paramKey={'residenceTax'}
-                          id={Number(a.id)}
-                          suffix={'円'}
-                        />
-                      </TableCell>
-
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <CustomNumberFormat
-                          value={a.yearEndAdjustment}
-                          edit={a.id === rowNumber ? isEditable : false}
-                          align="center"
-                          onChangeValue={changeValue}
-                          paramKey={'yearEndAdjustment'}
-                          id={Number(a.id)}
-                          suffix={'円'}
-                        />
-                      </TableCell>
-
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <CustomNumberFormat
-                          value={a.notes}
-                          edit={a.id === rowNumber ? isEditable : false}
-                          align="center"
-                          onChangeValue={changeValue}
-                          paramKey={'notes'}
-                          id={Number(a.id)}
-                          suffix={'円'}
-                        />
-                      </TableCell>
-
                       <CommonEditDeleteIcon
-                        individualEdit={() => individualEdit(a.id as number)}
-                        deleteValue={() => deleteValue(a.id as number)}
+                        individualEdit={() => individualEdit(row.id as number)}
+                        deleteValue={() => deleteValue(row.id as number)}
                         edit={edit}
                       />
                     </TableRow>
@@ -397,9 +305,9 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[20, 50, 75]}
+            rowsPerPageOptions={[20, 50, 100]}
             component="div"
-            count={salaryTaxData.length}
+            count={bonusData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={changePage}
@@ -411,4 +319,4 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   );
 };
 
-export default React.memo(SalaryTaxTable);
+export default BonusTable;

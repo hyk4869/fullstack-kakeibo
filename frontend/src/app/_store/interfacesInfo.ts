@@ -93,3 +93,45 @@ export interface TSalaryTax {
   /** その他 */
   notes: number | null;
 }
+
+/** 賞与 */
+export interface TBonus {
+  /** id番号 */
+  id: number | null;
+  /** ユーザーID */
+  userId: number | null;
+  /** 支給日 */
+  payday: Date | null;
+  /** 給与 */
+  bonusAmount: number | null;
+  /** 会社ID */
+  companyId: number | null;
+}
+
+/** 賞与に対する税金 */
+export interface TBonusTax {
+  /** id番号 */
+  id: number | null;
+  /** ユーザーID */
+  userId: number | null;
+  /** 会社ID */
+  companyId: number | null;
+  /** 健康保険料 */
+  healthInsuranceExpense: number | null;
+  /** 厚生年金保険料 */
+  employeePensionInsuranceExpense: number | null;
+  /** 国民年金保険料 */
+  nationalPensionInsuranceExpense: number | null;
+  /** 雇用保険料 */
+  employeeInsuranceExpense: number | null;
+  /** 介護保険料 */
+  longTermCareInsurance: number | null;
+  /** 所得税 */
+  incomeTax: number | null;
+  /** 住民税 */
+  residenceTax: number | null;
+  /** 年末調整額 */
+  yearEndAdjustment: number | null;
+  /** その他 */
+  notes: number | null;
+}

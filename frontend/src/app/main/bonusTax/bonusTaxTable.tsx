@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
-import { TSalaryTax } from '@/app/_store/interfacesInfo';
+import { TBonusTax } from '@/app/_store/interfacesInfo';
 import { alpha } from '@mui/material/styles';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import { Order, getComparator, stableSort } from '@/app/_util/utilFunctions';
@@ -86,23 +86,23 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
   );
 };
 
-type SalaryTaxProps = {
+type BonusTaxProps = {
   //
 };
 
-const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
-  const salaryTaxData = useSelector((state: RootState) => state.getSalaryTax);
+const BonusTaxTable: React.FC<BonusTaxProps> = () => {
+  const bonusTaxData = useSelector((state: RootState) => state.getBonusTax);
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof TSalaryTax>('id');
+  const [orderBy, setOrderBy] = useState<keyof TBonusTax>('id');
   const [selected, setSelected] = useState<number[]>([]);
   const [edit, setEdit] = useState<boolean>(false);
-  const [editValue, setEditValue] = useState<Array<TSalaryTax>>([]);
-  const [deleteSomething, setDeleteSomething] = useState<Array<TSalaryTax>>([]);
+  const [editValue, setEditValue] = useState<Array<TBonusTax>>([]);
+  const [deleteSomething, setDeleteSomething] = useState<Array<TBonusTax>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [page, setPage] = useState(0);
@@ -111,7 +111,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
 
-  const utilMethods = useCommonFunctions<TSalaryTax>();
+  const utilMethods = useCommonFunctions<TBonusTax>();
 
   useEffect(() => {
     if (width < 840) {
@@ -133,7 +133,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
 
   useEffect(() => {
     try {
-      if (salaryTaxData.length === 0) {
+      if (bonusTaxData.length === 0) {
         setIsLoading(true);
         axios
           .get(getSalaryTax)
@@ -152,13 +152,13 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [salaryTaxData]);
+  }, [bonusTaxData]);
 
   useEffect(() => {
-    if (salaryTaxData.length !== editValue.length) {
-      setEditValue(salaryTaxData);
+    if (bonusTaxData.length !== editValue.length) {
+      setEditValue(bonusTaxData);
     }
-  }, [salaryTaxData]);
+  }, [bonusTaxData]);
 
   /** 全選択のクリック関数 */
   const selectAllClick = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -209,7 +209,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
           <EnhancedTableToolbar
             numSelected={selected.length}
             edit={edit}
-            dataLength={salaryTaxData.length}
+            dataLength={bonusTaxData.length}
             handleEditFlag={editFlag}
             saveValue={saveValue}
             deleteArrayValue={deleteArrayValue}
@@ -220,12 +220,12 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
           />
           <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
             <Table stickyHeader aria-label="sticky table">
-              <CommonTDataTableHeader<TSalaryTax>
+              <CommonTDataTableHeader<TBonusTax>
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
                 onSelectAllClick={selectAllClick}
-                rowCount={salaryTaxData.length}
+                rowCount={bonusTaxData.length}
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
                 labelList={monthlyTaxHeaderList}
@@ -399,7 +399,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
           <TablePagination
             rowsPerPageOptions={[20, 50, 75]}
             component="div"
-            count={salaryTaxData.length}
+            count={bonusTaxData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={changePage}
@@ -411,4 +411,4 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   );
 };
 
-export default React.memo(SalaryTaxTable);
+export default React.memo(BonusTaxTable);

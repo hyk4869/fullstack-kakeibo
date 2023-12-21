@@ -1,5 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { MCategory, MCompany, MHireDate, TMonthlySpending, TSalary, TSalaryTax } from './interfacesInfo';
+import {
+  MCategory,
+  MCompany,
+  MHireDate,
+  TBonus,
+  TBonusTax,
+  TMonthlySpending,
+  TSalary,
+  TSalaryTax,
+} from './interfacesInfo';
 
 /** 月の出費関連 */
 export const getMonthlySpendingContent = createSlice({
@@ -150,6 +159,36 @@ export const getSalary = createSlice({
   },
 });
 
+/** 賞与に対する税金 */
+export const getBonusTax = createSlice({
+  name: 'getBonusTax',
+  initialState: [] as TBonusTax[],
+  reducers: {
+    /** 値の格納 */
+    setBonusTaxContent: (state, action: PayloadAction<TBonusTax[]>) => {
+      return [...action.payload];
+    },
+  },
+});
+
+/** 賞与 */
+export const getBonus = createSlice({
+  name: 'getBonus',
+  initialState: [] as TBonus[],
+  reducers: {
+    /** 値の格納 */
+    setBonusContent: (state, action: PayloadAction<TBonus[]>) => {
+      const v = action.payload.map((a) => {
+        return {
+          ...a,
+          payday: a.payday ? new Date(a.payday) : null,
+        };
+      });
+      return [...v];
+    },
+  },
+});
+
 /** edit */
 export const enableEdit = createSlice({
   name: 'enableEdit',
@@ -169,4 +208,6 @@ export const { setCompanyContent, setCreateCompanyContent } = getCompanyContent.
 export const { setHireDateContent, setCreateHireDateContent } = getHireDate.actions;
 export const { setSalaryTaxContent } = getSalaryTax.actions;
 export const { setSalaryContent } = getSalary.actions;
+export const { setBonusTaxContent } = getBonusTax.actions;
+export const { setBonusContent } = getBonus.actions;
 export const { setEnableEdit } = enableEdit.actions;
