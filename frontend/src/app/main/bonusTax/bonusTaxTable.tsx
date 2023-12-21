@@ -66,7 +66,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
       <CommonTopEditButton
         edit={edit}
         handleEditFlag={handleEditFlag}
-        title={'給与に対する税金関係'}
+        title={'賞与に対する税金関係'}
         setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
         saveValue={saveValue}
         numSelected={numSelected}
