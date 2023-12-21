@@ -22,4 +22,22 @@ export class SalaryInfoService {
     });
     return result;
   }
+
+  async getBonusTax() {
+    const result = await this.prisma.tTaxBonus.findMany({
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return result;
+  }
+
+  async getBonus() {
+    const result = await this.prisma.tBonus.findMany({
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return result;
+  }
 }
