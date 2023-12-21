@@ -29,7 +29,7 @@ import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import axios from 'axios';
 import { getBonusTax } from '@/app/_api/url';
-import { setSalaryTaxContent } from '@/app/_store/slice';
+import { setBonusTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
@@ -139,7 +139,7 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
           .get(getBonusTax)
           .then((res) => {
             if (res.data) {
-              dispatch(setSalaryTaxContent(res.data));
+              dispatch(setBonusTaxContent(res.data));
             }
           })
           .catch((error) => {
