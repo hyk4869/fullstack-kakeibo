@@ -63,7 +63,7 @@ const CustomSelectTab: React.FC<CustomSelectTabProps> = (props) => {
             {list?.map((data, idx) => {
               return (
                 <MenuItem key={idx} value={data.value}>
-                  <span style={{ whiteSpace: 'pre-wrap' }}>{data.label}</span>
+                  <span style={{ whiteSpace: 'pre-wrap', display: 'flex', justifyContent: align }}>{data.label}</span>
                 </MenuItem>
               );
             })}

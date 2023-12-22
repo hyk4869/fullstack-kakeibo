@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import AggregationByCategory from './aggregationByCategory';
 import useWindowSize from '@/app/_util/useWindowSize';
 import AggregationByMonth from './aggregationByMonth';
+import AggregationByDetailMonth from './aggregationByDetailMonth';
 
 type MonthlyAggregationProps = {
   //
@@ -46,7 +47,9 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
             <TabPanel value="2" sx={{ padding: windowSize ? '0px' : '' }}>
               <AggregationByMonth />
             </TabPanel>
-            <TabPanel value="3" sx={{ padding: windowSize ? '0px' : '' }}></TabPanel>
+            <TabPanel value="3" sx={{ padding: windowSize ? '0px' : '' }}>
+              <AggregationByDetailMonth />
+            </TabPanel>
           </TabContext>
         </Paper>
       </Box>
