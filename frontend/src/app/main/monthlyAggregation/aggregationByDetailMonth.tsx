@@ -38,6 +38,16 @@ export const toggleButtonList: ValueObjType[] = [
   },
 ];
 
+export type SelectDate = {
+  year: number | null;
+  month: number | null;
+};
+
+const defaultValue = {
+  year: null,
+  month: null,
+};
+
 /** カテゴリーごとの集計 */
 const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
@@ -48,6 +58,7 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [redirectTo, setRedirectTo] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<SelectDate>(defaultValue);
 
   useLayoutEffect(() => {
     if (monthlyData.length === 0) {
@@ -83,11 +94,19 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
     [displayGraph],
   );
 
+  const displayDate = () => {
+    //
+  };
   return (
     <>
       <Box>
-        <ChangeAggregationMonth monthlyData={monthlyData} categoryData={categoryData} />
-
+        <ChangeAggregationMonth
+          monthlyData={monthlyData}
+          categoryData={categoryData}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          displayDate={displayDate}
+        />
         <TableContainer
           sx={{
             display: windowSize ? 'block' : 'flex',

@@ -3,24 +3,19 @@
 import CustomSelectTab from '@/app/_customComponents/customSelectTab';
 import { MCategory, TMonthlySpending } from '@/app/_store/interfacesInfo';
 import { Box, Button } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
+import { SelectDate } from './aggregationByDetailMonth';
 
 type ChangeAggregationMonthProps = {
   monthlyData: TMonthlySpending[];
   categoryData: MCategory[];
+  selectedDate: SelectDate;
+  setSelectedDate: React.Dispatch<React.SetStateAction<SelectDate>>;
+  displayDate: () => void;
 };
-type SelectDate = {
-  year: number | null;
-  month: number | null;
-};
-const ChangeAggregationMonth: React.FC<ChangeAggregationMonthProps> = (props) => {
-  const { monthlyData, categoryData } = props;
 
-  const defaultValue = {
-    year: null,
-    month: null,
-  };
-  const [selectedDate, setSelectedDate] = useState<SelectDate>(defaultValue);
+const ChangeAggregationMonth: React.FC<ChangeAggregationMonthProps> = (props) => {
+  const { monthlyData, categoryData, selectedDate, setSelectedDate } = props;
 
   const onChangeValue = useCallback(
     (id: number, paramKey: string, value: number | null) => {
@@ -36,6 +31,7 @@ const ChangeAggregationMonth: React.FC<ChangeAggregationMonthProps> = (props) =>
     [selectedDate],
   );
 
+  /** monthlyDataから年を抽出 */
   const makeYearList = useCallback(() => {
     const getMonth: number[] = monthlyData
       .filter((s) => s.paymentDay !== null)
@@ -49,6 +45,7 @@ const ChangeAggregationMonth: React.FC<ChangeAggregationMonthProps> = (props) =>
     }));
   }, [monthlyData, categoryData]);
 
+  /** 月を作成 */
   const makeMonthList = useCallback(() => {
     const monthArray = [];
     for (let i = 1; i < 13; i++) {
