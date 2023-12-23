@@ -12,7 +12,7 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
 import BarGraph, { AmoutType } from '@/app/_util/commonGraph/barGraph';
-import { aggregationMonthlyHeaderList } from '@/app/_util/commonLayouts/headerList';
+import { aggregationAnnualSalaryHeaderList } from '@/app/_util/commonLayouts/headerList';
 
 type AggregationByAnnualIncomeProps = {
   //
@@ -22,6 +22,7 @@ type AggregationByAnnualIncomeProps = {
 const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () => {
   const { width, height } = useWindowSize();
   const salaryData = useSelector((state: RootState) => state.getSalary);
+  const bonusData = useSelector((state: RootState) => state.getBonus);
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [amount, setAmount] = useState<Array<AmoutType>>([]);
   const [sortedDate, setSortedDate] = useState<SortedDateType>();
@@ -55,10 +56,23 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
     [displayGraph],
   );
 
+  /**
+   * 年収計算
+   */
   const displayData = (): AmoutType[] => {
     const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
 
-    salaryData.forEach((d) => {
+    const newBonusArray = bonusData
+      .map((a) => {
+        return { ...a, salary: a.bonusAmount };
+      })
+      .map(({ bonusAmount, ...d }) => {
+        return d;
+      });
+
+    const annualSalaryArray = [...salaryData, ...newBonusArray];
+
+    annualSalaryArray.forEach((d) => {
       const categoryId = (d.payday && d.payday?.getFullYear()) ?? 0;
       const salary = d.salary || 0;
       const categoryName = d.payday?.getFullYear().toString();
@@ -93,7 +107,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
           }}
         >
           <Table sx={{ width: windowSize ? '100%' : '50%' }}>
-            <CommonTableHeader categoryHeaderList={aggregationMonthlyHeaderList} />
+            <CommonTableHeader categoryHeaderList={aggregationAnnualSalaryHeaderList} />
             <TableBody>
               {amount.map((a) => {
                 return (

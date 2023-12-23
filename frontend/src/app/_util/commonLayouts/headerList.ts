@@ -86,6 +86,18 @@ export const aggregationMonthlyHeaderList: commonTableHeaderType[] = [
   // }),
 ];
 
+/** 各種集計月間のヘッダー */
+export const aggregationAnnualSalaryHeaderList: commonTableHeaderType[] = [
+  {
+    id: 'year',
+    label: '年',
+  },
+  {
+    id: 'annualIncome',
+    label: '年収',
+  },
+];
+
 /** 月間の支出ヘッダー */
 export const monthlySpendingHeaderList: commonTableHeaderType[] = [
   {

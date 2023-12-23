@@ -87,6 +87,9 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
     [displayGraph],
   );
 
+  /**
+   * 一ヶ月毎の内訳計算
+   */
   const displayData = useCallback(
     (selectedDate: SelectDate): TMonthlySpending[] => {
       const result = monthlyData.filter(
