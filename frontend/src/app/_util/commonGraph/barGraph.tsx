@@ -83,7 +83,7 @@ const BarGraph = <T extends AmoutType, U extends MonthlyGrouping>(props: BarGrap
 
   return (
     <>
-      <Box sx={{ width: windowSize ? 300 : 500, height: windowSize ? 300 : 500 }}>
+      <Box sx={{ width: windowSize ? 300 : 470, height: windowSize ? 300 : 470 }}>
         <Bar data={graphData} options={options} />
       </Box>
     </>

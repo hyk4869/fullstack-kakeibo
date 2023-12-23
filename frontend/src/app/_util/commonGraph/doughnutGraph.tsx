@@ -67,7 +67,7 @@ const DoughnutGraph = <T extends AmoutType>(props: DoughnutGraphProps<T>): React
   }, [width]);
 
   return (
-    <Box sx={{ width: windowSize ? 300 : 500, height: windowSize ? 300 : 500 }}>
+    <Box sx={{ width: windowSize ? 300 : 470, height: windowSize ? 300 : 470 }}>
       <Doughnut data={graphdata} options={doughnutOptions} />
     </Box>
   );

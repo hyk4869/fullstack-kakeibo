@@ -9,7 +9,6 @@ import { commonPadding5, messageRedirect } from '@/app/_customComponents/customP
 import DoughnutGraph from '@/app/_util/commonGraph/doughnutGraph';
 import useWindowSize from '@/app/_util/useWindowSize';
 import CustomToggleButton from '@/app/_customComponents/customToggleButton';
-import { ValueObjType } from '@/app/_customComponents/customRadioButton';
 import BarGraph, { AmoutType } from '@/app/_util/commonGraph/barGraph';
 import RedirectDialog from '@/app/_util/commonLayouts/redirectDialog';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
@@ -17,6 +16,8 @@ import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '
 import CommonFooterAggregation from './commonFooter';
 import { aggregationHeaderList } from '@/app/_util/commonLayouts/headerList';
 import ChangeAggregationMonth from './changeDate';
+import { TMonthlySpending } from '@/app/_store/interfacesInfo';
+import { toggleButtonList } from './aggregationByCategory';
 
 type AggregationByDetailMonthProps = {
   //
@@ -27,25 +28,17 @@ export type SortedDateType = {
   endDate: Date | null;
 };
 
-export const toggleButtonList: ValueObjType[] = [
-  {
-    label: '円グラフ',
-    value: '1',
-  },
-  {
-    label: '棒グラフ',
-    value: '2',
-  },
-];
-
 export type SelectDate = {
   year: number | null;
   month: number | null;
 };
+const defaultDate = new Date();
+const defaultYear = defaultDate.getFullYear();
+const defaultMonth = defaultDate.getMonth();
 
 const defaultValue = {
-  year: null,
-  month: null,
+  year: defaultYear,
+  month: defaultMonth,
 };
 
 /** カテゴリーごとの集計 */
@@ -67,13 +60,13 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
   }, [monthlyData]);
 
   useEffect(() => {
-    setAmount(sumEachCategoryByMonthly(monthlyData));
+    setAmount(sumEachCategoryByMonthly(displayData(selectedDate)));
 
     setSortedDate({
       startDate: getOldDate(monthlyData),
       endDate: getLatestDate(monthlyData),
     });
-  }, [categoryData, monthlyData]);
+  }, [categoryData, monthlyData, selectedDate]);
 
   useEffect(() => {
     if (width < 1100) {
@@ -84,7 +77,7 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
   }, [width]);
 
   const changeValue = useCallback(
-    (id: number, paramKey: string, value: unknown) => {
+    (id: number, paramKey: string, value: unknown): void => {
       switch (paramKey) {
         case 'toggleValue':
           typeof value === 'string' ? setDisplayGraph(value) : setDisplayGraph(String(value));
@@ -94,9 +87,16 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
     [displayGraph],
   );
 
-  const displayDate = () => {
-    //
-  };
+  const displayData = useCallback(
+    (selectedDate: SelectDate): TMonthlySpending[] => {
+      const result = monthlyData.filter(
+        (a) => a.paymentDay?.getFullYear() === selectedDate.year && a.paymentDay.getMonth() + 1 === selectedDate.month,
+      );
+      return result;
+    },
+    [monthlyData, selectedDate],
+  );
+
   return (
     <>
       <Box>
@@ -105,7 +105,6 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
           categoryData={categoryData}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-          displayDate={displayDate}
         />
         <TableContainer
           sx={{
@@ -113,10 +112,10 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
             flexDirection: windowSize ? '' : 'row',
             justifyContent: 'center',
             width: '100%',
-            height: windowSize ? `${height - height * 0.25}px` : '70vh',
+            height: windowSize ? `${height - height * 0.25}px` : '65vh',
           }}
         >
-          <Table sx={{ width: windowSize ? '100%' : '50%' }}>
+          <Table sx={{ width: windowSize ? '100%' : '50%', height: '60vh' }}>
             <CommonTableHeader categoryHeaderList={aggregationHeaderList} />
             <TableBody>
               {amount.map((a) => {

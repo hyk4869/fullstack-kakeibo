@@ -11,7 +11,6 @@ type ChangeAggregationMonthProps = {
   categoryData: MCategory[];
   selectedDate: SelectDate;
   setSelectedDate: React.Dispatch<React.SetStateAction<SelectDate>>;
-  displayDate: () => void;
 };
 
 const ChangeAggregationMonth: React.FC<ChangeAggregationMonthProps> = (props) => {
@@ -58,7 +57,7 @@ const ChangeAggregationMonth: React.FC<ChangeAggregationMonthProps> = (props) =>
   }, [monthlyData, categoryData]);
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '1rem' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '1rem', alignItems: 'center', margin: '1rem' }}>
       <CustomSelectTab
         value={selectedDate.year}
         paramKey={'year'}
@@ -77,7 +76,6 @@ const ChangeAggregationMonth: React.FC<ChangeAggregationMonthProps> = (props) =>
         list={makeMonthList()}
       />
       <Box>月</Box>
-      <Button variant="outlined">表示</Button>
     </Box>
   );
 };
