@@ -247,6 +247,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                         <CustomNumberFormat
                           value={row?.salary}
                           edit={edit}
+                          suffix={' 円'}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'salary'}

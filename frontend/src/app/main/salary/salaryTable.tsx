@@ -288,6 +288,7 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
                         <CustomNumberFormat
                           value={row.salary}
                           edit={row.id === rowNumber ? isEditable : false}
+                          suffix={' 円'}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'salary'}
