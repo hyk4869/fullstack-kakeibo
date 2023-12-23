@@ -278,6 +278,34 @@ export const hireDateNullCheck = <T extends MHireDate>(array: T[]): MHireDate[] 
   return array.filter((a) => a.id !== null && a.companyId !== null && a.hireDate !== null);
 };
 
+/**
+ * CSVをインポートした際にきれいな形に成型する
+ * @param array TSalary
+ * @returns
+ */
+export const convertSalaryTypes = <T extends TSalary>(array: T[]): TSalary[] => {
+  return array
+    .map((s) => {
+      return {
+        ...s,
+        id: s.id !== null ? parseInt(String(s.id)) : null,
+        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
+        payday: s.payday !== null ? new Date(s.payday) : null,
+        salary: s.salary !== null ? parseInt(String(s.salary)) : null,
+      };
+    })
+    .filter((a) => a.id);
+};
+
+/**
+ * setStateする前にnullCheckを行う。
+ * @param array TSalary
+ * @returns
+ */
+export const salaryNullCheck = <T extends TSalary>(array: T[]): TSalary[] => {
+  return array.filter((a) => a.id !== null && a.companyId !== null && a.payday !== null && a.salary !== null);
+};
+
 /** 最新の日付を取得 */
 export const getLatestSalaryDate = (salaryData: TSalary[]): Date => {
   const latestDate = new Date(Math.max(...salaryData.map((date) => date.payday?.getTime() || 0)));

@@ -34,6 +34,7 @@ import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon
 import axios from 'axios';
 import { setSalaryContent } from '@/app/_store/slice';
 import { getSalary } from '@/app/_api/url';
+import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -77,11 +78,11 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         enableEdit={enableEdit}
         setOpenFetchDialog={() => setOpenFetchDialog(true)}
       />
-      {/* <CreateNewRecordsDialog
-          openDialog={openAddRecordsDialog}
-          onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
-          edit={edit}
-        /> */}
+      <CreateNewRecordsDialog
+        openDialog={openAddRecordsDialog}
+        onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
+        edit={edit}
+      />
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
       {/* <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} /> */}
     </Toolbar>
