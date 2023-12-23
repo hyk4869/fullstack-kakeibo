@@ -21,6 +21,7 @@ type AggregationByMonthProps = {
   //
 };
 
+/** 各期間の集計 */
 const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
   const { width, height } = useWindowSize();
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);

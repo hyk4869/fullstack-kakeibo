@@ -7,6 +7,7 @@ import AggregationByCategory from './aggregationByCategory';
 import useWindowSize from '@/app/_util/useWindowSize';
 import AggregationByMonth from './aggregationByMonth';
 import AggregationByDetailMonth from './aggregationByDetailMonth';
+import AggregationByAnnualIncome from './aggregationByAnnualIncome';
 
 type MonthlyAggregationProps = {
   //
@@ -39,6 +40,7 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
                 <Tab label="カテゴリー毎の集計" value="1" sx={{ background: grey[200] }} />
                 <Tab label="各期間の集計" value="2" sx={{ background: grey[200] }} />
                 <Tab label="一ヶ月毎の内訳" value="3" sx={{ background: grey[200] }} />
+                <Tab label="年収計算" value="4" sx={{ background: yellow[100] }} />
               </TabList>
             </Box>
             <TabPanel value="1" sx={{ padding: windowSize ? '0px' : '' }}>
@@ -49,6 +51,9 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
             </TabPanel>
             <TabPanel value="3" sx={{ padding: windowSize ? '0px' : '' }}>
               <AggregationByDetailMonth />
+            </TabPanel>
+            <TabPanel value="4" sx={{ padding: windowSize ? '0px' : '' }}>
+              <AggregationByAnnualIncome />
             </TabPanel>
           </TabContext>
         </Paper>

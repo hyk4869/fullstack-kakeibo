@@ -1,4 +1,4 @@
-import { MCategory, MCompany, MHireDate, TMonthlySpending } from '../_store/interfacesInfo';
+import { MCategory, MCompany, MHireDate, TMonthlySpending, TSalary } from '../_store/interfacesInfo';
 import { ReferenceType } from '../main/category/categoyTable';
 import { AmoutType, MonthlyGrouping } from './commonGraph/barGraph';
 
@@ -148,8 +148,8 @@ export const getLatestDate = (monthlyData: TMonthlySpending[]): Date => {
 
 /** 最も古い日付を取得 */
 export const getOldDate = (monthlyData: TMonthlySpending[]): Date => {
-  const latestDate = new Date(Math.min(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
-  return latestDate;
+  const result = new Date(Math.min(...monthlyData.map((date) => date.paymentDay?.getTime() || 0)));
+  return result;
 };
 
 /**
@@ -276,4 +276,16 @@ export const convertHireDateTypes = <T extends MHireDate>(array: T[]): MHireDate
  */
 export const hireDateNullCheck = <T extends MHireDate>(array: T[]): MHireDate[] => {
   return array.filter((a) => a.id !== null && a.companyId !== null && a.hireDate !== null);
+};
+
+/** 最新の日付を取得 */
+export const getLatestSalaryDate = (salaryData: TSalary[]): Date => {
+  const latestDate = new Date(Math.max(...salaryData.map((date) => date.payday?.getTime() || 0)));
+  return latestDate;
+};
+
+/** 最も古い日付を取得 */
+export const getOldSalaryDate = (salaryData: TSalary[]): Date => {
+  const result = new Date(Math.min(...salaryData.map((date) => date.payday?.getTime() || 0)));
+  return result;
 };

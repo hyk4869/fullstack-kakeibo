@@ -41,7 +41,7 @@ const defaultValue = {
   month: defaultMonth,
 };
 
-/** カテゴリーごとの集計 */
+/** 一ヶ月毎の内訳集計 */
 const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);

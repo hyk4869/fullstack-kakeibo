@@ -2,7 +2,7 @@
 
 import CustomSelectTab from '@/app/_customComponents/customSelectTab';
 import { MCategory, TMonthlySpending } from '@/app/_store/interfacesInfo';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useCallback } from 'react';
 import { SelectDate } from './aggregationByDetailMonth';
 
