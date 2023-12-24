@@ -13,7 +13,7 @@ import {
   Toolbar,
   Tooltip,
 } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
 import { TSalaryTax } from '@/app/_store/interfacesInfo';
 import { alpha } from '@mui/material/styles';
@@ -199,7 +199,59 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
       stableSort(editValue, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [order, orderBy, page, rowsPerPage, editValue],
   );
-  const changeValue = () => {};
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      setEditValue((prevValue) => {
+        return prevValue.map((a) => {
+          if (a.id === id) {
+            const updateValue = { ...a };
+            switch (paramKey) {
+              case 'id':
+                updateValue.id = value === '' ? null : (value as number);
+                break;
+              case 'userId':
+                updateValue.userId = value === '' ? null : (value as number);
+                break;
+              case 'companyId':
+                updateValue.companyId = value === '' ? null : (value as number);
+                break;
+              case 'healthInsuranceExpense':
+                updateValue.healthInsuranceExpense = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'employeePensionInsuranceExpense':
+                updateValue.employeePensionInsuranceExpense = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'nationalPensionInsuranceExpense':
+                updateValue.nationalPensionInsuranceExpense = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'employeeInsuranceExpense':
+                updateValue.employeeInsuranceExpense = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'longTermCareInsurance':
+                updateValue.longTermCareInsurance = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'incomeTax':
+                updateValue.incomeTax = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'residenceTax':
+                updateValue.residenceTax = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'yearEndAdjustment':
+                updateValue.yearEndAdjustment = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'notes':
+                updateValue.notes = value === '' ? null : parseFloat(value as string);
+                break;
+            }
+            return updateValue;
+          } else {
+            return a;
+          }
+        });
+      });
+    },
+    [editValue],
+  );
 
   const saveValue = async () => {
     setIsLoading(true);

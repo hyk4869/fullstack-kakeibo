@@ -203,7 +203,38 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
     [order, orderBy, page, rowsPerPage, editValue],
   );
 
-  const changeValue = useCallback(() => {}, []);
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      setEditValue((prevValue) => {
+        return prevValue.map((a) => {
+          if (a.id === id) {
+            const updateValue = { ...a };
+            switch (paramKey) {
+              case 'id':
+                updateValue.id = value === '' ? null : (value as number);
+                break;
+              case 'userId':
+                updateValue.userId = value === '' ? null : (value as number);
+                break;
+              case 'payday':
+                updateValue.payday = value === '' ? null : (value as Date);
+                break;
+              case 'salary':
+                updateValue.salary = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'companyId':
+                updateValue.companyId = value === '' ? null : (value as number);
+                break;
+            }
+            return updateValue;
+          } else {
+            return a;
+          }
+        });
+      });
+    },
+    [editValue],
+  );
 
   const saveValue = async () => {
     setIsLoading(true);
