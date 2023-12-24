@@ -38,8 +38,8 @@ CREATE TABLE "TTax" (
     "longTermCareInsurance" INTEGER,
     "incomeTax" INTEGER,
     "residenceTax" INTEGER,
-    "yearEndAdjustment" TEXT,
-    "notes" TEXT,
+    "yearEndAdjustment" INTEGER,
+    "notes" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -71,8 +71,8 @@ CREATE TABLE "TTaxBonus" (
     "longTermCareInsurance" INTEGER,
     "incomeTax" INTEGER,
     "residenceTax" INTEGER,
-    "yearEndAdjustment" TEXT,
-    "notes" TEXT,
+    "yearEndAdjustment" INTEGER,
+    "notes" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

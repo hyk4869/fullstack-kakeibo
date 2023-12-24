@@ -46,8 +46,8 @@ model TTax {
   longTermCareInsurance         Int?
   incomeTax                    Int?
   residenceTax                 Int?
-  yearEndAdjustment            String?
-  notes                        String?
+  yearEndAdjustment            Int?
+  notes                        Int?
   createdAt                    DateTime @default(now())
   updatedAt                    DateTime @updatedAt
   TSalary TSalary[]
@@ -79,8 +79,8 @@ model TTaxBonus {
   longTermCareInsurance         Int?
   incomeTax                    Int?
   residenceTax                 Int?
-  yearEndAdjustment            String?
-  notes                        String?
+  yearEndAdjustment            Int?
+  notes                        Int?
   createdAt                    DateTime @default(now())
   updatedAt                    DateTime @updatedAt
   TBonus TBonus[]
