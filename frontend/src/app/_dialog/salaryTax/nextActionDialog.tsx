@@ -22,22 +22,7 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
 
   const saveValue = async (): Promise<void> => {
     setIsLoading(true);
-    if (
-      content.every(
-        (d) =>
-          d.id !== null &&
-          d.companyId !== null &&
-          d.healthInsuranceExpense !== null &&
-          d.employeePensionInsuranceExpense !== null &&
-          d.nationalPensionInsuranceExpense !== null &&
-          d.employeeInsuranceExpense !== null &&
-          d.longTermCareInsurance !== null &&
-          d.incomeTax !== null &&
-          d.residenceTax !== null &&
-          d.yearEndAdjustment !== null &&
-          d.notes !== null,
-      )
-    ) {
+    if (content.every((d) => d.id !== null)) {
       try {
         const idSet = new Set<number | null>();
         const hasDuplicate = content.some((d) => {

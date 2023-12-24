@@ -22,7 +22,7 @@ import {
   salaryTaxNullCheck,
 } from '@/app/_util/utils';
 import useWindowSize from '@/app/_util/useWindowSize';
-import { saLaryHeaderList } from '@/app/_util/commonLayouts/headerList';
+import { monthlyTaxHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { TSalaryTax } from '@/app/_store/interfacesInfo';
 import { ImportCSV } from '@/app/_util/CSV/importCSV';
 import { CommonEditButton } from '../commonContent/commonEditButton';
@@ -225,7 +225,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
           <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxHeight: '550px' }}>
             <Table>
-              <CommonTableHeader categoryHeaderList={saLaryHeaderList} />
+              <CommonTableHeader categoryHeaderList={monthlyTaxHeaderList} />
 
               <TableBody>
                 {visibleRows?.map((row) => {

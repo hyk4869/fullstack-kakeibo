@@ -33,6 +33,7 @@ import { setCreateSalaryTax, setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
+import CreateNewRecordsDialog from '@/app/_dialog/salaryTax/createNewRecordsDialog';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -76,11 +77,11 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         enableEdit={enableEdit}
         setOpenFetchDialog={() => setOpenFetchDialog(true)}
       />
-      {/* <CreateNewRecordsDialog
+      <CreateNewRecordsDialog
         openDialog={openAddRecordsDialog}
         onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
         edit={edit}
-      /> */}
+      />
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
     </Toolbar>
   );
