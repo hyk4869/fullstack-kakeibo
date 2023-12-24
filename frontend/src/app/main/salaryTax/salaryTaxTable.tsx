@@ -28,8 +28,8 @@ import LoadingContent from '../../_util/commonLayouts/loading';
 import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import axios from 'axios';
-import { getSalaryTax } from '@/app/_api/url';
-import { setSalaryTaxContent } from '@/app/_store/slice';
+import { getSalaryTax, postDeleteSalaryTax } from '@/app/_api/url';
+import { setCreateSalaryTax, setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
@@ -200,7 +200,42 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     [order, orderBy, page, rowsPerPage, editValue],
   );
   const changeValue = () => {};
-  const saveValue = async () => {};
+
+  const saveValue = async () => {
+    setIsLoading(true);
+    const postData = editValue.map((a) => ({
+      ...a,
+      userId: a.userId || 1,
+    }));
+    const deleteData = deleteSomething.map((a) => ({
+      ...a,
+      userId: a.userId || 1,
+    }));
+    await axios
+      .post(getSalaryTax, postData)
+      .then((res) => {
+        if (res.data) {
+          dispatch(setCreateSalaryTax(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    if (deleteData.length !== 0) {
+      await axios
+        .post(postDeleteSalaryTax, deleteArrayValue)
+        .then((res) => {
+          if (res.data) {
+            dispatch(setCreateSalaryTax(res.data));
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    setIsLoading(false);
+    setEdit(false);
+  };
 
   return (
     <>

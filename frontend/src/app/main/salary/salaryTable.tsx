@@ -32,8 +32,8 @@ import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import axios from 'axios';
-import { setSalaryContent } from '@/app/_store/slice';
-import { getSalary } from '@/app/_api/url';
+import { setCreateSalary, setSalaryContent } from '@/app/_store/slice';
+import { getSalary, postDeleteSalary } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
 
 /** 上のeditボタン */
@@ -205,7 +205,41 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
 
   const changeValue = useCallback(() => {}, []);
 
-  const saveValue = async () => {};
+  const saveValue = async () => {
+    setIsLoading(true);
+    const postData = editValue.map((a) => ({
+      ...a,
+      userId: a.userId || 1,
+    }));
+    const deleteData = deleteSomething.map((a) => ({
+      ...a,
+      userId: a.userId || 1,
+    }));
+    await axios
+      .post(getSalary, postData)
+      .then((res) => {
+        if (res.data) {
+          dispatch(setCreateSalary(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    if (deleteData.length !== 0) {
+      await axios
+        .post(postDeleteSalary, deleteData)
+        .then((res) => {
+          if (res.data) {
+            dispatch(setCreateSalary(res.data));
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    setIsLoading(false);
+    setEdit(false);
+  };
 
   return (
     <>

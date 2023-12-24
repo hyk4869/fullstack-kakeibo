@@ -3,10 +3,8 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { useSelector } from 'react-redux';
 import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
-import CustomDate from '../../_customComponents/customDate';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { RootState } from '../../_store/store';
-import dayjs from 'dayjs';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { grey } from '@mui/material/colors';
 import NextActionDialog from './nextActionDialog';
@@ -20,12 +18,12 @@ import {
   getComparator,
   incrementFromArray,
   stableSort,
-  salaryNullCheck,
-  convertSalaryTypes,
+  convertSalaryTaxTypes,
+  salaryTaxNullCheck,
 } from '@/app/_util/utils';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { saLaryHeaderList } from '@/app/_util/commonLayouts/headerList';
-import { TSalary } from '@/app/_store/interfacesInfo';
+import { TSalaryTax } from '@/app/_store/interfacesInfo';
 import { ImportCSV } from '@/app/_util/CSV/importCSV';
 import { CommonEditButton } from '../commonContent/commonEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
@@ -41,29 +39,29 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [arrayLastId, setArrayLastId] = useState<number>(0);
   const [increment, setIncrement] = useState<number>(arrayLastId);
   const [incrementArray, setIncrementArray] = useState<Array<number>>([]);
-  const [makeNewArray, setMakeNewArray] = useState<Array<TSalary>>([]);
+  const [makeNewArray, setMakeNewArray] = useState<Array<TSalaryTax>>([]);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof TSalary>('id');
+  const [orderBy, setOrderBy] = useState<keyof TSalaryTax>('id');
   const [windowSize, setWindowSize] = useState<boolean>(false);
 
-  const salaryData = useSelector((state: RootState) => state.getSalary);
+  const salaryTaxData = useSelector((state: RootState) => state.getSalaryTax);
   const { width, height } = useWindowSize();
 
   useEffect(() => {
-    if (salaryData && salaryData.length >= 0) {
+    if (salaryTaxData && salaryTaxData.length >= 0) {
       const ID: number =
-        salaryData.length !== 0 || salaryData !== undefined
-          ? salaryData.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
+        salaryTaxData.length !== 0 || salaryTaxData !== undefined
+          ? salaryTaxData.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
           : 1;
       setArrayLastId(ID);
       setIncrement(ID);
     }
-  }, [salaryData]);
+  }, [salaryTaxData]);
 
   useEffect(() => {
     if (increment !== null && increment !== undefined && increment > 0 && incrementArray.slice(-1)[0] !== increment) {
@@ -81,16 +79,23 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
   /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
-    const incrementIdFromArray = incrementFromArray(makeNewArray, salaryData, incrementArray);
+    const incrementIdFromArray = incrementFromArray(makeNewArray, salaryTaxData, incrementArray);
 
     const lastId = makeNewArray.slice(-1)[0]?.id;
     if (lastId && incrementIdFromArray === lastId) return;
     const newMonthlySpending = {
       id: incrementIdFromArray,
       userId: null,
-      payday: null,
-      salary: null,
       companyId: null,
+      healthInsuranceExpense: null,
+      employeePensionInsuranceExpense: null,
+      nationalPensionInsuranceExpense: null,
+      employeeInsuranceExpense: null,
+      longTermCareInsurance: null,
+      incomeTax: null,
+      residenceTax: null,
+      yearEndAdjustment: null,
+      notes: null,
     };
 
     setIncrement(incrementIdFromArray);
@@ -135,11 +140,32 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
               case 'companyId':
                 updatedRow.companyId = value === '' ? null : (value as number);
                 break;
-              case 'payday':
-                updatedRow.payday = value === '' ? null : (value as Date);
+              case 'healthInsuranceExpense':
+                updatedRow.healthInsuranceExpense = value === '' ? null : (value as number);
                 break;
-              case 'salary':
-                updatedRow.salary = value === '' ? null : (value as number);
+              case 'employeePensionInsuranceExpense':
+                updatedRow.employeePensionInsuranceExpense = value === '' ? null : (value as number);
+                break;
+              case 'nationalPensionInsuranceExpense':
+                updatedRow.nationalPensionInsuranceExpense = value === '' ? null : (value as number);
+                break;
+              case 'employeeInsuranceExpense':
+                updatedRow.employeeInsuranceExpense = value === '' ? null : (value as number);
+                break;
+              case 'longTermCareInsurance':
+                updatedRow.longTermCareInsurance = value === '' ? null : (value as number);
+                break;
+              case 'incomeTax':
+                updatedRow.incomeTax = value === '' ? null : (value as number);
+                break;
+              case 'residenceTax':
+                updatedRow.residenceTax = value === '' ? null : (value as number);
+                break;
+              case 'yearEndAdjustment':
+                updatedRow.yearEndAdjustment = value === '' ? null : (value as number);
+                break;
+              case 'notes':
+                updatedRow.notes = value === '' ? null : (value as number);
                 break;
             }
             return updatedRow;
@@ -189,7 +215,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
       >
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <CommonEditButton
-            reduxArray={salaryData}
+            reduxArray={salaryTaxData}
             arrayLastId={arrayLastId}
             makeNewArray={makeNewArray}
             addNewArray={addNewArray}
@@ -233,24 +259,110 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                         />
                       </TableCell>
 
-                      <TableCell align="center">
-                        <CustomDate
-                          value={dayjs(row?.payday)}
+                      <TableCell component="th" scope="row?">
+                        <CustomNumberFormat
+                          value={row?.healthInsuranceExpense}
                           edit={edit}
+                          suffix={' 円'}
+                          align="center"
                           onChangeValue={changeValue}
-                          paramKey={'payday'}
+                          paramKey={'healthInsuranceExpense'}
                           id={Number(row?.id)}
                         />
                       </TableCell>
 
                       <TableCell component="th" scope="row?">
                         <CustomNumberFormat
-                          value={row?.salary}
+                          value={row?.employeePensionInsuranceExpense}
                           edit={edit}
                           suffix={' 円'}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'salary'}
+                          paramKey={'employeePensionInsuranceExpense'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+
+                      <TableCell component="th" scope="row?">
+                        <CustomNumberFormat
+                          value={row?.nationalPensionInsuranceExpense}
+                          edit={edit}
+                          suffix={' 円'}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'nationalPensionInsuranceExpense'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+
+                      <TableCell component="th" scope="row?">
+                        <CustomNumberFormat
+                          value={row?.employeeInsuranceExpense}
+                          edit={edit}
+                          suffix={' 円'}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'employeeInsuranceExpense'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+
+                      <TableCell component="th" scope="row?">
+                        <CustomNumberFormat
+                          value={row?.longTermCareInsurance}
+                          edit={edit}
+                          suffix={' 円'}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'longTermCareInsurance'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+
+                      <TableCell component="th" scope="row?">
+                        <CustomNumberFormat
+                          value={row?.incomeTax}
+                          edit={edit}
+                          suffix={' 円'}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'incomeTax'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+
+                      <TableCell component="th" scope="row?">
+                        <CustomNumberFormat
+                          value={row?.residenceTax}
+                          edit={edit}
+                          suffix={' 円'}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'residenceTax'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+
+                      <TableCell component="th" scope="row?">
+                        <CustomNumberFormat
+                          value={row?.yearEndAdjustment}
+                          edit={edit}
+                          suffix={' 円'}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'yearEndAdjustment'}
+                          id={Number(row?.id)}
+                        />
+                      </TableCell>
+
+                      <TableCell component="th" scope="row?">
+                        <CustomNumberFormat
+                          value={row?.notes}
+                          edit={edit}
+                          suffix={' 円'}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'notes'}
                           id={Number(row?.id)}
                         />
                       </TableCell>
@@ -296,13 +408,13 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           }}
         >
           <ExportExampleCSV headerOption={salaryHeaders} />
-          <ImportCSV<TSalary>
+          <ImportCSV<TSalaryTax>
             setMakeNewArray={setMakeNewArray}
             setIncrementArray={setIncrementArray}
             setArrayLastId={setArrayLastId}
             setIncrement={setIncrement}
-            convertTypes={convertSalaryTypes}
-            nullCheck={salaryNullCheck}
+            convertTypes={convertSalaryTaxTypes}
+            nullCheck={salaryTaxNullCheck}
           />
           <Button onClick={() => setIsShowCategoryMaster(true)} variant="outlined">
             カテゴリーIDを参照する

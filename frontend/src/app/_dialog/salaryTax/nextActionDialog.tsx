@@ -1,17 +1,17 @@
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import React, { useState } from 'react';
-import { setCreateSalary } from '../../_store/slice';
+import { setCreateSalary, setCreateSalaryTax } from '../../_store/slice';
 import { useDispatch } from 'react-redux';
 import LoadingContent from '../../_util/commonLayouts/loading';
-import { TSalary } from '@/app/_store/interfacesInfo';
+import { TSalaryTax } from '@/app/_store/interfacesInfo';
 
 type NextActionDialogProps = {
   isShow: boolean;
   onCloseConfirmDialog: () => void;
   contentNum: number;
-  content: TSalary[];
+  content: TSalaryTax[];
   onCloseMonthlyDialog: () => void;
-  setMakeNewArray: React.Dispatch<React.SetStateAction<TSalary[]>>;
+  setMakeNewArray: React.Dispatch<React.SetStateAction<TSalaryTax[]>>;
 };
 
 const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
@@ -25,7 +25,17 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
     if (
       content.every(
         (d) =>
-          d.id !== null && d.payday !== null && !isNaN(d.payday.getTime()) && d.salary !== null && d.companyId !== null,
+          d.id !== null &&
+          d.companyId !== null &&
+          d.healthInsuranceExpense !== null &&
+          d.employeePensionInsuranceExpense !== null &&
+          d.nationalPensionInsuranceExpense !== null &&
+          d.employeeInsuranceExpense !== null &&
+          d.longTermCareInsurance !== null &&
+          d.incomeTax !== null &&
+          d.residenceTax !== null &&
+          d.yearEndAdjustment !== null &&
+          d.notes !== null,
       )
     ) {
       try {
@@ -39,7 +49,7 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
           }
         });
         if (!hasDuplicate) {
-          dispatch(setCreateSalary(content));
+          dispatch(setCreateSalaryTax(content));
         }
       } catch (error) {
         console.error(error);

@@ -1,4 +1,4 @@
-import { MCategory, MCompany, MHireDate, TMonthlySpending, TSalary } from '../_store/interfacesInfo';
+import { MCategory, MCompany, MHireDate, TMonthlySpending, TSalary, TSalaryTax } from '../_store/interfacesInfo';
 import { ReferenceType } from '../main/category/categoyTable';
 import { AmoutType, MonthlyGrouping } from './commonGraph/barGraph';
 
@@ -304,6 +304,57 @@ export const convertSalaryTypes = <T extends TSalary>(array: T[]): TSalary[] => 
  */
 export const salaryNullCheck = <T extends TSalary>(array: T[]): TSalary[] => {
   return array.filter((a) => a.id !== null && a.companyId !== null && a.payday !== null && a.salary !== null);
+};
+
+/**
+ * CSVをインポートした際にきれいな形に成型する
+ * @param array TSalaryTax
+ * @returns
+ */
+export const convertSalaryTaxTypes = <T extends TSalaryTax>(array: T[]): TSalaryTax[] => {
+  return array
+    .map((s) => {
+      return {
+        ...s,
+        id: s.id !== null ? parseInt(String(s.id)) : null,
+        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
+        healthInsuranceExpense: s.healthInsuranceExpense !== null ? parseInt(String(s.healthInsuranceExpense)) : null,
+        employeePensionInsuranceExpense:
+          s.employeePensionInsuranceExpense !== null ? parseInt(String(s.employeePensionInsuranceExpense)) : null,
+        nationalPensionInsuranceExpense:
+          s.nationalPensionInsuranceExpense !== null ? parseInt(String(s.nationalPensionInsuranceExpense)) : null,
+        employeeInsuranceExpense:
+          s.employeeInsuranceExpense !== null ? parseInt(String(s.employeeInsuranceExpense)) : null,
+        longTermCareInsurance: s.longTermCareInsurance !== null ? parseInt(String(s.longTermCareInsurance)) : null,
+        incomeTax: s.incomeTax !== null ? parseInt(String(s.incomeTax)) : null,
+        residenceTax: s.residenceTax !== null ? parseInt(String(s.residenceTax)) : null,
+        yearEndAdjustment: s.yearEndAdjustment !== null ? parseInt(String(s.yearEndAdjustment)) : null,
+        notes: s.notes !== null ? parseInt(String(s.notes)) : null,
+      };
+    })
+    .filter((a) => a.id);
+};
+
+/**
+ * setStateする前にnullCheckを行う。
+ * @param array TSalaryTax
+ * @returns
+ */
+export const salaryTaxNullCheck = <T extends TSalaryTax>(array: T[]): TSalaryTax[] => {
+  return array.filter(
+    (a) =>
+      a.id !== null &&
+      a.companyId !== null &&
+      a.healthInsuranceExpense !== null &&
+      a.employeePensionInsuranceExpense !== null &&
+      a.nationalPensionInsuranceExpense !== null &&
+      a.employeeInsuranceExpense !== null &&
+      a.longTermCareInsurance !== null &&
+      a.incomeTax !== null &&
+      a.residenceTax !== null &&
+      a.yearEndAdjustment !== null &&
+      a.notes !== null,
+  );
 };
 
 /** 最新の日付を取得 */

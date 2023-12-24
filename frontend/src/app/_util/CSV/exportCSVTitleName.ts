@@ -27,3 +27,27 @@ export const hireDateHeaders = [
   { label: 'hireDate', key: 'hireDate' },
   { label: 'retirementDate', key: 'retirementDate' },
 ];
+
+/** 給与ヘッダー */
+export const salaryHeaders = [
+  { label: 'id', key: 'id' },
+  { label: 'companyId', key: 'companyId' },
+  { label: 'payday', key: 'payday' },
+  { label: 'salary', key: 'salary' },
+];
+
+/** 給与に対する税金ヘッダー */
+export const salaryTaxHeaders = [
+  { label: 'id', key: 'id' },
+  { label: 'userId', key: 'userId' },
+  { label: 'companyId', key: 'companyId' },
+  { label: 'healthInsuranceExpense', key: 'healthInsuranceExpense' },
+  { label: 'employeePensionInsuranceExpense', key: 'employeePensionInsuranceExpense' },
+  { label: 'nationalPensionInsuranceExpense', key: 'nationalPensionInsuranceExpense' },
+  { label: 'employeeInsuranceExpense', key: 'employeeInsuranceExpense' },
+  { label: 'longTermCareInsurance', key: 'longTermCareInsurance' },
+  { label: 'incomeTax', key: 'incomeTax' },
+  { label: 'residenceTax', key: 'residenceTax' },
+  { label: 'yearEndAdjustment', key: 'yearEndAdjustment' },
+  { label: 'notes', key: 'notes' },
+];
