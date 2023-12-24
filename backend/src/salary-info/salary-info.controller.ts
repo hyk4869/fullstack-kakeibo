@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { SalaryInfoService } from './salary-info.service';
-import { MCompany, MHireDate, TBonus, TSalary, TTax, TTaxBonus } from '@prisma/client';
+import { TBonus, TSalary, TTax, TTaxBonus } from '@prisma/client';
 
 @Controller('salaryInfo')
 export class SalaryInfoController {
@@ -11,9 +11,29 @@ export class SalaryInfoController {
     return this.salaryInfoService.getSalaryTax();
   }
 
+  @Post('/salaryTax')
+  async postSaveSalaryTaxContent(@Body() postData: TTax[]): Promise<TTax[]> {
+    return this.salaryInfoService.postSalaryTaxContent(postData);
+  }
+
+  @Post('/salaryTax/deletecontent')
+  async postDeleteSalaryTaxContent(@Body() postData: TTax[]): Promise<TTax[]> {
+    return this.salaryInfoService.deleteSalaryTaxContent(postData);
+  }
+
   @Get('/salary')
   async getSalaryContent(): Promise<TSalary[]> {
     return this.salaryInfoService.getSalary();
+  }
+
+  @Post('/salary')
+  async postSaveSalaryContent(@Body() postData: TSalary[]): Promise<TSalary[]> {
+    return this.salaryInfoService.postSalaryContent(postData);
+  }
+
+  @Post('/salary/deletecontent')
+  async postDeleteSalaryContent(@Body() postData: TSalary[]): Promise<TSalary[]> {
+    return this.salaryInfoService.deleteSalaryContent(postData);
   }
 
   @Get('/bonusTax')

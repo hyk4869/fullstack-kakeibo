@@ -22,7 +22,11 @@ export class MonthlySpendingService {
 
   /** MCategoryをDBからクライアントに送信 */
   async getCategory(): Promise<MCategory[]> {
-    return this.prisma.mCategory.findMany();
+    return this.prisma.mCategory.findMany({
+      orderBy: {
+        id: 'asc',
+      },
+    });
   }
 
   /** 期間を指定してTMonthlyとMCategoryをDBからクライアントに送信 */
