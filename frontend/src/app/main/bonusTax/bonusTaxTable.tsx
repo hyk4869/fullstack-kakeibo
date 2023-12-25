@@ -13,7 +13,7 @@ import {
   Toolbar,
   Tooltip,
 } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
 import { TBonusTax } from '@/app/_store/interfacesInfo';
 import { alpha } from '@mui/material/styles';
@@ -28,8 +28,8 @@ import LoadingContent from '../../_util/commonLayouts/loading';
 import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import axios from 'axios';
-import { getBonusTax } from '@/app/_api/url';
-import { setBonusTaxContent } from '@/app/_store/slice';
+import { getBonusTax, postDeleteBonusTax } from '@/app/_api/url';
+import { setBonusTaxContent, setCreateBonusTax } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
@@ -199,8 +199,96 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
       stableSort(editValue, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [order, orderBy, page, rowsPerPage, editValue],
   );
-  const changeValue = () => {};
-  const saveValue = async () => {};
+
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      setEditValue((prevValue) => {
+        return prevValue.map((a) => {
+          if (a.id === id) {
+            const updateValue = { ...a };
+            switch (paramKey) {
+              case 'id':
+                updateValue.id = value === '' ? null : (value as number);
+                break;
+              case 'userId':
+                updateValue.userId = value === '' ? null : (value as number);
+                break;
+              case 'companyId':
+                updateValue.companyId = value === '' ? null : (value as number);
+                break;
+              case 'healthInsuranceExpense':
+                updateValue.healthInsuranceExpense = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'employeePensionInsuranceExpense':
+                updateValue.employeePensionInsuranceExpense = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'nationalPensionInsuranceExpense':
+                updateValue.nationalPensionInsuranceExpense = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'employeeInsuranceExpense':
+                updateValue.employeeInsuranceExpense = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'longTermCareInsurance':
+                updateValue.longTermCareInsurance = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'incomeTax':
+                updateValue.incomeTax = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'residenceTax':
+                updateValue.residenceTax = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'yearEndAdjustment':
+                updateValue.yearEndAdjustment = value === '' ? null : parseFloat(value as string);
+                break;
+              case 'notes':
+                updateValue.notes = value === '' ? null : parseFloat(value as string);
+                break;
+            }
+            return updateValue;
+          } else {
+            return a;
+          }
+        });
+      });
+    },
+    [editValue],
+  );
+
+  const saveValue = async () => {
+    setIsLoading(true);
+    const postData = editValue.map((a) => ({
+      ...a,
+      userId: a.userId || 1,
+    }));
+    const deleteData = deleteSomething.map((a) => ({
+      ...a,
+      userId: a.userId || 1,
+    }));
+    await axios
+      .post(getBonusTax, postData)
+      .then((res) => {
+        if (res.data) {
+          dispatch(setCreateBonusTax(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    if (deleteData.length !== 0) {
+      await axios
+        .post(postDeleteBonusTax, deleteData)
+        .then((res) => {
+          if (res.data) {
+            dispatch(setCreateBonusTax(res.data));
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    setIsLoading(false);
+    setEdit(false);
+  };
 
   return (
     <>

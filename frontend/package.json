@@ -24,6 +24,7 @@
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "next": "14.0.1",
+    "pdfmake": "^0.2.8",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
     "react-csv": "^2.2.2",

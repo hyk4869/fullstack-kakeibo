@@ -32,8 +32,8 @@ import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import axios from 'axios';
-import { setBonusContent } from '@/app/_store/slice';
-import { getBonus } from '@/app/_api/url';
+import { setBonusContent, setCreateBonus } from '@/app/_store/slice';
+import { getBonus, postDeleteBonus } from '@/app/_api/url';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -202,9 +202,71 @@ const BonusTable: React.FC<BonusTableProps> = () => {
     [order, orderBy, page, rowsPerPage, editValue],
   );
 
-  const changeValue = useCallback(() => {}, []);
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      setEditValue((prevValue) => {
+        return prevValue.map((a) => {
+          if (a.id === id) {
+            const updateValue = { ...a };
+            switch (paramKey) {
+              case 'id':
+                updateValue.id = value === '' ? null : (value as number);
+                break;
+              case 'payday':
+                updateValue.payday = value === '' ? null : (value as Date);
+                break;
+              case 'bonusAmount':
+                updateValue.bonusAmount = value === '' ? null : (value as number);
+                break;
+              case 'companyId':
+                updateValue.companyId = value === '' ? null : (value as number);
+                break;
+            }
+            return updateValue;
+          } else {
+            return a;
+          }
+        });
+      });
+    },
+    [editValue],
+  );
 
-  const saveValue = async () => {};
+  const saveValue = async () => {
+    setIsLoading(true);
+    const postData = editValue.map((a) => ({
+      ...a,
+      userId: a.userId || 1,
+    }));
+    const deleteData = deleteSomething.map((a) => ({
+      ...a,
+      userId: a.userId || 1,
+    }));
+    await axios
+      .post(getBonus, postData)
+      .then((res) => {
+        if (res.data) {
+          dispatch(setCreateBonus(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    if (deleteData.length !== 0) {
+      await axios
+        .post(postDeleteBonus, deleteData)
+        .then((res) => {
+          if (res.data) {
+            dispatch(setCreateBonus(res.data));
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    setIsLoading(false);
+    setEdit(false);
+  };
 
   return (
     <>

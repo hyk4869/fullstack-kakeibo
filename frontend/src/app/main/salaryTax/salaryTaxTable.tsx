@@ -200,6 +200,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
       stableSort(editValue, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [order, orderBy, page, rowsPerPage, editValue],
   );
+
   const changeValue = useCallback(
     (id: number, paramKey: string, value: unknown) => {
       setEditValue((prevValue) => {

@@ -42,10 +42,18 @@ export const getSalary = `${commonURL}/salaryInfo/salary`;
  */
 export const postDeleteSalary = `${commonURL}/salaryInfo/salary/deletecontent`;
 /**
- * 賞与に対する税金情報を取ってくる
+ * 賞与に対する税金情報を取ってくる&データのPOSTも行っている
  */
 export const getBonusTax = `${commonURL}/salaryInfo/bonusTax`;
 /**
- * 賞与情報を取ってくる
+ * 賞与に対する税金情報削除用の POST
+ */
+export const postDeleteBonusTax = `${commonURL}/salaryInfo/bonusTax/deletecontent`;
+/**
+ * 賞与情報を取ってくる&データのPOSTも行っている
  */
 export const getBonus = `${commonURL}/salaryInfo/bonus`;
+/**
+ * 賞与情報削除用の POST
+ */
+export const postDeleteBonus = `${commonURL}/salaryInfo/bonus/deletecontent`;

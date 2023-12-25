@@ -197,6 +197,20 @@ export const getBonusTax = createSlice({
     setBonusTaxContent: (state, action: PayloadAction<TBonusTax[]>) => {
       return [...action.payload];
     },
+    /** 値の作成 */
+    setCreateBonusTax: (state: TBonusTax[], action: PayloadAction<TBonusTax[]>) => {
+      const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
+      const valueCheck = state.map((s) => s.id);
+
+      newItems.forEach((a) => {
+        if (valueCheck.includes(a.id)) {
+          console.error('idが重複しています。');
+          return state;
+        }
+      });
+
+      return [...state, ...action.payload];
+    },
   },
 });
 
@@ -214,6 +228,21 @@ export const getBonus = createSlice({
         };
       });
       return [...v];
+    },
+
+    /** 値の作成 */
+    setCreateBonus: (state: TBonus[], action: PayloadAction<TBonus[]>) => {
+      const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
+      const valueCheck = state.map((s) => s.id);
+
+      newItems.forEach((a) => {
+        if (valueCheck.includes(a.id)) {
+          console.error('idが重複しています。');
+          return state;
+        }
+      });
+
+      return [...state, ...action.payload];
     },
   },
 });
@@ -237,6 +266,6 @@ export const { setCompanyContent, setCreateCompanyContent } = getCompanyContent.
 export const { setHireDateContent, setCreateHireDateContent } = getHireDate.actions;
 export const { setSalaryTaxContent, setCreateSalaryTax } = getSalaryTax.actions;
 export const { setSalaryContent, setCreateSalary } = getSalary.actions;
-export const { setBonusTaxContent } = getBonusTax.actions;
-export const { setBonusContent } = getBonus.actions;
+export const { setBonusTaxContent, setCreateBonusTax } = getBonusTax.actions;
+export const { setBonusContent, setCreateBonus } = getBonus.actions;
 export const { setEnableEdit } = enableEdit.actions;
