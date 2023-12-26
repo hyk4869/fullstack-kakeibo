@@ -121,6 +121,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
                         onChangeValue={changeValue}
                         paramKey={'categoryId'}
                         id={Number(a.categoryId)}
+                        thousandSeparator={false}
                       />
                     </TableCell>
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>

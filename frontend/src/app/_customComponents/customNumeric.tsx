@@ -15,6 +15,7 @@ type CustomNumberFormatProps = {
   maxWidth?: string;
   width?: string;
   margin?: string;
+  thousandSeparator?: boolean;
 };
 const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
   const {
@@ -29,6 +30,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
     width = '7rem',
     margin = 'auto',
     variant = 'standard',
+    thousandSeparator = true,
   } = props;
 
   const [numeric, setNumeric] = useState<number | null>(value);
@@ -55,13 +57,14 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
     onChangeValue(id, paramKey || '', numeric);
   }, [id, paramKey, numeric, onChangeValue]);
 
-  const formattedValue =
-    numeric !== null
-      ? (numeric < 0 ? '-' : '') +
-        Math.abs(numeric)
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      : null;
+  const formattedValue = !thousandSeparator
+    ? numeric
+    : numeric !== null
+    ? (numeric < 0 ? '-' : '') +
+      Math.abs(numeric)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    : null;
 
   return (
     <Box sx={{ display: 'flex', justifyContent: align, maxWidth: maxWidth, minWidth: minWidth, margin: margin }}>
@@ -72,7 +75,7 @@ const CustomNumberFormat: React.FC<CustomNumberFormatProps> = (props) => {
           customInput={TextFieldCustomInput}
           // customInput={(inputProps) => <TextFieldCustomInput {...inputProps} variant={variant} width={width} />}
           value={numeric}
-          thousandSeparator={true}
+          thousandSeparator={thousandSeparator}
           style={{ fontSize: commonFontSize, width: width }}
           onValueChange={hadleChangeNumericValue}
           decimalScale={0}
