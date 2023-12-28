@@ -91,14 +91,14 @@ const LogiPage: React.FC<LoginPageProps> = () => {
               value={loginInfo?.password}
               onChange={(e) => inputUserData('password', e.target.value)}
               label="Password"
-              type={showPassword ? 'password' : 'text'}
+              type={showPassword ? 'text' : 'password'}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end" onClick={isShowPassword}>
                     {showPassword ? (
-                      <VisibilityOff sx={{ cursor: 'pointer' }} />
-                    ) : (
                       <Visibility sx={{ cursor: 'pointer' }} />
+                    ) : (
+                      <VisibilityOff sx={{ cursor: 'pointer' }} />
                     )}
                   </InputAdornment>
                 ),
