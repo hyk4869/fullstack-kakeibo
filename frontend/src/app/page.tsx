@@ -17,7 +17,7 @@ const Home: React.FC<HomeProps> = () => {
         <Link style={{ paddingRight: '1rem' }} href={'/main/summaryTable'}>
           Summary Table
         </Link>
-        <Link href={'/main/monthlyAggregation'}>Monthly Aggregation</Link>
+        <Link href={'/login'}>Login</Link>
       </div>
     </>
   );
