@@ -2,6 +2,7 @@ import {
   MCategory,
   MCompany,
   MHireDate,
+  TBonus,
   TBonusTax,
   TMonthlySpending,
   TSalary,
@@ -349,6 +350,34 @@ export const convertSalaryTaxTypes = <T extends TSalaryTax>(array: T[]): TSalary
  * @returns
  */
 export const salaryTaxNullCheck = <T extends TSalaryTax>(array: T[]): TSalaryTax[] => {
+  return array.filter((a) => a.id !== null);
+};
+
+/**
+ * CSVをインポートした際にきれいな形に成型する
+ * @param array TBonus
+ * @returns
+ */
+export const convertBonusTypes = <T extends TBonus>(array: T[]): TBonus[] => {
+  return array
+    .map((s) => {
+      return {
+        ...s,
+        id: s.id !== null ? parseInt(String(s.id)) : null,
+        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
+        payday: s.payday !== null ? new Date(s.payday) : null,
+        bonusAmount: s.bonusAmount !== null ? parseInt(String(s.bonusAmount)) : null,
+      };
+    })
+    .filter((a) => a.id);
+};
+
+/**
+ * setStateする前にnullCheckを行う。
+ * @param array TBonus
+ * @returns
+ */
+export const bonusNullCheck = <T extends TBonus>(array: T[]): TBonus[] => {
   return array.filter((a) => a.id !== null);
 };
 
