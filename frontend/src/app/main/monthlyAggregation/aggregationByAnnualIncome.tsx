@@ -18,6 +18,12 @@ type AggregationByAnnualIncomeProps = {
   //
 };
 
+interface AmountTypeWithTax extends AmoutType {
+  annualTax: number | null;
+  taxPercentage: number | null;
+  disposableIncome: number | null;
+}
+
 /** 年収の集計 */
 const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () => {
   const { width, height } = useWindowSize();
@@ -27,6 +33,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
   const [amount, setAmount] = useState<Array<AmoutType>>([]);
   const [sortedDate, setSortedDate] = useState<SortedDateType>();
   const [displayGraph, setDisplayGraph] = useState<string>('1');
+  const [arrayAmount, setArrayAmount] = useState<Array<AmountTypeWithTax>>([]);
 
   useEffect(() => {
     if (width < 1100) {
