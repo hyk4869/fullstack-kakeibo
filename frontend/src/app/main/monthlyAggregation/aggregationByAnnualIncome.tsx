@@ -13,6 +13,7 @@ import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
 import BarGraph, { AmoutType } from '@/app/_util/commonGraph/barGraph';
 import { aggregationAnnualSalaryHeaderList } from '@/app/_util/commonLayouts/headerList';
+import { TSalaryTax } from '@/app/_store/interfacesInfo';
 
 type AggregationByAnnualIncomeProps = {
   //
@@ -107,8 +108,19 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
       [categoryId: number]: { annualTax: number; taxPercentage: number; disposableIncome: number };
     } = {};
 
-    salaryTaxData.forEach((s) => {
+    const renameValue = bonusTaxData
+      .map((a) => {
+        return { ...a, TSalary: a.TBonus };
+      })
+      .map(({ TBonus, ...s }) => {
+        return s;
+      });
+
+    const annualTaxArray = [...salaryTaxData, ...renameValue];
+
+    annualTaxArray.forEach((s) => {
       const payday = s.TSalary?.[0]?.payday;
+
       const categoryId = (payday instanceof Date ? payday : new Date(payday!.toString())).getFullYear();
 
       if (s.id !== null) {
