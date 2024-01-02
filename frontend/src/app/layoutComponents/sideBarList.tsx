@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { Box, List, ListItem, Divider } from '@mui/material';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { colorBlack } from '../_customComponents/customProperties';
 import { HomeListURL, MonthlySpendingListURL, SalaryListURL } from './sideBarListContent';
 import { grey } from '@mui/material/colors';

@@ -4,6 +4,7 @@ import { Box, Button, InputAdornment, Paper, TextField } from '@mui/material';
 import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
 import KeyIcon from '@mui/icons-material/Key';
 import { grey } from '@mui/material/colors';
+import { useRouter } from 'next/navigation';
 
 type LoginPageProps = {
   //
@@ -18,6 +19,7 @@ const LogiPage: React.FC<LoginPageProps> = () => {
   const [loginInfo, setLoginInfo] = useState<loginInformation>({ userID: '', password: '' });
   const [openTrigger, setOpenTrigger] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const inputUserData = (paramKey: string, value: string) => {
     let _loginInfo = { ...loginInfo };
@@ -35,6 +37,10 @@ const LogiPage: React.FC<LoginPageProps> = () => {
   };
 
   const isShowPassword = () => setShowPassword((show) => !show);
+
+  const handleSingUp = () => {
+    router.push('/signUp');
+  };
 
   return (
     <Box
@@ -106,9 +112,15 @@ const LogiPage: React.FC<LoginPageProps> = () => {
               sx={{ width: '20rem' }}
             />
           </Box>
-          <Button variant="contained" onClick={() => loginButton(loginInfo)} sx={{ marginTop: '1rem' }}>
-            login
-          </Button>
+
+          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '2rem' }}>
+            <Button variant="outlined" color="primary" onClick={() => handleSingUp()} sx={{ marginTop: '1rem' }}>
+              sign up
+            </Button>
+            <Button variant="contained" onClick={() => loginButton(loginInfo)} sx={{ marginTop: '1rem' }}>
+              login
+            </Button>
+          </Box>
         </Box>
       </Paper>
     </Box>
