@@ -96,6 +96,18 @@ export const aggregationAnnualSalaryHeaderList: commonTableHeaderType[] = [
     id: 'annualIncome',
     label: '年収',
   },
+  {
+    id: 'annualIncome',
+    label: '税金等',
+  },
+  {
+    id: 'annualIncome',
+    label: '税率',
+  },
+  {
+    id: 'annualIncome',
+    label: '可処分所得',
+  },
 ];
 
 /** 月間の支出ヘッダー */

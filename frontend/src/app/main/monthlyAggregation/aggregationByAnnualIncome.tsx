@@ -28,7 +28,10 @@ interface AmountTypeWithTax extends AmoutType {
 const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () => {
   const { width, height } = useWindowSize();
   const salaryData = useSelector((state: RootState) => state.getSalary);
+  const salaryTaxData = useSelector((state: RootState) => state.getSalaryTax);
   const bonusData = useSelector((state: RootState) => state.getBonus);
+  const bonusTaxData = useSelector((state: RootState) => state.getBonusTax);
+
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [amount, setAmount] = useState<Array<AmoutType>>([]);
   const [sortedDate, setSortedDate] = useState<SortedDateType>();
@@ -98,7 +101,57 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
       categoryName: categoryName ?? null,
     }));
 
-    return newAmount.sort((a, b) => (a.categoryId || 0) - (b.categoryId || 0));
+    const result = newAmount.sort((a, b) => (a.categoryId || 0) - (b.categoryId || 0));
+
+    const calculatedTax: {
+      [categoryId: number]: { annualTax: number; taxPercentage: number; disposableIncome: number };
+    } = {};
+
+    salaryTaxData.forEach((s) => {
+      const payday = s.TSalary?.[0]?.payday;
+      const categoryId = (payday instanceof Date ? payday : new Date(payday!.toString())).getFullYear();
+
+      if (s.id !== null) {
+        calculatedTax[categoryId] = {
+          annualTax:
+            (calculatedTax[categoryId]?.annualTax || 0) +
+            (s.employeeInsuranceExpense ?? 0) +
+            (s.employeePensionInsuranceExpense ?? 0) +
+            (s.healthInsuranceExpense ?? 0) +
+            (s.incomeTax ?? 0) +
+            (s.longTermCareInsurance ?? 0) +
+            (s.nationalPensionInsuranceExpense ?? 0) +
+            (s.notes ?? 0) +
+            (s.residenceTax ?? 0) +
+            (s.yearEndAdjustment ?? 0),
+          taxPercentage: 0,
+          disposableIncome: 0,
+        };
+      }
+    });
+
+    const mergedAmount: { [categoryId: number]: AmoutType & AmountTypeWithTax } = {};
+
+    const value = newAmount.map((a) => {
+      const categoryId = a.categoryId || 0;
+      const existingAmount = mergedAmount[categoryId] || {};
+
+      return {
+        ...existingAmount,
+        ...a,
+        //   ...calculatedTax[categoryId],
+        annualTax: calculatedTax[categoryId]?.annualTax ?? 0,
+        taxPercentage: calculatedTax[categoryId]?.annualTax
+          ? Math.round((calculatedTax[categoryId]?.annualTax / a.totalAmount!) * 1000) / 10
+          : 0,
+        disposableIncome: calculatedTax[categoryId]?.annualTax
+          ? a.totalAmount! - calculatedTax[categoryId]?.annualTax
+          : 0,
+      };
+    });
+
+    setArrayAmount(value);
+    return result;
   };
 
   return (
@@ -116,7 +169,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
           <Table sx={{ width: windowSize ? '100%' : '50%' }}>
             <CommonTableHeader categoryHeaderList={aggregationAnnualSalaryHeaderList} />
             <TableBody>
-              {amount.map((a) => {
+              {arrayAmount.map((a) => {
                 return (
                   <TableRow key={a.categoryId} sx={{ padding: commonPadding5 }}>
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
@@ -134,6 +187,39 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomNumberFormat
                         value={a.totalAmount}
+                        suffix=" 円"
+                        edit={false}
+                        align="center"
+                        onChangeValue={changeValue}
+                        paramKey={'totalAmount'}
+                        id={Number(a.categoryId)}
+                      />
+                    </TableCell>
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                      <CustomNumberFormat
+                        value={a.annualTax}
+                        suffix=" 円"
+                        edit={false}
+                        align="center"
+                        onChangeValue={changeValue}
+                        paramKey={'totalAmount'}
+                        id={Number(a.categoryId)}
+                      />
+                    </TableCell>
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                      <CustomNumberFormat
+                        value={a.taxPercentage}
+                        suffix=" %"
+                        edit={false}
+                        align="center"
+                        onChangeValue={changeValue}
+                        paramKey={'totalAmount'}
+                        id={Number(a.categoryId)}
+                      />
+                    </TableCell>
+                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                      <CustomNumberFormat
+                        value={a.disposableIncome}
                         suffix=" 円"
                         edit={false}
                         align="center"

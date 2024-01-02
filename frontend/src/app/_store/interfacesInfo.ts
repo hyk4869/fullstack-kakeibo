@@ -92,6 +92,8 @@ export interface TSalaryTax {
   yearEndAdjustment: number | null;
   /** その他 */
   notes: number | null;
+  /** 給与額 */
+  TSalary: TSalary[];
 }
 
 /** 賞与 */
@@ -134,4 +136,6 @@ export interface TBonusTax {
   yearEndAdjustment: number | null;
   /** その他 */
   notes: number | null;
+  /** ボーナス額 */
+  TBonus: TBonus[];
 }

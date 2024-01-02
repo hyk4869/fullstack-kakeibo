@@ -8,6 +8,9 @@ export class SalaryInfoService {
 
   async getSalaryTax(): Promise<TTax[]> {
     const result = await this.prisma.tTax.findMany({
+      include: {
+        TSalary: true,
+      },
       orderBy: {
         id: 'asc',
       },
@@ -192,6 +195,7 @@ export class SalaryInfoService {
 
   async getBonusTax(): Promise<TTaxBonus[]> {
     const result = await this.prisma.tTaxBonus.findMany({
+      include: { TBonus: true },
       orderBy: {
         id: 'asc',
       },
