@@ -100,7 +100,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const deleteValue = useCallback(
     (id: number | null) => {
       if (id === arrayLastId) return;
-      const deletedArray = makeNewArray.filter((a) => a.id !== id);
+      const deletedArray = makeNewArray.filter((a) => a.sort !== id);
       setMakeNewArray(deletedArray);
 
       if (id !== null) {
