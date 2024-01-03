@@ -48,10 +48,10 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
                       <TableRow key={content.id}>
                         <TableCell align="center">
                           <CustomNumberFormat
-                            value={content?.id}
+                            value={content?.sort}
                             onChangeValue={changeValue}
-                            paramKey={'store'}
-                            id={Number(content?.id)}
+                            paramKey={'sort'}
+                            id={Number(content?.sort)}
                             edit={false}
                           />
                         </TableCell>
@@ -59,8 +59,8 @@ export const ShowCategoryMaster: React.FC<ShowCategoryMasterPrpos> = (props) => 
                           <CustomTextfield
                             value={content?.categoryName}
                             onChangeValue={changeValue}
-                            paramKey={'store'}
-                            id={Number(content?.id)}
+                            paramKey={'categoryName'}
+                            id={Number(content?.sort)}
                             edit={false}
                           />
                         </TableCell>

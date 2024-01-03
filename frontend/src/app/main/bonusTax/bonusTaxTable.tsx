@@ -99,7 +99,7 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
   const dispatch = useDispatch();
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof TBonusTax>('id');
+  const [orderBy, setOrderBy] = useState<keyof TBonusTax>('sort');
   const [selected, setSelected] = useState<number[]>([]);
   const [edit, setEdit] = useState<boolean>(false);
   const [editValue, setEditValue] = useState<Array<TBonusTax>>([]);
@@ -205,11 +205,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
     (id: number, paramKey: string, value: unknown) => {
       setEditValue((prevValue) => {
         return prevValue.map((a) => {
-          if (a.id === id) {
+          if (a.sort === id) {
             const updateValue = { ...a };
             switch (paramKey) {
-              case 'id':
-                updateValue.id = value === '' ? null : (value as number);
+              case 'sort':
+                updateValue.sort = value === '' ? null : (value as number);
                 break;
               case 'userId':
                 updateValue.userId = value === '' ? null : (value as number);
@@ -321,10 +321,10 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
               />
               <TableBody>
                 {visibleRows.map((a, idx) => {
-                  const isItemSelected = a.id !== null ? selectedData(a.id as number) : undefined;
+                  const isItemSelected = a.sort !== null ? selectedData(a.sort as number) : undefined;
                   const labelId = `enhanced-table-checkbox-${idx}`;
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={a.id} sx={{ cursor: 'pointer' }}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={a.sort} sx={{ cursor: 'pointer' }}>
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
@@ -333,8 +333,8 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                             'aria-labelledby': labelId,
                           }}
                           onClick={(event) => {
-                            if (a.id !== null) {
-                              selectContent(event, a.id as number);
+                            if (a.sort !== null) {
+                              selectContent(event, a.sort as number);
                             }
                           }}
                         />
@@ -343,12 +343,12 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <Tooltip title={'idを変更することはできません'} arrow>
                         <TableCell component="th" id={labelId} scope="row">
                           <CustomNumberFormat
-                            value={a.id}
+                            value={a.sort}
                             edit={false}
                             align="center"
                             onChangeValue={changeValue}
-                            paramKey={'id'}
-                            id={Number(a.id)}
+                            paramKey={'sort'}
+                            id={Number(a.sort)}
                           />
                         </TableCell>
                       </Tooltip>
@@ -357,11 +357,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                         <TableCell align="center" sx={{ padding: commonPadding5 }}>
                           <CustomNumberFormat
                             value={a.companyId}
-                            edit={a.id === rowNumber ? isEditable : false}
+                            edit={a.sort === rowNumber ? isEditable : false}
                             align="center"
                             onChangeValue={changeValue}
                             paramKey={'companyId'}
-                            id={Number(a.id)}
+                            id={Number(a.sort)}
                           />
                         </TableCell>
                       </Tooltip>
@@ -369,11 +369,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.healthInsuranceExpense}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'healthInsuranceExpense'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
@@ -381,11 +381,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.employeePensionInsuranceExpense}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'employeePensionInsuranceExpense'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
@@ -393,11 +393,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.nationalPensionInsuranceExpense}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'nationalPensionInsuranceExpense'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
@@ -405,11 +405,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.employeeInsuranceExpense}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'employeeInsuranceExpense'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
@@ -417,11 +417,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.longTermCareInsurance}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'longTermCareInsurance'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
@@ -429,11 +429,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.incomeTax}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'incomeTax'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
@@ -441,11 +441,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.residenceTax}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'residenceTax'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
@@ -453,11 +453,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.yearEndAdjustment}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'yearEndAdjustment'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
@@ -465,18 +465,18 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={a.notes}
-                          edit={a.id === rowNumber ? isEditable : false}
+                          edit={a.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'notes'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                           suffix={'円'}
                         />
                       </TableCell>
 
                       <CommonEditDeleteIcon
-                        individualEdit={() => individualEdit(a.id as number)}
-                        deleteValue={() => deleteValue(a.id as number)}
+                        individualEdit={() => individualEdit(a.sort as number)}
+                        deleteValue={() => deleteValue(a.sort as number)}
                         edit={edit}
                       />
                     </TableRow>

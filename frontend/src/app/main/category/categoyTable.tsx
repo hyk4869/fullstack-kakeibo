@@ -72,11 +72,11 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
     (id: number, paramKey: string, value: unknown) => {
       setEditCategoryValue((prevArray) => {
         return prevArray.map((d) => {
-          if (d.id === id) {
+          if (d.sort === id) {
             const updateValue = { ...d };
             switch (paramKey) {
               case 'categoryId':
-                updateValue.id = value === '' ? null : (value as number);
+                updateValue.sort = value === '' ? null : (value as number);
                 break;
               case 'categoryName':
                 updateValue.categoryName = value === '' ? null : (value as string);
@@ -122,15 +122,15 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
               <TableBody>
                 {editCategoryValue.map((a) => {
                   return (
-                    <TableRow key={a.id} sx={{ padding: commonPadding5 }}>
+                    <TableRow key={a.sort} sx={{ padding: commonPadding5 }}>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={a.id}
+                          value={a.sort}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id'}
-                          id={Number(a.id)}
+                          paramKey={'sort'}
+                          id={Number(a.sort)}
                         />
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
@@ -139,7 +139,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'categoryName'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                         />
                       </TableCell>
                     </TableRow>

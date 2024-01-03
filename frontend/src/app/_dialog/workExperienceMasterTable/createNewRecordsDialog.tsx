@@ -54,7 +54,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     if (companyData && companyData.length >= 0) {
       const ID: number =
         companyData.length !== 0 || companyData !== undefined
-          ? companyData.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
+          ? companyData.reduce((maxId, item) => Math.max(maxId, item.sort ?? 0), 1)
           : 1;
       setArrayLastId(ID);
       setIncrement(ID);
@@ -79,10 +79,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const addNewArray = useCallback(() => {
     const incrementIdFromArray = incrementFromArray(makeNewArray, companyData, incrementArray);
 
-    const lastId = makeNewArray.slice(-1)[0]?.id;
+    const lastId = makeNewArray.slice(-1)[0]?.sort;
     if (lastId && incrementIdFromArray === lastId) return;
     const newCategory = {
-      id: incrementIdFromArray,
+      id: '',
+      sort: incrementIdFromArray,
       name: '',
       majorSector: '',
       userId: null,
@@ -106,7 +107,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           prevId.map((a) => {
             return {
               ...a,
-              id: a.id && a.id > id ? a.id - 1 : a.id,
+              sort: a.sort && a.sort > id ? a.sort - 1 : a.sort,
             };
           }),
         );
@@ -121,11 +122,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     (id: number, paramKey: string, value: unknown) => {
       setMakeNewArray((prevArray) => {
         return prevArray.map((row) => {
-          if (row.id === id) {
+          if (row.sort === id) {
             const updatedRow = { ...row };
             switch (paramKey) {
-              case 'id':
-                updatedRow.id = value === '' ? null : (value as number);
+              case 'sort':
+                updatedRow.sort = value === '' ? null : (value as number);
                 break;
               case 'name':
                 updatedRow.name = value === '' ? null : (value as string);
@@ -197,19 +198,19 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                   return (
                     <TableRow
                       tabIndex={-1}
-                      key={Number(row?.id)}
+                      key={Number(row?.sort)}
                       sx={{
                         cursor: 'pointer',
                       }}
                     >
-                      <TableCell component="th" id={String(row?.id)} scope="row?">
+                      <TableCell component="th" id={String(row?.sort)} scope="row?">
                         <CustomNumberFormat
-                          value={row?.id}
+                          value={row?.sort}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id'}
-                          id={Number(row?.id)}
+                          paramKey={'sort'}
+                          id={Number(row?.sort)}
                         />
                       </TableCell>
 
@@ -218,7 +219,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           value={row?.name}
                           onChangeValue={changeValue}
                           paramKey={'name'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                           edit={edit}
                         />
                       </TableCell>
@@ -228,13 +229,13 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           value={row?.majorSector}
                           onChangeValue={changeValue}
                           paramKey={'majorSector'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                           edit={edit}
                         />
                       </TableCell>
 
                       <TableCell align="center">
-                        <IconButton onClick={() => deleteValue(row.id as number)} disabled={!edit}>
+                        <IconButton onClick={() => deleteValue(row.sort as number)} disabled={!edit}>
                           <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
                         </IconButton>
                       </TableCell>

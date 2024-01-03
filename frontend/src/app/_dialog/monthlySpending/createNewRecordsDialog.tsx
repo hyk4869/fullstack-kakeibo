@@ -50,7 +50,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
+  const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('sort');
   const [windowSize, setWindowSize] = useState<boolean>(false);
 
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
@@ -61,7 +61,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     if (monthlyData && monthlyData.length >= 0) {
       const ID: number =
         monthlyData.length !== 0 || monthlyData !== undefined
-          ? monthlyData.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
+          ? monthlyData.reduce((maxId, item) => Math.max(maxId, item.sort ?? 0), 1)
           : 1;
       setArrayLastId(ID);
       setIncrement(ID);
@@ -86,10 +86,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const addNewArray = useCallback(() => {
     const incrementIdFromArray = incrementFromArray(makeNewArray, monthlyData, incrementArray);
 
-    const lastId = makeNewArray.slice(-1)[0]?.id;
+    const lastId = makeNewArray.slice(-1)[0]?.sort;
     if (lastId && incrementIdFromArray === lastId) return;
     const newMonthlySpending = {
-      id: incrementIdFromArray,
+      id: '',
+      sort: incrementIdFromArray,
       userId: null,
       paymentDay: null,
       store: '',
@@ -115,7 +116,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           prevId.map((a) => {
             return {
               ...a,
-              id: a.id && a.id > id ? a.id - 1 : a.id,
+              sort: a.sort && a.sort > id ? a.sort - 1 : a.sort,
             };
           }),
         );
@@ -130,11 +131,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     (id: number, paramKey: string, value: unknown) => {
       setMakeNewArray((prevArray) => {
         return prevArray.map((row) => {
-          if (row.id === id) {
+          if (row.sort === id) {
             const updatedRow = { ...row };
             switch (paramKey) {
-              case 'id':
-                updatedRow.id = value === '' ? null : (value as number);
+              case 'sort':
+                updatedRow.sort = value === '' ? null : (value as number);
                 break;
               case 'paymentDay':
                 updatedRow.paymentDay = value === '' ? null : (value as Date);
@@ -213,19 +214,19 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                   return (
                     <TableRow
                       tabIndex={-1}
-                      key={Number(row?.id)}
+                      key={Number(row?.sort)}
                       sx={{
                         cursor: 'pointer',
                       }}
                     >
-                      <TableCell component="th" id={String(row?.id)} scope="row?">
+                      <TableCell component="th" id={String(row?.sort)} scope="row?">
                         <CustomNumberFormat
-                          value={row?.id}
+                          value={row?.sort}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'id'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                         />
                       </TableCell>
 
@@ -235,7 +236,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'paymentDay'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                         />
                       </TableCell>
 
@@ -244,7 +245,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           value={row?.store}
                           onChangeValue={changeValue}
                           paramKey={'store'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                           edit={edit}
                         />
                       </TableCell>
@@ -254,10 +255,10 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           list={categoryData.map((a: MCategory) => {
                             return { value: Number(a.id), label: String(a.categoryName) };
                           })}
-                          value={categoryData.find((a) => a.id === row?.categoryId)?.id ?? null}
+                          value={categoryData.find((a) => a.id === row?.categoryId)?.sort ?? null}
                           edit={edit}
                           paramKey={'categoryId'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                           onChangeValue={changeValue}
                         />
                       </TableCell>
@@ -270,11 +271,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'usageFee'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                         />
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton onClick={() => deleteValue(row.id)} disabled={!edit}>
+                        <IconButton onClick={() => deleteValue(row.sort)} disabled={!edit}>
                           <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
                         </IconButton>
                       </TableCell>

@@ -1,7 +1,9 @@
 /** 月の出費 */
 export interface TMonthlySpending {
   /** id番号 */
-  id: number | null;
+  id: string | null;
+  /** sort番号 */
+  sort: number | null;
   /** ユーザーID */
   userId: number | null;
   /** 利用日 */
@@ -19,7 +21,9 @@ export interface TMonthlySpending {
 /** カテゴリー */
 export interface MCategory {
   /** カテゴリーID */
-  id: number | null;
+  id: string | null;
+  /** sort番号 */
+  sort: number | null;
   /** カテゴリー名 */
   categoryName: string | null;
   /** ユーザーID */
@@ -29,7 +33,9 @@ export interface MCategory {
 /** 会社 */
 export interface MCompany {
   /** id番号 */
-  id: number | null;
+  id: string | null;
+  /** sort番号 */
+  sort: number | null;
   /** 会社名 */
   name: string | null;
   /** 大分類 */
@@ -41,7 +47,9 @@ export interface MCompany {
 /** 入退社日 */
 export interface MHireDate {
   /** id番号 */
-  id: number | null;
+  id: string | null;
+  /** sort番号 */
+  sort: number | null;
   /** 会社ID */
   companyId: number | null;
   /** 入社日 */
@@ -55,7 +63,9 @@ export interface MHireDate {
 /** 給与 */
 export interface TSalary {
   /** id番号 */
-  id: number | null;
+  id: string | null;
+  /** sort番号 */
+  sort: number | null;
   /** ユーザーID */
   userId: number | null;
   /** 支給日 */
@@ -69,7 +79,9 @@ export interface TSalary {
 /** 給与に対する税金 */
 export interface TSalaryTax {
   /** id番号 */
-  id: number | null;
+  id: string | null;
+  /** sort番号 */
+  sort: number | null;
   /** ユーザーID */
   userId: number | null;
   /** 会社ID */
@@ -93,13 +105,15 @@ export interface TSalaryTax {
   /** その他 */
   notes: number | null;
   /** 給与額 */
-  TSalary: TSalary[];
+  TSalary?: TSalary[];
 }
 
 /** 賞与 */
 export interface TBonus {
   /** id番号 */
-  id: number | null;
+  id: string | null;
+  /** sort番号 */
+  sort: number | null;
   /** ユーザーID */
   userId: number | null;
   /** 支給日 */
@@ -113,7 +127,9 @@ export interface TBonus {
 /** 賞与に対する税金 */
 export interface TBonusTax {
   /** id番号 */
-  id: number | null;
+  id: string | null;
+  /** sort番号 */
+  sort: number | null;
   /** ユーザーID */
   userId: number | null;
   /** 会社ID */
@@ -137,5 +153,5 @@ export interface TBonusTax {
   /** その他 */
   notes: number | null;
   /** ボーナス額 */
-  TBonus: TBonus[];
+  TBonus?: TBonus[];
 }

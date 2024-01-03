@@ -44,27 +44,30 @@ export const ImportCSV = <T extends ItemWithId>(props: ImportCSVProps<T>): React
 
           /** 重複するIDを持つ要素を更新し、新しい要素を追加する */
           const updatedArray = prevArray.map((a) => {
-            const matchingCategory = findCategoryID.find((s) => a.id === s.id);
+            const matchingCategory = findCategoryID.find((s) => a.sort === s.sort);
             return matchingCategory ? matchingCategory : a;
           });
 
           /** 重複しないIDを持つ新しい要素を追加する */
-          const newArray = [...updatedArray, ...findCategoryID.filter((s) => !updatedArray.some((a) => a.id === s.id))];
+          const newArray = [
+            ...updatedArray,
+            ...findCategoryID.filter((s) => !updatedArray.some((a) => a.sort === s.sort)),
+          ];
 
           /**nullチェック */
           const filteredValue = nullCheck(newArray);
 
           setIncrementArray((prevValue) => {
             return monthlyData.length === 0
-              ? newArray.map((a) => Number(a.id))
-              : [...prevValue, ...findCategoryID.map((a) => Number(a.id))];
+              ? newArray.map((a) => Number(a.sort))
+              : [...prevValue, ...findCategoryID.map((a) => Number(a.sort))];
           });
 
           const resetID = (): number => {
             if (monthlyData.length === 0) {
-              return newArray.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1);
+              return newArray.reduce((maxId, item) => Math.max(maxId, item.sort ?? 0), 1);
             } else {
-              return findCategoryID.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1);
+              return findCategoryID.reduce((maxId, item) => Math.max(maxId, item.sort ?? 0), 1);
             }
           };
 

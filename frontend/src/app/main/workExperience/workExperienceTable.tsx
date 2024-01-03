@@ -129,12 +129,12 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
                     <TableRow key={a.id} sx={{ padding: commonPadding5 }}>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={a.id}
+                          value={a.sort}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id'}
-                          id={Number(a.id)}
+                          paramKey={'sort'}
+                          id={Number(a.sort)}
                         />
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
@@ -143,7 +143,7 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'name'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                         />
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
@@ -152,7 +152,7 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'majorSector'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                         />
                       </TableCell>
                     </TableRow>

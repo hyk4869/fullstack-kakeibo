@@ -121,7 +121,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const dispatch = useDispatch();
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('id');
+  const [orderBy, setOrderBy] = useState<keyof TMonthlySpending>('sort');
   const [selected, setSelected] = useState<number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -213,11 +213,11 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     (id: number, paramKey: string, value: unknown) => {
       setEditValue((prevArray) => {
         return prevArray.map((row) => {
-          if (row.id === id) {
+          if (row.sort === id) {
             const updatedRow = { ...row };
             switch (paramKey) {
-              case 'id':
-                updatedRow.id = value === '' ? null : (value as number);
+              case 'sort':
+                updatedRow.sort = value === '' ? null : (value as number);
                 break;
               case 'paymentDay':
                 updatedRow.paymentDay = value === '' ? null : (value as Date);
@@ -345,11 +345,11 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = row.id !== null ? selectedData(row.id as number) : undefined;
+                const isItemSelected = row.sort !== null ? selectedData(row.sort as number) : undefined;
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.sort} sx={{ cursor: 'pointer' }}>
                     <TableCell padding="checkbox" sx={{ padding: commonPadding5 }}>
                       <Checkbox
                         color="primary"
@@ -358,8 +358,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                           'aria-labelledby': labelId,
                         }}
                         onClick={(event) => {
-                          if (row.id !== null) {
-                            selectContent(event, row.id as number);
+                          if (row.sort !== null) {
+                            selectContent(event, row.sort as number);
                           }
                         }}
                       />
@@ -367,38 +367,38 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <Tooltip title={'idを変更することはできません'} arrow>
                       <TableCell component="th" id={labelId} scope="row" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={row.id}
+                          value={row.sort}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id'}
-                          id={Number(row.id)}
+                          paramKey={'sort'}
+                          id={Number(row.sort)}
                         />
                       </TableCell>
                     </Tooltip>
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomDate
                         value={dayjs(row.paymentDay)}
-                        edit={row.id === rowNumber ? isEditable : false}
+                        edit={row.sort === rowNumber ? isEditable : false}
                         onChangeValue={changeValue}
                         paramKey={'paymentDay'}
-                        id={Number(row.id)}
+                        id={Number(row.sort)}
                       />
                     </TableCell>
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomTextfield
                         value={row.store}
-                        edit={row.id === rowNumber ? isEditable : false}
+                        edit={row.sort === rowNumber ? isEditable : false}
                         onChangeValue={changeValue}
                         paramKey={'store'}
-                        id={Number(row.id)}
+                        id={Number(row.sort)}
                       />
                     </TableCell>
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomSelectTab
                         list={generateCategoryList()}
-                        value={categoryData.find((a) => a.id === row.categoryId)?.id ?? null}
-                        edit={row.id === rowNumber ? isEditable : false}
+                        value={categoryData.find((a) => a.id === row.categoryId)?.sort ?? null}
+                        edit={row.sort === rowNumber ? isEditable : false}
                         paramKey={'categoryId'}
                         id={Number(row?.id)}
                         onChangeValue={changeValue}
@@ -408,17 +408,17 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                       <CustomNumberFormat
                         value={row.usageFee}
                         suffix=" 円"
-                        edit={row.id === rowNumber ? isEditable : false}
+                        edit={row.sort === rowNumber ? isEditable : false}
                         align="center"
                         onChangeValue={changeValue}
                         paramKey={'usageFee'}
-                        id={Number(row.id)}
+                        id={Number(row.sort)}
                       />
                     </TableCell>
 
                     <CommonEditDeleteIcon
-                      individualEdit={() => individualEdit(row.id as number)}
-                      deleteValue={() => deleteValue(row.id as number)}
+                      individualEdit={() => individualEdit(row.sort as number)}
+                      deleteValue={() => deleteValue(row.sort as number)}
                       edit={edit}
                     />
                   </TableRow>

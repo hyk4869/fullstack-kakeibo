@@ -1,11 +1,14 @@
 'use client';
 
-import { Box, Paper, TextField, InputAdornment } from '@mui/material';
+import { Box, Paper, TextField, InputAdornment, Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
 import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
+import axios from 'axios';
+import { createAccount } from '../_api/url';
+import { useRouter } from 'next/navigation';
 
 type SignUpPageProps = {
   //
@@ -20,28 +23,55 @@ type userInfo = {
 
 const SignUpPage: React.FC<SignUpPageProps> = () => {
   const [userInfo, setUserInfo] = useState<userInfo>({ name: '', email: '', password: '', confirmPassword: '' });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const router = useRouter();
 
-  const inputUserData = (paramKey: string, value: string) => {
-    let _userInfo = { ...userInfo };
-    switch (paramKey) {
-      case 'name':
-      case 'email':
-      case 'password':
-      case 'confirmPassword':
-        _userInfo = { ..._userInfo, [paramKey]: value === '' ? null : value };
-        setUserInfo(_userInfo);
-        break;
-    }
-  };
+  const inputUserData = useCallback(
+    (paramKey: string, value: string) => {
+      let _userInfo = { ...userInfo };
+      switch (paramKey) {
+        case 'name':
+        case 'email':
+        case 'password':
+        case 'confirmPassword':
+          _userInfo = { ..._userInfo, [paramKey]: value === '' ? '' : value };
+          break;
+      }
+      setUserInfo(_userInfo);
+    },
+    [userInfo],
+  );
 
   const isShowPassword = () => setShowPassword((show) => !show);
   const isShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
 
-  const registerButton = () => {
-    //
+  const registerButton = async () => {
+    if (userInfo.name === '' || userInfo.email === '' || userInfo.password === '' || userInfo.confirmPassword === '') {
+      return;
+    }
+    if (userInfo.password === userInfo.confirmPassword) {
+      const { confirmPassword, ...postData } = userInfo;
+      await axios
+        .post(createAccount, postData)
+        .then((res) => {
+          if (res.data) {
+            if (res.data?.status === true) {
+              console.log('aaaaa');
+              router.push('/main/summaryTable');
+            } else {
+              console.log('bbbbb');
+            }
+            //リダイレクト処理
+            //セッション情報
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
+
   return (
     <Box
       sx={{
@@ -50,21 +80,23 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
         alignItems: 'center',
         flexDirection: 'column',
         position: 'relative',
+        height: '90vh',
       }}
     >
       <Paper
-        elevation={3}
+        elevation={10}
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           width: '600px',
           background: grey[200],
-          minHeight: '500px',
+          minHeight: '450px',
           // position: 'absolute',
           // top: '50%',
           // left: '50%',
           // transform: 'translate(-50%, 50%)',
+          margin: 'auto',
         }}
       >
         <h1
@@ -75,7 +107,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
             marginTop: '1.5rem',
           }}
         >
-          Sign Up Page
+          Create Account
         </h1>
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -90,7 +122,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
             />
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
             <EmailIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
             <TextField
               variant="standard"
@@ -146,6 +178,20 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
               sx={{ width: '20rem' }}
             />
           </Box>
+        </Box>
+        <Box sx={{ display: 'flex', margin: '2rem' }}>
+          <Button
+            variant="contained"
+            onClick={() => registerButton()}
+            disabled={
+              userInfo.name === '' ||
+              userInfo.email === '' ||
+              userInfo.password === '' ||
+              userInfo.confirmPassword === ''
+            }
+          >
+            Send
+          </Button>
         </Box>
       </Paper>
     </Box>

@@ -11,7 +11,8 @@ export const colorWhite: string = 'white';
 export const colorBlack: string = 'black';
 /**イニシャルバリュー */
 export const newMonthlySpending: TMonthlySpending = {
-  id: 1,
+  id: '',
+  sort: null,
   userId: null,
   paymentDay: null,
   store: '',

@@ -25,16 +25,20 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
     if (
       content.every(
         (d) =>
-          d.id !== null && d.payday !== null && !isNaN(d.payday.getTime()) && d.salary !== null && d.companyId !== null,
+          d.sort !== null &&
+          d.payday !== null &&
+          !isNaN(d.payday.getTime()) &&
+          d.salary !== null &&
+          d.companyId !== null,
       )
     ) {
       try {
         const idSet = new Set<number | null>();
         const hasDuplicate = content.some((d) => {
-          if (idSet.has(d.id)) {
+          if (idSet.has(d.sort)) {
             return true;
           } else {
-            idSet.add(d.id);
+            idSet.add(d.sort);
             return false;
           }
         });

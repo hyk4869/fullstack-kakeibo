@@ -28,11 +28,11 @@ export const getMonthlySpendingContent = createSlice({
 
     /** 値の作成 */
     setCreateMonthlySpending: (state: TMonthlySpending[], action: PayloadAction<TMonthlySpending[]>) => {
-      const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
-      const valueCheck = state.map((s) => s.id);
+      const newItems = action.payload.filter((d) => d.sort !== null && d.sort > 0);
+      const valueCheck = state.map((s) => s.sort);
 
       newItems.forEach((a) => {
-        if (valueCheck.includes(a.id)) {
+        if (valueCheck.includes(a.sort)) {
           console.error('idが重複しています。');
           return state;
         }
@@ -44,7 +44,7 @@ export const getMonthlySpendingContent = createSlice({
     /** 値の編集 */
     setEditMonthlySpending: (state, action: PayloadAction<TMonthlySpending[]>) => {
       const updatedState = state.map((existingItem) => {
-        const matchingItem = action.payload.find((newItem) => newItem.id === existingItem.id);
+        const matchingItem = action.payload.find((newItem) => newItem.sort === existingItem.sort);
         return matchingItem ? { ...existingItem, ...matchingItem } : existingItem;
       });
 
@@ -53,8 +53,8 @@ export const getMonthlySpendingContent = createSlice({
 
     /** 値の削除 */
     setDeleteMonthlySpending: (state, action: PayloadAction<TMonthlySpending[]>) => {
-      const deletedIds = action.payload.map((item) => item.id);
-      const updatedState = state.filter((item) => deletedIds.includes(item.id));
+      const deletedIds = action.payload.map((item) => item.sort);
+      const updatedState = state.filter((item) => deletedIds.includes(item.sort));
       return updatedState;
     },
   },
@@ -71,10 +71,10 @@ export const getCategoryContent = createSlice({
     },
     /** 値の作成 */
     setCreateCategoryContent: (state, action: PayloadAction<MCategory[]>) => {
-      const newValue = action.payload.filter((a) => a.id !== null && a.id > 0);
-      const valueCheck = state.map((a) => a.id);
+      const newValue = action.payload.filter((a) => a.sort !== null && a.sort > 0);
+      const valueCheck = state.map((a) => a.sort);
       newValue.forEach((a) => {
-        if (valueCheck.includes(a.id)) {
+        if (valueCheck.includes(a.sort)) {
           throw new Error('idが重複しています。');
         }
       });
@@ -94,10 +94,10 @@ export const getCompanyContent = createSlice({
     },
     /** 値の作成 */
     setCreateCompanyContent: (state, action: PayloadAction<MCompany[]>) => {
-      const newValue = action.payload.filter((a) => a.id !== null && a.id > 0);
-      const valueCheck = state.map((a) => a.id);
+      const newValue = action.payload.filter((a) => a.sort !== null && a.sort > 0);
+      const valueCheck = state.map((a) => a.sort);
       newValue.forEach((a) => {
-        if (valueCheck.includes(a.id)) {
+        if (valueCheck.includes(a.sort)) {
           throw new Error('idが重複しています。');
         }
       });
@@ -117,10 +117,10 @@ export const getHireDate = createSlice({
     },
     /** 値の作成 */
     setCreateHireDateContent: (state, action: PayloadAction<MHireDate[]>) => {
-      const newValue = action.payload.filter((a) => a.id !== null && a.id > 0);
-      const valueCheck = state.map((a) => a.id);
+      const newValue = action.payload.filter((a) => a.sort !== null && a.sort > 0);
+      const valueCheck = state.map((a) => a.sort);
       newValue.forEach((a) => {
-        if (valueCheck.includes(a.id)) {
+        if (valueCheck.includes(a.sort)) {
           throw new Error('idが重複しています。');
         }
       });
@@ -140,11 +140,11 @@ export const getSalaryTax = createSlice({
     },
     /** 値の作成 */
     setCreateSalaryTax: (state: TSalaryTax[], action: PayloadAction<TSalaryTax[]>) => {
-      const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
-      const valueCheck = state.map((s) => s.id);
+      const newItems = action.payload.filter((d) => d.sort !== null && d.sort > 0);
+      const valueCheck = state.map((s) => s.sort);
 
       newItems.forEach((a) => {
-        if (valueCheck.includes(a.id)) {
+        if (valueCheck.includes(a.sort)) {
           console.error('idが重複しています。');
           return state;
         }
@@ -173,11 +173,11 @@ export const getSalary = createSlice({
 
     /** 値の作成 */
     setCreateSalary: (state: TSalary[], action: PayloadAction<TSalary[]>) => {
-      const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
-      const valueCheck = state.map((s) => s.id);
+      const newItems = action.payload.filter((d) => d.sort !== null && d.sort > 0);
+      const valueCheck = state.map((s) => s.sort);
 
       newItems.forEach((a) => {
-        if (valueCheck.includes(a.id)) {
+        if (valueCheck.includes(a.sort)) {
           console.error('idが重複しています。');
           return state;
         }
@@ -199,11 +199,11 @@ export const getBonusTax = createSlice({
     },
     /** 値の作成 */
     setCreateBonusTax: (state: TBonusTax[], action: PayloadAction<TBonusTax[]>) => {
-      const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
-      const valueCheck = state.map((s) => s.id);
+      const newItems = action.payload.filter((d) => d.sort !== null && d.sort > 0);
+      const valueCheck = state.map((s) => s.sort);
 
       newItems.forEach((a) => {
-        if (valueCheck.includes(a.id)) {
+        if (valueCheck.includes(a.sort)) {
           console.error('idが重複しています。');
           return state;
         }
@@ -232,11 +232,11 @@ export const getBonus = createSlice({
 
     /** 値の作成 */
     setCreateBonus: (state: TBonus[], action: PayloadAction<TBonus[]>) => {
-      const newItems = action.payload.filter((d) => d.id !== null && d.id > 0);
-      const valueCheck = state.map((s) => s.id);
+      const newItems = action.payload.filter((d) => d.sort !== null && d.sort > 0);
+      const valueCheck = state.map((s) => s.sort);
 
       newItems.forEach((a) => {
-        if (valueCheck.includes(a.id)) {
+        if (valueCheck.includes(a.sort)) {
           console.error('idが重複しています。');
           return state;
         }

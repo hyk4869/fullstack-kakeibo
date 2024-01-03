@@ -77,7 +77,7 @@ export const sumEachCategory = (categoryData: MCategory[], monthlyData: TMonthly
 
   categoryData.forEach((category: MCategory) => {
     const categoryName = category.categoryName;
-    const categoryId = category.id;
+    const categoryId = category.sort;
 
     const findMonthlyData = monthlyData.filter(
       (monthly: TMonthlySpending) => monthly.category?.categoryName === categoryName,

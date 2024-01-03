@@ -101,7 +101,7 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
   const dispatch = useDispatch();
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof TSalary>('id');
+  const [orderBy, setOrderBy] = useState<keyof TSalary>('sort');
   const [selected, setSelected] = useState<number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -207,11 +207,11 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
     (id: number, paramKey: string, value: unknown) => {
       setEditValue((prevValue) => {
         return prevValue.map((a) => {
-          if (a.id === id) {
+          if (a.sort === id) {
             const updateValue = { ...a };
             switch (paramKey) {
-              case 'id':
-                updateValue.id = value === '' ? null : (value as number);
+              case 'sort':
+                updateValue.sort = value === '' ? null : (value as number);
                 break;
               case 'userId':
                 updateValue.userId = value === '' ? null : (value as number);
@@ -302,10 +302,10 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
               />
               <TableBody>
                 {visibleRows.map((row, index) => {
-                  const isItemSelected = row.id !== null ? selectedData(row.id as number) : undefined;
+                  const isItemSelected = row.sort !== null ? selectedData(row.sort as number) : undefined;
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.sort} sx={{ cursor: 'pointer' }}>
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
@@ -314,55 +314,55 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
                             'aria-labelledby': labelId,
                           }}
                           onClick={(event) => {
-                            if (row.id !== null) {
-                              selectContent(event, row.id as number);
+                            if (row.sort !== null) {
+                              selectContent(event, row.sort as number);
                             }
                           }}
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={row.id}
+                          value={row.sort}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id'}
-                          id={Number(row.id)}
+                          paramKey={'sort'}
+                          id={Number(row.sort)}
                         />
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={row.companyId}
-                          edit={row.id === rowNumber ? isEditable : false}
+                          edit={row.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'companyId'}
-                          id={Number(row.id)}
+                          id={Number(row.sort)}
                         />
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomDate
                           value={dayjs(row.payday)}
-                          edit={row.id === rowNumber ? isEditable : false}
+                          edit={row.sort === rowNumber ? isEditable : false}
                           onChangeValue={changeValue}
                           paramKey={'payday'}
-                          id={Number(row.id)}
+                          id={Number(row.sort)}
                         />
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
                           value={row.salary}
-                          edit={row.id === rowNumber ? isEditable : false}
+                          edit={row.sort === rowNumber ? isEditable : false}
                           suffix={' 円'}
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'salary'}
-                          id={Number(row.id)}
+                          id={Number(row.sort)}
                         />
                       </TableCell>
                       <CommonEditDeleteIcon
-                        individualEdit={() => individualEdit(row.id as number)}
-                        deleteValue={() => deleteValue(row.id as number)}
+                        individualEdit={() => individualEdit(row.sort as number)}
+                        deleteValue={() => deleteValue(row.sort as number)}
                         edit={edit}
                       />
                     </TableRow>

@@ -60,7 +60,7 @@ const useCommonRecordsFunctions = <T extends ItemWithId>(): CommonFunctionsTypes
     setIncrement: React.Dispatch<React.SetStateAction<number>>,
   ) => {
     if (id === arrayLastId) return;
-    const deletedArray = makeNewArray.filter((a) => a.id !== id);
+    const deletedArray = makeNewArray.filter((a) => a.sort !== id);
     setMakeNewArray(deletedArray);
 
     if (id !== null) {
@@ -70,7 +70,7 @@ const useCommonRecordsFunctions = <T extends ItemWithId>(): CommonFunctionsTypes
         prevId.map((a) => {
           return {
             ...a,
-            id: a.id && a.id > id ? a.id - 1 : a.id,
+            id: a.sort && a.sort > id ? a.sort - 1 : a.sort,
           };
         }),
       );

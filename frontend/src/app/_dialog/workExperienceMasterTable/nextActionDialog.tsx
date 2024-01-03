@@ -22,14 +22,14 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
 
   const saveValue = async (): Promise<void> => {
     setIsLoading(true);
-    if (content.every((d) => d.id !== null && d.name !== null && d.majorSector !== null)) {
+    if (content.every((d) => d.sort !== null && d.name !== null && d.majorSector !== null)) {
       try {
         const idSet = new Set<number | null>();
         const hasDuplicate = content.some((d) => {
-          if (idSet.has(d.id)) {
+          if (idSet.has(d.sort)) {
             return true;
           } else {
-            idSet.add(d.id);
+            idSet.add(d.sort);
             return false;
           }
         });

@@ -46,7 +46,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof MHireDate>('id');
+  const [orderBy, setOrderBy] = useState<keyof MHireDate>('sort');
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const hireDateData = useSelector((state: RootState) => state.getHireDate);
@@ -56,7 +56,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     if (hireDateData && hireDateData.length >= 0) {
       const ID: number =
         hireDateData.length !== 0 || hireDateData !== undefined
-          ? hireDateData.reduce((maxId, item) => Math.max(maxId, item.id ?? 0), 1)
+          ? hireDateData.reduce((maxId, item) => Math.max(maxId, item.sort ?? 0), 1)
           : 1;
       setArrayLastId(ID);
       setIncrement(ID);
@@ -81,10 +81,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const addNewArray = useCallback(() => {
     const incrementIdFromArray = incrementFromArray(makeNewArray, hireDateData, incrementArray);
 
-    const lastId = makeNewArray.slice(-1)[0]?.id;
+    const lastId = makeNewArray.slice(-1)[0]?.sort;
     if (lastId && incrementIdFromArray === lastId) return;
     const newCategory = {
-      id: incrementIdFromArray,
+      id: '',
+      sort: incrementIdFromArray,
       hireDate: null,
       retirementDate: null,
       companyId: null,
@@ -109,7 +110,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           prevId.map((a) => {
             return {
               ...a,
-              id: a.id && a.id > id ? a.id - 1 : a.id,
+              sort: a.sort && a.sort > id ? a.sort - 1 : a.sort,
             };
           }),
         );
@@ -124,11 +125,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     (id: number, paramKey: string, value: unknown) => {
       setMakeNewArray((prevArray) => {
         return prevArray.map((row) => {
-          if (row.id === id) {
+          if (row.sort === id) {
             const updatedRow = { ...row };
             switch (paramKey) {
-              case 'id':
-                updatedRow.id = value === '' ? null : (value as number);
+              case 'sort':
+                updatedRow.sort = value === '' ? null : (value as number);
                 break;
               case 'hireDate':
                 updatedRow.hireDate = value === '' ? null : (value as Date);
@@ -201,19 +202,19 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                   return (
                     <TableRow
                       tabIndex={-1}
-                      key={Number(row?.id)}
+                      key={Number(row?.sort)}
                       sx={{
                         cursor: 'pointer',
                       }}
                     >
-                      <TableCell component="th" id={String(row?.id)} scope="row?">
+                      <TableCell component="th" id={String(row?.sort)} scope="row?">
                         <CustomNumberFormat
-                          value={row?.id}
+                          value={row?.sort}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id'}
-                          id={Number(row?.id)}
+                          paramKey={'sort'}
+                          id={Number(row?.sort)}
                         />
                       </TableCell>
 
@@ -225,7 +226,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                             align="center"
                             onChangeValue={changeValue}
                             paramKey={'companyId'}
-                            id={Number(row.id)}
+                            id={Number(row.sort)}
                           />
                         </TableCell>
                       </Tooltip>
@@ -236,7 +237,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'hireDate'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                         />
                       </TableCell>
 
@@ -246,12 +247,12 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'retirementDate'}
-                          id={Number(row?.id)}
+                          id={Number(row?.sort)}
                         />
                       </TableCell>
 
                       <TableCell align="center">
-                        <IconButton onClick={() => deleteValue(row.id)} disabled={!edit}>
+                        <IconButton onClick={() => deleteValue(row.sort)} disabled={!edit}>
                           <DeleteIcon sx={{ cursor: 'pointer', opacity: '0.4', '&:hover': { opacity: '1' } }} />
                         </IconButton>
                       </TableCell>

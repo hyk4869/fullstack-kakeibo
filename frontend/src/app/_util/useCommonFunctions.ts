@@ -18,7 +18,7 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
     if (event.target.checked) {
       setSelected((setNum) => {
         if (arrayContent) {
-          const filteredData: number[] = arrayContent.filter((d) => d.id !== null).map((d) => d.id as number);
+          const filteredData: number[] = arrayContent.filter((d) => d.sort !== null).map((d) => d.sort as number);
           return [...setNum, ...filteredData];
         }
         return setNum;
@@ -105,7 +105,7 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
     setIsEditable: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
     if (arraySomething) {
-      const result = arraySomething.find((a) => a.id === id)?.id;
+      const result = arraySomething.find((a) => a.sort === id)?.sort;
       setRowNumber(result as number);
       setIsEditable((prev) => !prev);
     }
@@ -124,11 +124,11 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
   ) => {
     if (id !== null) {
       setEditValue((prevData) => {
-        const updatedData = prevData.filter((d) => d.id !== id);
-        const deleteContent = prevData.filter((d) => d.id === id);
+        const updatedData = prevData.filter((d) => d.sort !== id);
+        const deleteContent = prevData.filter((d) => d.sort === id);
         setDeleteSomething((prev) => {
           const uniqueDeleteContent = deleteContent.filter(
-            (item) => !prev.some((existingItem) => existingItem.id === item.id),
+            (item) => !prev.some((existingItem) => existingItem.sort === item.sort),
           );
           return [...prev, ...uniqueDeleteContent];
         });
@@ -151,11 +151,11 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
     selected: number[],
   ) => {
     setEditValue((prevValue) => {
-      const updatedData = prevValue.filter((a) => !selected.includes(Number(a.id)));
-      const deleteContent = prevValue.filter((a) => selected.includes(Number(a.id)));
+      const updatedData = prevValue.filter((a) => !selected.includes(Number(a.sort)));
+      const deleteContent = prevValue.filter((a) => selected.includes(Number(a.sort)));
       setDeleteSomething((prev) => {
         const uniqueDeleteContent = deleteContent.filter(
-          (item) => !prev.some((existingItem) => existingItem.id === item.id),
+          (item) => !prev.some((existingItem) => existingItem.sort === item.sort),
         );
         return [...prev, ...uniqueDeleteContent];
       });

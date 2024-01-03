@@ -115,15 +115,15 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
               <TableBody>
                 {editHireDateValue.map((a) => {
                   return (
-                    <TableRow key={a.id} sx={{ padding: commonPadding5 }}>
+                    <TableRow key={a.sort} sx={{ padding: commonPadding5 }}>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={a.id}
+                          value={a.sort}
                           edit={false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'id'}
-                          id={Number(a.id)}
+                          paramKey={'sort'}
+                          id={Number(a.sort)}
                         />
                       </TableCell>
 
@@ -135,7 +135,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
                             align="center"
                             onChangeValue={changeValue}
                             paramKey={'companyId'}
-                            id={Number(a.id)}
+                            id={Number(a.sort)}
                           />
                         </TableCell>
                       </Tooltip>
@@ -146,7 +146,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'hireDate'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                         />
                       </TableCell>
 
@@ -156,7 +156,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
                           edit={edit}
                           onChangeValue={changeValue}
                           paramKey={'retirementDate'}
-                          id={Number(a.id)}
+                          id={Number(a.sort)}
                         />
                       </TableCell>
                     </TableRow>

@@ -25,7 +25,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
     if (
       content.every(
         (d) =>
-          d.id !== null &&
+          d.sort !== null &&
           d.paymentDay !== null &&
           !isNaN(d.paymentDay.getTime()) &&
           d.store !== null &&
@@ -35,10 +35,10 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
       try {
         const idSet = new Set<number | null>();
         const hasDuplicate = content.some((d) => {
-          if (idSet.has(d.id)) {
+          if (idSet.has(d.sort)) {
             return true;
           } else {
-            idSet.add(d.id);
+            idSet.add(d.sort);
             return false;
           }
         });
