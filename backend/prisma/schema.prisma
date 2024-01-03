@@ -19,11 +19,11 @@
   id String @db.Uuid @id @default(uuid()) @unique
   name String @db.VarChar(100)
   email String @db.VarChar(250)
-  password String @db.VarChar(20)
+  password String @db.VarChar(250)
   color String? @db.VarChar(20)
   lastLoginAt DateTime @db.Timestamptz()
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 
   Session Session[]
   TMonthlySpending TMonthlySpending[]
@@ -42,8 +42,8 @@
   userId String            @db.Uuid
 
   token String @db.VarChar(250)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
 
   user User ? @relation(fields: [userId],references: [id])
   }
@@ -57,8 +57,8 @@
   categoryId  String            @db.Uuid
   usageFee  Int @db.Integer
   notes     String? @db.VarChar(250)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
   category  MCategory?  @relation(fields: [categoryId], references: [id])
   userInfo User? @relation(fields: [userId], references: [id])
   }
@@ -70,8 +70,8 @@
   payday    DateTime @db.Timestamptz()
   salary    Int @db.Integer
   companyId String            @db.Uuid
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
   MCompany    MCompany? @relation(fields: [companyId], references: [id])
   TTax    TTax? @relation(fields: [id], references: [id])
   userInfo User? @relation(fields: [userId], references: [id])
@@ -92,8 +92,8 @@
   residenceTax                 Int?@db.Integer 
   yearEndAdjustment            Int?@db.Integer 
   notes                        Int?@db.Integer 
-  createdAt                    DateTime @default(now())
-  updatedAt                    DateTime @updatedAt
+  createdAt                    DateTime @default(now()) @db.Timestamptz()
+  updatedAt                    DateTime @updatedAt @db.Timestamptz()
   TSalary TSalary[]
   MCompany    MCompany? @relation(fields: [companyId], references: [id])
   userInfo User? @relation(fields: [userId], references: [id])
@@ -107,8 +107,8 @@
   payday      DateTime? @db.Timestamptz()
   bonusAmount Int? @db.Integer
   companyId String            @db.Uuid
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @db.Timestamptz()
   MCompany    MCompany? @relation(fields: [companyId], references: [id])
   TTaxBonus    TTaxBonus? @relation(fields: [id], references: [id])
   userInfo User? @relation(fields: [userId], references: [id])
@@ -129,8 +129,8 @@
   residenceTax                 Int? @db.Integer
   yearEndAdjustment            Int? @db.Integer
   notes                        Int? @db.Integer
-  createdAt                    DateTime @default(now())
-  updatedAt                    DateTime @updatedAt
+  createdAt                    DateTime @default(now()) @db.Timestamptz()
+  updatedAt                    DateTime @updatedAt @db.Timestamptz()
   TBonus TBonus[]
   MCompany    MCompany? @relation(fields: [companyId], references: [id])
   userInfo User? @relation(fields: [userId], references: [id])
@@ -142,8 +142,8 @@
   sort        Int        @db.Integer
   userId       String            @db.Uuid
   categoryName String @db.VarChar(250)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now()) @db.Timestamptz()
+  updatedAt    DateTime @updatedAt @db.Timestamptz()
   spendings    TMonthlySpending[]
   userInfo User? @relation(fields: [userId], references: [id])
 
@@ -158,8 +158,8 @@
   majorSector String @db.VarChar(250)
   subSector String? @db.VarChar(250)
   industry String? @db.VarChar(250)
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())  @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
   MhireDate MHireDate[]
   TTaxBonus TTaxBonus[]
   TTax TTax[]
@@ -176,8 +176,8 @@
   companyId String            @db.Uuid
   hireDate DateTime @db.Timestamptz()
   retirementDate DateTime? @db.Timestamptz()
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
   MCompany MCompany @relation(fields: [companyId], references: [id])
   userInfo User? @relation(fields: [userId], references: [id])
 

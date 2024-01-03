@@ -3,11 +3,11 @@ CREATE TABLE "User" (
     "id" UUID NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(250) NOT NULL,
-    "password" VARCHAR(20) NOT NULL,
+    "password" VARCHAR(250) NOT NULL,
     "color" VARCHAR(20),
     "lastLoginAt" TIMESTAMPTZ NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -18,8 +18,8 @@ CREATE TABLE "Session" (
     "sessionId" VARCHAR(250) NOT NULL,
     "userId" UUID NOT NULL,
     "token" VARCHAR(250) NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
 );
@@ -34,8 +34,8 @@ CREATE TABLE "TMonthlySpending" (
     "categoryId" UUID NOT NULL,
     "usageFee" INTEGER NOT NULL,
     "notes" VARCHAR(250),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "TMonthlySpending_pkey" PRIMARY KEY ("id")
 );
@@ -48,8 +48,8 @@ CREATE TABLE "TSalary" (
     "payday" TIMESTAMPTZ NOT NULL,
     "salary" INTEGER NOT NULL,
     "companyId" UUID NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "TSalary_pkey" PRIMARY KEY ("id")
 );
@@ -69,8 +69,8 @@ CREATE TABLE "TTax" (
     "residenceTax" INTEGER,
     "yearEndAdjustment" INTEGER,
     "notes" INTEGER,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "TTax_pkey" PRIMARY KEY ("id")
 );
@@ -83,8 +83,8 @@ CREATE TABLE "TBonus" (
     "payday" TIMESTAMPTZ,
     "bonusAmount" INTEGER,
     "companyId" UUID NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "TBonus_pkey" PRIMARY KEY ("id")
 );
@@ -104,8 +104,8 @@ CREATE TABLE "TTaxBonus" (
     "residenceTax" INTEGER,
     "yearEndAdjustment" INTEGER,
     "notes" INTEGER,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "TTaxBonus_pkey" PRIMARY KEY ("id")
 );
@@ -116,8 +116,8 @@ CREATE TABLE "MCategory" (
     "sort" INTEGER NOT NULL,
     "userId" UUID NOT NULL,
     "categoryName" VARCHAR(250) NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "MCategory_pkey" PRIMARY KEY ("id")
 );
@@ -131,8 +131,8 @@ CREATE TABLE "MCompany" (
     "majorSector" VARCHAR(250) NOT NULL,
     "subSector" VARCHAR(250),
     "industry" VARCHAR(250),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "MCompany_pkey" PRIMARY KEY ("id")
 );
@@ -145,8 +145,8 @@ CREATE TABLE "MHireDate" (
     "companyId" UUID NOT NULL,
     "hireDate" TIMESTAMPTZ NOT NULL,
     "retirementDate" TIMESTAMPTZ,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
 
     CONSTRAINT "MHireDate_pkey" PRIMARY KEY ("id")
 );
