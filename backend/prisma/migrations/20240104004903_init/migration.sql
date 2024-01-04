@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
+    "userID" VARCHAR(100) NOT NULL,
     "email" VARCHAR(250) NOT NULL,
     "password" VARCHAR(250) NOT NULL,
     "color" VARCHAR(20),
@@ -153,6 +153,12 @@ CREATE TABLE "MHireDate" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_userID_key" ON "User"("userID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_id_key" ON "Session"("id");

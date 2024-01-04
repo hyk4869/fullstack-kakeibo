@@ -17,8 +17,8 @@
 
   model User {
   id String @db.Uuid @id @default(uuid()) @unique
-  name String @db.VarChar(100)
-  email String @db.VarChar(250)
+  userID String @db.VarChar(100) @unique
+  email String @db.VarChar(250) @unique
   password String @db.VarChar(250)
   color String? @db.VarChar(20)
   lastLoginAt DateTime @db.Timestamptz()
