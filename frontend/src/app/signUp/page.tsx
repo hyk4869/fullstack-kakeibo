@@ -15,14 +15,14 @@ type SignUpPageProps = {
 };
 
 type userInfo = {
-  name: string;
+  userID: string;
   email: string;
   password: string;
   confirmPassword: string;
 };
 
 const SignUpPage: React.FC<SignUpPageProps> = () => {
-  const [userInfo, setUserInfo] = useState<userInfo>({ name: '', email: '', password: '', confirmPassword: '' });
+  const [userInfo, setUserInfo] = useState<userInfo>({ userID: '', email: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const router = useRouter();
@@ -31,7 +31,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
     (paramKey: string, value: string) => {
       let _userInfo = { ...userInfo };
       switch (paramKey) {
-        case 'name':
+        case 'userID':
         case 'email':
         case 'password':
         case 'confirmPassword':
@@ -47,7 +47,12 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
   const isShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
 
   const registerButton = async () => {
-    if (userInfo.name === '' || userInfo.email === '' || userInfo.password === '' || userInfo.confirmPassword === '') {
+    if (
+      userInfo.userID === '' ||
+      userInfo.email === '' ||
+      userInfo.password === '' ||
+      userInfo.confirmPassword === ''
+    ) {
       return;
     }
     if (userInfo.password === userInfo.confirmPassword) {
@@ -114,9 +119,9 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
             <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
             <TextField
               variant="standard"
-              value={userInfo?.name}
-              onChange={(e) => inputUserData('name', e.target.value)}
-              label="name"
+              value={userInfo?.userID}
+              onChange={(e) => inputUserData('userID', e.target.value)}
+              label="userID"
               type="text"
               sx={{ width: '20rem' }}
             />
@@ -184,7 +189,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
             variant="contained"
             onClick={() => registerButton()}
             disabled={
-              userInfo.name === '' ||
+              userInfo.userID === '' ||
               userInfo.email === '' ||
               userInfo.password === '' ||
               userInfo.confirmPassword === ''

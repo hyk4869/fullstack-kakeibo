@@ -1,8 +1,8 @@
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateNewUser {
   @IsNotEmpty()
-  name: string;
+  userID: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -10,5 +10,6 @@ export class CreateNewUser {
 
   @IsNotEmpty()
   @MinLength(6)
+  @MaxLength(16)
   password: string;
 }
