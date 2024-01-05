@@ -1,5 +1,7 @@
 export interface JwtPayload {
-  email: string;
+  username: string;
   /**認証情報を識別するための識別子 */
-  sub: number;
+  // sub: number;
+  iat?: number;
+  exp?: number;
 }
