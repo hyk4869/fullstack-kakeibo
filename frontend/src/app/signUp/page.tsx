@@ -9,6 +9,7 @@ import KeyIcon from '@mui/icons-material/Key';
 import axios from 'axios';
 import { createAccount } from '../_api/url';
 import { useRouter } from 'next/navigation';
+import MessageDialog from './messageDialog';
 
 type SignUpPageProps = {
   //
@@ -25,6 +26,10 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
   const [userInfo, setUserInfo] = useState<userInfo>({ userID: '', email: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
+  const [message, setMessage] = useState<string>('');
+  const [messageDialog, setMessageDialog] = useState<boolean>(false);
+
   const router = useRouter();
 
   const inputUserData = useCallback(
@@ -62,13 +67,14 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
         .then((res) => {
           if (res.data) {
             if (res.data?.status === true) {
-              console.log('aaaaa');
-              router.push('/main/summaryTable');
+              // router.push('/main/summaryTable');
+              setMessage(res.data?.message);
+              setMessageDialog(true);
+              console.log(res.data?.user);
             } else {
-              console.log('bbbbb');
+              setMessage(res.data?.message);
+              setMessageDialog(true);
             }
-            //リダイレクト処理
-            //セッション情報
           }
         })
         .catch((error) => {
@@ -199,6 +205,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
           </Button>
         </Box>
       </Paper>
+      <MessageDialog message={message} messageDialog={messageDialog} closeDialog={() => setMessageDialog(false)} />
     </Box>
   );
 };
