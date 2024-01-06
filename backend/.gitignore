@@ -3,7 +3,7 @@
 /dist
 /node_modules
 .env
-/sampledata/sampleCSV
+/sampledata/sampleCSV/userData.csv
 
 # Logs
 logs
