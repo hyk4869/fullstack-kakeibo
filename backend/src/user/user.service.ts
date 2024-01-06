@@ -3,13 +3,13 @@ import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNewUser } from './dto/createUser.input';
 import * as bcrypt from 'bcrypt';
-import { CustomMessage } from './interfaces/messages';
+import { CustomMessageUser } from './interfaces/messages';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createNewUser(postData: CreateNewUser): Promise<CustomMessage> {
+  async createNewUser(postData: CreateNewUser): Promise<CustomMessageUser> {
     const { userID, email, password } = postData;
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -21,7 +21,7 @@ export class UserService {
       });
 
       if (checkDuplicate.length === 0) {
-        await this.prisma.user.create({
+        const createdUser = await this.prisma.user.create({
           data: {
             userID,
             email,
@@ -30,13 +30,15 @@ export class UserService {
           },
         });
 
+        const { id, password, ...userAccount } = createdUser;
         return {
-          message: 'アカウントの作成に成功しました。リダイレクトします。',
+          message: 'アカウントの作成に成功しました。\nメインページに移動しますか？',
           status: true,
+          user: userAccount,
         };
       } else {
         return {
-          message: 'nameもしくは、emailが重複している可能性があります',
+          message: 'userIDもしくは、emailが重複しています',
           status: false,
         };
       }

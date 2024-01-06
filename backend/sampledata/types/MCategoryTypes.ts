@@ -1,23 +1,3 @@
-/** 月の出費 */
-export interface TMonthlySpendingSampleData {
-  /** id番号 */
-  id?: string | null;
-  /** sort番号 */
-  sort?: number | null;
-  /** ユーザーID */
-  userId?: number | null;
-  /** 利用日 */
-  paymentDay?: Date | null;
-  /** 利用店 */
-  store?: string | null;
-  /** カテゴリーID */
-  categoryId?: number | null;
-  /** 利用金額 */
-  usageFee?: number | null;
-  /** カテゴリーの詳細 */
-  category?: MCategorySampleData | null;
-}
-
 /** カテゴリー */
 export interface MCategorySampleData {
   /** sort番号 */
@@ -56,6 +36,26 @@ export interface MHireDateSampleData {
   retirementDate?: Date | null;
   /** ユーザーID */
   userId?: string | null;
+}
+
+/** 月の出費 */
+export interface TMonthlySpendingSampleData {
+  /** id番号 */
+  id?: string | null;
+  /** sort番号 */
+  sort?: number | null;
+  /** ユーザーID */
+  userId?: number | null;
+  /** 利用日 */
+  paymentDay?: Date | null;
+  /** 利用店 */
+  store?: string | null;
+  /** カテゴリーID */
+  categoryId?: number | null;
+  /** 利用金額 */
+  usageFee?: number | null;
+  /** カテゴリーの詳細 */
+  category?: MCategorySampleData | null;
 }
 
 /** 給与 */

@@ -6,5 +6,15 @@ export interface CustomMessage {
 }
 
 export interface CustomMessageUser extends CustomMessage {
-  user?: User;
+  // user?: User;
+  user?: {
+    id?: string;
+    userID: string;
+    email: string;
+    password?: string;
+    color: string;
+    lastLoginAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+  };
 }
