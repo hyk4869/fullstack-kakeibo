@@ -31,6 +31,7 @@ const readCsvFile = async (filePath: string): Promise<CreateNewUser[]> => {
   });
 };
 
+/** User */
 export const createUserSeedData = async (): Promise<User[]> => {
   const csvData = await readCsvFile(csvFilePath);
 

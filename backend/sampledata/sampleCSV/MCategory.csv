@@ -1,0 +1,14 @@
+sort,userId,categoryName
+1,test,住居費
+2,test,保険料
+3,test,通信費
+4,test,光熱費
+5,test,自動車費
+6,test,教育費
+7,test,食費
+8,test,日用品費
+9,test,医療費
+10,test,その他（不明）
+11,test,その他（変動費）
+12,test,現金
+13,test,その他（娯楽・旅行）

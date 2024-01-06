@@ -11,3 +11,5 @@
 次に以下を実行
 
 - `npx prisma generate`
+
+- `npx prisma studio` ➡localhostで管理を開く

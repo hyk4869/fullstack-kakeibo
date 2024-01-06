@@ -1,0 +1,4 @@
+sort,userId,name,majorSector,subSector,industry
+1,test,株式会社A,不動産業,不動産取引業,不動産代理業・仲介業
+2,test,株式会社B,卸売・小売・飲食業,一般飲食店,すし店
+3,test,株式会社C,サービス業,情報・広告業,情報サービス業

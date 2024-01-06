@@ -1,5 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { createUserSeedData } from '../sampledata/sampleScript/user.seedData';
+import { createMCategorySeedData } from '../sampledata/sampleScript/MCategory.seedData';
+import { createMCompanySeedData } from '../sampledata/sampleScript/MCompany.seedData';
+import { createMHireDateSeedData } from '../sampledata/sampleScript/MHireDate.seedData';
 
 const prisma = new PrismaClient();
 
@@ -7,6 +10,9 @@ const main = async () => {
   console.log(`seed データの追加を開始します`);
 
   await createUserSeedData();
+  await createMCategorySeedData();
+  await createMCompanySeedData();
+  await createMHireDateSeedData();
 
   console.log(`完了しました`);
 };
