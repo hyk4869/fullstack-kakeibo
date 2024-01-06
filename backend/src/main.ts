@@ -12,7 +12,7 @@ async function bootstrap() {
       origin: ['http://localhost:3000'],
     });
 
-    //後でここを修正
+    //TODO: 後でここを修正
     app.use(bodyParser.json({ limit: '50mb' }));
     app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
     await app.listen(3005);

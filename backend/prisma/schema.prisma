@@ -25,7 +25,6 @@
   createdAt DateTime @default(now()) @db.Timestamptz()
   updatedAt DateTime @updatedAt @db.Timestamptz()
 
-  Session Session[]
   TMonthlySpending TMonthlySpending[]
   TSalary TSalary[]
   TTax TTax[]
@@ -34,18 +33,6 @@
   MCategory MCategory[]
   MCompany MCompany[]
   MHireDate MHireDate[]
-  }
-
-  model Session {
-  id String @db.Uuid @id @default(uuid()) @unique
-  sessionId String @db.VarChar(250)
-  userId String            @db.Uuid
-
-  token String @db.VarChar(250)
-  createdAt DateTime @default(now()) @db.Timestamptz()
-  updatedAt DateTime @updatedAt @db.Timestamptz()
-
-  user User ? @relation(fields: [userId],references: [id])
   }
 
   model TMonthlySpending {

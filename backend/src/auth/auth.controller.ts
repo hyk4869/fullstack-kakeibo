@@ -4,7 +4,6 @@ import { AuthDto, SignInResponse } from './dto/loginUser.input';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from 'src/user/user.service';
 import { User } from '@prisma/client';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -24,7 +23,7 @@ export class AuthController {
   //   return this.authServise.postLogin(req.body);
   // }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get('/getUser')
   async getUser(@Query('userID') userID: string): Promise<User> {
     return await this.userService.getUser(userID);

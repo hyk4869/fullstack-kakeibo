@@ -13,18 +13,6 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Session" (
-    "id" UUID NOT NULL,
-    "sessionId" VARCHAR(250) NOT NULL,
-    "userId" UUID NOT NULL,
-    "token" VARCHAR(250) NOT NULL,
-    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ NOT NULL,
-
-    CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "TMonthlySpending" (
     "id" UUID NOT NULL,
     "sort" INTEGER NOT NULL,
@@ -161,9 +149,6 @@ CREATE UNIQUE INDEX "User_userID_key" ON "User"("userID");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Session_id_key" ON "Session"("id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "TMonthlySpending_id_key" ON "TMonthlySpending"("id");
 
 -- CreateIndex
@@ -186,9 +171,6 @@ CREATE UNIQUE INDEX "MCompany_id_key" ON "MCompany"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "MHireDate_id_key" ON "MHireDate"("id");
-
--- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TMonthlySpending" ADD CONSTRAINT "TMonthlySpending_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "MCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
