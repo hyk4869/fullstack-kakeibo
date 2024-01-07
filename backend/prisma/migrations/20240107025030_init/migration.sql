@@ -20,6 +20,7 @@ CREATE TABLE "TMonthlySpending" (
     "paymentDay" TIMESTAMPTZ NOT NULL,
     "store" VARCHAR(250) NOT NULL,
     "categoryId" UUID NOT NULL,
+    "categorySort" INTEGER NOT NULL,
     "usageFee" INTEGER NOT NULL,
     "notes" VARCHAR(250),
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

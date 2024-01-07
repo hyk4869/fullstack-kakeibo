@@ -40,22 +40,20 @@ export interface MHireDateSampleData {
 
 /** 月の出費 */
 export interface TMonthlySpendingSampleData {
-  /** id番号 */
-  id?: string | null;
   /** sort番号 */
   sort?: number | null;
   /** ユーザーID */
-  userId?: number | null;
+  userId?: string | null;
   /** 利用日 */
   paymentDay?: Date | null;
   /** 利用店 */
   store?: string | null;
   /** カテゴリーID */
-  categoryId?: number | null;
+  categoryId?: string | null;
+  /** カテゴリーsort番号 */
+  categorySort?: number | null;
   /** 利用金額 */
   usageFee?: number | null;
-  /** カテゴリーの詳細 */
-  category?: MCategorySampleData | null;
 }
 
 /** 給与 */

@@ -1,171 +1,164 @@
-  // This is your Prisma schema file,
-  // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-  generator client {
+generator client {
   provider = "prisma-client-js"
-  }
+}
 
-  datasource db {
+datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  }
+}
 
-  generator erd {
+generator erd {
   provider = "prisma-erd-generator"
-  output = "./ERD.svg"
-  }
+  output   = "./ERD.svg"
+}
 
-  model User {
-  id String @db.Uuid @id @default(uuid()) @unique
-  userID String @db.VarChar(100) @unique
-  email String @db.VarChar(250) @unique
-  password String @db.VarChar(250)
-  color String? @db.VarChar(20)
+model User {
+  id          String   @id @unique @default(uuid()) @db.Uuid
+  userID      String   @unique @db.VarChar(100)
+  email       String   @unique @db.VarChar(250)
+  password    String   @db.VarChar(250)
+  color       String?  @db.VarChar(20)
   lastLoginAt DateTime @db.Timestamptz()
-  createdAt DateTime @default(now()) @db.Timestamptz()
-  updatedAt DateTime @updatedAt @db.Timestamptz()
-
-  TMonthlySpending TMonthlySpending[]
-  TSalary TSalary[]
-  TTax TTax[]
-  TBonus TBonus[]
-  TTaxBonus TTaxBonus[]
-  MCategory MCategory[]
-  MCompany MCompany[]
-  MHireDate MHireDate[]
-  }
-
-  model TMonthlySpending {
-  id String @db.Uuid @id @default(uuid()) @unique
-  sort        Int       @db.Integer
-  userId    String           
-  paymentDay DateTime @db.Timestamptz()
-  store     String @db.VarChar(250)
-  categoryId  String            @db.Uuid
-  usageFee  Int @db.Integer
-  notes     String? @db.VarChar(250)
-  createdAt DateTime @default(now()) @db.Timestamptz()
-  updatedAt DateTime @updatedAt @db.Timestamptz()
-  category  MCategory?  @relation(fields: [categoryId], references: [id])
-  userInfo User? @relation(fields: [userId], references: [userID])
-  }
-
-  model TSalary {
-  id String @db.Uuid @id @default(uuid()) @unique 
-  sort        Int        @db.Integer
-  userId    String            
-  payday    DateTime @db.Timestamptz()
-  salary    Int @db.Integer
-  companyId String            @db.Uuid
-  createdAt DateTime @default(now()) @db.Timestamptz()
-  updatedAt DateTime @updatedAt @db.Timestamptz()
-  MCompany    MCompany? @relation(fields: [companyId], references: [id])
-  TTax    TTax? @relation(fields: [id], references: [id])
-  userInfo User? @relation(fields: [userId], references: [userID])
-
-  }
-
-  model TTax {
-  id String @db.Uuid @id @default(uuid()) @unique 
-  sort        Int @db.Integer       
-  userId                       String            
-  companyId String            @db.Uuid
-  healthInsuranceExpense       Int?@db.Integer 
-  employeePensionInsuranceExpense Int?@db.Integer 
-  nationalPensionInsuranceExpense Int?@db.Integer 
-  employeeInsuranceExpense      Int?@db.Integer 
-  longTermCareInsurance         Int?@db.Integer 
-  incomeTax                    Int?@db.Integer 
-  residenceTax                 Int?@db.Integer 
-  yearEndAdjustment            Int?@db.Integer 
-  notes                        Int?@db.Integer 
-  createdAt                    DateTime @default(now()) @db.Timestamptz()
-  updatedAt                    DateTime @updatedAt @db.Timestamptz()
-  TSalary TSalary[]
-  MCompany    MCompany? @relation(fields: [companyId], references: [id])
-  userInfo User? @relation(fields: [userId], references: [userID])
-
-  }
-
-  model TBonus {
-  id String @db.Uuid @id @default(uuid()) @unique 
-  sort        Int       @db.Integer
-  userId      String           
-  payday      DateTime? @db.Timestamptz()
-  bonusAmount Int? @db.Integer
-  companyId String            @db.Uuid
   createdAt   DateTime @default(now()) @db.Timestamptz()
   updatedAt   DateTime @updatedAt @db.Timestamptz()
-  MCompany    MCompany? @relation(fields: [companyId], references: [id])
-  TTaxBonus    TTaxBonus? @relation(fields: [id], references: [id])
-  userInfo User? @relation(fields: [userId], references: [userID])
 
-  }
+  TMonthlySpending TMonthlySpending[]
+  TSalary          TSalary[]
+  TTax             TTax[]
+  TBonus           TBonus[]
+  TTaxBonus        TTaxBonus[]
+  MCategory        MCategory[]
+  MCompany         MCompany[]
+  MHireDate        MHireDate[]
+}
 
-  model TTaxBonus {
-  id String @db.Uuid @id @default(uuid()) @unique 
-  sort        Int       @db.Integer
-  userId                       String            
-  companyId String            @db.Uuid
-  healthInsuranceExpense       Int? @db.Integer
-  employeePensionInsuranceExpense Int? @db.Integer
-  nationalPensionInsuranceExpense Int? @db.Integer
-  employeeInsuranceExpense      Int? @db.Integer
-  longTermCareInsurance         Int? @db.Integer
-  incomeTax                    Int? @db.Integer
-  residenceTax                 Int? @db.Integer
-  yearEndAdjustment            Int? @db.Integer
-  notes                        Int? @db.Integer
-  createdAt                    DateTime @default(now()) @db.Timestamptz()
-  updatedAt                    DateTime @updatedAt @db.Timestamptz()
-  TBonus TBonus[]
-  MCompany    MCompany? @relation(fields: [companyId], references: [id])
-  userInfo User? @relation(fields: [userId], references: [userID])
-
-  }
-
-  model MCategory {
-  id String @db.Uuid @id @default(uuid()) @unique 
-  sort        Int        @db.Integer
+model TMonthlySpending {
+  id           String     @id @unique @default(uuid()) @db.Uuid
+  sort         Int        @db.Integer
   userId       String
-  categoryName String @db.VarChar(250)
-  createdAt    DateTime @default(now()) @db.Timestamptz()
-  updatedAt    DateTime @updatedAt @db.Timestamptz()
-  spendings    TMonthlySpending[]
-  userInfo User? @relation(fields: [userId], references: [userID])
-  }
+  paymentDay   DateTime   @db.Timestamptz()
+  store        String     @db.VarChar(250)
+  categoryId   String     @db.Uuid
+  categorySort Int        @db.Integer
+  usageFee     Int        @db.Integer
+  notes        String?    @db.VarChar(250)
+  createdAt    DateTime   @default(now()) @db.Timestamptz()
+  updatedAt    DateTime   @updatedAt @db.Timestamptz()
+  category     MCategory? @relation(fields: [categoryId], references: [id])
+  userInfo     User?      @relation(fields: [userId], references: [userID])
+}
 
+model TSalary {
+  id        String    @id @unique @default(uuid()) @db.Uuid
+  sort      Int       @db.Integer
+  userId    String
+  payday    DateTime  @db.Timestamptz()
+  salary    Int       @db.Integer
+  companyId String    @db.Uuid
+  createdAt DateTime  @default(now()) @db.Timestamptz()
+  updatedAt DateTime  @updatedAt @db.Timestamptz()
+  MCompany  MCompany? @relation(fields: [companyId], references: [id])
+  TTax      TTax?     @relation(fields: [id], references: [id])
+  userInfo  User?     @relation(fields: [userId], references: [userID])
+}
 
-  model MCompany {
-  id String @db.Uuid @id @default(uuid()) @unique 
-  sort        Int       @db.Integer 
-  userId String            
-  name String @db.VarChar(250)
-  majorSector String @db.VarChar(250)
-  subSector String? @db.VarChar(250)
-  industry String? @db.VarChar(250)
-  createdAt DateTime @default(now())  @db.Timestamptz()
-  updatedAt DateTime @updatedAt @db.Timestamptz()
-  MhireDate MHireDate[]
-  TTaxBonus TTaxBonus[]
-  TTax TTax[]
-  TSalary TSalary[]
-  TBonus TBonus[]
-  userInfo User? @relation(fields: [userId], references: [userID])
+model TTax {
+  id                              String    @id @unique @default(uuid()) @db.Uuid
+  sort                            Int       @db.Integer
+  userId                          String
+  companyId                       String    @db.Uuid
+  healthInsuranceExpense          Int?      @db.Integer
+  employeePensionInsuranceExpense Int?      @db.Integer
+  nationalPensionInsuranceExpense Int?      @db.Integer
+  employeeInsuranceExpense        Int?      @db.Integer
+  longTermCareInsurance           Int?      @db.Integer
+  incomeTax                       Int?      @db.Integer
+  residenceTax                    Int?      @db.Integer
+  yearEndAdjustment               Int?      @db.Integer
+  notes                           Int?      @db.Integer
+  createdAt                       DateTime  @default(now()) @db.Timestamptz()
+  updatedAt                       DateTime  @updatedAt @db.Timestamptz()
+  TSalary                         TSalary[]
+  MCompany                        MCompany? @relation(fields: [companyId], references: [id])
+  userInfo                        User?     @relation(fields: [userId], references: [userID])
+}
 
-  }
-
-  model MHireDate {
-  id String @db.Uuid @id @default(uuid()) @unique 
+model TBonus {
+  id          String     @id @unique @default(uuid()) @db.Uuid
   sort        Int        @db.Integer
-  userId String           
-  companyId String            @db.Uuid
-  hireDate DateTime @db.Timestamptz()
+  userId      String
+  payday      DateTime?  @db.Timestamptz()
+  bonusAmount Int?       @db.Integer
+  companyId   String     @db.Uuid
+  createdAt   DateTime   @default(now()) @db.Timestamptz()
+  updatedAt   DateTime   @updatedAt @db.Timestamptz()
+  MCompany    MCompany?  @relation(fields: [companyId], references: [id])
+  TTaxBonus   TTaxBonus? @relation(fields: [id], references: [id])
+  userInfo    User?      @relation(fields: [userId], references: [userID])
+}
+
+model TTaxBonus {
+  id                              String    @id @unique @default(uuid()) @db.Uuid
+  sort                            Int       @db.Integer
+  userId                          String
+  companyId                       String    @db.Uuid
+  healthInsuranceExpense          Int?      @db.Integer
+  employeePensionInsuranceExpense Int?      @db.Integer
+  nationalPensionInsuranceExpense Int?      @db.Integer
+  employeeInsuranceExpense        Int?      @db.Integer
+  longTermCareInsurance           Int?      @db.Integer
+  incomeTax                       Int?      @db.Integer
+  residenceTax                    Int?      @db.Integer
+  yearEndAdjustment               Int?      @db.Integer
+  notes                           Int?      @db.Integer
+  createdAt                       DateTime  @default(now()) @db.Timestamptz()
+  updatedAt                       DateTime  @updatedAt @db.Timestamptz()
+  TBonus                          TBonus[]
+  MCompany                        MCompany? @relation(fields: [companyId], references: [id])
+  userInfo                        User?     @relation(fields: [userId], references: [userID])
+}
+
+model MCategory {
+  id           String             @id @unique @default(uuid()) @db.Uuid
+  sort         Int                @db.Integer
+  userId       String
+  categoryName String             @db.VarChar(250)
+  createdAt    DateTime           @default(now()) @db.Timestamptz()
+  updatedAt    DateTime           @updatedAt @db.Timestamptz()
+  spendings    TMonthlySpending[]
+  userInfo     User?              @relation(fields: [userId], references: [userID])
+}
+
+model MCompany {
+  id          String      @id @unique @default(uuid()) @db.Uuid
+  sort        Int         @db.Integer
+  userId      String
+  name        String      @db.VarChar(250)
+  majorSector String      @db.VarChar(250)
+  subSector   String?     @db.VarChar(250)
+  industry    String?     @db.VarChar(250)
+  createdAt   DateTime    @default(now()) @db.Timestamptz()
+  updatedAt   DateTime    @updatedAt @db.Timestamptz()
+  MhireDate   MHireDate[]
+  TTaxBonus   TTaxBonus[]
+  TTax        TTax[]
+  TSalary     TSalary[]
+  TBonus      TBonus[]
+  userInfo    User?       @relation(fields: [userId], references: [userID])
+}
+
+model MHireDate {
+  id             String    @id @unique @default(uuid()) @db.Uuid
+  sort           Int       @db.Integer
+  userId         String
+  companyId      String    @db.Uuid
+  hireDate       DateTime  @db.Timestamptz()
   retirementDate DateTime? @db.Timestamptz()
-  createdAt DateTime @default(now()) @db.Timestamptz()
-  updatedAt DateTime @updatedAt @db.Timestamptz()
-  MCompany MCompany? @relation(fields: [companyId], references: [id])
-  userInfo User? @relation(fields: [userId], references: [userID])
-
-  }
-
+  createdAt      DateTime  @default(now()) @db.Timestamptz()
+  updatedAt      DateTime  @updatedAt @db.Timestamptz()
+  MCompany       MCompany? @relation(fields: [companyId], references: [id])
+  userInfo       User?     @relation(fields: [userId], references: [userID])
+}
