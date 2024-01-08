@@ -6,6 +6,8 @@ import { createMHireDateSeedData } from '../sampledata/sampleScript/MHireDate.se
 import { createTMonthlySpendingSeedData } from '../sampledata/sampleScript/TMonthlySpending.seedData';
 import { createTTaxBonusSeedData } from '../sampledata/sampleScript/TTaxBonus.seedData';
 import { createTBonusSeedData } from '../sampledata/sampleScript/TBonus.seedData';
+import { createTSalarySeedData } from '../sampledata/sampleScript/TSalary.seedData';
+import { createTTaxSeedData } from '../sampledata/sampleScript/TTax.seedData';
 
 const prisma = new PrismaClient();
 
@@ -19,6 +21,8 @@ const main = async () => {
   await createTMonthlySpendingSeedData();
   await createTTaxBonusSeedData();
   await createTBonusSeedData();
+  await createTTaxSeedData();
+  await createTSalarySeedData();
 
   console.log(`完了しました`);
 };

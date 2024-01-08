@@ -62,32 +62,28 @@ export interface TMonthlySpendingSampleData {
 
 /** 給与 */
 export interface TSalarySampleData {
-  /** id番号 */
-  id?: string | null;
   /** sort番号 */
   sort?: number | null;
   /** ユーザーID */
-  userId?: number | null;
+  userId?: string | null;
   /** 支給日 */
   payday?: Date | null;
   /** 給与 */
   salary?: number | null;
   /** 会社ID */
-  companyId?: number | null;
+  companyId?: string | null;
   /** 会社番号 */
   companyNum: number | null;
 }
 
 /** 給与に対する税金 */
 export interface TSalaryTaxSampleData {
-  /** id番号 */
-  id?: string | null;
   /** sort番号 */
   sort?: number | null;
   /** ユーザーID */
-  userId?: number | null;
+  userId?: string | null;
   /** 会社ID */
-  companyId?: number | null;
+  companyId?: string | null;
   /** 会社番号 */
   companyNum: number | null;
   /** 健康保険料 */
