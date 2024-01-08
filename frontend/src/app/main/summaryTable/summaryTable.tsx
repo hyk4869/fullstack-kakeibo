@@ -203,7 +203,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   /** listのメモ化 */
   const generateCategoryList = useCallback(() => {
     return categoryData.map((a: MCategory) => ({
-      value: Number(a.id),
+      value: Number(a.sort),
       label: String(a.categoryName),
     }));
   }, [categoryData]);
@@ -318,6 +318,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   //   }
   // };
 
+  console.log(categoryData, visibleRows);
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
