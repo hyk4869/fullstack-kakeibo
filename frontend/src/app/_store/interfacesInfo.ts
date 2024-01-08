@@ -5,13 +5,15 @@ export interface TMonthlySpending {
   /** sort番号 */
   sort: number | null;
   /** ユーザーID */
-  userId: number | null;
+  userId: string | null;
   /** 利用日 */
   paymentDay: Date | null;
   /** 利用店 */
   store: string | null;
   /** カテゴリーID */
-  categoryId: number | null;
+  categoryId: string | null;
+  /** カテゴリー番号 */
+  categorySort: number | null;
   /** 利用金額 */
   usageFee: number | null;
   /** カテゴリーの詳細 */
@@ -24,10 +26,10 @@ export interface MCategory {
   id: string | null;
   /** sort番号 */
   sort: number | null;
+  /** ユーザーID */
+  userId: string | null;
   /** カテゴリー名 */
   categoryName: string | null;
-  /** ユーザーID */
-  userId: number | null;
 }
 
 /** 会社 */
@@ -36,12 +38,14 @@ export interface MCompany {
   id: string | null;
   /** sort番号 */
   sort: number | null;
+  /** 会社番号 */
+  companyNum: number | null;
+  /** ユーザーID */
+  userId: string | null;
   /** 会社名 */
   name: string | null;
   /** 大分類 */
   majorSector: string | null;
-  /** ユーザーID */
-  userId: number | null;
 }
 
 /** 入退社日 */
@@ -50,14 +54,16 @@ export interface MHireDate {
   id: string | null;
   /** sort番号 */
   sort: number | null;
+  /** ユーザーID */
+  userId: string | null;
   /** 会社ID */
-  companyId: number | null;
+  companyId: string | null;
+  /** 会社番号 */
+  companyNum: number | null;
   /** 入社日 */
   hireDate: Date | null;
   /** 退職日 */
   retirementDate: Date | null;
-  /** ユーザーID */
-  userId: number | null;
 }
 
 /** 給与 */
@@ -67,13 +73,15 @@ export interface TSalary {
   /** sort番号 */
   sort: number | null;
   /** ユーザーID */
-  userId: number | null;
+  userId: string | null;
   /** 支給日 */
   payday: Date | null;
   /** 給与 */
   salary: number | null;
   /** 会社ID */
-  companyId: number | null;
+  companyId: string | null;
+  /** 会社番号 */
+  companyNum: number | null;
 }
 
 /** 給与に対する税金 */
@@ -83,9 +91,11 @@ export interface TSalaryTax {
   /** sort番号 */
   sort: number | null;
   /** ユーザーID */
-  userId: number | null;
+  userId: string | null;
   /** 会社ID */
-  companyId: number | null;
+  companyId: string | null;
+  /** 会社番号 */
+  companyNum: number | null;
   /** 健康保険料 */
   healthInsuranceExpense: number | null;
   /** 厚生年金保険料 */
@@ -115,13 +125,15 @@ export interface TBonus {
   /** sort番号 */
   sort: number | null;
   /** ユーザーID */
-  userId: number | null;
+  userId: string | null;
   /** 支給日 */
   payday: Date | null;
   /** 給与 */
   bonusAmount: number | null;
   /** 会社ID */
-  companyId: number | null;
+  companyId: string | null;
+  /** 会社番号 */
+  companyNum: number | null;
 }
 
 /** 賞与に対する税金 */
@@ -131,9 +143,11 @@ export interface TBonusTax {
   /** sort番号 */
   sort: number | null;
   /** ユーザーID */
-  userId: number | null;
+  userId: string | null;
   /** 会社ID */
-  companyId: number | null;
+  companyId: string | null;
+  /** 会社番号 */
+  companyNum: number | null;
   /** 健康保険料 */
   healthInsuranceExpense: number | null;
   /** 厚生年金保険料 */

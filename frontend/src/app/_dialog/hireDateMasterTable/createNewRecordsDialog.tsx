@@ -86,10 +86,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     const newCategory = {
       id: '',
       sort: incrementIdFromArray,
+      userId: '',
+      companyId: '',
+      companyNum: null,
       hireDate: null,
       retirementDate: null,
-      companyId: null,
-      userId: null,
     };
 
     setIncrement(incrementIdFromArray);
@@ -130,6 +131,9 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             switch (paramKey) {
               case 'sort':
                 updatedRow.sort = value === '' ? null : (value as number);
+                break;
+              case 'companyNum':
+                updatedRow.companyNum = value === '' ? null : (value as number);
                 break;
               case 'hireDate':
                 updatedRow.hireDate = value === '' ? null : (value as Date);
@@ -221,11 +225,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                       <Tooltip title={companyData.find((d) => d.id === row.companyId)?.name} arrow>
                         <TableCell align="center" sx={{ padding: commonPadding5 }}>
                           <CustomNumberFormat
-                            value={row.companyId}
+                            value={row.companyNum}
                             edit={edit}
                             align="center"
                             onChangeValue={changeValue}
-                            paramKey={'companyId'}
+                            paramKey={'companyNum'}
                             id={Number(row.sort)}
                           />
                         </TableCell>

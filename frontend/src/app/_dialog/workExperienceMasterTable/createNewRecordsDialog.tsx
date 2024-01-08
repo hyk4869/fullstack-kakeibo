@@ -84,9 +84,10 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     const newCategory = {
       id: '',
       sort: incrementIdFromArray,
+      companyNum: null,
+      userId: '',
       name: '',
       majorSector: '',
-      userId: null,
     };
 
     setIncrement(incrementIdFromArray);
@@ -127,6 +128,9 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             switch (paramKey) {
               case 'sort':
                 updatedRow.sort = value === '' ? null : (value as number);
+                break;
+              case 'companyNum':
+                updatedRow.companyNum = value === '' ? null : (value as number);
                 break;
               case 'name':
                 updatedRow.name = value === '' ? null : (value as string);

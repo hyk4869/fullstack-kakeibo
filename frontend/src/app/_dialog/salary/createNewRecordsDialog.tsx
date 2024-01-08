@@ -88,10 +88,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     const newMonthlySpending = {
       id: '',
       sort: incrementIdFromArray,
-      userId: null,
+      userId: '',
       payday: null,
       salary: null,
-      companyId: null,
+      companyId: '',
+      companyNum: null,
     };
 
     setIncrement(incrementIdFromArray);
@@ -133,8 +134,8 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
               case 'sort':
                 updatedRow.sort = value === '' ? null : (value as number);
                 break;
-              case 'companyId':
-                updatedRow.companyId = value === '' ? null : (value as number);
+              case 'companyNum':
+                updatedRow.companyNum = value === '' ? null : (value as number);
                 break;
               case 'payday':
                 updatedRow.payday = value === '' ? null : (value as Date);
@@ -225,11 +226,11 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
 
                       <TableCell component="th" scope="row?">
                         <CustomNumberFormat
-                          value={row?.companyId}
+                          value={row?.companyNum}
                           edit={edit}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'companyId'}
+                          paramKey={'companyNum'}
                           id={Number(row?.sort)}
                         />
                       </TableCell>

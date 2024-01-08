@@ -218,8 +218,8 @@ const BonusTable: React.FC<BonusTableProps> = () => {
               case 'bonusAmount':
                 updateValue.bonusAmount = value === '' ? null : (value as number);
                 break;
-              case 'companyId':
-                updateValue.companyId = value === '' ? null : (value as number);
+              case 'companyNum':
+                updateValue.companyNum = value === '' ? null : (value as number);
                 break;
             }
             return updateValue;
@@ -328,11 +328,11 @@ const BonusTable: React.FC<BonusTableProps> = () => {
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={row.companyId}
+                          value={row.companyNum}
                           edit={row.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'companyId'}
+                          paramKey={'companyNum'}
                           id={Number(row.sort)}
                         />
                       </TableCell>

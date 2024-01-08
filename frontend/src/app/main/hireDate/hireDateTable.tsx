@@ -127,14 +127,14 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
                         />
                       </TableCell>
 
-                      <Tooltip title={companyData.find((d) => d.id === a.companyId)?.name} arrow>
+                      <Tooltip title={companyData.find((d) => d.id === a.companyNum)?.name} arrow>
                         <TableCell align="center" sx={{ padding: commonPadding5 }}>
                           <CustomNumberFormat
-                            value={a.companyId}
+                            value={a.companyNum}
                             edit={false}
                             align="center"
                             onChangeValue={changeValue}
-                            paramKey={'companyId'}
+                            paramKey={'companyNum'}
                             id={Number(a.sort)}
                           />
                         </TableCell>

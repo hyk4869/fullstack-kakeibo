@@ -91,11 +91,12 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
     const newMonthlySpending = {
       id: '',
       sort: incrementIdFromArray,
-      userId: null,
+      userId: '',
       paymentDay: null,
       store: '',
+      categoryId: '',
+      categorySort: null,
       usageFee: null,
-      categoryId: null,
     };
 
     setIncrement(incrementIdFromArray);
@@ -143,8 +144,8 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
               case 'store':
                 updatedRow.store = value === '' ? null : (value as string);
                 break;
-              case 'categoryId':
-                updatedRow.categoryId = value === '' ? null : (value as number);
+              case 'categorySort':
+                updatedRow.categorySort = value === '' ? null : (value as number);
                 break;
               case 'usageFee':
                 updatedRow.usageFee = value === '' ? null : parseFloat(value as string);
@@ -255,9 +256,9 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                           list={categoryData.map((a: MCategory) => {
                             return { value: Number(a.id), label: String(a.categoryName) };
                           })}
-                          value={categoryData.find((a) => a.id === row?.categoryId)?.sort ?? null}
+                          value={categoryData.find((a) => a.id === row?.categorySort)?.sort ?? null}
                           edit={edit}
-                          paramKey={'categoryId'}
+                          paramKey={'categorySort'}
                           id={Number(row?.sort)}
                           onChangeValue={changeValue}
                         />

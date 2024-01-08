@@ -214,7 +214,7 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
                 updateValue.sort = value === '' ? null : (value as number);
                 break;
               case 'userId':
-                updateValue.userId = value === '' ? null : (value as number);
+                updateValue.userId = value === '' ? null : (value as string);
                 break;
               case 'payday':
                 updateValue.payday = value === '' ? null : (value as Date);
@@ -223,7 +223,10 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
                 updateValue.salary = value === '' ? null : parseFloat(value as string);
                 break;
               case 'companyId':
-                updateValue.companyId = value === '' ? null : (value as number);
+                updateValue.companyId = value === '' ? null : (value as string);
+                break;
+              case 'companyNum':
+                updateValue.companyNum = value === '' ? null : (value as number);
                 break;
             }
             return updateValue;
@@ -332,11 +335,11 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
                       </TableCell>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
                         <CustomNumberFormat
-                          value={row.companyId}
+                          value={row.companyNum}
                           edit={row.sort === rowNumber ? isEditable : false}
                           align="center"
                           onChangeValue={changeValue}
-                          paramKey={'companyId'}
+                          paramKey={'companyNum'}
                           id={Number(row.sort)}
                         />
                       </TableCell>

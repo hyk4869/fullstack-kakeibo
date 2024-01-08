@@ -226,7 +226,10 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                 updatedRow.store = value === '' ? null : (value as string);
                 break;
               case 'categoryId':
-                updatedRow.categoryId = value === '' ? null : (value as number);
+                updatedRow.categoryId = value === '' ? null : (value as string);
+                break;
+              case 'categorySort':
+                updatedRow.categorySort = value === '' ? null : (value as number);
                 break;
               case 'usageFee':
                 updatedRow.usageFee = value === '' ? null : parseFloat(value as string);
@@ -397,10 +400,10 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                     <TableCell align="center" sx={{ padding: commonPadding5 }}>
                       <CustomSelectTab
                         list={generateCategoryList()}
-                        value={categoryData.find((a) => a.id === row.categoryId)?.sort ?? null}
+                        value={categoryData.find((a) => a.sort === row.categorySort)?.sort ?? null}
                         edit={row.sort === rowNumber ? isEditable : false}
-                        paramKey={'categoryId'}
-                        id={Number(row?.id)}
+                        paramKey={'categorySort'}
+                        id={Number(row?.sort)}
                         onChangeValue={changeValue}
                       />
                     </TableCell>

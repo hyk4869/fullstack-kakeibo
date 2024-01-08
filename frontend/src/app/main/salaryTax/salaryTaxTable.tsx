@@ -212,10 +212,13 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                 updateValue.sort = value === '' ? null : (value as number);
                 break;
               case 'userId':
-                updateValue.userId = value === '' ? null : (value as number);
+                updateValue.userId = value === '' ? null : (value as string);
                 break;
               case 'companyId':
-                updateValue.companyId = value === '' ? null : (value as number);
+                updateValue.companyId = value === '' ? null : (value as string);
+                break;
+              case 'companyNum':
+                updateValue.companyNum = value === '' ? null : (value as number);
                 break;
               case 'healthInsuranceExpense':
                 updateValue.healthInsuranceExpense = value === '' ? null : parseFloat(value as string);
@@ -353,14 +356,14 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
                         </TableCell>
                       </Tooltip>
 
-                      <Tooltip title={companyData.find((s) => s.id === a.companyId)?.name} arrow>
+                      <Tooltip title={companyData.find((s) => s.id === a.companyNum)?.name} arrow>
                         <TableCell align="center" sx={{ padding: commonPadding5 }}>
                           <CustomNumberFormat
-                            value={a.companyId}
+                            value={a.companyNum}
                             edit={a.sort === rowNumber ? isEditable : false}
                             align="center"
                             onChangeValue={changeValue}
-                            paramKey={'companyId'}
+                            paramKey={'companyNum'}
                             id={Number(a.sort)}
                           />
                         </TableCell>

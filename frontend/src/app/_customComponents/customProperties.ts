@@ -1,5 +1,4 @@
 import { red, blue, purple, pink, green, yellow, orange, grey } from '@mui/material/colors';
-import { TMonthlySpending } from '../_store/interfacesInfo';
 
 /**共通のフォントサイズ */
 export const commonFontSize: string = '12px';
@@ -9,16 +8,6 @@ export const minWidth: string = '7.2rem';
 export const colorWhite: string = 'white';
 /**黒 */
 export const colorBlack: string = 'black';
-/**イニシャルバリュー */
-export const newMonthlySpending: TMonthlySpending = {
-  id: '',
-  sort: null,
-  userId: null,
-  paymentDay: null,
-  store: '',
-  usageFee: null,
-  categoryId: null,
-};
 /** 色100 */
 export const color100 = [red[100], blue[100], purple[100], pink[100], green[100], yellow[100], orange[100], grey[100]];
 

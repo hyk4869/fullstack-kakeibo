@@ -96,16 +96,16 @@ export const sumEachCategory = (categoryData: MCategory[], monthlyData: TMonthly
 
 /** カテゴリー毎に合計を集計 */
 export const sumEachCategoryByMonthly = (monthlyData: TMonthlySpending[]): AmoutType[] => {
-  const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
+  const categoryTotal: { [categorySort: number]: { total: number; categoryName?: string } } = {};
 
   monthlyData.forEach((d) => {
-    const categoryId = d.categoryId;
+    const categorySort = d.categorySort;
     const usageFee = d.usageFee || 0;
     const categoryName = d.category?.categoryName;
 
-    if (categoryId !== null) {
-      categoryTotal[categoryId] = {
-        total: (categoryTotal[categoryId]?.total || 0) + usageFee,
+    if (categorySort !== null) {
+      categoryTotal[categorySort] = {
+        total: (categoryTotal[categorySort]?.total || 0) + usageFee,
         categoryName: categoryName ?? '',
       };
     }
