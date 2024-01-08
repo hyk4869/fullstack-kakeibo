@@ -4,6 +4,8 @@ import { createMCategorySeedData } from '../sampledata/sampleScript/MCategory.se
 import { createMCompanySeedData } from '../sampledata/sampleScript/MCompany.seedData';
 import { createMHireDateSeedData } from '../sampledata/sampleScript/MHireDate.seedData';
 import { createTMonthlySpendingSeedData } from '../sampledata/sampleScript/TMonthlySpending.seedData';
+import { createTTaxBonusSeedData } from '../sampledata/sampleScript/TTaxBonus.seedData';
+import { createTBonusSeedData } from '../sampledata/sampleScript/TBonus.seedData';
 
 const prisma = new PrismaClient();
 
@@ -15,6 +17,8 @@ const main = async () => {
   await createMCompanySeedData();
   await createMHireDateSeedData();
   await createTMonthlySpendingSeedData();
+  await createTTaxBonusSeedData();
+  await createTBonusSeedData();
 
   console.log(`完了しました`);
 };

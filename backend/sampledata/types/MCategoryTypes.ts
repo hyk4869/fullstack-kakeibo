@@ -14,6 +14,8 @@ export interface MCompanySampleData {
   sort?: number | null;
   /** 会社名 */
   name?: string | null;
+  /** 会社番号 */
+  companyNum: number | null;
   /** 大分類 */
   majorSector?: string | null;
   /** 中分類 */
@@ -30,6 +32,8 @@ export interface MHireDateSampleData {
   sort?: number | null;
   /** 会社ID */
   companyId?: string | null;
+  /** 会社番号 */
+  companyNum: number | null;
   /** 入社日 */
   hireDate?: Date | null;
   /** 退職日 */
@@ -70,6 +74,8 @@ export interface TSalarySampleData {
   salary?: number | null;
   /** 会社ID */
   companyId?: number | null;
+  /** 会社番号 */
+  companyNum: number | null;
 }
 
 /** 給与に対する税金 */
@@ -82,6 +88,8 @@ export interface TSalaryTaxSampleData {
   userId?: number | null;
   /** 会社ID */
   companyId?: number | null;
+  /** 会社番号 */
+  companyNum: number | null;
   /** 健康保険料 */
   healthInsuranceExpense?: number | null;
   /** 厚生年金保険料 */
@@ -100,36 +108,34 @@ export interface TSalaryTaxSampleData {
   yearEndAdjustment?: number | null;
   /** その他 */
   notes?: number | null;
-  /** 給与額 */
-  TSalary?: TSalarySampleData[];
 }
 
 /** 賞与 */
 export interface TBonusSampleData {
-  /** id番号 */
-  id?: string | null;
   /** sort番号 */
   sort?: number | null;
   /** ユーザーID */
-  userId?: number | null;
+  userId?: string | null;
   /** 支給日 */
   payday?: Date | null;
   /** 給与 */
   bonusAmount?: number | null;
   /** 会社ID */
-  companyId?: number | null;
+  companyId?: string | null;
+  /** 会社番号 */
+  companyNum: number | null;
 }
 
 /** 賞与に対する税金 */
 export interface TBonusTaxSampleData {
-  /** id番号 */
-  id?: string | null;
   /** sort番号 */
   sort?: number | null;
   /** ユーザーID */
-  userId?: number | null;
+  userId?: string | null;
   /** 会社ID */
   companyId?: number | null;
+  /** 会社番号 */
+  companyNum: number | null;
   /** 健康保険料 */
   healthInsuranceExpense?: number | null;
   /** 厚生年金保険料 */
@@ -148,6 +154,4 @@ export interface TBonusTaxSampleData {
   yearEndAdjustment?: number | null;
   /** その他 */
   notes?: number | null;
-  /** ボーナス額 */
-  TBonus?: TBonusSampleData[];
 }

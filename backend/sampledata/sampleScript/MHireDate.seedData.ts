@@ -16,7 +16,7 @@ const readCsvFile = async (filePath: string): Promise<MHireDateSampleData[]> => 
       .pipe(csvParser())
       .on('data', (row) => {
         content.push({
-          sort: typeof row.sort === 'string' ? parseInt(row.sort, 10) : Number(row.sort),
+          sort: typeof row.sort === 'string' ? parseInt(row.sort, 10) ?? null : Number(row.sort) ?? null,
           hireDate: typeof row.hireDate === 'string' ? new Date(row.hireDate) : null,
           retirementDate:
             row.retirementDate !== null
@@ -25,6 +25,8 @@ const readCsvFile = async (filePath: string): Promise<MHireDateSampleData[]> => 
                 : null
               : null,
           userId: row.userId,
+          companyNum:
+            typeof row.companyNum === 'string' ? parseInt(row.companyNum, 10) ?? null : Number(row.companyNum) ?? null,
         });
       })
       .on('end', () => {
@@ -42,7 +44,7 @@ export const createMHireDateSeedData = async (): Promise<MHireDate[]> => {
   const posts = [];
 
   for (const data of csvData) {
-    const { sort, companyId, hireDate, retirementDate, userId } = data;
+    const { sort, companyId, hireDate, retirementDate, userId, companyNum } = data;
 
     const verify = prisma.mCompany.findMany({
       where: {
@@ -52,7 +54,8 @@ export const createMHireDateSeedData = async (): Promise<MHireDate[]> => {
     const createPosts = prisma.mHireDate.create({
       data: {
         sort,
-        companyId: (await verify).find((a) => a.sort === sort)?.id,
+        companyId: (await verify).find((a) => a.companyNum === companyNum)?.id,
+        companyNum,
         hireDate,
         retirementDate: retirementDate ?? null,
         userId,

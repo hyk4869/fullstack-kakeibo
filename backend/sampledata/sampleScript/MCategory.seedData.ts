@@ -16,7 +16,7 @@ const readCsvFile = async (filePath: string): Promise<MCategorySampleData[]> => 
       .pipe(csvParser())
       .on('data', (row) => {
         content.push({
-          sort: typeof row.sort === 'string' ? parseInt(row.sort, 10) : Number(row.sort),
+          sort: typeof row.sort === 'string' ? parseInt(row.sort, 10) ?? null : Number(row.sort) ?? null,
           userId: row.userId,
           categoryName: row.categoryName,
         });

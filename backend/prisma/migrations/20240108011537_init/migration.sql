@@ -13,6 +13,49 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "MCategory" (
+    "id" UUID NOT NULL,
+    "sort" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    "categoryName" VARCHAR(250) NOT NULL,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
+
+    CONSTRAINT "MCategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "MCompany" (
+    "id" UUID NOT NULL,
+    "sort" INTEGER NOT NULL,
+    "companyNum" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    "name" VARCHAR(250) NOT NULL,
+    "majorSector" VARCHAR(250) NOT NULL,
+    "subSector" VARCHAR(250),
+    "industry" VARCHAR(250),
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
+
+    CONSTRAINT "MCompany_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "MHireDate" (
+    "id" UUID NOT NULL,
+    "sort" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    "companyId" UUID NOT NULL,
+    "companyNum" INTEGER NOT NULL,
+    "hireDate" TIMESTAMPTZ NOT NULL,
+    "retirementDate" TIMESTAMPTZ,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ NOT NULL,
+
+    CONSTRAINT "MHireDate_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "TMonthlySpending" (
     "id" UUID NOT NULL,
     "sort" INTEGER NOT NULL,
@@ -37,6 +80,7 @@ CREATE TABLE "TSalary" (
     "payday" TIMESTAMPTZ NOT NULL,
     "salary" INTEGER NOT NULL,
     "companyId" UUID NOT NULL,
+    "companyNum" INTEGER NOT NULL,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ NOT NULL,
 
@@ -49,6 +93,7 @@ CREATE TABLE "TTax" (
     "sort" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "companyId" UUID NOT NULL,
+    "companyNum" INTEGER NOT NULL,
     "healthInsuranceExpense" INTEGER,
     "employeePensionInsuranceExpense" INTEGER,
     "nationalPensionInsuranceExpense" INTEGER,
@@ -72,6 +117,7 @@ CREATE TABLE "TBonus" (
     "payday" TIMESTAMPTZ,
     "bonusAmount" INTEGER,
     "companyId" UUID NOT NULL,
+    "companyNum" INTEGER NOT NULL,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ NOT NULL,
 
@@ -84,6 +130,7 @@ CREATE TABLE "TTaxBonus" (
     "sort" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "companyId" UUID NOT NULL,
+    "companyNum" INTEGER NOT NULL,
     "healthInsuranceExpense" INTEGER,
     "employeePensionInsuranceExpense" INTEGER,
     "nationalPensionInsuranceExpense" INTEGER,
@@ -99,47 +146,6 @@ CREATE TABLE "TTaxBonus" (
     CONSTRAINT "TTaxBonus_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "MCategory" (
-    "id" UUID NOT NULL,
-    "sort" INTEGER NOT NULL,
-    "userId" TEXT NOT NULL,
-    "categoryName" VARCHAR(250) NOT NULL,
-    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ NOT NULL,
-
-    CONSTRAINT "MCategory_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "MCompany" (
-    "id" UUID NOT NULL,
-    "sort" INTEGER NOT NULL,
-    "userId" TEXT NOT NULL,
-    "name" VARCHAR(250) NOT NULL,
-    "majorSector" VARCHAR(250) NOT NULL,
-    "subSector" VARCHAR(250),
-    "industry" VARCHAR(250),
-    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ NOT NULL,
-
-    CONSTRAINT "MCompany_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "MHireDate" (
-    "id" UUID NOT NULL,
-    "sort" INTEGER NOT NULL,
-    "userId" TEXT NOT NULL,
-    "companyId" UUID NOT NULL,
-    "hireDate" TIMESTAMPTZ NOT NULL,
-    "retirementDate" TIMESTAMPTZ,
-    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ NOT NULL,
-
-    CONSTRAINT "MHireDate_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
 
@@ -148,6 +154,15 @@ CREATE UNIQUE INDEX "User_userID_key" ON "User"("userID");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MCategory_id_key" ON "MCategory"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MCompany_id_key" ON "MCompany"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MHireDate_id_key" ON "MHireDate"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "TMonthlySpending_id_key" ON "TMonthlySpending"("id");
@@ -164,14 +179,17 @@ CREATE UNIQUE INDEX "TBonus_id_key" ON "TBonus"("id");
 -- CreateIndex
 CREATE UNIQUE INDEX "TTaxBonus_id_key" ON "TTaxBonus"("id");
 
--- CreateIndex
-CREATE UNIQUE INDEX "MCategory_id_key" ON "MCategory"("id");
+-- AddForeignKey
+ALTER TABLE "MCategory" ADD CONSTRAINT "MCategory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;
 
--- CreateIndex
-CREATE UNIQUE INDEX "MCompany_id_key" ON "MCompany"("id");
+-- AddForeignKey
+ALTER TABLE "MCompany" ADD CONSTRAINT "MCompany_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;
 
--- CreateIndex
-CREATE UNIQUE INDEX "MHireDate_id_key" ON "MHireDate"("id");
+-- AddForeignKey
+ALTER TABLE "MHireDate" ADD CONSTRAINT "MHireDate_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "MCompany"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MHireDate" ADD CONSTRAINT "MHireDate_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TMonthlySpending" ADD CONSTRAINT "TMonthlySpending_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "MCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -208,15 +226,3 @@ ALTER TABLE "TTaxBonus" ADD CONSTRAINT "TTaxBonus_companyId_fkey" FOREIGN KEY ("
 
 -- AddForeignKey
 ALTER TABLE "TTaxBonus" ADD CONSTRAINT "TTaxBonus_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MCategory" ADD CONSTRAINT "MCategory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MCompany" ADD CONSTRAINT "MCompany_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MHireDate" ADD CONSTRAINT "MHireDate_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "MCompany"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MHireDate" ADD CONSTRAINT "MHireDate_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -16,12 +16,14 @@ const readCsvFile = async (filePath: string): Promise<MCompanySampleData[]> => {
       .pipe(csvParser())
       .on('data', (row) => {
         content.push({
-          sort: typeof row.sort === 'string' ? parseInt(row.sort, 10) : Number(row.sort),
+          sort: typeof row.sort === 'string' ? parseInt(row.sort, 10) ?? null : Number(row.sort) ?? null,
           name: row.name,
           majorSector: row.majorSector,
           subSector: row.subSector,
           industry: row.industry,
           userId: row.userId,
+          companyNum:
+            typeof row.companyNum === 'string' ? parseInt(row.companyNum, 10) ?? null : Number(row.companyNum) ?? null,
         });
       })
       .on('end', () => {
@@ -39,7 +41,7 @@ export const createMCompanySeedData = async (): Promise<MCompany[]> => {
   const posts = [];
 
   for (const data of csvData) {
-    const { sort, name, majorSector, subSector, industry, userId } = data;
+    const { sort, name, majorSector, subSector, industry, userId, companyNum } = data;
 
     const createPosts = prisma.mCompany.create({
       data: {
@@ -49,6 +51,7 @@ export const createMCompanySeedData = async (): Promise<MCompany[]> => {
         subSector,
         industry,
         userId,
+        companyNum,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

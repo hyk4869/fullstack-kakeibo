@@ -16,13 +16,16 @@ const readCsvFile = async (filePath: string): Promise<TMonthlySpendingSampleData
       .pipe(csvParser())
       .on('data', (row) => {
         content.push({
-          sort: typeof row.sort === 'string' ? parseInt(row.sort, 10) : Number(row.sort),
+          sort: typeof row.sort === 'string' ? parseInt(row.sort, 10) ?? null : Number(row.sort) ?? null,
           userId: row.userId,
           paymentDay: typeof row.paymentDay === 'string' ? new Date(row.paymentDay) : null,
           store: row.store,
           categorySort:
-            typeof row.categorySort === 'string' ? parseInt(row.categorySort, 10) : Number(row.categorySort),
-          usageFee: typeof row.usageFee === 'string' ? parseInt(row.usageFee, 10) : Number(row.usageFee),
+            typeof row.categorySort === 'string'
+              ? parseInt(row.categorySort, 10) ?? null
+              : Number(row.categorySort) ?? null,
+          usageFee:
+            typeof row.usageFee === 'string' ? parseInt(row.usageFee, 10) ?? null : Number(row.usageFee) ?? null,
         });
       })
       .on('end', () => {
