@@ -2,6 +2,12 @@
 const commonURL = 'http://localhost:3005';
 
 /**
+ *
+ * バックエンドへのエンドポイント
+ *
+ */
+
+/**
  * アカウントの作成
  */
 export const createAccount = `${commonURL}/user/signUp`;

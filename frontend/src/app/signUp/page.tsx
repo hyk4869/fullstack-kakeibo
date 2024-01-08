@@ -8,7 +8,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 import axios from 'axios';
 import { createAccount } from '../_api/url';
-import { useRouter } from 'next/navigation';
 import MessageDialog from './messageDialog';
 
 type SignUpPageProps = {
@@ -29,8 +28,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
 
   const [message, setMessage] = useState<string>('');
   const [messageDialog, setMessageDialog] = useState<boolean>(false);
-
-  const router = useRouter();
+  const [changePage, setChangePage] = useState<boolean>(false);
 
   const inputUserData = useCallback(
     (paramKey: string, value: string) => {
@@ -67,10 +65,9 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
         .then((res) => {
           if (res.data) {
             if (res.data?.status === true) {
-              // router.push('/main/summaryTable');
               setMessage(res.data?.message);
               setMessageDialog(true);
-              console.log(res.data?.user);
+              setChangePage(true);
             } else {
               setMessage(res.data?.message);
               setMessageDialog(true);
@@ -205,7 +202,12 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
           </Button>
         </Box>
       </Paper>
-      <MessageDialog message={message} messageDialog={messageDialog} closeDialog={() => setMessageDialog(false)} />
+      <MessageDialog
+        message={message}
+        messageDialog={messageDialog}
+        closeDialog={() => setMessageDialog(false)}
+        changePage={changePage}
+      />
     </Box>
   );
 };
