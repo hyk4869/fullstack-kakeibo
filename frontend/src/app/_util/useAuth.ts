@@ -22,14 +22,14 @@ export const useAuth = () => {
   useEffect(() => {
     /**localstorageに保存 */
     // const token = localStorage.getItem('token');
-    const token = Cookies.get('token');
+    const token = Cookies.get('authToken');
 
     try {
       if (token) {
         const decodedToken = jwtDecode<Payload>(token);
         if (decodedToken.exp * 1000 < Date.now()) {
           //   localStorage.removeItem('token');
-          Cookies.remove('token');
+          Cookies.remove('authToken');
           setAuthInfo({ checked: true, isAuthenticated: false });
         } else {
           // 認証済み

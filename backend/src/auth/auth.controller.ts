@@ -29,7 +29,7 @@ export class AuthController {
     return await this.userService.getUser(userID);
   }
 
-  @Post('/test')
+  @Post('/test/token')
   async verifyToken(@Body('token') token: string): Promise<boolean> {
     return await this.authServise.verifyToken(token);
   }

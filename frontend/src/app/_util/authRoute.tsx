@@ -1,40 +1,61 @@
-// import { ReactNode } from 'react';
-// import { useAuth } from './useAuth';
-// import { useRouter } from 'next/navigation';
+import { ReactNode, useEffect, useState } from 'react';
+import { useAuth } from './useAuth';
+import { useRouter } from 'next/navigation';
 
-// type Props = {
-//   children: ReactNode;
-// };
+type Props = {
+  children: ReactNode;
+};
 
-// export const PrivateRoute = ({ children }: Props) => {
-//   const authInfo = useAuth();
-//   const router = useRouter();
+export const PrivateRoute = ({ children }: Props) => {
+  const authInfo = useAuth();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
-//   // チェック中
-//   if (!authInfo.checked) {
-//     return <div>Loading...</div>;
-//   }
-//   // 認証状態の場合
-//   if (authInfo.isAuthenticated) {
-//     return <>{children}</>;
-//   }
-//   // 未認証状態
-//   return <Navigate to="/signin" />;
-// };
+  useEffect(() => {
+    const checkAuthAndRedirect = async () => {
+      // チェック中
+      if (!authInfo.checked) {
+        return;
+      }
 
-// export const GuestRoute = ({ children }: Props) => {
-//   const authInfo = useAuth();
-//   const router = useRouter();
+      // 認証状態の場合
+      if (authInfo.isAuthenticated) {
+        setIsLoading(false);
+      } else {
+        // 未認証状態
+        await router.push('/login');
+      }
+    };
 
-//   if (!authInfo.checked) {
-//     return <div>Loading...</div>;
-//   }
+    checkAuthAndRedirect();
+  }, [authInfo.checked, authInfo.isAuthenticated, router]);
 
-//   if (authInfo.isAuthenticated) {
-//     // 認証済みの場合
-//     return <Navigate to="/" />;
-//   }
+  return isLoading ? <div>Loading...</div> : <>{children}</>;
+};
 
-//   // 未認証状態
-//   return <>{children}</>;
-// };
+export const GuestRoute = ({ children }: Props) => {
+  const authInfo = useAuth();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuthAndRedirect = async () => {
+      // チェック中
+      if (!authInfo.checked) {
+        return;
+      }
+
+      // 認証済みの場合
+      if (authInfo.isAuthenticated) {
+        setIsLoading(false);
+        await router.push('/main/summaryTable');
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthAndRedirect();
+  }, [authInfo.checked, authInfo.isAuthenticated, router]);
+
+  return isLoading ? <div>Loading...</div> : <>{children}</>;
+};

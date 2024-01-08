@@ -1,10 +1,14 @@
 'use client';
 import React, { useState } from 'react';
-import { Box, Button, InputAdornment, Paper, TextField } from '@mui/material';
+import { Box, Button, InputAdornment, Paper, TextField, Tooltip } from '@mui/material';
 import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
 import KeyIcon from '@mui/icons-material/Key';
 import { grey } from '@mui/material/colors';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { signInLink } from '../_api/url';
+import Cookies from 'js-cookie';
+import MessageDialog from './messageDialog';
 
 type LoginPageProps = {
   //
@@ -17,8 +21,9 @@ type loginInformation = {
 
 const LogiPage: React.FC<LoginPageProps> = () => {
   const [loginInfo, setLoginInfo] = useState<loginInformation>({ userID: '', password: '' });
-  const [openTrigger, setOpenTrigger] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState<string>('');
+  const [messageDialog, setMessageDialog] = useState<boolean>(false);
   const router = useRouter();
 
   const inputUserData = (paramKey: string, value: string) => {
@@ -26,14 +31,31 @@ const LogiPage: React.FC<LoginPageProps> = () => {
     switch (paramKey) {
       case 'userID':
       case 'password':
-        _loginInfo = { ..._loginInfo, [paramKey]: value === '' ? null : value };
+        _loginInfo = { ..._loginInfo, [paramKey]: value === '' ? '' : value };
         setLoginInfo(_loginInfo);
         break;
     }
   };
 
-  const loginButton = (loginInfo: loginInformation) => {
-    //
+  const loginButton = async (loginInfo: loginInformation) => {
+    await axios
+      .post(signInLink, loginInfo)
+      .then((res) => {
+        if (res.data) {
+          if (res.data.status === true) {
+            Cookies.set('authToken', res.data?.token);
+            setMessage(res.data?.message);
+            setMessageDialog(true);
+            router.push('/main/summaryTable');
+          } else {
+            setMessage(res.data?.message);
+            setMessageDialog(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const isShowPassword = () => setShowPassword((show) => !show);
@@ -50,6 +72,7 @@ const LogiPage: React.FC<LoginPageProps> = () => {
         alignItems: 'center',
         flexDirection: 'column',
         position: 'relative',
+        height: '90vh',
       }}
     >
       <Paper
@@ -60,11 +83,11 @@ const LogiPage: React.FC<LoginPageProps> = () => {
           alignItems: 'center',
           width: '600px',
           background: grey[200],
-          minHeight: '300px',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, 50%)',
+          minHeight: '320px',
+          // position: 'absolute',
+          // top: '50%',
+          // left: '50%',
+          // transform: 'translate(-50%, 50%)',
         }}
       >
         <h1
@@ -113,16 +136,19 @@ const LogiPage: React.FC<LoginPageProps> = () => {
             />
           </Box>
 
-          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '2rem' }}>
-            <Button variant="outlined" color="primary" onClick={() => handleSingUp()} sx={{ marginTop: '1rem' }}>
-              sign up
-            </Button>
-            <Button variant="contained" onClick={() => loginButton(loginInfo)} sx={{ marginTop: '1rem' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '2rem', marginTop: '2.5rem' }}>
+            <Tooltip title={'新しいアカウントを作成します'} arrow>
+              <Button variant="outlined" color="primary" onClick={() => handleSingUp()}>
+                sign up
+              </Button>
+            </Tooltip>
+            <Button variant="contained" onClick={() => loginButton(loginInfo)}>
               login
             </Button>
           </Box>
         </Box>
       </Paper>
+      <MessageDialog message={message} messageDialog={messageDialog} closeDialog={() => setMessageDialog(false)} />
     </Box>
   );
 };

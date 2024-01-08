@@ -12,6 +12,10 @@ const commonURL = 'http://localhost:3005';
  */
 export const createAccount = `${commonURL}/user/signUp`;
 /**
+ * アカウントの作成
+ */
+export const signInLink = `${commonURL}/auth/login`;
+/**
  * 全期間のmonthlySpendingを取得&データのPOSTも行っている
  */
 export const getMonthlySpending = `${commonURL}/summaryTable`;

@@ -3,11 +3,14 @@
 import { Provider } from 'react-redux';
 import { store } from '../../_store/store';
 import SummaryTable from './summaryTable';
+import { PrivateRoute } from '@/app/_util/authRoute';
 
 const EntryPageSummaryTable = () => {
   return (
     <Provider store={store}>
-      <SummaryTable />
+      <PrivateRoute>
+        <SummaryTable />
+      </PrivateRoute>
     </Provider>
   );
 };

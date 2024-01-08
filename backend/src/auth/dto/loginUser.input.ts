@@ -22,4 +22,5 @@ export class SignInResponse {
   token?: string;
   message: string;
   user?: UserWithoutPassword;
+  status?: boolean;
 }

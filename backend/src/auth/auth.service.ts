@@ -3,7 +3,6 @@ import { AuthDto, SignInResponse } from './dto/loginUser.input';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { Prisma } from '@prisma/client';
 import { CustomMessageUser } from 'src/user/interfaces/messages';
 
 @Injectable()
@@ -23,7 +22,7 @@ export class AuthService {
     if (findUser) {
       const comparePassword = await bcrypt.compare(postData.password, findUser.password);
       return comparePassword
-        ? { message: '成功しました', status: true, user: findUser }
+        ? { message: 'ログインに成功しました', status: true, user: findUser }
         : { message: 'userID もしくは パスワードが正しくありません', status: false };
     } else {
       return { message: 'アカウントが存在していない可能性があります', status: false };
@@ -41,10 +40,12 @@ export class AuthService {
         token: this.jwtService.sign(payload),
         message: validationResult.message,
         user: { ...userWithoutPassword },
+        status: true,
       };
     } else {
       return {
         message: validationResult.message,
+        status: false,
       };
     }
   }
