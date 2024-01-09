@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useAuth } from './useAuth';
 import { useRouter } from 'next/navigation';
+import LoadingContent from '../_util/commonLayouts/loading';
 
 type Props = {
   children: ReactNode;
@@ -30,7 +31,12 @@ export const PrivateRoute = ({ children }: Props) => {
     checkAuthAndRedirect();
   }, [authInfo.checked, authInfo.isAuthenticated, router]);
 
-  return isLoading ? <div>Loading...</div> : <>{children}</>;
+  // return isLoading ? <div>Loading...</div> : <>{children}</>;
+  return isLoading ? (
+    <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
+  ) : (
+    <>{children}</>
+  );
 };
 
 export const GuestRoute = ({ children }: Props) => {
@@ -57,5 +63,10 @@ export const GuestRoute = ({ children }: Props) => {
     checkAuthAndRedirect();
   }, [authInfo.checked, authInfo.isAuthenticated, router]);
 
-  return isLoading ? <div>Loading...</div> : <>{children}</>;
+  // return isLoading ? <div>Loading...</div> : <>{children}</>;
+  return isLoading ? (
+    <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
+  ) : (
+    <>{children}</>
+  );
 };

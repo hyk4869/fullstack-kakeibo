@@ -3,11 +3,14 @@
 import { store } from '@/app/_store/store';
 import { Provider } from 'react-redux';
 import BonusTable from './bonusTable';
+import { PrivateRoute } from '@/app/_util/authRoute';
 
 const EntryPageBonus = () => {
   return (
     <Provider store={store}>
-      <BonusTable />
+      <PrivateRoute>
+        <BonusTable />
+      </PrivateRoute>
     </Provider>
   );
 };

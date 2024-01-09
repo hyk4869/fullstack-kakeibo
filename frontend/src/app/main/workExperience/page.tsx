@@ -3,11 +3,14 @@
 import { Provider } from 'react-redux';
 import { store } from '../../_store/store';
 import WorkExperienceTable from './workExperienceTable';
+import { PrivateRoute } from '@/app/_util/authRoute';
 
 const EntryPageCompanyTable = () => {
   return (
     <Provider store={store}>
-      <WorkExperienceTable />
+      <PrivateRoute>
+        <WorkExperienceTable />
+      </PrivateRoute>
     </Provider>
   );
 };

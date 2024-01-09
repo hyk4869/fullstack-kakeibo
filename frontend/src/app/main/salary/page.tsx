@@ -3,11 +3,14 @@
 import { store } from '@/app/_store/store';
 import { Provider } from 'react-redux';
 import SalaryTable from './salaryTable';
+import { PrivateRoute } from '@/app/_util/authRoute';
 
 const EntryPageSalary = () => {
   return (
     <Provider store={store}>
-      <SalaryTable />
+      <PrivateRoute>
+        <SalaryTable />
+      </PrivateRoute>
     </Provider>
   );
 };
