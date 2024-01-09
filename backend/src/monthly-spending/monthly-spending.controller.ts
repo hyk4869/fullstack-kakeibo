@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { MonthlySpendingService } from './monthly-spending.service';
 import { MCategory, TMonthlySpending } from '@prisma/client';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('summaryTable')
 export class MonthlySpendingController {
@@ -8,8 +9,9 @@ export class MonthlySpendingController {
 
   /** TMonthlyとMCategoryをDBからクライアントに送信 */
   @Get()
-  async getMonthlySpendingWithCategory(): Promise<TMonthlySpending[]> {
-    return this.monthlySpendingService.getMonthlySpendingWithCategory();
+  @UseGuards(AuthGuard('jwt'))
+  async getMonthlySpendingWithCategory(@Query('userID') userID: string): Promise<TMonthlySpending[]> {
+    return this.monthlySpendingService.getMonthlySpendingWithCategory(userID);
   }
 
   /** MCategoryをDBからクライアントに送信 */
