@@ -169,3 +169,13 @@ export interface TBonusTax {
   /** ボーナス額 */
   TBonus?: TBonus[];
 }
+
+/** User情報 */
+export interface UserInfo {
+  userID: string | null;
+  email: string | null;
+  color: string | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  lastLoginAt: Date | null;
+}

@@ -117,6 +117,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
+
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
 
@@ -318,7 +319,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   //   }
   // };
 
-  console.log(categoryData, visibleRows);
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>

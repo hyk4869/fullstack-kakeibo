@@ -1,4 +1,4 @@
-import LogiPage from './login/page';
+import LogiPage from './signIn/page';
 type HomeProps = {
   //
 };

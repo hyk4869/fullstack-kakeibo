@@ -9,6 +9,8 @@ import axios from 'axios';
 import { signInLink } from '../_api/url';
 import Cookies from 'js-cookie';
 import MessageDialog from './messageDialog';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '../_store/slice';
 
 type LoginPageProps = {
   //
@@ -25,6 +27,7 @@ const LogiPage: React.FC<LoginPageProps> = () => {
   const [message, setMessage] = useState<string>('');
   const [messageDialog, setMessageDialog] = useState<boolean>(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const inputUserData = (paramKey: string, value: string) => {
     let _loginInfo = { ...loginInfo };
@@ -44,6 +47,7 @@ const LogiPage: React.FC<LoginPageProps> = () => {
         if (res.data) {
           if (res.data.status === true) {
             Cookies.set('authToken', res.data?.token);
+            dispatch(setUserInfo(res.data?.user));
             setMessage(res.data?.message);
             setMessageDialog(true);
             router.push('/main/summaryTable');

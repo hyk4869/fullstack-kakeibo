@@ -9,10 +9,12 @@ import {
   getMonthlySpendingContent,
   getSalary,
   getSalaryTax,
+  getUserInfo,
 } from './slice';
 
 export const store = configureStore({
   reducer: {
+    getUserInfo: getUserInfo.reducer,
     getMonthlySpendingContent: getMonthlySpendingContent.reducer,
     getCategoryContent: getCategoryContent.reducer,
     getCompanyContent: getCompanyContent.reducer,

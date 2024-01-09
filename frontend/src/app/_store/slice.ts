@@ -8,7 +8,40 @@ import {
   TMonthlySpending,
   TSalary,
   TSalaryTax,
+  UserInfo,
 } from './interfacesInfo';
+
+/** User情報 */
+export const getUserInfo = createSlice({
+  name: 'getUserInfo',
+  initialState: {
+    userID: '',
+    email: '',
+    color: '',
+    lastLoginAt: null,
+    createdAt: null,
+    updatedAt: null,
+  } as UserInfo,
+  reducers: {
+    setUserInfo: (state, action: PayloadAction<UserInfo>) => {
+      const lastLoginAt = action.payload.lastLoginAt !== null ? new Date(action.payload.lastLoginAt) : null;
+      const createdAt = action.payload.createdAt !== null ? new Date(action.payload.createdAt) : null;
+      const updatedAt = action.payload.updatedAt !== null ? new Date(action.payload.updatedAt) : null;
+      const userID = action.payload.userID !== null ? String(action.payload.userID) : '';
+      const email = action.payload.email !== null ? String(action.payload.email) : '';
+      const color = action.payload.color !== null ? String(action.payload.color) : '';
+      return {
+        ...action.payload,
+        userID: userID,
+        email: email,
+        color: color,
+        lastLoginAt: lastLoginAt,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      };
+    },
+  },
+});
 
 /** 月の出費関連 */
 export const getMonthlySpendingContent = createSlice({
@@ -259,6 +292,7 @@ export const enableEdit = createSlice({
   },
 });
 
+export const { setUserInfo } = getUserInfo.actions;
 export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending, setDeleteMonthlySpending } =
   getMonthlySpendingContent.actions;
 export const { setCategoryContent, setCreateCategoryContent } = getCategoryContent.actions;

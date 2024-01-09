@@ -24,7 +24,7 @@ export const PrivateRoute = ({ children }: Props) => {
         setIsLoading(false);
       } else {
         // 未認証状態
-        await router.push('/login');
+        await router.push('/signIn');
       }
     };
 

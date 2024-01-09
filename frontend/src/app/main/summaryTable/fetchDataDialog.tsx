@@ -10,6 +10,7 @@ import CustomDate from '../../_customComponents/customDate';
 import { RootState } from '../../_store/store';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import CloseIcon from '@mui/icons-material/Close';
+import Cookies from 'js-cookie';
 
 type FetchDataDialogProps = {
   openFetchDialog: boolean;
@@ -24,12 +25,22 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
 
   const dispatch = useDispatch();
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
+  const user = useSelector((state: RootState) => state.getUserInfo);
+
+  const jwtToken = Cookies.get('authToken');
 
   /** 全期間のデータを取得 */
   const getAllContent = (): void => {
     setIsLoading(true);
     axios
-      .get(getMonthlySpending)
+      .get(getMonthlySpending, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        params: {
+          userID: user.userID,
+        },
+      })
       .then((res) => {
         if (res.data) {
           dispatch(setMonthlySpending(res.data));
