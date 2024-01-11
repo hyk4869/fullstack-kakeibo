@@ -11,26 +11,26 @@ export const monthlySpendingHeaders = [
 /** カテゴリーマスタ用 */
 export const categoryHeaders = [
   { label: 'sort', key: 'sort' },
-  { label: 'categoryName', key: 'categoryName' },
   { label: 'userId', key: 'userId' },
+  { label: 'categoryName', key: 'categoryName' },
 ];
 
 /** 会社マスタ用 */
 export const companyHeaders = [
   { label: 'sort', key: 'sort' },
+  { label: 'userId', key: 'userId' },
   { label: 'name', key: 'name' },
   { label: 'companyNum', key: 'companyNum' },
   { label: 'majorSector', key: 'majorSector' },
-  { label: 'userId', key: 'userId' },
 ];
 
 /** 入退社マスタ用 */
 export const hireDateHeaders = [
   { label: 'sort', key: 'sort' },
+  { label: 'userId', key: 'userId' },
   { label: 'companyNum', key: 'companyNum' },
   { label: 'hireDate', key: 'hireDate' },
   { label: 'retirementDate', key: 'retirementDate' },
-  { label: 'userId', key: 'userId' },
 ];
 
 /** 給与ヘッダー */

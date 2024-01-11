@@ -188,13 +188,16 @@ export const convertMonthlySpendingTypes = <T extends TMonthlySpending>(array: T
     .map((s) => {
       return {
         ...s,
-        id: s.id !== null ? parseInt(String(s.id)) : null,
+        sort: s.sort !== null && typeof s.sort === 'string' ? parseInt(s.sort, 10) : null,
+        userId: s.userId !== null ? s.userId : null,
         paymentDay: s.paymentDay !== null ? new Date(s.paymentDay) : null,
-        categoryId: s.categoryId !== null ? parseInt(String(s.categoryId)) : null,
-        usageFee: s.usageFee !== null ? parseInt(String(s.usageFee)) : null,
+        store: s.store !== null ? s.store : null,
+        categorySort:
+          s.categorySort !== null && typeof s.categorySort === 'string' ? parseInt(String(s.categorySort)) : null,
+        usageFee: s.usageFee !== null && typeof s.usageFee === 'string' ? parseInt(String(s.usageFee)) : null,
       };
     })
-    .filter((a) => a.id);
+    .filter((a) => a.sort);
 };
 
 /**
@@ -204,7 +207,13 @@ export const convertMonthlySpendingTypes = <T extends TMonthlySpending>(array: T
  */
 export const monthlySpendingNullCheck = <T extends TMonthlySpending>(array: T[]): TMonthlySpending[] => {
   return array.filter(
-    (a) => a.id !== null && a.paymentDay !== null && a.store !== '' && a.usageFee !== null && a.categoryId !== null,
+    (a) =>
+      a.sort !== null &&
+      a.userId !== '' &&
+      a.paymentDay !== null &&
+      a.store !== '' &&
+      a.categorySort !== null &&
+      a.usageFee !== null,
   );
 };
 
@@ -218,11 +227,12 @@ export const convertCategoryTypes = <T extends MCategory>(array: T[]): MCategory
     .map((s) => {
       return {
         ...s,
-        id: s.id !== null ? parseInt(String(s.id)) : null,
-        categoryName: s.categoryName !== null ? String(s.categoryName) : null,
+        sort: s.sort !== null && typeof s.sort === 'string' ? parseInt(s.sort) : null,
+        userId: s.userId !== null ? s.userId : null,
+        categoryName: s.categoryName !== null ? s.categoryName : null,
       };
     })
-    .filter((a) => a.id);
+    .filter((a) => a.sort);
 };
 
 /**
@@ -231,7 +241,7 @@ export const convertCategoryTypes = <T extends MCategory>(array: T[]): MCategory
  * @returns
  */
 export const categoryNullCheck = <T extends MCategory>(array: T[]): MCategory[] => {
-  return array.filter((a) => a.id !== null && a.categoryName !== '');
+  return array.filter((a) => a.sort !== null && a.userId !== '' && a.categoryName !== '');
 };
 
 /**
@@ -244,12 +254,14 @@ export const convertCompanyTypes = <T extends MCompany>(array: T[]): MCompany[] 
     .map((s) => {
       return {
         ...s,
-        categoryId: s.id !== null ? parseInt(String(s.id)) : null,
-        categoryName: s.name !== null ? String(s.name) : null,
+        sort: s.sort !== null && typeof s.sort === 'string' ? parseInt(s.sort) : null,
+        userId: s.userId !== null ? s.userId : null,
+        name: s.name !== null ? s.name : null,
+        companyNum: s.companyNum !== null && typeof s.companyNum === 'string' ? parseInt(s.companyNum) : null,
         majorSector: s.majorSector !== null ? String(s.majorSector) : null,
       };
     })
-    .filter((a) => a.categoryId);
+    .filter((a) => a.sort);
 };
 
 /**
@@ -258,7 +270,9 @@ export const convertCompanyTypes = <T extends MCompany>(array: T[]): MCompany[] 
  * @returns
  */
 export const companyNullCheck = <T extends MCompany>(array: T[]): MCompany[] => {
-  return array.filter((a) => a.id !== null && a.name !== '' && a.majorSector !== '');
+  return array.filter(
+    (a) => a.sort !== null && a.userId !== '' && a.name !== '' && a.companyNum !== null && a.majorSector !== '',
+  );
 };
 
 /**
@@ -271,13 +285,14 @@ export const convertHireDateTypes = <T extends MHireDate>(array: T[]): MHireDate
     .map((s) => {
       return {
         ...s,
-        id: s.id !== null ? parseInt(String(s.id)) : null,
-        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
+        sort: s.sort !== null && typeof s.sort === 'string' ? parseInt(s.sort) : null,
+        userId: s.userId !== null ? s.userId : null,
+        companyNum: s.companyNum !== null && typeof s.companyNum === 'string' ? parseInt(s.companyNum) : null,
         hireDate: s.hireDate !== null ? new Date(s.hireDate) : null,
         retirementDate: s.retirementDate !== null ? new Date(s.retirementDate) : null,
       };
     })
-    .filter((a) => a.id);
+    .filter((a) => a.sort);
 };
 
 /**
@@ -286,7 +301,7 @@ export const convertHireDateTypes = <T extends MHireDate>(array: T[]): MHireDate
  * @returns
  */
 export const hireDateNullCheck = <T extends MHireDate>(array: T[]): MHireDate[] => {
-  return array.filter((a) => a.id !== null && a.companyId !== null && a.hireDate !== null);
+  return array.filter((a) => a.sort !== null && a.userId !== '' && a.companyNum !== null && a.hireDate !== null);
 };
 
 /**
@@ -299,13 +314,14 @@ export const convertSalaryTypes = <T extends TSalary>(array: T[]): TSalary[] => 
     .map((s) => {
       return {
         ...s,
-        id: s.id !== null ? parseInt(String(s.id)) : null,
-        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
+        sort: s.sort !== null && typeof s.sort === 'string' ? parseInt(s.sort) : null,
+        userId: s.userId !== null ? s.userId : null,
         payday: s.payday !== null ? new Date(s.payday) : null,
-        salary: s.salary !== null ? parseInt(String(s.salary)) : null,
+        salary: s.salary !== null && typeof s.salary === 'string' ? parseInt(s.salary) : null,
+        companyNum: s.companyNum !== null && typeof s.companyNum === 'string' ? parseInt(s.companyNum) : null,
       };
     })
-    .filter((a) => a.id);
+    .filter((a) => a.sort);
 };
 
 /**
@@ -314,7 +330,9 @@ export const convertSalaryTypes = <T extends TSalary>(array: T[]): TSalary[] => 
  * @returns
  */
 export const salaryNullCheck = <T extends TSalary>(array: T[]): TSalary[] => {
-  return array.filter((a) => a.id !== null && a.companyId !== null && a.payday !== null && a.salary !== null);
+  return array.filter(
+    (a) => a.sort !== null && a.userId !== '' && a.companyNum !== null && a.payday !== null && a.salary !== null,
+  );
 };
 
 /**
@@ -327,23 +345,39 @@ export const convertSalaryTaxTypes = <T extends TSalaryTax>(array: T[]): TSalary
     .map((s) => {
       return {
         ...s,
-        id: s.id !== null ? parseInt(String(s.id)) : null,
-        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
-        healthInsuranceExpense: s.healthInsuranceExpense !== null ? parseInt(String(s.healthInsuranceExpense)) : null,
+        sort: s.sort !== null && typeof s.sort === 'string' ? parseInt(s.sort) : null,
+        userId: s.userId !== null ? s.userId : null,
+        companyNum: s.companyNum !== null && typeof s.companyNum === 'string' ? parseInt(s.companyNum) : null,
+        healthInsuranceExpense:
+          s.healthInsuranceExpense !== null && typeof s.healthInsuranceExpense === 'string'
+            ? parseInt(s.healthInsuranceExpense)
+            : null,
         employeePensionInsuranceExpense:
-          s.employeePensionInsuranceExpense !== null ? parseInt(String(s.employeePensionInsuranceExpense)) : null,
+          s.employeePensionInsuranceExpense !== null && typeof s.employeePensionInsuranceExpense === 'string'
+            ? parseInt(s.employeePensionInsuranceExpense)
+            : null,
         nationalPensionInsuranceExpense:
-          s.nationalPensionInsuranceExpense !== null ? parseInt(String(s.nationalPensionInsuranceExpense)) : null,
+          s.nationalPensionInsuranceExpense !== null && typeof s.nationalPensionInsuranceExpense === 'string'
+            ? parseInt(s.nationalPensionInsuranceExpense)
+            : null,
         employeeInsuranceExpense:
-          s.employeeInsuranceExpense !== null ? parseInt(String(s.employeeInsuranceExpense)) : null,
-        longTermCareInsurance: s.longTermCareInsurance !== null ? parseInt(String(s.longTermCareInsurance)) : null,
-        incomeTax: s.incomeTax !== null ? parseInt(String(s.incomeTax)) : null,
-        residenceTax: s.residenceTax !== null ? parseInt(String(s.residenceTax)) : null,
-        yearEndAdjustment: s.yearEndAdjustment !== null ? parseInt(String(s.yearEndAdjustment)) : null,
-        notes: s.notes !== null ? parseInt(String(s.notes)) : null,
+          s.employeeInsuranceExpense !== null && typeof s.employeeInsuranceExpense === 'string'
+            ? parseInt(s.employeeInsuranceExpense)
+            : null,
+        longTermCareInsurance:
+          s.longTermCareInsurance !== null && typeof s.longTermCareInsurance === 'string'
+            ? parseInt(s.longTermCareInsurance)
+            : null,
+        incomeTax: s.incomeTax !== null && typeof s.incomeTax === 'string' ? parseInt(s.incomeTax) : null,
+        residenceTax: s.residenceTax !== null && typeof s.residenceTax === 'string' ? parseInt(s.residenceTax) : null,
+        yearEndAdjustment:
+          s.yearEndAdjustment !== null && typeof s.yearEndAdjustment === 'string'
+            ? parseInt(s.yearEndAdjustment)
+            : null,
+        notes: s.notes !== null && typeof s.notes === 'string' ? parseInt(s.notes) : null,
       };
     })
-    .filter((a) => a.id);
+    .filter((a) => a.sort);
 };
 
 /**
@@ -352,7 +386,7 @@ export const convertSalaryTaxTypes = <T extends TSalaryTax>(array: T[]): TSalary
  * @returns
  */
 export const salaryTaxNullCheck = <T extends TSalaryTax>(array: T[]): TSalaryTax[] => {
-  return array.filter((a) => a.id !== null);
+  return array.filter((a) => a.sort !== null && a.userId !== '' && a.companyNum !== null);
 };
 
 /**
@@ -365,13 +399,14 @@ export const convertBonusTypes = <T extends TBonus>(array: T[]): TBonus[] => {
     .map((s) => {
       return {
         ...s,
-        id: s.id !== null ? parseInt(String(s.id)) : null,
-        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
+        sort: s.sort !== null && typeof s.sort === 'string' ? parseInt(s.sort) : null,
+        userId: s.userId !== null ? s.userId : null,
         payday: s.payday !== null ? new Date(s.payday) : null,
-        bonusAmount: s.bonusAmount !== null ? parseInt(String(s.bonusAmount)) : null,
+        bonusAmount: s.bonusAmount !== null && typeof s.bonusAmount === 'string' ? parseInt(s.bonusAmount) : null,
+        companyNum: s.companyNum !== null && typeof s.companyNum === 'string' ? parseInt(s.companyNum) : null,
       };
     })
-    .filter((a) => a.id);
+    .filter((a) => a.sort);
 };
 
 /**
@@ -380,7 +415,7 @@ export const convertBonusTypes = <T extends TBonus>(array: T[]): TBonus[] => {
  * @returns
  */
 export const bonusNullCheck = <T extends TBonus>(array: T[]): TBonus[] => {
-  return array.filter((a) => a.id !== null);
+  return array.filter((a) => a.sort !== null && a.userId !== '' && a.companyNum !== null);
 };
 
 /**
@@ -393,23 +428,39 @@ export const convertBonusyTaxTypes = <T extends TBonusTax>(array: T[]): TBonusTa
     .map((s) => {
       return {
         ...s,
-        id: s.id !== null ? parseInt(String(s.id)) : null,
-        companyId: s.companyId !== null ? parseInt(String(s.companyId)) : null,
-        healthInsuranceExpense: s.healthInsuranceExpense !== null ? parseInt(String(s.healthInsuranceExpense)) : null,
+        sort: s.sort !== null && typeof s.sort === 'string' ? parseInt(s.sort) : null,
+        userId: s.userId !== null ? s.userId : null,
+        companyNum: s.companyNum !== null && typeof s.companyNum === 'string' ? parseInt(s.companyNum) : null,
+        healthInsuranceExpense:
+          s.healthInsuranceExpense !== null && typeof s.healthInsuranceExpense === 'string'
+            ? parseInt(s.healthInsuranceExpense)
+            : null,
         employeePensionInsuranceExpense:
-          s.employeePensionInsuranceExpense !== null ? parseInt(String(s.employeePensionInsuranceExpense)) : null,
+          s.employeePensionInsuranceExpense !== null && typeof s.employeePensionInsuranceExpense === 'string'
+            ? parseInt(s.employeePensionInsuranceExpense)
+            : null,
         nationalPensionInsuranceExpense:
-          s.nationalPensionInsuranceExpense !== null ? parseInt(String(s.nationalPensionInsuranceExpense)) : null,
+          s.nationalPensionInsuranceExpense !== null && typeof s.nationalPensionInsuranceExpense === 'string'
+            ? parseInt(s.nationalPensionInsuranceExpense)
+            : null,
         employeeInsuranceExpense:
-          s.employeeInsuranceExpense !== null ? parseInt(String(s.employeeInsuranceExpense)) : null,
-        longTermCareInsurance: s.longTermCareInsurance !== null ? parseInt(String(s.longTermCareInsurance)) : null,
-        incomeTax: s.incomeTax !== null ? parseInt(String(s.incomeTax)) : null,
-        residenceTax: s.residenceTax !== null ? parseInt(String(s.residenceTax)) : null,
-        yearEndAdjustment: s.yearEndAdjustment !== null ? parseInt(String(s.yearEndAdjustment)) : null,
-        notes: s.notes !== null ? parseInt(String(s.notes)) : null,
+          s.employeeInsuranceExpense !== null && typeof s.employeeInsuranceExpense === 'string'
+            ? parseInt(s.employeeInsuranceExpense)
+            : null,
+        longTermCareInsurance:
+          s.longTermCareInsurance !== null && typeof s.longTermCareInsurance === 'string'
+            ? parseInt(s.longTermCareInsurance)
+            : null,
+        incomeTax: s.incomeTax !== null && typeof s.incomeTax === 'string' ? parseInt(s.incomeTax) : null,
+        residenceTax: s.residenceTax !== null && typeof s.residenceTax === 'string' ? parseInt(s.residenceTax) : null,
+        yearEndAdjustment:
+          s.yearEndAdjustment !== null && typeof s.yearEndAdjustment === 'string'
+            ? parseInt(s.yearEndAdjustment)
+            : null,
+        notes: s.notes !== null && typeof s.notes === 'string' ? parseInt(s.notes) : null,
       };
     })
-    .filter((a) => a.id);
+    .filter((a) => a.sort);
 };
 
 /**
@@ -418,7 +469,7 @@ export const convertBonusyTaxTypes = <T extends TBonusTax>(array: T[]): TBonusTa
  * @returns
  */
 export const bonusTaxNullCheck = <T extends TBonusTax>(array: T[]): TBonusTax[] => {
-  return array.filter((a) => a.id !== null);
+  return array.filter((a) => a.sort !== null && a.userId !== '' && a.companyNum !== null);
 };
 
 /** 最新の日付を取得 */
