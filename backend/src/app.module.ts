@@ -8,6 +8,7 @@ import { SalaryInfoModule } from './salary-info/salary-info.module';
 import { CompanyInfoModule } from './company-info/company-info.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { MasterDataModule } from './master-data/master-data.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     CompanyInfoModule,
     UserModule,
     AuthModule,
+    MasterDataModule,
     // ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
