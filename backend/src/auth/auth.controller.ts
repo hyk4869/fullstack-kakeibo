@@ -4,6 +4,7 @@ import { AuthDto, SignInResponse } from './dto/loginUser.input';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from 'src/user/user.service';
 import { User } from '@prisma/client';
+import { JwtPayload } from './interfaces/jwtPayload.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -29,8 +30,8 @@ export class AuthController {
     return await this.userService.getUser(userID);
   }
 
-  @Post('/test/token')
-  async verifyToken(@Body('token') token: string): Promise<boolean> {
-    return await this.authServise.verifyToken(token);
+  @Post('/verifyToken')
+  async verifyToken(@Body('authToken') authToken: string): Promise<SignInResponse> {
+    return await this.authServise.verifyToken(authToken);
   }
 }

@@ -16,6 +16,10 @@ export const createAccount = `${commonURL}/user/signUp`;
  */
 export const signInLink = `${commonURL}/auth/login`;
 /**
+ * トークンの確認
+ */
+export const verifyTokenLink = `${commonURL}/auth/verifyToken`;
+/**
  * 全てのマスタデータを取得する
  */
 export const getAllMasterData = `${commonURL}/masterData`;

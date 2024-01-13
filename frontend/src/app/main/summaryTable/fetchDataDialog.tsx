@@ -53,6 +53,7 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
       })
       .finally(() => {
         setIsLoading(false);
+        onCloseDialog();
       });
   };
 
