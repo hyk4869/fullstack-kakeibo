@@ -2,9 +2,9 @@
 
 import { Box, Button, Dialog, IconButton, Tooltip } from '@mui/material';
 import axios from 'axios';
-import { getCategory, getMonthlySpending, getSomeMonthlySpending } from '../../_api/url';
+import { getMonthlySpending, getSomeMonthlySpending } from '../../_api/url';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryContent, setEnableEdit, setMonthlySpending } from '../../_store/slice';
+import { setEnableEdit, setMonthlySpending } from '../../_store/slice';
 import React, { useCallback, useState } from 'react';
 import CustomDate from '../../_customComponents/customDate';
 import { RootState } from '../../_store/store';
@@ -71,17 +71,13 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
           dispatch(setMonthlySpending(res.data));
           dispatch(setEnableEdit(true));
         }
-        return axios.get(getCategory);
-      })
-      .then((res) => {
-        if (res.data) {
-          dispatch(setCategoryContent(res.data));
-          setIsLoading(false);
-          onCloseDialog();
-        }
       })
       .catch((error) => {
         console.error(error);
+        setIsLoading(false);
+        onCloseDialog();
+      })
+      .finally(() => {
         setIsLoading(false);
         onCloseDialog();
       });
@@ -107,7 +103,6 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
 
   const clearAllContent = () => {
     dispatch(setMonthlySpending([]));
-    dispatch(setCategoryContent([]));
   };
 
   const disable =

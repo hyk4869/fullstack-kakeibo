@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,14 +11,27 @@ import { blue } from '@mui/material/colors';
 import PersonIcon from '@mui/icons-material/Person';
 import SideBar from './sideBar';
 import useWindowSize from '../_util/useWindowSize';
+import { useSelector } from 'react-redux';
+import { RootState } from '../_store/store';
 
 type CustomMenuBarProps = {
   TitleName?: string;
 };
+
 const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
   const { TitleName } = props;
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
   const { width, height } = useWindowSize();
+  const userData = useSelector((state: RootState) => state.getUserInfo);
+
+  const headerName = useMemo(() => {
+    return (
+      <Box sx={{ display: 'flex', gap: '20px' }}>
+        <Box>{TitleName ?? ''}</Box>
+        <Box>{userData.userID + ' 様' ?? ''}</Box>
+      </Box>
+    );
+  }, [TitleName, userData.userID]);
 
   return (
     <>
@@ -36,12 +49,12 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {TitleName ?? ''}
+              {headerName}
             </Typography>
+            {/* TODO: 後で消す */}
             {`確認用 width: ${width}`} - {`height: ${height}`}
             <Button color="inherit">
               <PersonIcon />
-              {/* <div style={{ paddingLeft: '1rem' }}>{userDataValue.username ?? ''}</div> */}
             </Button>
           </Toolbar>
         </AppBar>
