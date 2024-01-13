@@ -9,8 +9,6 @@ export class MonthlySpendingService {
 
   /** TMonthlyとMCategoryをDBからクライアントに送信 */
   async getMonthlySpendingWithCategory(userID: string) {
-    console.log(userID);
-
     const result = await this.prisma.tMonthlySpending.findMany({
       where: {
         userId: userID,

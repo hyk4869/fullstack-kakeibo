@@ -59,7 +59,7 @@ export class AuthService {
       const decoded = this.jwtService.verify(token);
       return !!decoded;
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       return false;
     }
   }
