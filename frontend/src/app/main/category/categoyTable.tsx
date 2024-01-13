@@ -2,12 +2,11 @@
 import { RootState } from '@/app/_store/store';
 import { Box, Paper, Table, TableCell, TableContainer, TableRow, TableBody, Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomTextfield from '../../_customComponents/customTextfield';
-import RedirectDialog from '@/app/_util/commonLayouts/redirectDialog';
-import { messageRedirect, commonPadding5 } from '@/app/_customComponents/customProperties';
+import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import CreateNewRecordsDialog from '@/app/_dialog/categoryMasterTable/createNewRecordsDialog';
@@ -32,7 +31,6 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
 
   const [edit, setEdit] = useState<boolean>(false);
-  const [redirectTo, setRedirectTo] = useState<boolean>(false);
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
   const [editCategoryValue, setEditCategoryValue] = useState<Array<MCategory>>([]);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
@@ -49,12 +47,6 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
       setWindowSize(false);
     }
   }, [width, height]);
-
-  useLayoutEffect(() => {
-    if (monthlyData.length === 0) {
-      setRedirectTo(true);
-    }
-  }, [monthlyData]);
 
   useEffect(() => {
     if (categoryData.length !== editCategoryValue.length) {
@@ -167,12 +159,6 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
           </Button>
         </Box>
       </Box>
-      <RedirectDialog
-        openRedirect={redirectTo}
-        closeRedirect={() => setRedirectTo(false)}
-        url="/main/summaryTable"
-        message={messageRedirect}
-      />
       <CreateNewRecordsDialog
         openDialog={openAddContent}
         onCloseAddRecords={() => setOpenAddContent(false)}

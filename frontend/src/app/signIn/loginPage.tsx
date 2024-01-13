@@ -10,7 +10,7 @@ import { signInLink } from '../_api/url';
 import Cookies from 'js-cookie';
 import MessageDialog from './messageDialog';
 import { useDispatch } from 'react-redux';
-import { setUserInfo } from '../_store/slice';
+import { setCategoryContent, setCompanyContent, setHireDateContent, setUserInfo } from '../_store/slice';
 
 type LoginPageProps = {
   //
@@ -50,6 +50,12 @@ const LogiPage: React.FC<LoginPageProps> = () => {
             dispatch(setUserInfo(res.data?.user));
             setMessage(res.data?.message);
             setMessageDialog(true);
+
+            const masterData = res.data?.masterData;
+            dispatch(setCategoryContent(masterData.categoryData));
+            dispatch(setCompanyContent(masterData.companyData));
+            dispatch(setHireDateContent(masterData.hireData));
+
             router.push('/main/summaryTable');
           } else {
             setMessage(res.data?.message);

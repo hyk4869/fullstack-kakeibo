@@ -46,13 +46,6 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
           dispatch(setMonthlySpending(res.data));
           dispatch(setEnableEdit(true));
         }
-        return axios.get(getCategory);
-      })
-      .then((res) => {
-        if (res.data) {
-          dispatch(setCategoryContent(res.data));
-          onCloseDialog();
-        }
       })
       .catch((error) => {
         console.error(error);

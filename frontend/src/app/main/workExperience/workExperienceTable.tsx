@@ -1,13 +1,10 @@
 'use client';
 
-import { getCompany, getHireDate } from '@/app/_api/url';
-import { setCompanyContent, setHireDateContent } from '@/app/_store/slice';
 import { RootState } from '@/app/_store/store';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
-import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import { grey } from '@mui/material/colors';
@@ -15,9 +12,7 @@ import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomTextfield from '../../_customComponents/customTextfield';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CreateNewRecordsDialog from '@/app/_dialog/workExperienceMasterTable/createNewRecordsDialog';
-import { ShowWorkExperienceMaster } from '@/app/_dialog/workExperienceMasterTable/showWorkExperience';
-import { ReferenceType } from '../category/categoyTable';
-import { sumEachCategory } from '@/app/_util/utils';
+
 import { workExperienceHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCompany } from '@/app/_store/interfacesInfo';
 import useWindowSize from '@/app/_util/useWindowSize';
@@ -40,8 +35,6 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const { width, height } = useWindowSize();
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     if (width < 840) {
       setWindowSize(true);
@@ -49,35 +42,6 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
       setWindowSize(false);
     }
   }, [width, height]);
-
-  useEffect(() => {
-    try {
-      if (companyData.length === 0 && hireDateData.length === 0) {
-        setIsLoading(true);
-        axios
-          .get(getCompany)
-          .then((res) => {
-            if (res.data) {
-              dispatch(setCompanyContent(res.data));
-            }
-            return axios.get(getHireDate);
-          })
-          .then((res) => {
-            if (res.data) {
-              dispatch(setHireDateContent(res.data));
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [companyData, hireDateData]);
 
   useEffect(() => {
     if (companyData.length !== editCompanyValue.length) {

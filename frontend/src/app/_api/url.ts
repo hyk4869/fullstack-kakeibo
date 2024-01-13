@@ -16,6 +16,10 @@ export const createAccount = `${commonURL}/user/signUp`;
  */
 export const signInLink = `${commonURL}/auth/login`;
 /**
+ * 全てのマスタデータを取得する
+ */
+export const getAllMasterData = `${commonURL}/masterData`;
+/**
  * 全期間のmonthlySpendingを取得&データのPOSTも行っている
  */
 export const getMonthlySpending = `${commonURL}/summaryTable`;

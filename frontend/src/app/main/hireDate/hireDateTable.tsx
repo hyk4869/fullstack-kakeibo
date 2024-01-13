@@ -1,14 +1,11 @@
 'use client';
 
-import { getCompany, getHireDate } from '@/app/_api/url';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
-import { setCompanyContent, setHireDateContent } from '@/app/_store/slice';
 import { RootState } from '@/app/_store/store';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingContent from '../../_util/commonLayouts/loading';
@@ -45,35 +42,6 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
       setWindowSize(false);
     }
   }, [width, height]);
-
-  useEffect(() => {
-    try {
-      if (companyData.length === 0 && hireDateData.length === 0) {
-        setIsLoading(true);
-        axios
-          .get(getCompany)
-          .then((res) => {
-            if (res.data) {
-              dispatch(setCompanyContent(res.data));
-            }
-            return axios.get(getHireDate);
-          })
-          .then((res) => {
-            if (res.data) {
-              dispatch(setHireDateContent(res.data));
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [companyData, hireDateData]);
 
   useEffect(() => {
     if (companyData.length !== editHireDateValue.length) {
