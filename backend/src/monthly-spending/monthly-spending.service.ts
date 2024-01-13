@@ -95,28 +95,6 @@ export class MonthlySpendingService {
 
         await Promise.all(upsertPromises);
 
-        // /** DBにある全てのidを取得 */
-        // const existingIds = await prisma.tMonthlySpending.findMany({
-        //   select: {
-        //     id: true,
-        //   },
-        // });
-
-        // /** postDataに存在しないidを取得 */
-        // const missingIds = existingIds
-        //   .filter((existingItem) => !postData.some((item) => item.id === existingItem.id))
-        //   .map((item) => item.id);
-
-        // if (missingIds.length > 0) {
-        //   await prisma.tMonthlySpending.deleteMany({
-        //     where: {
-        //       id: {
-        //         in: missingIds,
-        //       },
-        //     },
-        //   });
-        // }
-
         /** データベースから最新のデータを取得 */
         const latestData = await prisma.tMonthlySpending.findMany({
           include: {

@@ -7,5 +7,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [MasterDataController],
   providers: [MasterDataService],
+  exports: [MasterDataService],
 })
 export class MasterDataModule {}

@@ -1,5 +1,5 @@
-import { User } from '@prisma/client';
 import { IsNotEmpty, MinLength } from 'class-validator';
+import { MasterData } from 'src/master-data/interface/masterDataInterface';
 
 export class AuthDto {
   @IsNotEmpty()
@@ -18,9 +18,11 @@ export interface UserWithoutPassword {
   createdAt: Date;
   updatedAt: Date;
 }
+
 export class SignInResponse {
   token?: string;
   message: string;
   user?: UserWithoutPassword;
   status?: boolean;
+  masterData?: MasterData;
 }

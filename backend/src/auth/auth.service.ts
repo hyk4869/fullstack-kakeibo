@@ -4,12 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { CustomMessageUser } from 'src/user/interfaces/messages';
+import { MasterDataService } from 'src/master-data/master-data.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private prisma: PrismaService,
+    private readonly masterDataService: MasterDataService,
   ) {}
 
   /** ユーザーが正しいかどうかを判断するもの */
@@ -35,12 +37,14 @@ export class AuthService {
     if (validationResult.status) {
       const payload = { username: postData.userID };
       const { password, id, ...userWithoutPassword } = validationResult.user;
+      const masterData = await this.masterDataService.getMasterData(userWithoutPassword.userID);
 
       return {
         token: this.jwtService.sign(payload),
         message: validationResult.message,
         user: { ...userWithoutPassword },
         status: true,
+        masterData: masterData,
       };
     } else {
       return {
