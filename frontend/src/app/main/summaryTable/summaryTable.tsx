@@ -37,6 +37,7 @@ import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHe
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
+import Cookies from 'js-cookie';
 
 export type EnhancedTableToolbarProps = {
   numSelected: number;
@@ -117,6 +118,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
+  const user = useSelector((state: RootState) => state.getUserInfo);
 
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
@@ -136,6 +138,8 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TMonthlySpending>();
+
+  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -251,16 +255,18 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
    */
   const saveValue = async () => {
     setIsLoading(true);
+
     const postData = editValue.map(({ category, ...data }) => ({
       ...data,
-      userId: data.userId || 1,
+      userId: user.userID,
     }));
     const deleteData = deleteSomething.map(({ category, ...data }) => ({
       ...data,
-      userId: data.userId || 1,
+      userId: user.userID,
     }));
+
     await axios
-      .post(getMonthlySpending, postData)
+      .post(getMonthlySpending, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
       .then((res) => {
         if (res.data) {
           dispatch(setMonthlySpending(res.data));
@@ -271,7 +277,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       });
     if (deleteSomething.length !== 0) {
       await axios
-        .post(postDeleteMonthlySpending, deleteData)
+        .post(postDeleteMonthlySpending, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
         .then((res) => {
           if (res.data) {
             dispatch(setMonthlySpending(res.data));

@@ -65,6 +65,10 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
         params: {
           startDate: startDate,
           endDate: endDate,
+          userID: user.userID,
+        },
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
         },
       })
       .then((res) => {
