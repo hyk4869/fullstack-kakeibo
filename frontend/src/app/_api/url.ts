@@ -30,7 +30,7 @@ export const getMonthlySpending = `${commonURL}/summaryTable`;
 /**
  * 全期間のcategoryを取得
  */
-export const getCategory = `${commonURL}/summaryTable/category`;
+// export const getCategory = `${commonURL}/summaryTable/category`;
 /**
  * 一部期間のmonthlyを取得
  */
