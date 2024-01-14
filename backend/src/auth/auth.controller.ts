@@ -1,10 +1,9 @@
-import { Body, Controller, Post, UseGuards, Get, Query, Param } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Get, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, SignInResponse } from './dto/loginUser.input';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from 'src/user/user.service';
 import { User } from '@prisma/client';
-import { JwtPayload } from './interfaces/jwtPayload.interface';
 
 @Controller('auth')
 export class AuthController {

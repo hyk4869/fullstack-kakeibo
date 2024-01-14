@@ -34,6 +34,7 @@ import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import CreateNewRecordsDialog from '@/app/_dialog/salaryTax/createNewRecordsDialog';
+import Cookies from 'js-cookie';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -95,6 +96,8 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const salaryTaxData = useSelector((state: RootState) => state.getSalaryTax);
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
+  const user = useSelector((state: RootState) => state.getUserInfo);
+
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
 
@@ -113,6 +116,8 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TSalaryTax>();
+
+  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -137,7 +142,14 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
       if (salaryTaxData.length === 0) {
         setIsLoading(true);
         axios
-          .get(getSalaryTax)
+          .get(getSalaryTax, {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+            params: {
+              userID: user.userID,
+            },
+          })
           .then((res) => {
             if (res.data) {
               dispatch(setSalaryTaxContent(res.data));

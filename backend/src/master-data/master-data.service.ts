@@ -8,12 +8,12 @@ export class MasterDataService {
   constructor(private prisma: PrismaService) {}
 
   /** ログイン時にマスターのデータを取ってくる処理 */
-  async getMasterData(userID: string): Promise<MasterData> {
+  public async getMasterData(userID: string): Promise<MasterData> {
     const result: MasterData = await this.findCategoryMaster(userID);
     return result;
   }
 
-  async findCategoryMaster(userID: string): Promise<MasterData> {
+  private async findCategoryMaster(userID: string): Promise<MasterData> {
     const categoryData = await this.findData<MCategory>('mCategory', userID);
     const companyData = await this.findData<MCompany>('mCompany', userID);
     const hireDateData = await this.findData<MHireDate>('mHireDate', userID);
@@ -26,7 +26,8 @@ export class MasterDataService {
     return result;
   }
 
-  async findData<T>(key: string, id: string): Promise<T[]> {
+  /** ジェネリクスで書いた共通の処理 */
+  private async findData<T>(key: string, id: string): Promise<T[]> {
     try {
       const result: T[] = await this.prisma[key].findMany({
         where: {

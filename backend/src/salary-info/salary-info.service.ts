@@ -6,18 +6,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SalaryInfoService {
   constructor(private prisma: PrismaService) {}
 
-  async getSalaryTax(): Promise<TTax[]> {
-    const result = await this.prisma.tTax.findMany({
-      include: {
-        TSalary: true,
-      },
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
-  }
-
   async postSalaryTaxContent(postData: TTax[]): Promise<TTax[]> {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
@@ -97,15 +85,6 @@ export class SalaryInfoService {
       console.error('データベースへの書き込みエラー:', error);
       throw error;
     }
-  }
-
-  async getSalary(): Promise<TSalary[]> {
-    const result = await this.prisma.tSalary.findMany({
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
   }
 
   async postSalaryContent(postData: TSalary[]): Promise<TSalary[]> {
@@ -193,9 +172,11 @@ export class SalaryInfoService {
     }
   }
 
-  async getBonusTax(): Promise<TTaxBonus[]> {
-    const result = await this.prisma.tTaxBonus.findMany({
-      include: { TBonus: true },
+  async getSalary(userID: string): Promise<TSalary[]> {
+    const result = await this.prisma.tSalary.findMany({
+      where: {
+        userId: userID,
+      },
       orderBy: {
         id: 'asc',
       },
@@ -203,8 +184,41 @@ export class SalaryInfoService {
     return result;
   }
 
-  async getBonus(): Promise<TBonus[]> {
+  async getSalaryTax(userID: string): Promise<TTax[]> {
+    const result = await this.prisma.tTax.findMany({
+      where: {
+        userId: userID,
+      },
+      include: {
+        TSalary: true,
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return result;
+  }
+
+  async getBonusTax(userID: string): Promise<TTaxBonus[]> {
+    const result = await this.prisma.tTaxBonus.findMany({
+      where: {
+        userId: userID,
+      },
+      include: {
+        TBonus: true,
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return result;
+  }
+
+  async getBonus(userID: string): Promise<TBonus[]> {
     const result = await this.prisma.tBonus.findMany({
+      where: {
+        userId: userID,
+      },
       orderBy: {
         id: 'asc',
       },

@@ -35,6 +35,7 @@ import axios from 'axios';
 import { setCreateSalary, setSalaryContent } from '@/app/_store/slice';
 import { getSalary, postDeleteSalary } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
+import Cookies from 'js-cookie';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -96,6 +97,7 @@ type SalaryTableProps = {
 const SalaryTable: React.FC<SalaryTableProps> = () => {
   const salaryData = useSelector((state: RootState) => state.getSalary);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
+  const user = useSelector((state: RootState) => state.getUserInfo);
 
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
@@ -115,6 +117,8 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TSalary>();
+
+  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -139,7 +143,14 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
       if (salaryData.length === 0) {
         setIsLoading(true);
         axios
-          .get(getSalary)
+          .get(getSalary, {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+            params: {
+              userID: user.userID,
+            },
+          })
           .then((res) => {
             if (res.data) {
               dispatch(setSalaryContent(res.data));

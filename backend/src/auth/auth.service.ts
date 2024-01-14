@@ -56,7 +56,7 @@ export class AuthService {
     }
   }
 
-  /** 再リロード時 */
+  /** リロード時 */
   async verifyToken(token: string): Promise<SignInResponse> {
     try {
       const decoded = this.jwtService.verify(token) as JwtPayload;

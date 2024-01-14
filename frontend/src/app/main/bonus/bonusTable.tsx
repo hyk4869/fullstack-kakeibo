@@ -34,6 +34,7 @@ import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon
 import axios from 'axios';
 import { setBonusContent, setCreateBonus } from '@/app/_store/slice';
 import { getBonus, postDeleteBonus } from '@/app/_api/url';
+import Cookies from 'js-cookie';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -95,6 +96,7 @@ type BonusTableProps = {
 const BonusTable: React.FC<BonusTableProps> = () => {
   const bonusData = useSelector((state: RootState) => state.getBonus);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
+  const user = useSelector((state: RootState) => state.getUserInfo);
 
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
@@ -114,6 +116,8 @@ const BonusTable: React.FC<BonusTableProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TBonus>();
+
+  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -138,7 +142,14 @@ const BonusTable: React.FC<BonusTableProps> = () => {
       if (bonusData.length === 0) {
         setIsLoading(true);
         axios
-          .get(getBonus)
+          .get(getBonus, {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+            params: {
+              userID: user.userID,
+            },
+          })
           .then((res) => {
             if (res.data) {
               dispatch(setBonusContent(res.data));

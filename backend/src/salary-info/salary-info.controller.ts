@@ -1,14 +1,16 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { SalaryInfoService } from './salary-info.service';
 import { TBonus, TSalary, TTax, TTaxBonus } from '@prisma/client';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('salaryInfo')
 export class SalaryInfoController {
   constructor(private readonly salaryInfoService: SalaryInfoService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/salaryTax')
-  async getSalaryTaxContent(): Promise<TTax[]> {
-    return this.salaryInfoService.getSalaryTax();
+  async getSalaryTaxContent(@Query('userID') userID: string): Promise<TTax[]> {
+    return this.salaryInfoService.getSalaryTax(userID);
   }
 
   @Post('/salaryTax')
@@ -21,9 +23,10 @@ export class SalaryInfoController {
     return this.salaryInfoService.deleteSalaryTaxContent(postData);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/salary')
-  async getSalaryContent(): Promise<TSalary[]> {
-    return this.salaryInfoService.getSalary();
+  async getSalaryContent(@Query('userID') userID: string): Promise<TSalary[]> {
+    return this.salaryInfoService.getSalary(userID);
   }
 
   @Post('/salary')
@@ -36,13 +39,15 @@ export class SalaryInfoController {
     return this.salaryInfoService.deleteSalaryContent(postData);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/bonusTax')
-  async getBonusTaxContent(): Promise<TTaxBonus[]> {
-    return this.salaryInfoService.getBonusTax();
+  async getBonusTaxContent(@Query('userID') userID: string): Promise<TTaxBonus[]> {
+    return this.salaryInfoService.getBonusTax(userID);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/bonus')
-  async getBonusContent(): Promise<TBonus[]> {
-    return this.salaryInfoService.getBonus();
+  async getBonusContent(@Query('userID') userID: string): Promise<TBonus[]> {
+    return this.salaryInfoService.getBonus(userID);
   }
 }

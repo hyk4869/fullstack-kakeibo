@@ -34,6 +34,7 @@ import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import CreateNewRecordsDialog from '@/app/_dialog/bonusTax/createNewRecordsDialog';
+import Cookies from 'js-cookie';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -95,6 +96,8 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
   const bonusTaxData = useSelector((state: RootState) => state.getBonusTax);
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
+  const user = useSelector((state: RootState) => state.getUserInfo);
+
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
 
@@ -113,6 +116,8 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TBonusTax>();
+
+  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -137,7 +142,14 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
       if (bonusTaxData.length === 0) {
         setIsLoading(true);
         axios
-          .get(getBonusTax)
+          .get(getBonusTax, {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+            params: {
+              userID: user.userID,
+            },
+          })
           .then((res) => {
             if (res.data) {
               dispatch(setBonusTaxContent(res.data));
