@@ -165,7 +165,8 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [salaryTaxData]);
+    //TODO: 無限レンダリングしているため、第二引数は取っているが、検討が必要
+  }, []);
 
   useEffect(() => {
     if (salaryTaxData.length !== editValue.length) {

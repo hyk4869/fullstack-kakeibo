@@ -176,8 +176,6 @@ export const incrementFromArray = <T, U>(makeNewArray: T[], arrayFormRedux: U[],
   }
 };
 
-//TODO: 以下を修正する
-
 /**
  * CSVをインポートした際にきれいな形に成型する
  * @param array TMonthlySpending

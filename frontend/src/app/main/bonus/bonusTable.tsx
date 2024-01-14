@@ -165,7 +165,8 @@ const BonusTable: React.FC<BonusTableProps> = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [bonusData]);
+    //TODO: 無限レンダリングしているため、第二引数は取っているが、検討が必要
+  }, []);
 
   useEffect(() => {
     if (bonusData.length !== editValue.length) {

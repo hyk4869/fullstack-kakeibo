@@ -6,6 +6,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SalaryInfoService {
   constructor(private prisma: PrismaService) {}
 
+  //TODO: もう少しコンパクトにまとめる
+
   async postSalaryTaxContent(postData: TTax[]): Promise<TTax[]> {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
@@ -199,13 +201,10 @@ export class SalaryInfoService {
     return result;
   }
 
-  async getBonusTax(userID: string): Promise<TTaxBonus[]> {
-    const result = await this.prisma.tTaxBonus.findMany({
+  async getBonus(userID: string): Promise<TBonus[]> {
+    const result = await this.prisma.tBonus.findMany({
       where: {
         userId: userID,
-      },
-      include: {
-        TBonus: true,
       },
       orderBy: {
         id: 'asc',
@@ -214,10 +213,13 @@ export class SalaryInfoService {
     return result;
   }
 
-  async getBonus(userID: string): Promise<TBonus[]> {
-    const result = await this.prisma.tBonus.findMany({
+  async getBonusTax(userID: string): Promise<TTaxBonus[]> {
+    const result = await this.prisma.tTaxBonus.findMany({
       where: {
         userId: userID,
+      },
+      include: {
+        TBonus: true,
       },
       orderBy: {
         id: 'asc',

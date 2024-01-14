@@ -165,7 +165,8 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [bonusTaxData]);
+    //TODO: 無限レンダリングしているため、第二引数は取っているが、検討が必要
+  }, []);
 
   useEffect(() => {
     if (bonusTaxData.length !== editValue.length) {
