@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MCategory, TMonthlySpending } from '@prisma/client';
-import * as fs from 'fs';
 
 @Injectable()
 export class MonthlySpendingService {
@@ -23,23 +22,21 @@ export class MonthlySpendingService {
     return result;
   }
 
-  /** MCategoryをDBからクライアントに送信 */
-  async getCategory(): Promise<MCategory[]> {
-    return this.prisma.mCategory.findMany({
-      orderBy: {
-        id: 'asc',
-      },
-    });
-  }
-
   /** 期間を指定してTMonthlyとMCategoryをDBからクライアントに送信 */
-  async getMonthlySpendingByDateRange(startDate: Date, endDate: Date) {
+  async getMonthlySpendingByDateRange(startDate: Date, endDate: Date, userID: string) {
     return this.prisma.tMonthlySpending.findMany({
       where: {
-        paymentDay: {
-          gte: startDate,
-          lte: endDate,
-        },
+        AND: [
+          {
+            paymentDay: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
+          {
+            userId: userID,
+          },
+        ],
       },
       include: {
         category: true,
@@ -59,14 +56,7 @@ export class MonthlySpendingService {
         const now = new Date();
 
         const upsertPromises = postData.map(async (data) => {
-          /** IDで既存のレコードを探す */
-          const existingRecord = await prisma.tMonthlySpending.findUnique({
-            where: {
-              id: data.id,
-            },
-          });
-
-          if (existingRecord) {
+          if (data.id) {
             // 既存のレコードがある場合は更新
             await prisma.tMonthlySpending.update({
               where: {
@@ -76,18 +66,40 @@ export class MonthlySpendingService {
                 ...data,
                 updatedAt: now.toISOString(),
                 paymentDay: new Date(data.paymentDay).toISOString(),
+                id: data.id,
               },
             });
           } else {
-            // 既存のレコードがない場合は新規作成
-            await prisma.tMonthlySpending.create({
-              data: {
-                ...data,
-                createdAt: now.toISOString(),
-                updatedAt: now.toISOString(),
-                paymentDay: new Date(data.paymentDay).toISOString(),
+            const verify = await prisma.mCategory.findMany({
+              where: {
+                AND: [{ sort: data.categorySort }, { userId: data.userId }],
               },
             });
+            const checkSort = await prisma.tMonthlySpending.findMany({
+              where: {
+                userId: data.userId,
+              },
+            });
+
+            const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+
+            if (foundMatchingSort) {
+              return;
+            } else {
+              const { userId, categoryId, id, ...datas } = data;
+
+              // 既存のレコードがない場合は新規作成
+              await prisma.tMonthlySpending.create({
+                data: {
+                  ...datas,
+                  createdAt: now.toISOString(),
+                  updatedAt: now.toISOString(),
+                  paymentDay: new Date(data.paymentDay).toISOString(),
+                  userInfo: { connect: { userID: data.userId } },
+                  category: { connect: { id: verify.find((a) => a.sort === data.categorySort)?.id } },
+                },
+              });
+            }
           }
         });
 

@@ -7,37 +7,49 @@ import { AuthGuard } from '@nestjs/passport';
 export class MonthlySpendingController {
   constructor(private readonly monthlySpendingService: MonthlySpendingService) {}
 
-  /** TMonthlyとMCategoryをDBからクライアントに送信 */
+  /**
+   * TMonthlyとMCategoryをDBからクライアントに送信
+   */
   @Get()
   @UseGuards(AuthGuard('jwt'))
   async getMonthlySpendingWithCategory(@Query('userID') userID: string): Promise<TMonthlySpending[]> {
     return this.monthlySpendingService.getMonthlySpendingWithCategory(userID);
   }
 
-  /** MCategoryをDBからクライアントに送信 */
-  @Get('/category')
-  async getCategory(): Promise<MCategory[]> {
-    return this.monthlySpendingService.getCategory();
-  }
-
-  /** 期間を指定してTMonthlyとMCategoryをDBからクライアントに送信 */
+  /**
+   * 期間を指定してTMonthlyとMCategoryをDBからクライアントに送信
+   */
+  @UseGuards(AuthGuard('jwt'))
   @Get('/someContent')
   async getMonthlySpendingByDateRange(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
+    @Query('userID') userID: string,
   ): Promise<TMonthlySpending[]> {
     const startDateDate = new Date(startDate);
     const endDateDate = new Date(endDate);
 
-    const monthlySpending = await this.monthlySpendingService.getMonthlySpendingByDateRange(startDateDate, endDateDate);
+    const monthlySpending = await this.monthlySpendingService.getMonthlySpendingByDateRange(
+      startDateDate,
+      endDateDate,
+      userID,
+    );
     return monthlySpending;
   }
 
+  /**
+   * TMonthlySpendingを保存
+   */
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async postSaveContent(@Body() postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
     return this.monthlySpendingService.postMonthlySpending(postData);
   }
 
+  /**
+   * TMonthlySpendingを削除
+   */
+  @UseGuards(AuthGuard('jwt'))
   @Post('/deleteContent')
   async postDeleteContent(@Body() postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
     return this.monthlySpendingService.deleteContent(postData);
