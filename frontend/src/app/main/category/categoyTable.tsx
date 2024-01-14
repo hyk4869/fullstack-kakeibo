@@ -3,7 +3,7 @@ import { RootState } from '@/app/_store/store';
 import { Box, Paper, Table, TableCell, TableContainer, TableRow, TableBody, Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomTextfield from '../../_customComponents/customTextfield';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
@@ -15,6 +15,11 @@ import { sumEachCategory } from '@/app/_util/utils';
 import { categoryHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCategory } from '@/app/_store/interfacesInfo';
 import useWindowSize from '@/app/_util/useWindowSize';
+import LoadingContent from '../../_util/commonLayouts/loading';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { getCategoryLink } from '@/app/_api/url';
+import { setCategoryContent } from '@/app/_store/slice';
 
 type CategoryTableProps = {
   //
@@ -29,16 +34,22 @@ export type ReferenceType = {
 const CategoryTable: React.FC<CategoryTableProps> = () => {
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
+  const user = useSelector((state: RootState) => state.getUserInfo);
 
   const [edit, setEdit] = useState<boolean>(false);
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
-  const [editCategoryValue, setEditCategoryValue] = useState<Array<MCategory>>([]);
+  const [editValue, setEditValue] = useState<Array<MCategory>>([]);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
   const [amount, setAmount] = useState<Array<ReferenceType>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const { width, height } = useWindowSize();
+
+  const jwtToken = Cookies.get('authToken');
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (width < 840) {
@@ -49,8 +60,8 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
   }, [width, height]);
 
   useEffect(() => {
-    if (categoryData.length !== editCategoryValue.length) {
-      setEditCategoryValue(categoryData);
+    if (categoryData.length !== editValue.length) {
+      setEditValue(categoryData);
     }
   }, [categoryData]);
 
@@ -62,12 +73,12 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
 
   const changeValue = useCallback(
     (id: number, paramKey: string, value: unknown) => {
-      setEditCategoryValue((prevArray) => {
+      setEditValue((prevArray) => {
         return prevArray.map((d) => {
           if (d.sort === id) {
             const updateValue = { ...d };
             switch (paramKey) {
-              case 'categoryId':
+              case 'sort':
                 updateValue.sort = value === '' ? null : (value as number);
                 break;
               case 'categoryName':
@@ -81,14 +92,34 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
         });
       });
     },
-    [editCategoryValue],
+    [editValue],
   );
 
   const handleEditFlag = () => {
     setEdit((edit) => !edit);
   };
 
-  const saveValue = useCallback(() => {}, [categoryData, monthlyData]);
+  const saveValue = async () => {
+    setIsLoading(true);
+    const postData = editValue.map((data) => ({
+      ...data,
+      userId: user.userID,
+    }));
+    await axios
+      .post(getCategoryLink, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+      .then((res) => {
+        if (res.data) {
+          dispatch(setCategoryContent(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setEdit(false);
+      });
+  };
 
   const deleteArrayValue = () => {};
   return (
@@ -104,7 +135,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
               saveValue={saveValue}
               numSelected={selected.length}
               windowSize={windowSize}
-              dataLength={editCategoryValue.length}
+              dataLength={editValue.length}
               deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
@@ -112,7 +143,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
             <Table>
               <CommonTableHeader categoryHeaderList={categoryHeaderList} />
               <TableBody>
-                {editCategoryValue.map((a) => {
+                {editValue.map((a) => {
                   return (
                     <TableRow key={a.sort} sx={{ padding: commonPadding5 }}>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
@@ -169,6 +200,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
         onCloseCategoryMaster={() => setIsShowCategoryMaster(false)}
         amount={amount}
       />
+      <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
     </>
   );
 };

@@ -291,6 +291,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     setIsLoading(false);
     setEdit(false);
   };
+
   /**
    *
    * saveValueメソッド修正する

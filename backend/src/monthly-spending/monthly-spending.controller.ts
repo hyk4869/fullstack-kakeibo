@@ -10,8 +10,8 @@ export class MonthlySpendingController {
   /**
    * TMonthlyとMCategoryをDBからクライアントに送信
    */
-  @Get()
   @UseGuards(AuthGuard('jwt'))
+  @Get()
   async getMonthlySpendingWithCategory(@Query('userID') userID: string): Promise<TMonthlySpending[]> {
     return this.monthlySpendingService.getMonthlySpendingWithCategory(userID);
   }
@@ -53,5 +53,14 @@ export class MonthlySpendingController {
   @Post('/deleteContent')
   async postDeleteContent(@Body() postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
     return this.monthlySpendingService.deleteContent(postData);
+  }
+
+  /**
+   * MCategoryを保存
+   */
+  @UseGuards(AuthGuard('jwt'))
+  @Post('/category')
+  async postSaveMasterCategoryContent(@Body() postData: MCategory[]): Promise<MCategory[]> {
+    return this.monthlySpendingService.postSaveMasterCategoryContent(postData);
   }
 }
