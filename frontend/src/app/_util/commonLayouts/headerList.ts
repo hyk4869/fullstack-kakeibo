@@ -35,8 +35,8 @@ export const numberOfCategoryHeaderList: commonTableHeaderType[] = [
 /** 入退社マスタのヘッダー */
 export const hireDateHeaderList: commonTableHeaderType[] = [
   {
-    id: 'id',
-    label: 'id',
+    id: 'sort',
+    label: 'sort',
   },
   {
     id: 'companyId',
@@ -113,8 +113,8 @@ export const aggregationAnnualSalaryHeaderList: commonTableHeaderType[] = [
 /** 月間の支出ヘッダー */
 export const monthlySpendingHeaderList: commonTableHeaderType[] = [
   {
-    id: 'id',
-    label: 'id',
+    id: 'sort',
+    label: 'sort',
   },
   {
     id: 'paymentDay',
@@ -141,8 +141,8 @@ export const monthlySpendingHeaderList: commonTableHeaderType[] = [
 /** 職歴マスタのヘッダー */
 export const workExperienceHeaderList: commonTableHeaderType[] = [
   {
-    id: 'id',
-    label: 'id',
+    id: 'sort',
+    label: 'sort',
   },
   {
     id: 'name',
@@ -161,8 +161,8 @@ export const workExperienceHeaderList: commonTableHeaderType[] = [
 /** 給与ヘッダー */
 export const saLaryHeaderList: commonTableHeaderType[] = [
   {
-    id: 'id',
-    label: 'id',
+    id: 'sort',
+    label: 'sort',
   },
   {
     id: 'companyId',
@@ -185,8 +185,8 @@ export const saLaryHeaderList: commonTableHeaderType[] = [
 /** 給与に対する税金ヘッダー */
 export const monthlyTaxHeaderList: commonTableHeaderType[] = [
   {
-    id: 'id',
-    label: 'id',
+    id: 'sort',
+    label: 'sort',
   },
   {
     id: 'companyId',
