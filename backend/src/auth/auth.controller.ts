@@ -30,7 +30,12 @@ export class AuthController {
   }
 
   @Post('/verifyToken')
-  async verifyToken(@Body('authToken') authToken: string): Promise<SignInResponse> {
+  async verifyReloadToken(@Body('authToken') authToken: string): Promise<SignInResponse> {
+    return await this.authServise.verifyReloadToken(authToken);
+  }
+
+  @Post('/test/verifyToken')
+  async verifyToken(@Body('authToken') authToken: string): Promise<boolean> {
     return await this.authServise.verifyToken(authToken);
   }
 }

@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   /** リロード時 */
-  async verifyToken(token: string): Promise<SignInResponse> {
+  async verifyReloadToken(token: string): Promise<SignInResponse> {
     try {
       const decoded = this.jwtService.verify(token) as JwtPayload;
       const findUser = await this.prisma.user.findUnique({
@@ -77,6 +77,21 @@ export class AuthService {
     } catch (error) {
       console.error(error.message);
       return null;
+    }
+  }
+
+  /** トークン検証 */
+  async verifyToken(token: string): Promise<boolean> {
+    try {
+      const decoded = this.jwtService.verify(token) as JwtPayload;
+      if (decoded) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
     }
   }
 }
