@@ -13,7 +13,7 @@ type Props = {
   children: ReactNode;
 };
 
-const token = Cookies.get('authToken');
+const authToken = Cookies.get('authToken');
 
 export const PrivateRoute = ({ children }: Props) => {
   const authInfo = useAuth();
@@ -24,7 +24,7 @@ export const PrivateRoute = ({ children }: Props) => {
 
   const fetchUserData = async (): Promise<void> => {
     await axios
-      .post(verifyTokenLink, { authToken: token })
+      .post(verifyTokenLink, { authToken: authToken })
       .then((res) => {
         if (res.data) {
           dispatch(setUserInfo(res.data?.user));
