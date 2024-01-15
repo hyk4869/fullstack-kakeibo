@@ -14,7 +14,7 @@ const MessageDialog: React.FC<MessageDialogProps> = (props) => {
   const router = useRouter();
 
   const changePageToLogin = () => {
-    router.push('/login');
+    router.push('/signIn');
   };
 
   return (

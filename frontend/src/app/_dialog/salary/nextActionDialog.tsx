@@ -75,7 +75,7 @@ const NextActionDialog: React.FC<NextActionDialogProps> = (props) => {
           </DialogContentText>
           <br />
           <DialogContentText id="alert-dialog-description">
-            {`レコードid ${content.map((a) => a.id).join(' , ')} が追加の対象となります。`}
+            {`レコードid ${content.map((a) => a.sort).join(' , ')} が追加の対象となります。`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

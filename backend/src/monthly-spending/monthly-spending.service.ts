@@ -161,6 +161,7 @@ export class MonthlySpendingService {
             },
           });
         }
+
         const userData = postData.find((a) => a.userId)?.userId;
 
         /** データベースから最新のデータを取得 */
