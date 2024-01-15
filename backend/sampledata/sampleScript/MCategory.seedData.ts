@@ -41,8 +41,8 @@ export const createMCategorySeedData = async (): Promise<MCategory[]> => {
     const createPosts = prisma.mCategory.create({
       data: {
         sort,
-        userId,
         categoryName,
+        userInfo: { connect: { userID: userId } },
         createdAt: new Date(),
         updatedAt: new Date(),
       },

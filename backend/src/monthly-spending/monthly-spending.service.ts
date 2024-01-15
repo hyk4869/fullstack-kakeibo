@@ -196,7 +196,40 @@ export class MonthlySpendingService {
       const insertedData = await this.prisma.$transaction(async (prisma) => {
         const now = new Date();
         const upsertPromises = postData.map(async (data) => {
-          //TODO: 処理の記述
+          if (data.id) {
+            await prisma.mCategory.update({
+              where: {
+                id: data.id,
+              },
+              data: {
+                ...data,
+                updatedAt: now.toISOString(),
+              },
+            });
+          } else {
+            const checkSort = await prisma.mCategory.findMany({
+              where: {
+                userId: data.userId,
+              },
+            });
+
+            const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+
+            if (foundMatchingSort) {
+              return;
+            } else {
+              const { userId, ...datas } = data;
+
+              await prisma.mCategory.create({
+                data: {
+                  ...datas,
+                  createdAt: now.toISOString(),
+                  updatedAt: now.toISOString(),
+                  userInfo: { connect: { userID: data.userId } },
+                },
+              });
+            }
+          }
         });
         await Promise.all(upsertPromises);
         const userData = postData.find((a) => a.userId)?.userId;
