@@ -214,7 +214,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
                         edit={false}
                         align="center"
                         onChangeValue={changeValue}
-                        paramKey={'totalAmount'}
+                        paramKey={'annualTax'}
                         id={Number(a.categoryId)}
                       />
                     </TableCell>
@@ -225,7 +225,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
                         edit={false}
                         align="center"
                         onChangeValue={changeValue}
-                        paramKey={'totalAmount'}
+                        paramKey={'taxPercentage'}
                         id={Number(a.categoryId)}
                       />
                     </TableCell>
@@ -236,7 +236,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
                         edit={false}
                         align="center"
                         onChangeValue={changeValue}
-                        paramKey={'totalAmount'}
+                        paramKey={'disposableIncome'}
                         id={Number(a.categoryId)}
                       />
                     </TableCell>
