@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MCategory, TMonthlySpending } from '@prisma/client';
+import { timeout } from 'rxjs';
 
 @Injectable()
 export class MonthlySpendingService {
@@ -58,74 +59,77 @@ export class MonthlySpendingService {
 
     try {
       /** トランザクション処理 */
-      const insertedData = await this.prisma.$transaction(async (prisma) => {
-        const now = new Date();
+      const insertedData = await this.prisma.$transaction(
+        async (prisma) => {
+          const now = new Date();
 
-        const upsertPromises = postData.map(async (data) => {
-          if (data.id) {
-            // 既存のレコードがある場合は更新
-            await prisma.tMonthlySpending.update({
-              where: {
-                id: data.id,
-              },
-              data: {
-                ...data,
-                updatedAt: now.toISOString(),
-                paymentDay: new Date(data.paymentDay).toISOString(),
-              },
-            });
-          } else {
-            const verify = await prisma.mCategory.findMany({
-              where: {
-                AND: [{ sort: data.categorySort }, { userId: data.userId }],
-              },
-            });
-            const checkSort = await prisma.tMonthlySpending.findMany({
-              where: {
-                userId: data.userId,
-              },
-            });
-
-            const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
-
-            if (foundMatchingSort) {
-              return;
-            } else {
-              const { userId, categoryId, id, ...datas } = data;
-
-              // 既存のレコードがない場合は新規作成
-              await prisma.tMonthlySpending.create({
+          const upsertPromises = postData.map(async (data) => {
+            if (data.id) {
+              // 既存のレコードがある場合は更新
+              await prisma.tMonthlySpending.update({
+                where: {
+                  id: data.id,
+                },
                 data: {
-                  ...datas,
-                  createdAt: now.toISOString(),
+                  ...data,
                   updatedAt: now.toISOString(),
                   paymentDay: new Date(data.paymentDay).toISOString(),
-                  userInfo: { connect: { userID: data.userId } },
-                  category: { connect: { id: verify.find((a) => a.sort === data.categorySort)?.id } },
                 },
               });
+            } else {
+              const verify = await prisma.mCategory.findMany({
+                where: {
+                  AND: [{ sort: data.categorySort }, { userId: data.userId }],
+                },
+              });
+              const checkSort = await prisma.tMonthlySpending.findMany({
+                where: {
+                  userId: data.userId,
+                },
+              });
+
+              const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+
+              if (foundMatchingSort) {
+                return;
+              } else {
+                const { userId, categoryId, id, ...datas } = data;
+
+                // 既存のレコードがない場合は新規作成
+                await prisma.tMonthlySpending.create({
+                  data: {
+                    ...datas,
+                    createdAt: now.toISOString(),
+                    updatedAt: now.toISOString(),
+                    paymentDay: new Date(data.paymentDay).toISOString(),
+                    userInfo: { connect: { userID: data.userId } },
+                    category: { connect: { id: verify.find((a) => a.sort === data.categorySort)?.id } },
+                  },
+                });
+              }
             }
-          }
-        });
+          });
 
-        await Promise.all(upsertPromises);
-        const userData = postData.find((a) => a.userId)?.userId;
+          await Promise.all(upsertPromises);
+          const userData = postData.find((a) => a.userId)?.userId;
 
-        /** データベースから最新のデータを取得 */
-        const latestData = await prisma.tMonthlySpending.findMany({
-          where: {
-            userId: userData,
-          },
-          include: {
-            category: true,
-          },
-          orderBy: {
-            id: 'asc',
-          },
-        });
+          /** データベースから最新のデータを取得 */
+          const latestData = await prisma.tMonthlySpending.findMany({
+            where: {
+              userId: userData,
+            },
+            include: {
+              category: true,
+            },
+            orderBy: {
+              id: 'asc',
+            },
+          });
 
-        return latestData;
-      });
+          return latestData;
+        },
+        { timeout: 10000 },
+      );
 
       return insertedData;
     } catch (error) {
