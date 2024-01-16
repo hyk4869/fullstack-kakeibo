@@ -19,7 +19,7 @@ import LoadingContent from '../../_util/commonLayouts/loading';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { getCategoryLink } from '@/app/_api/url';
-import { setCategoryContent } from '@/app/_store/slice';
+import { setCategoryContent, setCreateCategoryContent } from '@/app/_store/slice';
 
 type CategoryTableProps = {
   //
@@ -109,7 +109,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
       .post(getCategoryLink, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
       .then((res) => {
         if (res.data) {
-          dispatch(setCategoryContent(res.data));
+          dispatch(setCreateCategoryContent(res.data));
         }
       })
       .catch((error) => {

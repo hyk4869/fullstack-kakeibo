@@ -145,6 +145,10 @@ export const workExperienceHeaderList: commonTableHeaderType[] = [
     label: 'sort',
   },
   {
+    id: 'companyNum',
+    label: '会社番号',
+  },
+  {
     id: 'name',
     label: '会社名',
   },

@@ -219,6 +219,17 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
                       </TableCell>
 
                       <TableCell align="center">
+                        <CustomNumberFormat
+                          value={row?.companyNum}
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'companyNum'}
+                          id={Number(row?.sort)}
+                        />
+                      </TableCell>
+
+                      <TableCell align="center">
                         <CustomTextfield
                           value={row?.name}
                           onChangeValue={changeValue}

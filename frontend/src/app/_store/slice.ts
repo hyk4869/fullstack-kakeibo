@@ -11,6 +11,8 @@ import {
   UserInfo,
 } from './interfacesInfo';
 
+//TODO: 後で全体的に見直し
+
 /** User情報 */
 export const getUserInfo = createSlice({
   name: 'getUserInfo',

@@ -4,7 +4,7 @@ import { RootState } from '@/app/_store/store';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import { grey } from '@mui/material/colors';
@@ -16,6 +16,10 @@ import CreateNewRecordsDialog from '@/app/_dialog/workExperienceMasterTable/crea
 import { workExperienceHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MCompany } from '@/app/_store/interfacesInfo';
 import useWindowSize from '@/app/_util/useWindowSize';
+import axios from 'axios';
+import { getCompany } from '@/app/_api/url';
+import Cookies from 'js-cookie';
+import { setCompanyContent } from '@/app/_store/slice';
 
 type WorkExperienceTableProps = {
   //
@@ -24,16 +28,20 @@ type WorkExperienceTableProps = {
 const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const hireDateData = useSelector((state: RootState) => state.getHireDate);
+  const user = useSelector((state: RootState) => state.getUserInfo);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
-  const [editCompanyValue, setEditCompanyValue] = useState<Array<MCompany>>([]);
+  const [editValue, setEditValue] = useState<Array<MCompany>>([]);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
   // const [amount, setAmount] = useState<Array<ReferenceType>>([]);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const { width, height } = useWindowSize();
+  const jwtToken = Cookies.get('authToken');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (width < 840) {
@@ -44,8 +52,8 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
   }, [width, height]);
 
   useEffect(() => {
-    if (companyData.length !== editCompanyValue.length) {
-      setEditCompanyValue(companyData);
+    if (companyData.length !== editValue.length) {
+      setEditValue(companyData);
     }
   }, [companyData]);
 
@@ -55,15 +63,61 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
   //   }
   // }, [companyData]);
 
-  const changeValue = useCallback(() => {
-    //
-  }, []);
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      setEditValue((prevValue) => {
+        return prevValue.map((a) => {
+          if (a.sort === id) {
+            const updatedRow = { ...a };
+            switch (paramKey) {
+              case 'sort':
+                updatedRow.sort = value === '' ? null : (value as number);
+                break;
+              case 'name':
+                updatedRow.name = value === '' ? null : (value as string);
+                break;
+              case 'majorSector':
+                updatedRow.majorSector = value === '' ? null : (value as string);
+                break;
+              case 'companyNum':
+                updatedRow.companyNum = value === '' ? null : (value as number);
+                break;
+            }
+            return updatedRow;
+          } else {
+            return a;
+          }
+        });
+      });
+    },
+    [editValue],
+  );
 
   const handleEditFlag = () => {
     setEdit((edit) => !edit);
   };
 
-  const saveValue = useCallback(() => {}, []);
+  const saveValue = async () => {
+    setIsLoading(true);
+    const postData = editValue.map((data) => ({
+      ...data,
+      userId: user.userID,
+    }));
+    await axios
+      .post(getCompany, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+      .then((res) => {
+        if (res.data) {
+          dispatch(setCompanyContent(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setEdit(false);
+      });
+  };
 
   const deleteArrayValue = () => {};
 
@@ -88,7 +142,7 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
             <Table>
               <CommonTableHeader categoryHeaderList={workExperienceHeaderList} />
               <TableBody>
-                {editCompanyValue.map((a) => {
+                {editValue.map((a) => {
                   return (
                     <TableRow key={a.id} sx={{ padding: commonPadding5 }}>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>
@@ -98,6 +152,16 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
                           align="center"
                           onChangeValue={changeValue}
                           paramKey={'sort'}
+                          id={Number(a.sort)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={a.companyNum}
+                          edit={edit}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'companyNum'}
                           id={Number(a.sort)}
                         />
                       </TableCell>

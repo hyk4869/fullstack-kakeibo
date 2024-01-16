@@ -256,7 +256,7 @@ export const convertCompanyTypes = <T extends MCompany>(array: T[]): MCompany[] 
         userId: s.userId !== null ? s.userId : null,
         name: s.name !== null ? s.name : null,
         companyNum: s.companyNum !== null && typeof s.companyNum === 'string' ? parseInt(s.companyNum) : null,
-        majorSector: s.majorSector !== null ? String(s.majorSector) : null,
+        majorSector: s.majorSector !== null ? s.majorSector : null,
       };
     })
     .filter((a) => a.sort);

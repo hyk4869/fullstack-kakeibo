@@ -48,7 +48,7 @@ export const getSomeMonthlySpending = `${commonURL}/summaryTable/someContent`;
 export const postDeleteMonthlySpending = `${commonURL}/summaryTable/deleteContent`;
 
 /**
- * 会社情報を取ってくる
+ * 会社情報を取ってくる&データのPOSTも行っている
  */
 export const getCompany = `${commonURL}/companyInfo/companyName`;
 
