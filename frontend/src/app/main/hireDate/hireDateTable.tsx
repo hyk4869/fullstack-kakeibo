@@ -16,6 +16,10 @@ import CreateNewRecordsDialog from '@/app/_dialog/hireDateMasterTable/createNewR
 import { hireDateHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { MHireDate } from '@/app/_store/interfacesInfo';
 import useWindowSize from '@/app/_util/useWindowSize';
+import axios from 'axios';
+import { getHireDate } from '@/app/_api/url';
+import Cookies from 'js-cookie';
+import { setHireDateContent } from '@/app/_store/slice';
 
 type HireDateTableProps = {
   //
@@ -24,14 +28,17 @@ type HireDateTableProps = {
 const HireDateTable: React.FC<HireDateTableProps> = () => {
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const hireDateData = useSelector((state: RootState) => state.getHireDate);
+  const user = useSelector((state: RootState) => state.getUserInfo);
+
   const [edit, setEdit] = useState<boolean>(false);
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [editHireDateValue, setEditHireDateValue] = useState<Array<MHireDate>>([]);
+  const [editValue, setEditValue] = useState<Array<MHireDate>>([]);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const { width, height } = useWindowSize();
+  const jwtToken = Cookies.get('authToken');
 
   const dispatch = useDispatch();
 
@@ -44,19 +51,65 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
   }, [width, height]);
 
   useEffect(() => {
-    if (companyData.length !== editHireDateValue.length) {
-      setEditHireDateValue(hireDateData);
+    if (companyData.length !== editValue.length) {
+      setEditValue(hireDateData);
     }
   }, [hireDateData]);
 
-  const changeValue = useCallback(() => {
-    //
-  }, []);
+  const changeValue = useCallback(
+    (id: number, paramKey: string, value: unknown) => {
+      setEditValue((prevValue) => {
+        return prevValue.map((a) => {
+          if (a.sort === id) {
+            const updateRow = { ...a };
+            switch (paramKey) {
+              case 'sort':
+                updateRow.sort = value === '' ? null : (value as number);
+                break;
+              case 'companyNum':
+                updateRow.companyNum = value === '' ? null : (value as number);
+                break;
+              case 'hireDate':
+                updateRow.hireDate = value === '' ? null : (value as Date);
+                break;
+              case 'retirementDate':
+                updateRow.retirementDate = value === '' ? null : (value as Date);
+                break;
+            }
+            return updateRow;
+          } else {
+            return a;
+          }
+        });
+      });
+    },
+    [editValue],
+  );
 
   const handleEditFlag = () => {
     setEdit((edit) => !edit);
   };
-  const saveValue = useCallback(() => {}, []);
+  const saveValue = async () => {
+    setIsLoading(true);
+    const postData = editValue.map((data) => ({
+      ...data,
+      userId: user.userID,
+    }));
+    await axios
+      .post(getHireDate, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+      .then((res) => {
+        if (res.data) {
+          dispatch(setHireDateContent(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setEdit(false);
+      });
+  };
 
   const deleteArrayValue = () => {};
 
@@ -73,7 +126,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
               saveValue={saveValue}
               numSelected={selected.length}
               windowSize={windowSize}
-              dataLength={editHireDateValue.length}
+              dataLength={editValue.length}
               deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
@@ -81,7 +134,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
             <Table>
               <CommonTableHeader categoryHeaderList={hireDateHeaderList} />
               <TableBody>
-                {editHireDateValue.map((a) => {
+                {editValue.map((a) => {
                   return (
                     <TableRow key={a.sort} sx={{ padding: commonPadding5 }}>
                       <TableCell align="center" sx={{ padding: commonPadding5 }}>

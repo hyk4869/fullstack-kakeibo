@@ -53,7 +53,7 @@ export const postDeleteMonthlySpending = `${commonURL}/summaryTable/deleteConten
 export const getCompany = `${commonURL}/companyInfo/companyName`;
 
 /**
- * 入退社情報を取ってくる
+ * 入退社情報を取ってくる&データのPOSTも行っている
  */
 export const getHireDate = `${commonURL}/companyInfo/hireDate`;
 
