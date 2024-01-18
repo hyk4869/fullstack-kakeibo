@@ -22,4 +22,10 @@ export class CompanyInfoController {
   async getHireDateContent(): Promise<MHireDate[]> {
     return this.companyInfoService.getHireDateContent();
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('/hireDate')
+  async postHireDataContent(@Body() postData: MHireDate[]): Promise<MHireDate[]> {
+    return this.companyInfoService.postHireDataContent(postData);
+  }
 }
