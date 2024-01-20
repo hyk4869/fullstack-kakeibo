@@ -18,12 +18,8 @@ export class SalaryInfoService {
         const now = new Date();
 
         const updateValue = postData.map(async (data) => {
-          const getExistingRecords = await prisma.tTax.findUnique({
-            where: {
-              id: data.id,
-            },
-          });
-          if (getExistingRecords) {
+          if (data.id) {
+            // 既存のレコードがある場合は更新
             await prisma.tTax.update({
               where: {
                 id: data.id,
@@ -34,23 +30,53 @@ export class SalaryInfoService {
               },
             });
           } else {
-            await prisma.tTax.create({
-              data: {
-                ...data,
-                createdAt: now.toISOString(),
-                updatedAt: now.toISOString(),
+            const verify = await prisma.mCompany.findMany({
+              where: {
+                AND: [{ companyNum: data.companyNum }, { userId: data.userId }],
               },
             });
+
+            const checkSort = await prisma.tTax.findMany({
+              where: {
+                userId: data.userId,
+              },
+            });
+
+            const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+
+            if (foundMatchingSort) {
+              return;
+            } else {
+              const { userId, companyId, id, ...datas } = data;
+
+              // 既存のレコードがない場合は新規作成
+              await prisma.tTax.create({
+                data: {
+                  ...datas,
+                  createdAt: now.toISOString(),
+                  updatedAt: now.toISOString(),
+                  userInfo: { connect: { userID: data.userId } },
+                  MCompany: { connect: { id: verify.find((a) => a.companyNum === data.companyNum)?.id } },
+                },
+              });
+            }
           }
         });
         await Promise.all(updateValue);
 
-        const getLatestData = await prisma.tTax.findMany({
+        const userData = postData.find((a) => a.userId)?.userId;
+
+        /** データベースから最新のデータを取得 */
+        const latestData = await prisma.tTax.findMany({
+          where: {
+            userId: userData,
+          },
           orderBy: {
             id: 'asc',
           },
         });
-        return getLatestData;
+
+        return latestData;
       });
       return insertedData;
     } catch (error) {
@@ -98,13 +124,8 @@ export class SalaryInfoService {
         const now = new Date();
 
         const updateValue = postData.map(async (data) => {
-          const getExistingRecords = await prisma.tSalary.findUnique({
-            where: {
-              id: data.id,
-            },
-          });
-
-          if (getExistingRecords) {
+          if (data.id) {
+            // 既存のレコードがある場合は更新
             await prisma.tSalary.update({
               where: {
                 id: data.id,
@@ -112,16 +133,45 @@ export class SalaryInfoService {
               data: {
                 ...data,
                 updatedAt: now.toISOString(),
+                payday: new Date(data.payday).toISOString(),
               },
             });
           } else {
-            await prisma.tSalary.create({
-              data: {
-                ...data,
-                createdAt: now.toISOString(),
-                updatedAt: now.toISOString(),
+            const verify = await prisma.mCompany.findMany({
+              where: {
+                AND: [{ sort: data.sort }, { userId: data.userId }],
               },
             });
+            const verifyTTax = await prisma.tTax.findMany({
+              where: {
+                AND: [{ sort: data.sort }, { userId: data.userId }],
+              },
+            });
+            const checkSort = await prisma.tSalary.findMany({
+              where: {
+                userId: data.userId,
+              },
+            });
+            const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+
+            if (foundMatchingSort) {
+              return;
+            } else {
+              const { userId, companyId, id, ...datas } = data;
+
+              // 既存のレコードがない場合は新規作成
+              await prisma.tSalary.create({
+                data: {
+                  ...datas,
+                  createdAt: now.toISOString(),
+                  updatedAt: now.toISOString(),
+                  // payday: new Date(data.payday).toISOString(),
+                  userInfo: { connect: { userID: data.userId } },
+                  MCompany: { connect: { id: verify.find((a) => a.companyNum === data.companyNum)?.id } },
+                  TTax: { connect: { id: verifyTTax.find((a) => a.sort === data.sort)?.id } },
+                },
+              });
+            }
           }
         });
         await Promise.all(updateValue);

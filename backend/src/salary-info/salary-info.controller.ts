@@ -13,6 +13,9 @@ export class SalaryInfoController {
     return this.salaryInfoService.getSalaryTax(userID);
   }
 
+  /**
+   * TTaxを保存
+   */
   @Post('/salaryTax')
   async postSaveSalaryTaxContent(@Body() postData: TTax[]): Promise<TTax[]> {
     return this.salaryInfoService.postSalaryTaxContent(postData);
@@ -29,6 +32,9 @@ export class SalaryInfoController {
     return this.salaryInfoService.getSalary(userID);
   }
 
+  /**
+   * TSalaryを保存
+   */
   @Post('/salary')
   async postSaveSalaryContent(@Body() postData: TSalary[]): Promise<TSalary[]> {
     return this.salaryInfoService.postSalaryContent(postData);
