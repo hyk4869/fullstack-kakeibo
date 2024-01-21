@@ -8,6 +8,21 @@ export class SalaryInfoService {
 
   //TODO: もう少しコンパクトにまとめる
 
+  async getSalaryTax(userID: string): Promise<TTax[]> {
+    const result = await this.prisma.tTax.findMany({
+      where: {
+        userId: userID,
+      },
+      include: {
+        TSalary: true,
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return result;
+  }
+
   async postSalaryTaxContent(postData: TTax[]): Promise<TTax[]> {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
@@ -113,6 +128,18 @@ export class SalaryInfoService {
       console.error('データベースへの書き込みエラー:', error);
       throw error;
     }
+  }
+
+  async getSalary(userID: string): Promise<TSalary[]> {
+    const result = await this.prisma.tSalary.findMany({
+      where: {
+        userId: userID,
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return result;
   }
 
   async postSalaryContent(postData: TSalary[]): Promise<TSalary[]> {
@@ -222,59 +249,5 @@ export class SalaryInfoService {
       console.error('データベースへの書き込みエラー:', error);
       throw error;
     }
-  }
-
-  async getSalary(userID: string): Promise<TSalary[]> {
-    const result = await this.prisma.tSalary.findMany({
-      where: {
-        userId: userID,
-      },
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
-  }
-
-  async getSalaryTax(userID: string): Promise<TTax[]> {
-    const result = await this.prisma.tTax.findMany({
-      where: {
-        userId: userID,
-      },
-      include: {
-        TSalary: true,
-      },
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
-  }
-
-  async getBonus(userID: string): Promise<TBonus[]> {
-    const result = await this.prisma.tBonus.findMany({
-      where: {
-        userId: userID,
-      },
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
-  }
-
-  async getBonusTax(userID: string): Promise<TTaxBonus[]> {
-    const result = await this.prisma.tTaxBonus.findMany({
-      where: {
-        userId: userID,
-      },
-      include: {
-        TBonus: true,
-      },
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
   }
 }

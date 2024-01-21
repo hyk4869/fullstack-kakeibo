@@ -7,12 +7,6 @@ import { AuthGuard } from '@nestjs/passport';
 export class SalaryInfoController {
   constructor(private readonly salaryInfoService: SalaryInfoService) {}
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('/salaryTax')
-  async getSalaryTaxContent(@Query('userID') userID: string): Promise<TTax[]> {
-    return this.salaryInfoService.getSalaryTax(userID);
-  }
-
   /**
    * TTaxを保存
    */
@@ -27,9 +21,9 @@ export class SalaryInfoController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('/salary')
-  async getSalaryContent(@Query('userID') userID: string): Promise<TSalary[]> {
-    return this.salaryInfoService.getSalary(userID);
+  @Get('/salaryTax')
+  async getSalaryTaxContent(@Query('userID') userID: string): Promise<TTax[]> {
+    return this.salaryInfoService.getSalaryTax(userID);
   }
 
   /**
@@ -46,14 +40,8 @@ export class SalaryInfoController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('/bonusTax')
-  async getBonusTaxContent(@Query('userID') userID: string): Promise<TTaxBonus[]> {
-    return this.salaryInfoService.getBonusTax(userID);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('/bonus')
-  async getBonusContent(@Query('userID') userID: string): Promise<TBonus[]> {
-    return this.salaryInfoService.getBonus(userID);
+  @Get('/salary')
+  async getSalaryContent(@Query('userID') userID: string): Promise<TSalary[]> {
+    return this.salaryInfoService.getSalary(userID);
   }
 }

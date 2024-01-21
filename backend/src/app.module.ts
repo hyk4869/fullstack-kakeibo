@@ -9,6 +9,7 @@ import { CompanyInfoModule } from './company-info/company-info.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MasterDataModule } from './master-data/master-data.module';
+import { BonusInfoModule } from './bonus-info/bonus-info.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MasterDataModule } from './master-data/master-data.module';
     UserModule,
     AuthModule,
     MasterDataModule,
+    BonusInfoModule,
     // ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
