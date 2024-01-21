@@ -149,6 +149,9 @@ export class MonthlySpendingService {
           select: {
             id: true,
           },
+          where: {
+            userId: postData.find((a) => a.userId)?.userId,
+          },
         });
 
         /** postDataに存在するidを取得 */

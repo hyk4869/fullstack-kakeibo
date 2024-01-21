@@ -110,6 +110,9 @@ export class BonusInfoService {
           select: {
             id: true,
           },
+          where: {
+            userId: postData.find((a) => a.userId)?.userId,
+          },
         });
         /** postDataに存在するidを取得 */
         const missingIds = getExistingRecords.filter((a) => postData.some((d) => d.id === a.id)).map((s) => s.id);
@@ -228,6 +231,9 @@ export class BonusInfoService {
         const getExistingRecords = await prisma.tBonus.findMany({
           select: {
             id: true,
+          },
+          where: {
+            userId: postData.find((a) => a.userId)?.userId,
           },
         });
 

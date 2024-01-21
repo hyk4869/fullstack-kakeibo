@@ -113,6 +113,9 @@ export class SalaryInfoService {
           select: {
             id: true,
           },
+          where: {
+            userId: postData.find((a) => a.userId)?.userId,
+          },
         });
         /** postDataに存在するidを取得 */
         const missingIds = getExistingRecords.filter((a) => postData.some((d) => d.id === a.id)).map((s) => s.id);
@@ -187,7 +190,7 @@ export class SalaryInfoService {
           } else {
             const verify = await prisma.mCompany.findMany({
               where: {
-                AND: [{ sort: data.sort }, { userId: data.userId }],
+                AND: [{ companyNum: data.companyNum }, { userId: data.userId }],
               },
             });
             const verifyTTax = await prisma.tTax.findMany({
@@ -247,6 +250,9 @@ export class SalaryInfoService {
         const getExistingRecords = await prisma.tSalary.findMany({
           select: {
             id: true,
+          },
+          where: {
+            userId: postData.find((a) => a.userId)?.userId,
           },
         });
 
