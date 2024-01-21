@@ -15,7 +15,7 @@ export class CustomValidation implements ClassInterfaces {
    * 許可 大小の半角英数字。特殊文字。
    * 許可しない 空欄。
    */
-  private _passwordRegex: RegExp = /^[a-zA-Z0-9!@#$%^&*()_+{}[\]:;<>,.?~\\/-]{6,}$/;
+  private _passwordRegex: RegExp = /^[a-zA-Z0-9!@#$%^&*()_+{}[\]:;<>,.?~\\/-]*$/;
 
   /**
    * stringに変換
@@ -33,6 +33,15 @@ export class CustomValidation implements ClassInterfaces {
    */
   public emailCheck(value: unknown): ReturnValidationData {
     const emailValue = this.convertToString(value);
+
+    if (emailValue === '') {
+      return {
+        status: false,
+        comment: '',
+        type: 'warn',
+        value: value,
+      };
+    }
 
     if (this._emailRegex.test(emailValue)) {
       return {
@@ -59,11 +68,20 @@ export class CustomValidation implements ClassInterfaces {
   public userIDCheck(value: unknown): ReturnValidationData {
     const userIDValue = this.convertToString(value);
 
+    if (userIDValue === '') {
+      return {
+        status: false,
+        comment: '',
+        type: 'warn',
+        value: value,
+      };
+    }
+
     if (this._userIDRegex.test(userIDValue)) {
       if (userIDValue.length >= 4) {
         return {
           status: true,
-          comment: '正しい入力です。',
+          comment: '有効な入力です。',
           type: 'sucess',
           value: value,
         };
@@ -78,7 +96,7 @@ export class CustomValidation implements ClassInterfaces {
     } else {
       return {
         status: false,
-        comment: '無効な入力です。userIDは半角英数字のみで入力してください。',
+        comment: 'userIDは半角英数字のみで入力してください。',
         type: 'error',
         value: value,
       };
@@ -93,11 +111,20 @@ export class CustomValidation implements ClassInterfaces {
   public passwordCheck(value: unknown): ReturnValidationData {
     const passwordValue = this.convertToString(value);
 
+    if (passwordValue === '') {
+      return {
+        status: false,
+        comment: '',
+        type: 'warn',
+        value: value,
+      };
+    }
+
     if (this._passwordRegex.test(passwordValue)) {
       if (passwordValue.length >= 6) {
         return {
           status: true,
-          comment: '正しい入力です。',
+          comment: '有効な入力です。',
           type: 'sucess',
           value: value,
         };
@@ -125,14 +152,23 @@ export class CustomValidation implements ClassInterfaces {
    * @param confirmValue 確認用のパスワード
    * @returns ReturnValidationDataオブジェクト
    */
-  public passwordDuplicateCheck(password: undefined, confirmValue: unknown): ReturnValidationData {
+  public passwordDuplicateCheck(password: unknown, confirmValue: unknown): ReturnValidationData {
     const passwordValue = this.convertToString(password);
     const confirmPassword = this.convertToString(confirmValue);
+
+    if (passwordValue === '' && confirmPassword === '') {
+      return {
+        status: false,
+        comment: '',
+        type: 'warn',
+        value: confirmValue,
+      };
+    }
 
     if (passwordValue === confirmPassword) {
       return {
         status: true,
-        comment: '正しい入力です。',
+        comment: '有効な入力です。',
         type: 'sucess',
         value: confirmValue,
       };
