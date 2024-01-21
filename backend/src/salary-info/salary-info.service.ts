@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TBonus, TSalary, TTax, TTaxBonus } from '@prisma/client';
+import { TSalary, TTax } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -15,6 +15,7 @@ export class SalaryInfoService {
       },
       include: {
         TSalary: true,
+        MCompany: true,
       },
       orderBy: {
         id: 'asc',
@@ -86,6 +87,10 @@ export class SalaryInfoService {
           where: {
             userId: userData,
           },
+          include: {
+            TSalary: true,
+            MCompany: true,
+          },
           orderBy: {
             id: 'asc',
           },
@@ -103,11 +108,13 @@ export class SalaryInfoService {
   async deleteSalaryTaxContent(postData: TTax[]): Promise<TTax[]> {
     try {
       const insertedData = await this.prisma.$transaction(async (prisma) => {
+        /** DBにある全てのidを取得 */
         const getExistingRecords = await prisma.tTax.findMany({
           select: {
             id: true,
           },
         });
+        /** postDataに存在するidを取得 */
         const missingIds = getExistingRecords.filter((a) => postData.some((d) => d.id === a.id)).map((s) => s.id);
         if (missingIds.length > 0) {
           await prisma.tTax.deleteMany({
@@ -116,12 +123,22 @@ export class SalaryInfoService {
             },
           });
         }
-        const getLatestData = await prisma.tTax.findMany({
+        const userData = postData.find((a) => a.userId)?.userId;
+
+        const latestData = await prisma.tTax.findMany({
+          where: {
+            userId: userData,
+          },
+          include: {
+            TSalary: true,
+            MCompany: true,
+          },
           orderBy: {
             id: 'asc',
           },
         });
-        return getLatestData;
+
+        return latestData;
       });
       return insertedData;
     } catch (error) {
@@ -134,6 +151,10 @@ export class SalaryInfoService {
     const result = await this.prisma.tSalary.findMany({
       where: {
         userId: userID,
+      },
+      include: {
+        MCompany: true,
+        TTax: true,
       },
       orderBy: {
         id: 'asc',
@@ -222,11 +243,14 @@ export class SalaryInfoService {
   async deleteSalaryContent(postData: TSalary[]): Promise<TSalary[]> {
     try {
       const insertedData = await this.prisma.$transaction(async (prisma) => {
+        /** DBにある全てのidを取得 */
         const getExistingRecords = await prisma.tSalary.findMany({
           select: {
             id: true,
           },
         });
+
+        /** postDataに存在するidを取得 */
         const missingIds = getExistingRecords.filter((a) => postData.some((d) => d.id === a.id)).map((s) => s.id);
         if (missingIds.length > 0) {
           await prisma.tSalary.deleteMany({
@@ -237,12 +261,23 @@ export class SalaryInfoService {
             },
           });
         }
-        const getLatestData = await prisma.tSalary.findMany({
+        const userData = postData.find((a) => a.userId)?.userId;
+
+        /** データベースから最新のデータを取得 */
+        const latestData = await prisma.tSalary.findMany({
+          where: {
+            userId: userData,
+          },
+          include: {
+            MCompany: true,
+            TTax: true,
+          },
           orderBy: {
             id: 'asc',
           },
         });
-        return getLatestData;
+
+        return latestData;
       });
       return insertedData;
     } catch (error) {

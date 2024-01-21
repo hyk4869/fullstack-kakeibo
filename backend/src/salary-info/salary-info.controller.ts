@@ -10,11 +10,13 @@ export class SalaryInfoController {
   /**
    * TTaxを保存
    */
+  @UseGuards(AuthGuard('jwt'))
   @Post('/salaryTax')
   async postSaveSalaryTaxContent(@Body() postData: TTax[]): Promise<TTax[]> {
     return this.salaryInfoService.postSalaryTaxContent(postData);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('/salaryTax/deletecontent')
   async postDeleteSalaryTaxContent(@Body() postData: TTax[]): Promise<TTax[]> {
     return this.salaryInfoService.deleteSalaryTaxContent(postData);
@@ -29,11 +31,13 @@ export class SalaryInfoController {
   /**
    * TSalaryを保存
    */
+  @UseGuards(AuthGuard('jwt'))
   @Post('/salary')
   async postSaveSalaryContent(@Body() postData: TSalary[]): Promise<TSalary[]> {
     return this.salaryInfoService.postSalaryContent(postData);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('/salary/deletecontent')
   async postDeleteSalaryContent(@Body() postData: TSalary[]): Promise<TSalary[]> {
     return this.salaryInfoService.deleteSalaryContent(postData);
