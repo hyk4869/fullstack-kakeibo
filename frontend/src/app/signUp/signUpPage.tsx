@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Paper, TextField, InputAdornment, Button } from '@mui/material';
+import { Box, Paper, TextField, InputAdornment, Button, FormControl, FormHelperText } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React, { useCallback, useState } from 'react';
 import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
@@ -9,6 +9,8 @@ import KeyIcon from '@mui/icons-material/Key';
 import axios from 'axios';
 import { createAccount } from '../_api/url';
 import MessageDialog from './messageDialog';
+import { CustomValidation } from '../_customComponents/customValidation/validationClass';
+import { ReturnValidationData } from '../_customComponents/customValidation/validationInterfaces';
 
 type SignUpPageProps = {
   //
@@ -21,6 +23,13 @@ type userInfo = {
   confirmPassword: string;
 };
 
+export type inputInfo = {
+  userID?: ReturnValidationData;
+  email?: ReturnValidationData;
+  password?: ReturnValidationData;
+  confirmPassword?: ReturnValidationData;
+};
+
 const SignUpPage: React.FC<SignUpPageProps> = () => {
   const [userInfo, setUserInfo] = useState<userInfo>({ userID: '', email: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -29,6 +38,19 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
   const [message, setMessage] = useState<string>('');
   const [messageDialog, setMessageDialog] = useState<boolean>(false);
   const [changePage, setChangePage] = useState<boolean>(false);
+
+  const [inputInfo, setInputInfo] = useState<inputInfo>();
+
+  const validation = new CustomValidation();
+
+  /** userIDのバリデーション */
+  const userIDValidation = validation.userIDCheck(userInfo.userID);
+  /** emailのバリデーション */
+  const emailValidation = validation.emailCheck(userInfo.email);
+  /** passwordのバリデーション */
+  const passwordValidation = validation.passwordCheck(userInfo.password);
+  /** 確認用のpasswordのバリデーション */
+  const confirmPasswordValidation = validation.passwordDuplicateCheck(userInfo.password, userInfo.confirmPassword);
 
   const inputUserData = useCallback(
     (paramKey: string, value: string) => {
@@ -118,85 +140,165 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
           Create Account
         </h1>
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-            <TextField
-              variant="standard"
-              value={userInfo?.userID}
-              onChange={(e) => inputUserData('userID', e.target.value)}
-              label="userID"
-              type="text"
-              sx={{ width: '20rem' }}
-            />
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
-            <EmailIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-            <TextField
-              variant="standard"
-              value={userInfo?.email}
-              onChange={(e) => inputUserData('email', e.target.value)}
-              label="email"
-              type="text"
-              sx={{ width: '20rem' }}
-            />
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
-            <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-            <TextField
-              variant="standard"
-              value={userInfo?.password}
-              onChange={(e) => inputUserData('password', e.target.value)}
-              label="password"
-              type={showPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" onClick={isShowPassword}>
-                    {showPassword ? (
-                      <Visibility sx={{ cursor: 'pointer' }} />
-                    ) : (
-                      <VisibilityOff sx={{ cursor: 'pointer' }} />
-                    )}
-                  </InputAdornment>
-                ),
+          <FormControl
+            sx={{ width: '20rem', marginBottom: '0.1rem' }}
+            error={inputInfo?.userID?.type === 'warn' || inputInfo?.userID?.type === 'error'}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+              <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <TextField
+                variant="standard"
+                value={userInfo?.userID}
+                onChange={(e) => inputUserData('userID', e.target.value)}
+                onBlur={() =>
+                  setInputInfo((prev) => {
+                    return { ...prev, userID: userIDValidation };
+                  })
+                }
+                label="userID"
+                type="text"
+                InputProps={{ sx: { minWidth: '300px' } }}
+              />
+            </Box>
+            <FormHelperText
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                marginLeft: '2rem',
+                color: inputInfo?.userID?.type === 'warn' || inputInfo?.userID?.type === 'error' ? 'red' : 'green',
               }}
-              sx={{ width: '20rem' }}
-            />
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
-            <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-            <TextField
-              variant="standard"
-              value={userInfo?.confirmPassword}
-              onChange={(e) => inputUserData('confirmPassword', e.target.value)}
-              label="confirm password"
-              type={showConfirmPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" onClick={isShowConfirmPassword}>
-                    {showConfirmPassword ? (
-                      <Visibility sx={{ cursor: 'pointer' }} />
-                    ) : (
-                      <VisibilityOff sx={{ cursor: 'pointer' }} />
-                    )}
-                  </InputAdornment>
-                ),
+            >
+              {inputInfo?.userID?.comment}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl sx={{ width: '20rem', marginBottom: '0.1rem' }} error={inputInfo?.email?.type === 'warn'}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
+              <EmailIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <TextField
+                variant="standard"
+                value={userInfo?.email}
+                onChange={(e) => inputUserData('email', e.target.value)}
+                onBlur={() =>
+                  setInputInfo((prev) => {
+                    return { ...prev, email: emailValidation };
+                  })
+                }
+                label="email"
+                type="text"
+                InputProps={{ sx: { minWidth: '300px' } }}
+              />
+            </Box>
+            <FormHelperText
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                marginLeft: '2rem',
+                color: inputInfo?.email?.type === 'warn' ? 'red' : 'green',
               }}
-              sx={{ width: '20rem' }}
-            />
-          </Box>
+            >
+              {inputInfo?.email?.comment}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl
+            sx={{ width: '20rem', marginBottom: '0.1rem' }}
+            error={inputInfo?.password?.type === 'warn' || inputInfo?.password?.type === 'error'}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
+              <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <TextField
+                variant="standard"
+                value={userInfo?.password}
+                onChange={(e) => inputUserData('password', e.target.value)}
+                onBlur={() =>
+                  setInputInfo((prev) => {
+                    return { ...prev, password: passwordValidation };
+                  })
+                }
+                label="password"
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end" onClick={isShowPassword}>
+                      {showPassword ? (
+                        <Visibility sx={{ cursor: 'pointer' }} />
+                      ) : (
+                        <VisibilityOff sx={{ cursor: 'pointer' }} />
+                      )}
+                    </InputAdornment>
+                  ),
+                  sx: { minWidth: '300px' },
+                }}
+              />
+            </Box>
+            <FormHelperText
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                marginLeft: '2rem',
+                color: inputInfo?.password?.type === 'warn' || inputInfo?.password?.type === 'error' ? 'red' : 'green',
+              }}
+            >
+              {inputInfo?.password?.comment}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl
+            sx={{ width: '20rem', marginBottom: '0.1rem' }}
+            error={inputInfo?.confirmPassword?.type === 'warn'}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
+              <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <TextField
+                variant="standard"
+                value={userInfo?.confirmPassword}
+                onChange={(e) => inputUserData('confirmPassword', e.target.value)}
+                onBlur={() =>
+                  setInputInfo((prev) => {
+                    return { ...prev, confirmPassword: confirmPasswordValidation };
+                  })
+                }
+                label="confirm password"
+                type={showConfirmPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end" onClick={isShowConfirmPassword}>
+                      {showConfirmPassword ? (
+                        <Visibility sx={{ cursor: 'pointer' }} />
+                      ) : (
+                        <VisibilityOff sx={{ cursor: 'pointer' }} />
+                      )}
+                    </InputAdornment>
+                  ),
+                  sx: { minWidth: '300px' },
+                }}
+              />
+            </Box>
+            <FormHelperText
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                marginLeft: '2rem',
+                color: inputInfo?.confirmPassword?.type === 'warn' ? 'red' : 'green',
+              }}
+            >
+              {inputInfo?.confirmPassword?.comment}
+            </FormHelperText>
+          </FormControl>
         </Box>
         <Box sx={{ display: 'flex', margin: '2rem' }}>
           <Button
             variant="contained"
             onClick={() => registerButton()}
             disabled={
-              userInfo.userID === '' ||
-              userInfo.email === '' ||
-              userInfo.password === '' ||
+              inputInfo?.userID?.status === false ||
+              inputInfo?.email?.status === false ||
+              inputInfo?.password?.status === false ||
+              inputInfo?.confirmPassword?.status === false ||
               userInfo.confirmPassword === ''
             }
+            sx={{ padding: '0.5rem 5rem' }}
           >
             Send
           </Button>

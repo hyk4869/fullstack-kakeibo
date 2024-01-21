@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Box, Button, InputAdornment, Paper, TextField, Tooltip } from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, InputAdornment, Paper, TextField, Tooltip } from '@mui/material';
 import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
 import KeyIcon from '@mui/icons-material/Key';
 import { grey } from '@mui/material/colors';
@@ -11,6 +11,8 @@ import Cookies from 'js-cookie';
 import MessageDialog from './messageDialog';
 import { useDispatch } from 'react-redux';
 import { setCategoryContent, setCompanyContent, setHireDateContent, setUserInfo } from '../_store/slice';
+import { CustomValidation } from '../_customComponents/customValidation/validationClass';
+import { type inputInfo } from '../signUp/signUpPage';
 
 type LoginPageProps = {
   //
@@ -26,8 +28,17 @@ const LogiPage: React.FC<LoginPageProps> = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messageDialog, setMessageDialog] = useState<boolean>(false);
+  const [inputInfo, setInputInfo] = useState<inputInfo>();
+
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const validation = new CustomValidation();
+
+  /** userIDのバリデーション */
+  const userIDValidation = validation.userIDCheck(loginInfo.userID);
+  /** passwordのバリデーション */
+  const passwordValidation = validation.passwordCheck(loginInfo.password);
 
   const inputUserData = (paramKey: string, value: string) => {
     let _loginInfo = { ...loginInfo };
@@ -112,41 +123,81 @@ const LogiPage: React.FC<LoginPageProps> = () => {
         </h1>
 
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-            <TextField
-              variant="standard"
-              value={loginInfo?.userID}
-              onChange={(e) => inputUserData('userID', e.target.value)}
-              label="userID"
-              type="text"
-              sx={{ width: '20rem' }}
-            />
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
-            <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-            <TextField
-              variant="standard"
-              value={loginInfo?.password}
-              onChange={(e) => inputUserData('password', e.target.value)}
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" onClick={isShowPassword}>
-                    {showPassword ? (
-                      <Visibility sx={{ cursor: 'pointer' }} />
-                    ) : (
-                      <VisibilityOff sx={{ cursor: 'pointer' }} />
-                    )}
-                  </InputAdornment>
-                ),
+          <FormControl
+            sx={{ width: '20rem', marginBottom: '0.1rem' }}
+            error={inputInfo?.userID?.type === 'warn' || inputInfo?.userID?.type === 'error'}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+              <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <TextField
+                variant="standard"
+                value={loginInfo?.userID}
+                onChange={(e) => inputUserData('userID', e.target.value)}
+                onBlur={() =>
+                  setInputInfo((prev) => {
+                    return { ...prev, userID: userIDValidation };
+                  })
+                }
+                label="userID"
+                type="text"
+                InputProps={{ sx: { minWidth: '300px' } }}
+              />
+            </Box>
+            <FormHelperText
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                marginLeft: '2rem',
+                color: inputInfo?.userID?.type === 'warn' || inputInfo?.userID?.type === 'error' ? 'red' : 'green',
               }}
-              sx={{ width: '20rem' }}
-            />
-          </Box>
+            >
+              {inputInfo?.userID?.comment}
+            </FormHelperText>
+          </FormControl>
 
-          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '2rem', marginTop: '2.5rem' }}>
+          <FormControl
+            sx={{ width: '20rem', marginBottom: '0.1rem' }}
+            error={inputInfo?.password?.type === 'warn' || inputInfo?.password?.type === 'error'}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '1rem' }}>
+              <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <TextField
+                variant="standard"
+                value={loginInfo?.password}
+                onChange={(e) => inputUserData('password', e.target.value)}
+                onBlur={() =>
+                  setInputInfo((prev) => {
+                    return { ...prev, password: passwordValidation };
+                  })
+                }
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end" onClick={isShowPassword}>
+                      {showPassword ? (
+                        <Visibility sx={{ cursor: 'pointer' }} />
+                      ) : (
+                        <VisibilityOff sx={{ cursor: 'pointer' }} />
+                      )}
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ minWidth: '300px' }}
+              />
+            </Box>
+            <FormHelperText
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                marginLeft: '2rem',
+                color: inputInfo?.password?.type === 'warn' || inputInfo?.password?.type === 'error' ? 'red' : 'green',
+              }}
+            >
+              {inputInfo?.password?.comment}
+            </FormHelperText>
+          </FormControl>
+          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '2rem', margin: '2.5rem 0' }}>
             <Tooltip title={'新しいアカウントを作成します'} arrow>
               <Button variant="outlined" color="primary" onClick={() => handleSingUp()}>
                 sign up
