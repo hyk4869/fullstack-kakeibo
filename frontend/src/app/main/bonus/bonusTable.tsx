@@ -248,14 +248,14 @@ const BonusTable: React.FC<BonusTableProps> = () => {
     setIsLoading(true);
     const postData = editValue.map((a) => ({
       ...a,
-      userId: a.userId || 1,
+      userId: user.userID,
     }));
     const deleteData = deleteSomething.map((a) => ({
       ...a,
-      userId: a.userId || 1,
+      userId: user.userID,
     }));
     await axios
-      .post(getBonus, postData)
+      .post(getBonus, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
       .then((res) => {
         if (res.data) {
           dispatch(setCreateBonus(res.data));
@@ -266,7 +266,7 @@ const BonusTable: React.FC<BonusTableProps> = () => {
       });
     if (deleteData.length !== 0) {
       await axios
-        .post(postDeleteBonus, deleteData)
+        .post(postDeleteBonus, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
         .then((res) => {
           if (res.data) {
             dispatch(setCreateBonus(res.data));

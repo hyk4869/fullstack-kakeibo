@@ -32,7 +32,7 @@ import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import axios from 'axios';
-import { setCreateSalary, setSalaryContent } from '@/app/_store/slice';
+import { setSalaryContent } from '@/app/_store/slice';
 import { getSalary, postDeleteSalary } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
 import Cookies from 'js-cookie';
@@ -255,17 +255,17 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
     setIsLoading(true);
     const postData = editValue.map((a) => ({
       ...a,
-      userId: a.userId || 1,
+      userId: user.userID,
     }));
     const deleteData = deleteSomething.map((a) => ({
       ...a,
-      userId: a.userId || 1,
+      userId: user.userID,
     }));
     await axios
-      .post(getSalary, postData)
+      .post(getSalary, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
       .then((res) => {
         if (res.data) {
-          dispatch(setCreateSalary(res.data));
+          dispatch(setSalaryContent(res.data));
         }
       })
       .catch((error) => {
@@ -273,10 +273,10 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
       });
     if (deleteData.length !== 0) {
       await axios
-        .post(postDeleteSalary, deleteData)
+        .post(postDeleteSalary, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
         .then((res) => {
           if (res.data) {
-            dispatch(setCreateSalary(res.data));
+            dispatch(setSalaryContent(res.data));
           }
         })
         .catch((error) => {

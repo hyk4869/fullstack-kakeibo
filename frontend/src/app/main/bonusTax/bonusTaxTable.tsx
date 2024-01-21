@@ -275,14 +275,14 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
     setIsLoading(true);
     const postData = editValue.map((a) => ({
       ...a,
-      userId: a.userId || 1,
+      userId: user.userID,
     }));
     const deleteData = deleteSomething.map((a) => ({
       ...a,
-      userId: a.userId || 1,
+      userId: user.userID,
     }));
     await axios
-      .post(getBonusTax, postData)
+      .post(getBonusTax, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
       .then((res) => {
         if (res.data) {
           dispatch(setCreateBonusTax(res.data));
@@ -293,7 +293,7 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
       });
     if (deleteData.length !== 0) {
       await axios
-        .post(postDeleteBonusTax, deleteData)
+        .post(postDeleteBonusTax, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
         .then((res) => {
           if (res.data) {
             dispatch(setCreateBonusTax(res.data));

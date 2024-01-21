@@ -29,7 +29,7 @@ import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import axios from 'axios';
 import { getSalaryTax, postDeleteSalaryTax } from '@/app/_api/url';
-import { setCreateSalaryTax, setSalaryTaxContent } from '@/app/_store/slice';
+import { setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
@@ -275,17 +275,17 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     setIsLoading(true);
     const postData = editValue.map((a) => ({
       ...a,
-      userId: a.userId || 1,
+      userId: user.userID,
     }));
     const deleteData = deleteSomething.map((a) => ({
       ...a,
-      userId: a.userId || 1,
+      userId: user.userID,
     }));
     await axios
-      .post(getSalaryTax, postData)
+      .post(getSalaryTax, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
       .then((res) => {
         if (res.data) {
-          dispatch(setCreateSalaryTax(res.data));
+          dispatch(setSalaryTaxContent(res.data));
         }
       })
       .catch((error) => {
@@ -293,10 +293,10 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
       });
     if (deleteData.length !== 0) {
       await axios
-        .post(postDeleteSalaryTax, deleteArrayValue)
+        .post(postDeleteSalaryTax, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
         .then((res) => {
           if (res.data) {
-            dispatch(setCreateSalaryTax(res.data));
+            dispatch(setSalaryTaxContent(res.data));
           }
         })
         .catch((error) => {
