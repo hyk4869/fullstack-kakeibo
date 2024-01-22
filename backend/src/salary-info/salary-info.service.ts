@@ -52,6 +52,11 @@ export class SalaryInfoService {
               },
             });
 
+            const verifyTsalary = await prisma.tSalary.findMany({
+              where: {
+                AND: [{ companyNum: data.companyNum }, { userId: data.userId }],
+              },
+            });
             const checkSort = await prisma.tTax.findMany({
               where: {
                 userId: data.userId,
@@ -73,6 +78,7 @@ export class SalaryInfoService {
                   updatedAt: now.toISOString(),
                   userInfo: { connect: { userID: data.userId } },
                   MCompany: { connect: { id: verify.find((a) => a.companyNum === data.companyNum)?.id } },
+                  TSalary: { connect: { id: verifyTsalary.find((a) => a.sort === data.sort)?.id ?? '' } },
                 },
               });
             }

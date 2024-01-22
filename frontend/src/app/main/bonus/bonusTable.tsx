@@ -35,6 +35,7 @@ import axios from 'axios';
 import { setBonusContent, setCreateBonus } from '@/app/_store/slice';
 import { getBonus, postDeleteBonus } from '@/app/_api/url';
 import Cookies from 'js-cookie';
+import CreateNewRecordsDialog from '@/app/_dialog/bonus/createNewRecordsDialog';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -78,11 +79,11 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         enableEdit={enableEdit}
         setOpenFetchDialog={() => setOpenFetchDialog(true)}
       />
-      {/* <CreateNewRecordsDialog
-          openDialog={openAddRecordsDialog}
-          onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
-          edit={edit}
-        /> */}
+      <CreateNewRecordsDialog
+        openDialog={openAddRecordsDialog}
+        onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
+        edit={edit}
+      />
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
       {/* <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} /> */}
     </Toolbar>

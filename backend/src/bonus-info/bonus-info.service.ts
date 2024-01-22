@@ -171,7 +171,7 @@ export class BonusInfoService {
           } else {
             const verify = await prisma.mCompany.findMany({
               where: {
-                AND: [{ sort: data.sort }, { userId: data.userId }],
+                AND: [{ companyNum: data.companyNum }, { userId: data.userId }],
               },
             });
             const verifyTTax = await prisma.tTaxBonus.findMany({

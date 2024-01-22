@@ -225,7 +225,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             onCloseAddRecords={onCloseAddRecords}
           />
 
-          <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxHeight: '550px' }}>
+          <TableContainer sx={{ display: 'flex', justifyContent: 'flex-start', width: '100%', maxHeight: '550px' }}>
             <Table>
               <CommonTableHeader categoryHeaderList={monthlyTaxHeaderList} />
 

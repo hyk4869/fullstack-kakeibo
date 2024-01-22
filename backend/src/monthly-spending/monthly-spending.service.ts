@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MCategory, TMonthlySpending } from '@prisma/client';
-import { timeout } from 'rxjs';
 
 @Injectable()
 export class MonthlySpendingService {
