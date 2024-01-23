@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MasterDataModule } from './master-data/master-data.module';
 import { BonusInfoModule } from './bonus-info/bonus-info.module';
+import { TestApiModule } from './test-api/test-api.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { BonusInfoModule } from './bonus-info/bonus-info.module';
     AuthModule,
     MasterDataModule,
     BonusInfoModule,
+    TestApiModule,
     // ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
