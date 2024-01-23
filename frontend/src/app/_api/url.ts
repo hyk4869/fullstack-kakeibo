@@ -96,3 +96,8 @@ export const getBonus = `${commonURL}/bonusInfo/bonus`;
  * 賞与情報削除用の POST
  */
 export const postDeleteBonus = `${commonURL}/bonusInfo/bonus/deletecontent`;
+
+/**
+ * テストAPI
+ */
+export const testAPILink = `${commonURL}/test-api/test-post`;

@@ -6,6 +6,7 @@ import StandardContent from './standardField';
 import OutlinedContent from './outlined';
 import { Box, Divider } from '@mui/material';
 import OtherUtil from './otherUtil';
+import TestApi from './apitest';
 
 type TestComponentProps = {
   //
@@ -22,6 +23,10 @@ const TestComponent: React.FC<TestComponentProps> = () => {
       <Divider sx={{ background: 'red', borderWidth: '1px', marginTop: '2rem' }} variant="fullWidth" />
       <Box>
         <OtherUtil />
+      </Box>
+      <Divider sx={{ background: 'red', borderWidth: '1px', marginTop: '2rem' }} variant="fullWidth" />
+      <Box>
+        <TestApi />
       </Box>
     </Box>
   );
