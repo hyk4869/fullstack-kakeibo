@@ -7,7 +7,7 @@ import { UtilFunctions } from 'src/util/utils';
 export class TestApiService {
   constructor(private prisma: PrismaService) {}
 
-  private util = new UtilFunctions();
+  private util = new UtilFunctions(this.prisma);
 
   async testPost(postData: Record<string, any>) {
     const result = await this.util.getFindManyData<MCompany>(postData, this.util.mCompany);

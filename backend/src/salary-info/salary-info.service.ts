@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { TSalary, TTax } from '@prisma/client';
+import { MCompany, TSalary, TTax } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UtilFunctions } from 'src/util/utils';
+import { isEqual } from 'lodash';
 
 @Injectable()
 export class SalaryInfoService {
   constructor(private prisma: PrismaService) {}
+
+  private util = new UtilFunctions(this.prisma);
 
   //TODO: もう少しコンパクトにまとめる
 
@@ -24,6 +28,11 @@ export class SalaryInfoService {
     return result;
   }
 
+  /**
+   * TTaxの保存作業
+   * @param postData
+   * @returns
+   */
   async postSalaryTaxContent(postData: TTax[]): Promise<TTax[]> {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
@@ -33,9 +42,21 @@ export class SalaryInfoService {
       const insertedData = await this.prisma.$transaction(async (prisma) => {
         const now = new Date();
 
-        const updateValue = postData.map(async (data) => {
+        const updateValue = postData.map(async ({ userId, companyId, ...data }) => {
+          /** MCompany */
+          const mCompany = await this.util.getFindManyData<MCompany>(
+            { companyNum: data.companyNum, userId: userId },
+            this.util.mCompany,
+          );
+          /** TTax */
+          const tTax = await this.util.getFindManyData<TTax>({ userId: userId }, this.util.tTax);
+
           if (data.id) {
-            // 既存のレコードがある場合は更新
+            const { createdAt, updatedAt, ...restData } = data;
+            const compare = tTax.some(({ companyId, userId, createdAt, updatedAt, ...a }) => isEqual(a, restData));
+            // 値が変わっていないものは早期return
+            if (compare) return;
+
             await prisma.tTax.update({
               where: {
                 id: data.id,
@@ -43,32 +64,17 @@ export class SalaryInfoService {
               data: {
                 ...data,
                 updatedAt: now.toISOString(),
+                MCompany: { connect: { id: mCompany.find((a) => a.companyNum === data.companyNum)?.id } },
+                userInfo: { connect: { userID: userId } },
               },
             });
           } else {
-            const verify = await prisma.mCompany.findMany({
-              where: {
-                AND: [{ companyNum: data.companyNum }, { userId: data.userId }],
-              },
-            });
-
-            const verifyTsalary = await prisma.tSalary.findMany({
-              where: {
-                AND: [{ companyNum: data.companyNum }, { userId: data.userId }],
-              },
-            });
-            const checkSort = await prisma.tTax.findMany({
-              where: {
-                userId: data.userId,
-              },
-            });
-
-            const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+            const foundMatchingSort = tTax.some((s) => s.sort === data.sort);
 
             if (foundMatchingSort) {
               return;
             } else {
-              const { userId, companyId, id, ...datas } = data;
+              const { id, ...datas } = data;
 
               // 既存のレコードがない場合は新規作成
               await prisma.tTax.create({
@@ -76,9 +82,8 @@ export class SalaryInfoService {
                   ...datas,
                   createdAt: now.toISOString(),
                   updatedAt: now.toISOString(),
-                  userInfo: { connect: { userID: data.userId } },
-                  MCompany: { connect: { id: verify.find((a) => a.companyNum === data.companyNum)?.id } },
-                  TSalary: { connect: { id: verifyTsalary.find((a) => a.sort === data.sort)?.id ?? '' } },
+                  userInfo: { connect: { userID: userId } },
+                  MCompany: { connect: { id: mCompany.find((a) => a.companyNum === data.companyNum)?.id } },
                 },
               });
             }
@@ -172,6 +177,11 @@ export class SalaryInfoService {
     return result;
   }
 
+  /**
+   * TSalaryの保存作業
+   * @param postData
+   * @returns
+   */
   async postSalaryContent(postData: TSalary[]): Promise<TSalary[]> {
     if (!Array.isArray(postData)) {
       throw new Error('postData must be an array');
@@ -180,41 +190,45 @@ export class SalaryInfoService {
       const insertedData = await this.prisma.$transaction(async (prisma) => {
         const now = new Date();
 
-        const updateValue = postData.map(async (data) => {
+        const updateValue = postData.map(async ({ userId, companyId, ...data }) => {
+          /** MCompany */
+          const mCompany = await this.util.getFindManyData<MCompany>(
+            { companyNum: data.companyNum, userId: userId },
+            this.util.mCompany,
+          );
+          /** TTax */
+          const tTax = await this.util.getFindManyData<TTax>({ userId: userId }, this.util.tTax);
+          /** tSalary */
+          const tSalary = await this.util.getFindManyData<TSalary>({ userId: userId }, this.util.tSalary);
+
           if (data.id) {
-            // 既存のレコードがある場合は更新
+            const { createdAt, updatedAt, ...restData } = data;
+            const compare = tSalary.some(({ companyId, userId, createdAt, updatedAt, ...a }) => isEqual(a, restData));
+            // 値が変わっていないものは早期return
+            if (compare) return;
+            // 仕方なくこっちを使う
+            const { id, ...dataWithoutId } = data;
+
             await prisma.tSalary.update({
               where: {
                 id: data.id,
               },
               data: {
-                ...data,
+                ...dataWithoutId,
                 updatedAt: now.toISOString(),
                 payday: new Date(data.payday).toISOString(),
+                userInfo: { connect: { userID: userId } },
+                MCompany: { connect: { id: mCompany.find((a) => a.companyNum === data.companyNum)?.id } },
+                TTax: { connect: { id: tTax.find((a) => a.sort === data.sort)?.id } },
               },
             });
           } else {
-            const verify = await prisma.mCompany.findMany({
-              where: {
-                AND: [{ companyNum: data.companyNum }, { userId: data.userId }],
-              },
-            });
-            const verifyTTax = await prisma.tTax.findMany({
-              where: {
-                AND: [{ sort: data.sort }, { userId: data.userId }],
-              },
-            });
-            const checkSort = await prisma.tSalary.findMany({
-              where: {
-                userId: data.userId,
-              },
-            });
-            const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+            const foundMatchingSort = tSalary.some((s) => s.sort === data.sort);
 
             if (foundMatchingSort) {
               return;
             } else {
-              const { userId, companyId, id, ...datas } = data;
+              const { id, ...datas } = data;
 
               // 既存のレコードがない場合は新規作成
               await prisma.tSalary.create({
@@ -222,10 +236,9 @@ export class SalaryInfoService {
                   ...datas,
                   createdAt: now.toISOString(),
                   updatedAt: now.toISOString(),
-                  // payday: new Date(data.payday).toISOString(),
-                  userInfo: { connect: { userID: data.userId } },
-                  MCompany: { connect: { id: verify.find((a) => a.companyNum === data.companyNum)?.id } },
-                  TTax: { connect: { id: verifyTTax.find((a) => a.sort === data.sort)?.id } },
+                  userInfo: { connect: { userID: userId } },
+                  MCompany: { connect: { id: mCompany.find((a) => a.companyNum === data.companyNum)?.id } },
+                  TTax: { connect: { id: tTax.find((a) => a.sort === data.sort)?.id } },
                 },
               });
             }
@@ -233,13 +246,22 @@ export class SalaryInfoService {
         });
         await Promise.all(updateValue);
 
-        const getLatestData = await prisma.tSalary.findMany({
+        const userData = postData.find((a) => a.userId)?.userId;
+
+        const latestData = await prisma.tSalary.findMany({
+          where: {
+            userId: userData,
+          },
+          include: {
+            TTax: true,
+            MCompany: true,
+          },
           orderBy: {
             id: 'asc',
           },
         });
 
-        return getLatestData;
+        return latestData;
       });
 
       return insertedData;

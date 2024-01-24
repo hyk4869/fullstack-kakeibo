@@ -1,8 +1,9 @@
-import { MCompany, Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 export class UtilFunctions {
-  private prisma = new PrismaClient();
+  constructor(private readonly prisma: PrismaService) {}
 
   public mCompany: Prisma.MCompanyDelegate<DefaultArgs> = this.prisma.mCompany;
   public mCategory: Prisma.MCategoryDelegate<DefaultArgs> = this.prisma.mCategory;

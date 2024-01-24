@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MCategory, TMonthlySpending } from '@prisma/client';
+import { UtilFunctions } from 'src/util/utils';
+import { isEqual } from 'lodash';
 
 @Injectable()
 export class MonthlySpendingService {
   constructor(private prisma: PrismaService) {}
+
+  private util = new UtilFunctions(this.prisma);
 
   /**
    * TMonthlyとMCategoryをDBからクライアントに送信
@@ -194,6 +198,8 @@ export class MonthlySpendingService {
 
   /**
    * MCategoryの保存
+   * @param postData
+   * @returns
    */
   async postSaveMasterCategoryContent(postData: MCategory[]): Promise<MCategory[]> {
     if (!Array.isArray(postData)) {
@@ -202,8 +208,17 @@ export class MonthlySpendingService {
     try {
       const insertedData = await this.prisma.$transaction(async (prisma) => {
         const now = new Date();
-        const upsertPromises = postData.map(async (data) => {
+
+        const upsertPromises = postData.map(async ({ userId, ...data }) => {
+          /** mCategory */
+          const mCategory = await this.util.getFindManyData<MCategory>({ userId: userId }, this.util.mCategory);
+
           if (data.id) {
+            const { createdAt, updatedAt, ...restData } = data;
+            const compare = mCategory.some(({ userId, createdAt, updatedAt, ...a }) => isEqual(a, restData));
+            // 値が変わっていないものは早期return
+            if (compare) return;
+
             await prisma.mCategory.update({
               where: {
                 id: data.id,
@@ -211,28 +226,23 @@ export class MonthlySpendingService {
               data: {
                 ...data,
                 updatedAt: now.toISOString(),
+                userInfo: { connect: { userID: userId } },
               },
             });
           } else {
-            const checkSort = await prisma.mCategory.findMany({
-              where: {
-                userId: data.userId,
-              },
-            });
-
-            const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+            const foundMatchingSort = mCategory.some((s) => s.sort === data.sort);
 
             if (foundMatchingSort) {
               return;
             } else {
-              const { userId, ...datas } = data;
+              const { id, ...datas } = data;
 
               await prisma.mCategory.create({
                 data: {
                   ...datas,
                   createdAt: now.toISOString(),
                   updatedAt: now.toISOString(),
-                  userInfo: { connect: { userID: data.userId } },
+                  userInfo: { connect: { userID: userId } },
                 },
               });
             }
