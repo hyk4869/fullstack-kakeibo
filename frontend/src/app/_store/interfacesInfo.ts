@@ -82,6 +82,10 @@ export interface TSalary {
   companyId: string | null;
   /** 会社番号 */
   companyNum: number | null;
+  /** 給与に対する税金 */
+  TTax?: TSalaryTax[];
+  /** 会社 */
+  MCompany?: MCompany[];
 }
 
 /** 給与に対する税金 */
@@ -116,6 +120,8 @@ export interface TSalaryTax {
   notes: number | null;
   /** 給与額 */
   TSalary?: TSalary[];
+  /** 会社 */
+  MCompany?: MCompany[];
 }
 
 /** 賞与 */

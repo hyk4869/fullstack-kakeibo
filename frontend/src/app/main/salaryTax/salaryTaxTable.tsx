@@ -273,11 +273,11 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
 
   const saveValue = async () => {
     setIsLoading(true);
-    const postData = editValue.map(({ TSalary, ...a }) => ({
+    const postData = editValue.map(({ TSalary, MCompany, ...a }) => ({
       ...a,
       userId: user.userID,
     }));
-    const deleteData = deleteSomething.map(({ TSalary, ...a }) => ({
+    const deleteData = deleteSomething.map(({ TSalary, MCompany, ...a }) => ({
       ...a,
       userId: user.userID,
     }));
