@@ -53,7 +53,9 @@ export class MonthlySpendingService {
   }
 
   /**
-   * 保存処理
+   * TMonthlySpendingの保存作業
+   * @param postData
+   * @returns
    */
   async postMonthlySpending(postData: TMonthlySpending[]): Promise<TMonthlySpending[]> {
     if (!Array.isArray(postData)) {
@@ -66,9 +68,26 @@ export class MonthlySpendingService {
         async (prisma) => {
           const now = new Date();
 
-          const upsertPromises = postData.map(async (data) => {
+          const upsertPromises = postData.map(async ({ categoryId, userId, ...data }) => {
+            /** MCategory */
+            const mCategory = await this.util.getFindManyData<MCategory>(
+              { sort: data.categorySort, userId: userId },
+              this.util.mCategory,
+            );
+            /** TMonthlySpending */
+            const tMonthlySpending = await this.util.getFindManyData<TMonthlySpending>(
+              { userId: userId },
+              this.util.tMonthlySpending,
+            );
+
             if (data.id) {
-              // 既存のレコードがある場合は更新
+              const { createdAt, updatedAt, ...restData } = data;
+              const compare = tMonthlySpending.some(({ userId, categoryId, createdAt, updatedAt, ...a }) =>
+                isEqual(a, restData),
+              );
+              // 値が変わっていないものは早期return
+              if (compare) return;
+
               await prisma.tMonthlySpending.update({
                 where: {
                   id: data.id,
@@ -77,26 +96,17 @@ export class MonthlySpendingService {
                   ...data,
                   updatedAt: now.toISOString(),
                   paymentDay: new Date(data.paymentDay).toISOString(),
+                  userInfo: { connect: { userID: userId } },
+                  category: { connect: { id: mCategory.find((a) => a.sort === data.categorySort)?.id } },
                 },
               });
             } else {
-              const verify = await prisma.mCategory.findMany({
-                where: {
-                  AND: [{ sort: data.categorySort }, { userId: data.userId }],
-                },
-              });
-              const checkSort = await prisma.tMonthlySpending.findMany({
-                where: {
-                  userId: data.userId,
-                },
-              });
-
-              const foundMatchingSort = checkSort.some((s) => s.sort === data.sort);
+              const foundMatchingSort = tMonthlySpending.some((s) => s.sort === data.sort);
 
               if (foundMatchingSort) {
                 return;
               } else {
-                const { userId, categoryId, id, ...datas } = data;
+                const { id, ...datas } = data;
 
                 // 既存のレコードがない場合は新規作成
                 await prisma.tMonthlySpending.create({
@@ -105,8 +115,8 @@ export class MonthlySpendingService {
                     createdAt: now.toISOString(),
                     updatedAt: now.toISOString(),
                     paymentDay: new Date(data.paymentDay).toISOString(),
-                    userInfo: { connect: { userID: data.userId } },
-                    category: { connect: { id: verify.find((a) => a.sort === data.categorySort)?.id } },
+                    userInfo: { connect: { userID: userId } },
+                    category: { connect: { id: mCategory.find((a) => a.sort === data.categorySort)?.id } },
                   },
                 });
               }
@@ -131,7 +141,7 @@ export class MonthlySpendingService {
 
           return latestData;
         },
-        { timeout: 10000 },
+        { timeout: 100000 },
       );
 
       return insertedData;
@@ -197,7 +207,7 @@ export class MonthlySpendingService {
   }
 
   /**
-   * MCategoryの保存
+   * MCategoryの保存作業
    * @param postData
    * @returns
    */
