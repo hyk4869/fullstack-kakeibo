@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MCompany, MHireDate } from '@prisma/client';
+import { isEqual } from 'lodash';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UtilFunctions } from 'src/util/utils';
 
@@ -48,7 +49,11 @@ export class CompanyInfoService {
           );
 
           if (data.id) {
-            // 既存のレコードがある場合は更新
+            const { createdAt, updatedAt, ...restData } = data;
+            const compare = mCompany.some(({ createdAt, updatedAt, userId, ...a }) => isEqual(a, restData));
+            // 値が変わっていないものは早期return
+            if (compare) return;
+
             await prisma.mCompany.update({
               where: {
                 id: data.id,
@@ -130,7 +135,10 @@ export class CompanyInfoService {
           );
 
           if (data.id) {
-            // 既存のレコードがある場合は更新
+            const { createdAt, updatedAt, ...restData } = data;
+            const compare = mHireDate.some(({ createdAt, updatedAt, userId, companyId, ...a }) => isEqual(a, restData));
+            // 値が変わっていないものは早期return
+            if (compare) return;
             await prisma.mHireDate.update({
               where: {
                 id: data.id,
