@@ -259,7 +259,7 @@ const BonusTable: React.FC<BonusTableProps> = () => {
       .post(getBonus, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
       .then((res) => {
         if (res.data) {
-          dispatch(setCreateBonus(res.data));
+          dispatch(setBonusContent(res.data));
         }
       })
       .catch((error) => {
@@ -270,7 +270,7 @@ const BonusTable: React.FC<BonusTableProps> = () => {
         .post(postDeleteBonus, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
         .then((res) => {
           if (res.data) {
-            dispatch(setCreateBonus(res.data));
+            dispatch(setBonusContent(res.data));
           }
         })
         .catch((error) => {
