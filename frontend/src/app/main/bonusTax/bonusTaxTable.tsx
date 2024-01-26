@@ -273,11 +273,11 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
 
   const saveValue = async () => {
     setIsLoading(true);
-    const postData = editValue.map((a) => ({
+    const postData = editValue.map(({ TBonus, MCompany, ...a }) => ({
       ...a,
       userId: user.userID,
     }));
-    const deleteData = deleteSomething.map((a) => ({
+    const deleteData = deleteSomething.map(({ TBonus, MCompany, ...a }) => ({
       ...a,
       userId: user.userID,
     }));

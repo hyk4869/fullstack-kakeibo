@@ -140,6 +140,10 @@ export interface TBonus {
   companyId: string | null;
   /** 会社番号 */
   companyNum: number | null;
+  /** 賞与に対する税金 */
+  TBonus?: TBonus[];
+  /** 会社 */
+  MCompany?: MCompany[];
 }
 
 /** 賞与に対する税金 */
@@ -174,6 +178,8 @@ export interface TBonusTax {
   notes: number | null;
   /** ボーナス額 */
   TBonus?: TBonus[];
+  /** 会社 */
+  MCompany?: MCompany[];
 }
 
 /** User情報 */

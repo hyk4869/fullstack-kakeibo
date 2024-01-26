@@ -247,11 +247,11 @@ const BonusTable: React.FC<BonusTableProps> = () => {
 
   const saveValue = async () => {
     setIsLoading(true);
-    const postData = editValue.map((a) => ({
+    const postData = editValue.map(({ MCompany, TBonus, ...a }) => ({
       ...a,
       userId: user.userID,
     }));
-    const deleteData = deleteSomething.map((a) => ({
+    const deleteData = deleteSomething.map(({ MCompany, TBonus, ...a }) => ({
       ...a,
       userId: user.userID,
     }));
