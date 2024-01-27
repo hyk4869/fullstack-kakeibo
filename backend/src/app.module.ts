@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { MasterDataModule } from './master-data/master-data.module';
 import { BonusInfoModule } from './bonus-info/bonus-info.module';
 import { TestApiModule } from './test-api/test-api.module';
+import { AllIncomeInfoModule } from './all-income-info/all-income-info.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TestApiModule } from './test-api/test-api.module';
     MasterDataModule,
     BonusInfoModule,
     TestApiModule,
+    AllIncomeInfoModule,
     // ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],

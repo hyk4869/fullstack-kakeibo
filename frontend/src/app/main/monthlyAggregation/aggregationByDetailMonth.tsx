@@ -32,6 +32,7 @@ export type SelectDate = {
   year: number | null;
   month: number | null;
 };
+
 const defaultDate = new Date();
 const defaultYear = defaultDate.getFullYear();
 const defaultMonth = defaultDate.getMonth();
@@ -47,10 +48,10 @@ const AggregationByDetailMonth: React.FC<AggregationByDetailMonthProps> = () => 
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const { width, height } = useWindowSize();
   const [amount, setAmount] = useState<Array<AmoutType>>([]);
-  const [sortedDate, setSortedDate] = useState<SortedDateType>();
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [redirectTo, setRedirectTo] = useState<boolean>(false);
+  const [sortedDate, setSortedDate] = useState<SortedDateType>();
   const [selectedDate, setSelectedDate] = useState<SelectDate>(defaultValue);
 
   useLayoutEffect(() => {

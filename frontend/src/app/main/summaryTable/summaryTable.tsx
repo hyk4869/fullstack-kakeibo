@@ -50,7 +50,7 @@ export type EnhancedTableToolbarProps = {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   windowSize: boolean;
-  setEditLogValue: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
+  setEditLogValue?: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
 };
 
 /** 上のeditボタン */
@@ -100,7 +100,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         openDialog={openAddRecordsDialog}
         onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
         edit={edit}
-        setEditLogValue={setEditLogValue}
+        setEditLogValue={setEditLogValue!}
       />
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
       <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} />

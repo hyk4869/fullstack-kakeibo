@@ -5,7 +5,7 @@ import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import useWindowSize from '@/app/_util/useWindowSize';
 import { Box, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { getLatestSalaryDate, getOldSalaryDate } from '@/app/_util/utils';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
@@ -13,7 +13,10 @@ import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
 import BarGraph, { AmoutType } from '@/app/_util/commonGraph/barGraph';
 import { aggregationAnnualSalaryHeaderList } from '@/app/_util/commonLayouts/headerList';
-import { TSalaryTax } from '@/app/_store/interfacesInfo';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { getAllIncomeLink } from '@/app/_api/url';
+import { setBonusContent, setBonusTaxContent, setSalaryContent, setSalaryTaxContent } from '@/app/_store/slice';
 
 type AggregationByAnnualIncomeProps = {
   //
@@ -32,12 +35,43 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
   const salaryTaxData = useSelector((state: RootState) => state.getSalaryTax);
   const bonusData = useSelector((state: RootState) => state.getBonus);
   const bonusTaxData = useSelector((state: RootState) => state.getBonusTax);
+  const userData = useSelector((state: RootState) => state.getUserInfo);
 
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [amount, setAmount] = useState<Array<AmoutType>>([]);
   const [sortedDate, setSortedDate] = useState<SortedDateType>();
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [arrayAmount, setArrayAmount] = useState<Array<AmountTypeWithTax>>([]);
+
+  const jwtToken = Cookies.get('authToken');
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (salaryData.length === 0 || salaryTaxData.length === 0 || bonusData.length === 0 || bonusTaxData.length === 0) {
+      try {
+        axios
+          .get(getAllIncomeLink, {
+            params: {
+              userID: userData.userID,
+            },
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          })
+          .then((res) => {
+            if (res.data) {
+              const data = res.data;
+              dispatch(setSalaryTaxContent(data.salaryTaxData));
+              dispatch(setSalaryContent(data.salaryData));
+              dispatch(setBonusTaxContent(data.bonusTaxData));
+              dispatch(setBonusContent(data.bonusData));
+            }
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [salaryData, salaryTaxData, bonusData, bonusTaxData]);
 
   useEffect(() => {
     if (width < 1100) {

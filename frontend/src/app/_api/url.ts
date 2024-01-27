@@ -100,4 +100,9 @@ export const postDeleteBonus = `${commonURL}/bonusInfo/bonus/deletecontent`;
 /**
  * テストAPI
  */
+export const getAllIncomeLink = `${commonURL}/all-income-info`;
+
+/**
+ * テストAPI
+ */
 export const testAPILink = `${commonURL}/test-api/test-post`;
