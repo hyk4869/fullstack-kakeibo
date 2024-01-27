@@ -13,6 +13,7 @@ import SideBar from './sideBar';
 import useWindowSize from '../_util/useWindowSize';
 import { useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
+import SettingDialog from './setting';
 
 type CustomMenuBarProps = {
   TitleName?: string;
@@ -21,6 +22,8 @@ type CustomMenuBarProps = {
 const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
   const { TitleName } = props;
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
   const { width, height } = useWindowSize();
   const userData = useSelector((state: RootState) => state.getUserInfo);
 
@@ -32,6 +35,10 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
       </Box>
     );
   }, [TitleName, userData.userID]);
+
+  const openSetting = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   return (
     <>
@@ -53,13 +60,14 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
             </Typography>
             {/* TODO: 後で消す */}
             {`確認用 width: ${width}`} - {`height: ${height}`}
-            <Button color="inherit">
+            <Button color="inherit" onClick={openSetting} id="person">
               <PersonIcon />
             </Button>
           </Toolbar>
         </AppBar>
       </Box>
       <SideBar openSideBar={openSideBar} onCloseSideBar={() => setOpenSideBar(false)} />
+      <SettingDialog setAnchorEl={setAnchorEl} anchorEl={anchorEl} />
     </>
   );
 };
