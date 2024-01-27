@@ -10,23 +10,6 @@ export class CompanyInfoService {
 
   private util = new UtilFunctions(this.prisma);
 
-  async getCompanyContent() {
-    const result = await this.prisma.mCompany.findMany({
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
-  }
-  async getHireDateContent() {
-    const result = await this.prisma.mHireDate.findMany({
-      orderBy: {
-        id: 'asc',
-      },
-    });
-    return result;
-  }
-
   /**
    * MCompanyの保存作業
    * @param postData

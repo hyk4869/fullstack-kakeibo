@@ -7,20 +7,10 @@ import { AuthGuard } from '@nestjs/passport';
 export class CompanyInfoController {
   constructor(private readonly companyInfoService: CompanyInfoService) {}
 
-  @Get('/companyName')
-  async getCompanyContent(): Promise<MCompany[]> {
-    return this.companyInfoService.getCompanyContent();
-  }
-
   @UseGuards(AuthGuard('jwt'))
   @Post('/companyName')
   async postCompanyContent(@Body() postData: MCompany[]): Promise<MCompany[]> {
     return this.companyInfoService.postCompanyContent(postData);
-  }
-
-  @Get('/hireDate')
-  async getHireDateContent(): Promise<MHireDate[]> {
-    return this.companyInfoService.getHireDateContent();
   }
 
   @UseGuards(AuthGuard('jwt'))
