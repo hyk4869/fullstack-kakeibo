@@ -141,7 +141,7 @@ export class MonthlySpendingService {
 
           return latestData;
         },
-        { timeout: 100000 },
+        { timeout: 20000 },
       );
 
       return insertedData;

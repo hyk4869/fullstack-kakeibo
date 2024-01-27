@@ -50,6 +50,7 @@ export type EnhancedTableToolbarProps = {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   windowSize: boolean;
+  setEditLogValue: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
 };
 
 /** 上のeditボタン */
@@ -65,6 +66,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
     isLoading,
     setIsLoading,
     windowSize,
+    setEditLogValue,
   } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
@@ -98,6 +100,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         openDialog={openAddRecordsDialog}
         onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
         edit={edit}
+        setEditLogValue={setEditLogValue}
       />
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
       <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} />
@@ -137,9 +140,13 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
 
+  const [editLogValue, setEditLogValue] = useState<Array<TMonthlySpending>>([]);
+
   const utilMethods = useCommonFunctions<TMonthlySpending>();
 
   const jwtToken = Cookies.get('authToken');
+
+  console.log({ editLogValue });
 
   useEffect(() => {
     if (width < 840) {
@@ -161,7 +168,15 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   useEffect(() => {
     if (monthlyData.length !== editValue.length) {
-      setEditValue(monthlyData);
+      if (editLogValue.length !== 0) {
+        const updatedEditValue: TMonthlySpending[] = monthlyData.map((row) => {
+          const logRow = editLogValue.find((log) => log.sort === row.sort);
+          return logRow ? { ...row, ...logRow } : row;
+        });
+        setEditValue(updatedEditValue);
+      } else {
+        setEditValue(monthlyData);
+      }
     }
   }, [monthlyData, enableEdit]);
 
@@ -240,6 +255,13 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
                 updatedRow.usageFee = value === '' ? null : parseFloat(value as string);
                 break;
             }
+
+            setEditLogValue((prev) => {
+              /** 最初の一致する要素が削除され、新しい要素 updatedRow が配列の末尾に追加される */
+              const filteredArray = prev.filter((a) => a.sort !== updatedRow.sort);
+              return [...filteredArray, updatedRow];
+            });
+
             return updatedRow;
           } else {
             return row;
@@ -247,7 +269,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
         });
       });
     },
-    [editValue],
+    [editValue, editLogValue],
   );
 
   /**
@@ -256,7 +278,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const saveValue = async () => {
     setIsLoading(true);
 
-    const postData = editValue.map(({ category, ...data }) => ({
+    const postData = editLogValue.map(({ category, ...data }) => ({
       ...data,
       userId: user.userID,
     }));
@@ -340,6 +362,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           windowSize={windowSize}
+          setEditLogValue={setEditLogValue}
         />
         <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
           <Table stickyHeader aria-label="sticky table">

@@ -36,10 +36,11 @@ type CreateNewRecordsDialogProps = {
   openDialog: boolean;
   onCloseAddRecords: () => void;
   edit?: boolean;
+  setEditLogValue: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
 };
 
 const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) => {
-  const { openDialog, onCloseAddRecords, edit } = props;
+  const { openDialog, onCloseAddRecords, edit, setEditLogValue } = props;
   const [arrayLastId, setArrayLastId] = useState<number>(0);
   const [increment, setIncrement] = useState<number>(arrayLastId);
   const [incrementArray, setIncrementArray] = useState<Array<number>>([]);
@@ -336,6 +337,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           content={makeNewArray}
           onCloseMonthlyDialog={onCloseAddRecords}
           setMakeNewArray={setMakeNewArray}
+          setEditLogValue={setEditLogValue}
         />
         <ShowCategoryMaster
           isShowCategoryMaster={isShowCategoryMaster}

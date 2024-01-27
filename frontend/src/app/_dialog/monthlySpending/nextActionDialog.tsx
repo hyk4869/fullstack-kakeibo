@@ -12,10 +12,12 @@ type MonthlyNextActionDialogProps = {
   content: TMonthlySpending[];
   onCloseMonthlyDialog: () => void;
   setMakeNewArray: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
+  setEditLogValue: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
 };
 
 const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) => {
-  const { isShow, onCloseConfirmDialog, contentNum, content, onCloseMonthlyDialog, setMakeNewArray } = props;
+  const { isShow, onCloseConfirmDialog, contentNum, content, onCloseMonthlyDialog, setMakeNewArray, setEditLogValue } =
+    props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -43,6 +45,7 @@ const MonthlyNextActionDialog: React.FC<MonthlyNextActionDialogProps> = (props) 
           }
         });
         if (!hasDuplicate) {
+          setEditLogValue((prev) => [...prev, ...content]);
           dispatch(setCreateMonthlySpending(content));
         }
       } catch (error) {
