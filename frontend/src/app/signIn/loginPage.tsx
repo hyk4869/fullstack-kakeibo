@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Box, Button, FormControl, FormHelperText, InputAdornment, Paper, TextField, Tooltip } from '@mui/material';
 import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
 import KeyIcon from '@mui/icons-material/Key';
@@ -33,6 +33,10 @@ const LogiPage: React.FC<LoginPageProps> = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const loginButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  /** 自作のバリデ－ション */
   const validation = new CustomValidation();
 
   /** userIDのバリデーション */
@@ -80,6 +84,20 @@ const LogiPage: React.FC<LoginPageProps> = () => {
   };
 
   const isShowPassword = () => setShowPassword((show) => !show);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (passwordRef.current && loginButtonRef.current) {
+        event.preventDefault();
+
+        if (document.activeElement === passwordRef.current) {
+          loginButtonRef.current.click();
+        } else {
+          passwordRef.current.focus();
+        }
+      }
+    }
+  };
 
   const handleSingUp = () => {
     router.push('/signUp');
@@ -141,6 +159,7 @@ const LogiPage: React.FC<LoginPageProps> = () => {
                 label="userID"
                 type="text"
                 InputProps={{ sx: { minWidth: '300px' } }}
+                onKeyDown={handleKeyDown} // InputProps内に記述するのも可能
               />
             </Box>
             <FormHelperText
@@ -184,6 +203,8 @@ const LogiPage: React.FC<LoginPageProps> = () => {
                   ),
                 }}
                 sx={{ minWidth: '300px' }}
+                inputRef={passwordRef}
+                onKeyDown={handleKeyDown}
               />
             </Box>
             <FormHelperText
@@ -203,7 +224,7 @@ const LogiPage: React.FC<LoginPageProps> = () => {
                 sign up
               </Button>
             </Tooltip>
-            <Button variant="contained" onClick={() => loginButton(loginInfo)}>
+            <Button ref={loginButtonRef} variant="contained" onClick={() => loginButton(loginInfo)}>
               login
             </Button>
           </Box>

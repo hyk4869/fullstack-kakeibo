@@ -146,8 +146,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
 
   const jwtToken = Cookies.get('authToken');
 
-  console.log({ editLogValue });
-
   useEffect(() => {
     if (width < 840) {
       setWindowSize(true);
