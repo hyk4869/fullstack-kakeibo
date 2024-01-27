@@ -1,4 +1,4 @@
-// 'use client';
+'use client';
 import React from 'react';
 import { Box, Menu, MenuItem } from '@mui/material';
 import { useDispatch } from 'react-redux';
