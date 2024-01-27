@@ -36,7 +36,7 @@ type CreateNewRecordsDialogProps = {
   openDialog: boolean;
   onCloseAddRecords: () => void;
   edit?: boolean;
-  setEditLogValue: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
+  setEditLogValue?: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
 };
 
 const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) => {

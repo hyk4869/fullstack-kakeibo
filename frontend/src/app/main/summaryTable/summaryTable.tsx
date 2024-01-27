@@ -100,7 +100,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         openDialog={openAddRecordsDialog}
         onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
         edit={edit}
-        setEditLogValue={setEditLogValue!}
+        setEditLogValue={setEditLogValue}
       />
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
       <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} />
