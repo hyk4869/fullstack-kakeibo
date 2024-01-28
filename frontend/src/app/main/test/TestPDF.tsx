@@ -2,18 +2,8 @@
 
 import { Box, Button } from '@mui/material';
 import React, { useState } from 'react';
-import * as pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import type { CustomTableLayout, TDocumentDefinitions } from 'pdfmake/interfaces';
-
-const fonts = {
-  NotoSerifJP: {
-    normal: 'https://fonts.gstatic.com/s/notoserifjp/v21/xn7mYHs72GKoTvER4Gn3b5eMXNikYkY0T84.otf',
-    bold: 'https://fonts.gstatic.com/s/notoserifjp/v21/xn77YHs72GKoTvER4Gn3b5eMZGKLRkgfU8fEwb0.otf',
-    italics: 'https://fonts.gstatic.com/s/notoserifjp/v21/xn7mYHs72GKoTvER4Gn3b5eMXNikYkY0T84.otf',
-    bolditalics: 'https://fonts.gstatic.com/s/notoserifjp/v21/xn77YHs72GKoTvER4Gn3b5eMZGKLRkgfU8fEwb0.otf',
-  },
-};
+import type { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { useGeneratePDF } from '@/app/_util/generatePDF/useGeneratePDF';
 
 type TestPDFProps = {
   //
@@ -23,22 +13,7 @@ const TestPDF: React.FC<TestPDFProps> = () => {
   const [openPDF, setOpenPDF] = useState<boolean>(false);
   const [pdfDataUrl, setPdfDataUrl] = useState<string>('');
 
-  /** 同じページでPDFを開く */
-  const createPDF = async (definition: TDocumentDefinitions, tableLayouts?: { [name: string]: CustomTableLayout }) => {
-    return new Promise((resolve) => {
-      pdfMake.createPdf(definition, tableLayouts, fonts, pdfFonts.pdfMake?.vfs).getDataUrl((value) => {
-        setPdfDataUrl(value);
-        resolve(value);
-      });
-    });
-  };
-
-  /** 別ページでPDFを開く */
-  const createOpenPDF = (definition: TDocumentDefinitions, tableLayouts?: { [name: string]: CustomTableLayout }) => {
-    return new Promise(() => {
-      pdfMake.createPdf(definition, tableLayouts, fonts, pdfFonts.pdfMake?.vfs).open();
-    });
-  };
+  const { createPDF, createOpenPDF } = useGeneratePDF();
 
   const pdfSample = async () => {
     setOpenPDF((prev) => !prev);
@@ -65,10 +40,11 @@ const TestPDF: React.FC<TestPDFProps> = () => {
         font: 'NotoSerifJP',
       },
     };
-    // return await createOpenPDF(documentDefinition);
-    return await createPDF(documentDefinition).finally();
+    // return await createOpenPDF(documentDefinition).finally();
+    return await createPDF(setPdfDataUrl, documentDefinition).finally();
   };
 
+  console.log(pdfDataUrl);
   return (
     <>
       <Box sx={{ paddingTop: '1rem', display: 'flex', flexDirection: 'column' }}>
@@ -76,6 +52,7 @@ const TestPDF: React.FC<TestPDFProps> = () => {
           open pdf
         </Button>
         {openPDF ? <iframe title="PDF Viewer" src={pdfDataUrl} width="100%" height="800"></iframe> : <></>}
+        {/* {openPDF ? <object data="pdfSample" type="application/pdf" width="100%" height="800"></object> : <></>} */}
       </Box>
     </>
   );
