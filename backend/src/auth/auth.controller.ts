@@ -12,16 +12,15 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
+  /**
+   * ログイン時に使用しているもの
+   * @param postData
+   * @returns
+   */
   @Post('/login')
   async postLogin(@Body() postData: AuthDto): Promise<SignInResponse> {
     return this.authServise.postLogin(postData);
   }
-
-  // @Post('/login')
-  // @UseGuards(AuthGuard('local'))
-  // async postLogin(@Request() req: any): Promise<SignInResponse> {
-  //   return this.authServise.postLogin(req.body);
-  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/getUser')
@@ -29,13 +28,13 @@ export class AuthController {
     return await this.userService.getUser(userID);
   }
 
+  /**
+   * リロード時に使用しているもの
+   * @param authToken
+   * @returns
+   */
   @Post('/verifyToken')
   async verifyReloadToken(@Body('authToken') authToken: string): Promise<SignInResponse> {
     return await this.authServise.verifyReloadToken(authToken);
-  }
-
-  @Post('/test/verifyToken')
-  async verifyToken(@Body('authToken') authToken: string): Promise<boolean> {
-    return await this.authServise.verifyToken(authToken);
   }
 }

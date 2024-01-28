@@ -6,7 +6,7 @@ export class AuthDto {
   userID: string;
 
   @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(6)
   password: string;
 }
 
@@ -25,4 +25,9 @@ export class SignInResponse {
   user?: UserWithoutPassword;
   status?: boolean;
   masterData?: MasterData;
+}
+
+export class VerifyUserID {
+  @IsNotEmpty()
+  userID: string;
 }
