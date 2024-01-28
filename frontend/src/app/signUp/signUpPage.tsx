@@ -11,6 +11,7 @@ import { createAccount } from '../_api/url';
 import MessageDialog from './messageDialog';
 import { CustomValidation } from '../_customComponents/customValidation/validationClass';
 import { ReturnValidationData } from '../_customComponents/customValidation/validationInterfaces';
+import { useRouter } from 'next/navigation';
 
 type SignUpPageProps = {
   //
@@ -42,6 +43,8 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
   const [inputInfo, setInputInfo] = useState<inputInfo>();
 
   const validation = new CustomValidation();
+
+  const router = useRouter();
 
   /** userIDのバリデーション */
   const userIDValidation = validation.userIDCheck(userInfo.userID);
@@ -100,6 +103,10 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
           console.error(error);
         });
     }
+  };
+
+  const signInPage = () => {
+    router.push('/signIn');
   };
 
   return (
@@ -304,6 +311,10 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
           </Button>
         </Box>
       </Paper>
+
+      <Button variant="outlined" onClick={signInPage}>
+        SIGN IN
+      </Button>
       <MessageDialog
         message={message}
         messageDialog={messageDialog}
