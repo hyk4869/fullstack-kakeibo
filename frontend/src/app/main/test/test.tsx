@@ -7,6 +7,7 @@ import OutlinedContent from './outlined';
 import { Box, Divider } from '@mui/material';
 import OtherUtil from './otherUtil';
 import TestApi from './apitest';
+import TestPDF from './TestPDF';
 
 type TestComponentProps = {
   //
@@ -27,6 +28,10 @@ const TestComponent: React.FC<TestComponentProps> = () => {
       <Divider sx={{ background: 'red', borderWidth: '1px', marginTop: '2rem' }} variant="fullWidth" />
       <Box>
         <TestApi />
+      </Box>
+      <Divider sx={{ background: 'red', borderWidth: '1px', marginTop: '2rem' }} variant="fullWidth" />
+      <Box>
+        <TestPDF />
       </Box>
     </Box>
   );
