@@ -24,7 +24,6 @@ import CustomSelectTab from '../../_customComponents/customSelectTab';
 import dayjs from 'dayjs';
 import CreateNewRecordsDialog from '../../_dialog/monthlySpending/createNewRecordsDialog';
 import { grey } from '@mui/material/colors';
-import axios from 'axios';
 import { getMonthlySpending, postDeleteMonthlySpending } from '../../_api/url';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import FetchDataDialog from './fetchDataDialog';
@@ -37,7 +36,6 @@ import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHe
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
-import Cookies from 'js-cookie';
 
 export type EnhancedTableToolbarProps<T> = {
   numSelected: number;
@@ -144,8 +142,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [editLogValue, setEditLogValue] = useState<Array<TMonthlySpending>>([]);
 
   const utilMethods = useCommonFunctions<TMonthlySpending>();
-
-  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -271,47 +267,30 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
     [editValue, editLogValue],
   );
 
+  const postData = editLogValue.map(({ category, ...data }) => ({
+    ...data,
+    userId: user.userID,
+  }));
+  const deleteData = deleteSomething.map(({ category, ...data }) => ({
+    ...data,
+    userId: user.userID,
+  }));
+
   /**
    * 保存
    */
-  const saveValue = async () => {
-    setIsLoading(true);
-
-    const postData = editLogValue.map(({ category, ...data }) => ({
-      ...data,
-      userId: user.userID,
-    }));
-    const deleteData = deleteSomething.map(({ category, ...data }) => ({
-      ...data,
-      userId: user.userID,
-    }));
-
-    await axios
-      .post(getMonthlySpending, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-      .then((res) => {
-        if (res.data) {
-          dispatch(setMonthlySpending(res.data));
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    if (deleteSomething.length !== 0) {
-      await axios
-        .post(postDeleteMonthlySpending, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-        .then((res) => {
-          if (res.data) {
-            dispatch(setMonthlySpending(res.data));
-            setDeleteSomething([]);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-    setIsLoading(false);
-    setEdit(false);
-  };
+  const saveValue = () =>
+    utilMethods.handleSaveValue(
+      dispatch,
+      postData,
+      deleteData,
+      getMonthlySpending,
+      postDeleteMonthlySpending,
+      setMonthlySpending,
+      setIsLoading,
+      setEdit,
+      setDeleteSomething,
+    );
 
   /**
    *

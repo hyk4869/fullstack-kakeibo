@@ -31,11 +31,9 @@ import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
-import axios from 'axios';
 import { setSalaryContent } from '@/app/_store/slice';
 import { getSalary, postDeleteSalary } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
-import Cookies from 'js-cookie';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 
 /** 上のeditボタン */
@@ -125,8 +123,6 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TSalary>();
-
-  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -228,41 +224,30 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
     [editValue],
   );
 
-  const saveValue = async () => {
-    setIsLoading(true);
-    const postData = editValue.map(({ MCompany, TTax, ...a }) => ({
-      ...a,
-      userId: user.userID,
-    }));
-    const deleteData = deleteSomething.map(({ MCompany, TTax, ...a }) => ({
-      ...a,
-      userId: user.userID,
-    }));
-    await axios
-      .post(getSalary, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-      .then((res) => {
-        if (res.data) {
-          dispatch(setSalaryContent(res.data));
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    if (deleteData.length !== 0) {
-      await axios
-        .post(postDeleteSalary, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-        .then((res) => {
-          if (res.data) {
-            dispatch(setSalaryContent(res.data));
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-    setIsLoading(false);
-    setEdit(false);
-  };
+  const postData = editValue.map(({ MCompany, TTax, ...a }) => ({
+    ...a,
+    userId: user.userID,
+  }));
+  const deleteData = deleteSomething.map(({ MCompany, TTax, ...a }) => ({
+    ...a,
+    userId: user.userID,
+  }));
+
+  /**
+   * 保存
+   */
+  const saveValue = () =>
+    utilMethods.handleSaveValue(
+      dispatch,
+      postData,
+      deleteData,
+      getSalary,
+      postDeleteSalary,
+      setSalaryContent,
+      setIsLoading,
+      setEdit,
+      setDeleteSomething,
+    );
 
   return (
     <>

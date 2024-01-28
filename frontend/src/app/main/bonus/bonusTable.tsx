@@ -31,10 +31,8 @@ import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
-import axios from 'axios';
 import { setBonusContent, setCreateBonus } from '@/app/_store/slice';
 import { getBonus, postDeleteBonus } from '@/app/_api/url';
-import Cookies from 'js-cookie';
 import CreateNewRecordsDialog from '@/app/_dialog/bonus/createNewRecordsDialog';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 
@@ -125,8 +123,6 @@ const BonusTable: React.FC<BonusTableProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TBonus>();
-
-  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -222,41 +218,30 @@ const BonusTable: React.FC<BonusTableProps> = () => {
     [editValue],
   );
 
-  const saveValue = async () => {
-    setIsLoading(true);
-    const postData = editValue.map(({ MCompany, TBonus, ...a }) => ({
-      ...a,
-      userId: user.userID,
-    }));
-    const deleteData = deleteSomething.map(({ MCompany, TBonus, ...a }) => ({
-      ...a,
-      userId: user.userID,
-    }));
-    await axios
-      .post(getBonus, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-      .then((res) => {
-        if (res.data) {
-          dispatch(setBonusContent(res.data));
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    if (deleteData.length !== 0) {
-      await axios
-        .post(postDeleteBonus, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-        .then((res) => {
-          if (res.data) {
-            dispatch(setBonusContent(res.data));
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-    setIsLoading(false);
-    setEdit(false);
-  };
+  const postData = editValue.map(({ MCompany, TBonus, ...a }) => ({
+    ...a,
+    userId: user.userID,
+  }));
+  const deleteData = deleteSomething.map(({ MCompany, TBonus, ...a }) => ({
+    ...a,
+    userId: user.userID,
+  }));
+
+  /**
+   * 保存
+   */
+  const saveValue = () =>
+    utilMethods.handleSaveValue(
+      dispatch,
+      postData,
+      deleteData,
+      getBonus,
+      postDeleteBonus,
+      setBonusContent,
+      setIsLoading,
+      setEdit,
+      setDeleteSomething,
+    );
 
   return (
     <>

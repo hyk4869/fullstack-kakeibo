@@ -27,14 +27,12 @@ import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
-import axios from 'axios';
 import { getSalaryTax, postDeleteSalaryTax } from '@/app/_api/url';
 import { setSalaryTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import CreateNewRecordsDialog from '@/app/_dialog/salaryTax/createNewRecordsDialog';
-import Cookies from 'js-cookie';
 import FetchDataDialog from '../../_util/commonDialog/fetchDataDialog';
 
 /** 上のeditボタン */
@@ -125,8 +123,6 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TSalaryTax>();
-
-  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -249,41 +245,30 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
     [editValue],
   );
 
-  const saveValue = async () => {
-    setIsLoading(true);
-    const postData = editValue.map(({ TSalary, MCompany, ...a }) => ({
-      ...a,
-      userId: user.userID,
-    }));
-    const deleteData = deleteSomething.map(({ TSalary, MCompany, ...a }) => ({
-      ...a,
-      userId: user.userID,
-    }));
-    await axios
-      .post(getSalaryTax, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-      .then((res) => {
-        if (res.data) {
-          dispatch(setSalaryTaxContent(res.data));
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    if (deleteData.length !== 0) {
-      await axios
-        .post(postDeleteSalaryTax, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-        .then((res) => {
-          if (res.data) {
-            dispatch(setSalaryTaxContent(res.data));
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-    setIsLoading(false);
-    setEdit(false);
-  };
+  const postData = editValue.map(({ TSalary, MCompany, ...a }) => ({
+    ...a,
+    userId: user.userID,
+  }));
+  const deleteData = deleteSomething.map(({ TSalary, MCompany, ...a }) => ({
+    ...a,
+    userId: user.userID,
+  }));
+
+  /**
+   * 保存
+   */
+  const saveValue = () =>
+    utilMethods.handleSaveValue(
+      dispatch,
+      postData,
+      deleteData,
+      getSalaryTax,
+      postDeleteSalaryTax,
+      setSalaryTaxContent,
+      setIsLoading,
+      setEdit,
+      setDeleteSomething,
+    );
 
   return (
     <>

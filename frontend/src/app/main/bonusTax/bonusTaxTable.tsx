@@ -27,14 +27,12 @@ import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import useWindowSize from '@/app/_util/useWindowSize';
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
-import axios from 'axios';
 import { getBonusTax, postDeleteBonusTax } from '@/app/_api/url';
-import { setBonusTaxContent, setCreateBonusTax } from '@/app/_store/slice';
+import { setBonusTaxContent } from '@/app/_store/slice';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import CreateNewRecordsDialog from '@/app/_dialog/bonusTax/createNewRecordsDialog';
-import Cookies from 'js-cookie';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 
 /** 上のeditボタン */
@@ -125,8 +123,6 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TBonusTax>();
-
-  const jwtToken = Cookies.get('authToken');
 
   useEffect(() => {
     if (width < 840) {
@@ -249,41 +245,30 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
     [editValue],
   );
 
-  const saveValue = async () => {
-    setIsLoading(true);
-    const postData = editValue.map(({ TBonus, MCompany, ...a }) => ({
-      ...a,
-      userId: user.userID,
-    }));
-    const deleteData = deleteSomething.map(({ TBonus, MCompany, ...a }) => ({
-      ...a,
-      userId: user.userID,
-    }));
-    await axios
-      .post(getBonusTax, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-      .then((res) => {
-        if (res.data) {
-          dispatch(setCreateBonusTax(res.data));
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    if (deleteData.length !== 0) {
-      await axios
-        .post(postDeleteBonusTax, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-        .then((res) => {
-          if (res.data) {
-            dispatch(setCreateBonusTax(res.data));
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-    setIsLoading(false);
-    setEdit(false);
-  };
+  const postData = editValue.map(({ TBonus, MCompany, ...a }) => ({
+    ...a,
+    userId: user.userID,
+  }));
+  const deleteData = deleteSomething.map(({ TBonus, MCompany, ...a }) => ({
+    ...a,
+    userId: user.userID,
+  }));
+
+  /**
+   * 保存
+   */
+  const saveValue = () =>
+    utilMethods.handleSaveValue(
+      dispatch,
+      postData,
+      deleteData,
+      getBonusTax,
+      postDeleteBonusTax,
+      setBonusTaxContent,
+      setIsLoading,
+      setEdit,
+      setDeleteSomething,
+    );
 
   return (
     <>

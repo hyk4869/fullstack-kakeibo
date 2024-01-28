@@ -1,4 +1,9 @@
+import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import { CommonUtils, ItemWithId } from './commonFunctionTypes';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
+const jwtToken = Cookies.get('authToken');
 
 /** ジェネリクスで書いた共通の処理 */
 const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
@@ -164,6 +169,57 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
     setSelected([]);
   };
 
+  /**
+   * 保存関数
+   * @param dispatch
+   * @param postData
+   * @param deleteData
+   * @param api
+   * @param deleteApi
+   * @param setReduxValue
+   * @param setIsLoading
+   * @param setEdit
+   * @param setDeleteSomething
+   */
+  const handleSaveValue = async (
+    dispatch: Dispatch<AnyAction>,
+    postData: T[],
+    deleteData: T[],
+    api: string,
+    deleteApi: string,
+    setReduxValue: (payload: T[]) => PayloadAction<T[], string>,
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
+    setDeleteSomething: (value: React.SetStateAction<T[]>) => void,
+  ) => {
+    setIsLoading(true);
+    await axios
+      .post(api, postData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+      .then((res) => {
+        if (res.data) {
+          dispatch(setReduxValue(res.data));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    if (deleteData.length !== 0) {
+      await axios
+        .post(deleteApi, deleteData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+        .then((res) => {
+          if (res.data) {
+            dispatch(setReduxValue(res.data));
+            setDeleteSomething([]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    setIsLoading(false);
+    setEdit(false);
+  };
+
   return {
     handleSelectAllClick,
     handleSelect,
@@ -174,6 +230,7 @@ const useCommonFunctions = <T extends ItemWithId>(): CommonUtils<T> => {
     handledeleteValue,
     handleDeleteArrayValue,
     handleIndividualEdit,
+    handleSaveValue,
   };
 };
 
