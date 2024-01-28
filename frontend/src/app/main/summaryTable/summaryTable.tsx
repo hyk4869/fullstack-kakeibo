@@ -39,7 +39,7 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import Cookies from 'js-cookie';
 
-export type EnhancedTableToolbarProps = {
+export type EnhancedTableToolbarProps<T> = {
   numSelected: number;
   edit: boolean;
   dataLength: number;
@@ -51,10 +51,11 @@ export type EnhancedTableToolbarProps = {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   windowSize: boolean;
   setEditLogValue?: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
+  reduxValue?: T[];
 };
 
 /** 上のeditボタン */
-const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
+const EnhancedTableToolbar = <T,>(props: EnhancedTableToolbarProps<T>): React.ReactElement => {
   const {
     numSelected,
     edit,

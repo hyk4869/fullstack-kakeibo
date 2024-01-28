@@ -36,9 +36,10 @@ import { setSalaryContent } from '@/app/_store/slice';
 import { getSalary, postDeleteSalary } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
 import Cookies from 'js-cookie';
+import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 
 /** 上のeditボタン */
-const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
+const EnhancedTableToolbar = <T,>(props: EnhancedTableToolbarProps<T>): React.ReactElement => {
   const {
     numSelected,
     edit,
@@ -50,6 +51,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
     isLoading,
     setIsLoading,
     windowSize,
+    reduxValue,
   } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
@@ -85,7 +87,13 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         edit={edit}
       />
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
-      {/* <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} /> */}
+      <FetchDataDialog
+        openFetchDialog={openFetchDialog}
+        onCloseDialog={() => setOpenFetchDialog(false)}
+        setReduxValue={(payload: unknown[]) => setSalaryContent(payload as TSalary[])}
+        reduxValue={reduxValue!}
+        api={getSalary}
+      />
     </Toolbar>
   );
 };
@@ -137,37 +145,6 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
       setMaxHeightState(height - subtractionHeigh);
     }
   }, [width, height]);
-
-  useEffect(() => {
-    try {
-      if (salaryData.length === 0) {
-        setIsLoading(true);
-        axios
-          .get(getSalary, {
-            headers: {
-              Authorization: `Bearer ${jwtToken}`,
-            },
-            params: {
-              userID: user.userID,
-            },
-          })
-          .then((res) => {
-            if (res.data) {
-              dispatch(setSalaryContent(res.data));
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    //TODO: 無限レンダリングしているため、第二引数は取っているが、検討が必要
-  }, []);
 
   useEffect(() => {
     if (salaryData.length !== editValue.length) {
@@ -302,6 +279,7 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             windowSize={windowSize}
+            reduxValue={salaryData}
           />
           <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
             <Table stickyHeader aria-label="sticky table">

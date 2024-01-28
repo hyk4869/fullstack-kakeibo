@@ -35,9 +35,10 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import CreateNewRecordsDialog from '@/app/_dialog/bonusTax/createNewRecordsDialog';
 import Cookies from 'js-cookie';
+import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 
 /** 上のeditボタン */
-const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
+const EnhancedTableToolbar = <T,>(props: EnhancedTableToolbarProps<T>): React.ReactElement => {
   const {
     numSelected,
     edit,
@@ -49,6 +50,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
     isLoading,
     setIsLoading,
     windowSize,
+    reduxValue,
   } = props;
 
   const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
@@ -84,6 +86,13 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         edit={edit}
       />
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
+      <FetchDataDialog
+        openFetchDialog={openFetchDialog}
+        onCloseDialog={() => setOpenFetchDialog(false)}
+        setReduxValue={(payload: unknown[]) => setBonusTaxContent(payload as TBonusTax[])}
+        reduxValue={reduxValue!}
+        api={getBonusTax}
+      />
     </Toolbar>
   );
 };
@@ -136,37 +145,6 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
       setMaxHeightState(height - subtractionHeigh);
     }
   }, [width, height]);
-
-  useEffect(() => {
-    try {
-      if (bonusTaxData.length === 0) {
-        setIsLoading(true);
-        axios
-          .get(getBonusTax, {
-            headers: {
-              Authorization: `Bearer ${jwtToken}`,
-            },
-            params: {
-              userID: user.userID,
-            },
-          })
-          .then((res) => {
-            if (res.data) {
-              dispatch(setBonusTaxContent(res.data));
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    //TODO: 無限レンダリングしているため、第二引数は取っているが、検討が必要
-  }, []);
 
   useEffect(() => {
     if (bonusTaxData.length !== editValue.length) {
@@ -322,6 +300,7 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             windowSize={windowSize}
+            reduxValue={bonusTaxData}
           />
           <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
             <Table stickyHeader aria-label="sticky table">
