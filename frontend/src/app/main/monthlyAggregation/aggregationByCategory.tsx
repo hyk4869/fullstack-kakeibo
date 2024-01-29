@@ -2,7 +2,7 @@
 import CustomTextfield from '@/app/_customComponents/customTextfield';
 import CustomNumberFormat from '@/app/_customComponents/customNumeric';
 import { RootState } from '@/app/_store/store';
-import { Box, TableBody, TableCell, TableContainer, TableRow, Table } from '@mui/material';
+import { Box, TableBody, TableCell, TableContainer, TableRow, Table, Button } from '@mui/material';
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { commonPadding5, messageRedirect } from '@/app/_customComponents/customProperties';
@@ -16,6 +16,8 @@ import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import { getLatestDate, getOldDate, sumAmount, sumEachCategoryByMonthly } from '@/app/_util/utils';
 import CommonFooterAggregation from './commonFooter';
 import { aggregationHeaderList } from '@/app/_util/commonLayouts/headerList';
+import { useGeneratePDF } from '@/app/_util/generatePDF/useGeneratePDF';
+import { aggregationByCategoryPDF } from '@/app/_util/generatePDF/aggregate/aggregationByCategoryPDF';
 
 type AggregationByCategoryProps = {
   //
@@ -47,6 +49,8 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [redirectTo, setRedirectTo] = useState<boolean>(false);
+
+  const { createOpenPDF } = useGeneratePDF();
 
   useLayoutEffect(() => {
     if (monthlyData.length === 0) {
@@ -81,6 +85,10 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
     },
     [displayGraph],
   );
+
+  const generatePDF = async () => {
+    return await createOpenPDF(aggregationByCategoryPDF()).finally();
+  };
 
   return (
     <>
@@ -168,7 +176,12 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
             </Box>
           </Box>
         </TableContainer>
-        <CommonFooterAggregation sortedDate={sortedDate} />
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+          <Button variant="outlined" onClick={generatePDF}>
+            PDFデータのダウンロード
+          </Button>
+          <CommonFooterAggregation sortedDate={sortedDate} />
+        </Box>
       </Box>
 
       <RedirectDialog
