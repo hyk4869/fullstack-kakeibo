@@ -87,7 +87,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   );
 
   const generatePDF = async () => {
-    return await createOpenPDF(aggregationByCategoryPDF()).finally();
+    return await createOpenPDF(aggregationByCategoryPDF(amount, sortedDate)).finally();
   };
 
   return (
