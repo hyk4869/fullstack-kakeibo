@@ -481,3 +481,19 @@ export const getOldSalaryDate = (salaryData: TSalary[]): Date => {
   const result = new Date(Math.min(...salaryData.map((date) => date.payday?.getTime() || 0)));
   return result;
 };
+
+/**
+ * 3桁毎に区切る関数
+ * @param num
+ * @returns
+ */
+export const formatedNumeric = (num: number): string => {
+  if (!num || num == null) return '';
+
+  const sign = num < 0 ? '-' : '';
+  const absoluteValue = Math.abs(num)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return sign + absoluteValue;
+};
