@@ -17,15 +17,10 @@ import CommonFooterAggregation from './commonFooter';
 import { aggregationHeaderList } from '@/app/_util/commonLayouts/headerList';
 import ChangeAggregationMonth from './changeDate';
 import { TMonthlySpending } from '@/app/_store/interfacesInfo';
-import { toggleButtonList } from './aggregationByCategory';
+import { SortedDateType, toggleButtonList } from './aggregationByCategory';
 
 type AggregationByDetailMonthProps = {
   //
-};
-
-export type SortedDateType = {
-  startDate: Date | null;
-  endDate: Date | null;
 };
 
 export type SelectDate = {
