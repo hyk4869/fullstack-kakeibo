@@ -3,7 +3,11 @@ import { AmoutType } from '../../commonGraph/barGraph';
 import { formatedNumeric, sumAmount } from '../../utils';
 import { SortedDateType } from '@/app/main/monthlyAggregation/aggregationByCategory';
 
-export const aggregationByCategoryPDF = (value: AmoutType[], aggregateDate?: SortedDateType): TDocumentDefinitions => {
+export const aggregationByCategoryPDF = (
+  value: AmoutType[],
+  aggregateDate?: SortedDateType,
+  imageURL?: string,
+): TDocumentDefinitions => {
   const date = new Date();
   const today = `${date.getFullYear()}年 ${date.getMonth() + 1}月 ${date.getDate()}日`;
 
@@ -19,7 +23,7 @@ export const aggregationByCategoryPDF = (value: AmoutType[], aggregateDate?: Sor
     ];
     return result;
   };
-
+  console.log(imageURL);
   const sortedDate = value.sort((a, b) => {
     if (a.categoryId !== null && b.categoryId !== null) {
       return a.categoryId - b.categoryId;
@@ -82,7 +86,14 @@ export const aggregationByCategoryPDF = (value: AmoutType[], aggregateDate?: Sor
           { text: `${endDate}`, style: 'period', alignment: 'left', width: 'auto' },
         ],
       },
+      {
+        image: imageURL || '',
+        width: 300,
+        alignment: 'center',
+        margin: [0, 30, 0, 0],
+      },
     ],
+
     styles: {
       title: {
         fontSize: 20,

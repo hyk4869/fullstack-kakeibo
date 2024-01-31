@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables, ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { color200 } from '../../_customComponents/customProperties';
@@ -12,17 +12,20 @@ Chart.register(...registerables);
 type DoughnutGraphProps<T> = {
   value: T[];
   title: string;
+  setImageURL?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 /** ジェネリクスで書いた共通のグラフ */
 const DoughnutGraph = <T extends AmoutType>(props: DoughnutGraphProps<T>): React.ReactElement => {
-  const { value, title } = props;
+  const { value, title, setImageURL } = props;
 
   const sortedChartData = value.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1));
   const chartData = sortedChartData.map((s) => s.totalAmount);
   const chartLabel = sortedChartData.map((s) => s.categoryName);
   const { width } = useWindowSize();
   const [windowSize, setWindowSize] = useState<boolean>(false);
+
+  const chartRef = useRef<Chart<'doughnut', (number | null)[], string | null> | null>(null);
 
   const graphdata = {
     datasets: [
@@ -66,9 +69,24 @@ const DoughnutGraph = <T extends AmoutType>(props: DoughnutGraphProps<T>): React
     }
   }, [width]);
 
+  useEffect(() => {
+    if (chartRef.current) {
+      const chartInstance = chartRef.current;
+      chartInstance.options.animation = {
+        ...chartInstance.options.animation,
+        onComplete: () => {
+          const canvas = chartInstance.canvas;
+          const imageUrl = canvas.toDataURL('image/png');
+          setImageURL!(imageUrl);
+          console.log(imageUrl);
+        },
+      };
+    }
+  }, [chartRef]);
+
   return (
-    <Box sx={{ width: windowSize ? 300 : 470, height: windowSize ? 300 : 470 }}>
-      <Doughnut data={graphdata} options={doughnutOptions} />
+    <Box sx={{ width: windowSize ? 300 : 470, height: windowSize ? 300 : 470 }} id="doughnut">
+      <Doughnut data={graphdata} options={doughnutOptions} ref={chartRef} />
     </Box>
   );
 };

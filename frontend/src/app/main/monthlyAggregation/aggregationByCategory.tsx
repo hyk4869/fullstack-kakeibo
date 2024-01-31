@@ -50,6 +50,8 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [redirectTo, setRedirectTo] = useState<boolean>(false);
 
+  const [imageURL, setImageURL] = useState<string>('');
+
   const { createOpenPDF } = useGeneratePDF();
 
   useLayoutEffect(() => {
@@ -83,11 +85,11 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           break;
       }
     },
-    [displayGraph],
+    [displayGraph, imageURL],
   );
 
   const generatePDF = async () => {
-    return await createOpenPDF(aggregationByCategoryPDF(amount, sortedDate)).finally();
+    return await createOpenPDF(aggregationByCategoryPDF(amount, sortedDate, imageURL)).finally();
   };
 
   return (
@@ -160,7 +162,7 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           </Table>
           <Box sx={{ width: windowSize ? '100%' : '50%', display: 'grid', justifyContent: 'center' }}>
             {displayGraph === '1' ? (
-              <DoughnutGraph<AmoutType> value={amount} title={'カテゴリー別の金額'} />
+              <DoughnutGraph<AmoutType> value={amount} title={'カテゴリー別の金額'} setImageURL={setImageURL} />
             ) : (
               <BarGraph AmoutType={amount} title={'カテゴリー別の金額'} label={'categoryName'} />
             )}
