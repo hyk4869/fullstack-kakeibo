@@ -11,8 +11,21 @@ export const aggregationByCategoryPDF = (
   const date = new Date();
   const today = `${date.getFullYear()}年 ${date.getMonth() + 1}月 ${date.getDate()}日`;
 
-  const startDate = `${aggregateDate?.startDate?.getFullYear()}年 ${aggregateDate!.startDate!.getMonth() + 1}月`;
-  const endDate = `${aggregateDate?.endDate?.getFullYear()}年 ${aggregateDate!.endDate!.getMonth() + 1}月`;
+  const startDate = () => {
+    if (aggregateDate?.startDate?.getFullYear() && aggregateDate?.startDate?.getMonth()) {
+      return `${aggregateDate.startDate.getFullYear()}年 ${aggregateDate.startDate.getMonth() + 1}月`;
+    } else {
+      return '';
+    }
+  };
+
+  const endDate = () => {
+    if (aggregateDate?.endDate?.getFullYear() && aggregateDate?.endDate?.getMonth()) {
+      return `${aggregateDate.endDate.getFullYear()}年 ${aggregateDate.endDate.getMonth() + 1}月`;
+    } else {
+      return '';
+    }
+  };
 
   const aggregateValue = (obj: AmoutType) => {
     const totalAmount = formatedNumeric(Number(obj.totalAmount));
@@ -23,7 +36,7 @@ export const aggregationByCategoryPDF = (
     ];
     return result;
   };
-  console.log(imageURL);
+
   const sortedDate = value.sort((a, b) => {
     if (a.categoryId !== null && b.categoryId !== null) {
       return a.categoryId - b.categoryId;
@@ -81,14 +94,14 @@ export const aggregationByCategoryPDF = (
       {
         columns: [
           { text: 'データの抽出期間：', style: 'period', alignment: 'right', width: '*' },
-          { text: `${startDate}`, style: 'period', alignment: 'left', width: 'auto' },
+          { text: `${startDate()}`, style: 'period', alignment: 'left', width: 'auto' },
           { text: '～', style: 'period', alignment: 'left', width: 'auto' },
-          { text: `${endDate}`, style: 'period', alignment: 'left', width: 'auto' },
+          { text: `${endDate()}`, style: 'period', alignment: 'left', width: 'auto' },
         ],
       },
       {
         image: imageURL || '',
-        width: 300,
+        width: 320,
         alignment: 'center',
         margin: [0, 30, 0, 0],
       },

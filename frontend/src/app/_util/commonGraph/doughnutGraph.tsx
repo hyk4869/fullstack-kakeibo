@@ -12,12 +12,12 @@ Chart.register(...registerables);
 type DoughnutGraphProps<T> = {
   value: T[];
   title: string;
-  setImageURL?: React.Dispatch<React.SetStateAction<string>>;
+  setDoughnutImageURL?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 /** ジェネリクスで書いた共通のグラフ */
 const DoughnutGraph = <T extends AmoutType>(props: DoughnutGraphProps<T>): React.ReactElement => {
-  const { value, title, setImageURL } = props;
+  const { value, title, setDoughnutImageURL } = props;
 
   const sortedChartData = value.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1));
   const chartData = sortedChartData.map((s) => s.totalAmount);
@@ -70,15 +70,14 @@ const DoughnutGraph = <T extends AmoutType>(props: DoughnutGraphProps<T>): React
   }, [width]);
 
   useEffect(() => {
-    if (chartRef.current) {
+    if (chartRef.current && setDoughnutImageURL) {
       const chartInstance = chartRef.current;
       chartInstance.options.animation = {
         ...chartInstance.options.animation,
         onComplete: () => {
           const canvas = chartInstance.canvas;
           const imageUrl = canvas.toDataURL('image/png');
-          setImageURL!(imageUrl);
-          console.log(imageUrl);
+          setDoughnutImageURL(imageUrl);
         },
       };
     }

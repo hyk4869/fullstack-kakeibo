@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables, ChartOptions } from 'chart.js';
 import { color200 } from '../../_customComponents/customProperties';
 import { Bar } from 'react-chartjs-2';
@@ -24,13 +24,16 @@ type BarGraphProps<T, U> = {
   MonthlyGrouping?: U;
   title: string;
   label?: 'categoryName' | 'paymentDay';
+  setBarImageURL?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 /** ジェネリクスで書いた共通のグラフ（修正必要） */
 const BarGraph = <T extends AmoutType, U extends MonthlyGrouping>(props: BarGraphProps<T, U>) => {
-  const { AmoutType, MonthlyGrouping, title, label } = props;
+  const { AmoutType, MonthlyGrouping, title, label, setBarImageURL } = props;
   const { width, height } = useWindowSize();
   const [windowSize, setWindowSize] = useState<boolean>(false);
+
+  const chartRef = useRef<Chart<'bar', (number | null)[], string | null> | null>(null);
 
   useEffect(() => {
     if (width < 640) {
@@ -39,6 +42,20 @@ const BarGraph = <T extends AmoutType, U extends MonthlyGrouping>(props: BarGrap
       setWindowSize(false);
     }
   }, [width]);
+
+  useEffect(() => {
+    if (chartRef.current && setBarImageURL) {
+      const chartInstance = chartRef.current;
+      chartInstance.options.animation = {
+        ...chartInstance.options.animation,
+        onComplete: () => {
+          const canvas = chartInstance.canvas;
+          const imageUrl = canvas.toDataURL('image/png');
+          setBarImageURL(imageUrl);
+        },
+      };
+    }
+  }, [chartRef]);
 
   const graphData = {
     labels:
@@ -51,7 +68,9 @@ const BarGraph = <T extends AmoutType, U extends MonthlyGrouping>(props: BarGrap
         label: title,
         data:
           label === 'categoryName'
-            ? AmoutType?.map((a) => a.totalAmount ?? null)
+            ? AmoutType?.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1)).map(
+                (a) => a.totalAmount ?? null,
+              )
             : Object.entries(MonthlyGrouping ?? {}).map(([a, b]) => b?.totalUsageFee),
 
         backgroundColor: color200.map((a) => a),
@@ -84,7 +103,7 @@ const BarGraph = <T extends AmoutType, U extends MonthlyGrouping>(props: BarGrap
   return (
     <>
       <Box sx={{ width: windowSize ? 300 : 470, height: windowSize ? 300 : 470 }}>
-        <Bar data={graphData} options={options} />
+        <Bar data={graphData} options={options} ref={chartRef} />
       </Box>
     </>
   );

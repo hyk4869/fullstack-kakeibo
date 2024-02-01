@@ -31,9 +31,14 @@ export const useGeneratePDF = () => {
   };
 
   /** 別ページでPDFを開く */
-  const createOpenPDF = (definition: TDocumentDefinitions, tableLayouts?: { [name: string]: CustomTableLayout }) => {
+  const createOpenPDF = (
+    definition: TDocumentDefinitions | undefined,
+    tableLayouts?: { [name: string]: CustomTableLayout },
+  ) => {
     return new Promise(() => {
-      pdfMake.createPdf(definition, tableLayouts, fonts, pdfFonts.pdfMake?.vfs).open();
+      if (definition) {
+        return pdfMake.createPdf(definition, tableLayouts, fonts, pdfFonts.pdfMake?.vfs).open();
+      }
     });
   };
 

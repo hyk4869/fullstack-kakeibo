@@ -18,6 +18,7 @@ import CommonFooterAggregation from './commonFooter';
 import { aggregationHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { useGeneratePDF } from '@/app/_util/generatePDF/useGeneratePDF';
 import { aggregationByCategoryPDF } from '@/app/_util/generatePDF/aggregate/aggregationByCategoryPDF';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
 
 type AggregationByCategoryProps = {
   //
@@ -45,12 +46,13 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const { width, height } = useWindowSize();
   const [amount, setAmount] = useState<Array<AmoutType>>([]);
-  const [sortedDate, setSortedDate] = useState<SortedDateType>();
+  const [sortedDate, setSortedDate] = useState<SortedDateType>({ startDate: null, endDate: null });
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [redirectTo, setRedirectTo] = useState<boolean>(false);
 
-  const [imageURL, setImageURL] = useState<string>('');
+  const [doughnutImageURL, setDoughnutImageURL] = useState<string>('');
+  const [barImageURL, setBarImageURL] = useState<string>('');
 
   const { createOpenPDF } = useGeneratePDF();
 
@@ -85,12 +87,16 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           break;
       }
     },
-    [displayGraph, imageURL],
+    [displayGraph, doughnutImageURL, barImageURL, amount],
   );
 
-  const generatePDF = async () => {
-    return await createOpenPDF(aggregationByCategoryPDF(amount, sortedDate, imageURL)).finally();
-  };
+  const generatePDF = useCallback(async () => {
+    if (displayGraph === '1') {
+      return await createOpenPDF(aggregationByCategoryPDF(amount, sortedDate, doughnutImageURL)).finally();
+    } else if (displayGraph === '2') {
+      return await createOpenPDF(aggregationByCategoryPDF(amount, sortedDate, barImageURL)).finally();
+    }
+  }, [doughnutImageURL, barImageURL, sortedDate]);
 
   return (
     <>
@@ -107,32 +113,34 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           <Table sx={{ width: windowSize ? '100%' : '50%' }}>
             <CommonTableHeader categoryHeaderList={aggregationHeaderList} />
             <TableBody>
-              {amount.map((a) => {
-                return (
-                  <TableRow key={a.categoryId} sx={{ padding: commonPadding5 }}>
-                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                      <CustomTextfield
-                        value={a.categoryName}
-                        edit={false}
-                        onChangeValue={changeValue}
-                        paramKey={'categoryName'}
-                        id={Number(a.categoryId)}
-                      />
-                    </TableCell>
-                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                      <CustomNumberFormat
-                        value={a.totalAmount}
-                        suffix=" 円"
-                        edit={false}
-                        align="center"
-                        onChangeValue={changeValue}
-                        paramKey={'totalAmount'}
-                        id={Number(a.categoryId)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {amount
+                .sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1))
+                .map((a) => {
+                  return (
+                    <TableRow key={a.categoryId} sx={{ padding: commonPadding5 }}>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomTextfield
+                          value={a.categoryName}
+                          edit={false}
+                          onChangeValue={changeValue}
+                          paramKey={'categoryName'}
+                          id={Number(a.categoryId)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={a.totalAmount}
+                          suffix=" 円"
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'totalAmount'}
+                          id={Number(a.categoryId)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
 
             <TableBody>
@@ -162,9 +170,18 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
           </Table>
           <Box sx={{ width: windowSize ? '100%' : '50%', display: 'grid', justifyContent: 'center' }}>
             {displayGraph === '1' ? (
-              <DoughnutGraph<AmoutType> value={amount} title={'カテゴリー別の金額'} setImageURL={setImageURL} />
+              <DoughnutGraph<AmoutType>
+                value={amount}
+                title={'カテゴリー別の金額'}
+                setDoughnutImageURL={setDoughnutImageURL}
+              />
             ) : (
-              <BarGraph AmoutType={amount} title={'カテゴリー別の金額'} label={'categoryName'} />
+              <BarGraph
+                AmoutType={amount}
+                title={'カテゴリー別の金額'}
+                label={'categoryName'}
+                setBarImageURL={setBarImageURL}
+              />
             )}
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <CustomToggleButton
