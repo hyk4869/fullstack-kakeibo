@@ -215,68 +215,70 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
           <Table sx={{ width: windowSize ? '100%' : '50%' }}>
             <CommonTableHeader categoryHeaderList={aggregationAnnualSalaryHeaderList} />
             <TableBody>
-              {arrayAmount.map((a) => {
-                return (
-                  <TableRow key={a.categoryId} sx={{ padding: commonPadding5 }}>
-                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                      <CustomNumberFormat
-                        value={a.categoryId}
-                        suffix=" 年"
-                        edit={false}
-                        align="center"
-                        onChangeValue={changeValue}
-                        paramKey={'categoryId'}
-                        id={Number(a.categoryId)}
-                        thousandSeparator={false}
-                      />
-                    </TableCell>
-                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                      <CustomNumberFormat
-                        value={a.totalAmount}
-                        suffix=" 円"
-                        edit={false}
-                        align="center"
-                        onChangeValue={changeValue}
-                        paramKey={'totalAmount'}
-                        id={Number(a.categoryId)}
-                      />
-                    </TableCell>
-                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                      <CustomNumberFormat
-                        value={a.annualTax}
-                        suffix=" 円"
-                        edit={false}
-                        align="center"
-                        onChangeValue={changeValue}
-                        paramKey={'annualTax'}
-                        id={Number(a.categoryId)}
-                      />
-                    </TableCell>
-                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                      <CustomNumberFormat
-                        value={a.taxPercentage}
-                        suffix=" %"
-                        edit={false}
-                        align="center"
-                        onChangeValue={changeValue}
-                        paramKey={'taxPercentage'}
-                        id={Number(a.categoryId)}
-                      />
-                    </TableCell>
-                    <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                      <CustomNumberFormat
-                        value={a.disposableIncome}
-                        suffix=" 円"
-                        edit={false}
-                        align="center"
-                        onChangeValue={changeValue}
-                        paramKey={'disposableIncome'}
-                        id={Number(a.categoryId)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {arrayAmount
+                .sort((a, b) => (Number(a.categoryId) < Number(b.categoryId) ? -1 : 1))
+                .map((a) => {
+                  return (
+                    <TableRow key={a.categoryId} sx={{ padding: commonPadding5 }}>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={a.categoryId}
+                          suffix=" 年"
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'categoryId'}
+                          id={Number(a.categoryId)}
+                          thousandSeparator={false}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={a.totalAmount}
+                          suffix=" 円"
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'totalAmount'}
+                          id={Number(a.categoryId)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={a.annualTax}
+                          suffix=" 円"
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'annualTax'}
+                          id={Number(a.categoryId)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={a.taxPercentage}
+                          suffix=" %"
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'taxPercentage'}
+                          id={Number(a.categoryId)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                        <CustomNumberFormat
+                          value={a.disposableIncome}
+                          suffix=" 円"
+                          edit={false}
+                          align="center"
+                          onChangeValue={changeValue}
+                          paramKey={'disposableIncome'}
+                          id={Number(a.categoryId)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
 
