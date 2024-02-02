@@ -18,7 +18,6 @@ import CommonFooterAggregation from './commonFooter';
 import { aggregationHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { useGeneratePDF } from '@/app/_util/generatePDF/useGeneratePDF';
 import { aggregationByCategoryPDF } from '@/app/_util/generatePDF/aggregate/aggregationByCategoryPDF';
-import { TDocumentDefinitions } from 'pdfmake/interfaces';
 
 type AggregationByCategoryProps = {
   //

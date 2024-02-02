@@ -3,7 +3,7 @@
 import { RootState } from '@/app/_store/store';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import useWindowSize from '@/app/_util/useWindowSize';
-import { Box, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
@@ -16,6 +16,8 @@ import CommonFooterAggregation from './commonFooter';
 import { SortedDateType } from './aggregationByCategory';
 import BarGraph, { MonthlyGrouping } from '@/app/_util/commonGraph/barGraph';
 import { aggregationMonthlyHeaderList } from '@/app/_util/commonLayouts/headerList';
+import { useGeneratePDF } from '@/app/_util/generatePDF/useGeneratePDF';
+import { aggregationByMonthPDF } from '@/app/_util/generatePDF/aggregate/aggregationByMonthPDF';
 
 type AggregationByMonthProps = {
   //
@@ -29,6 +31,9 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
   const [groupingMonthly, setGroupingMonthly] = useState<MonthlyGrouping>({});
   const [sortedDate, setSortedDate] = useState<SortedDateType>();
   const [displayGraph, setDisplayGraph] = useState<string>('1');
+  const [barImageURL, setBarImageURL] = useState<string>('');
+
+  const { createOpenPDF } = useGeneratePDF();
 
   useEffect(() => {
     if (width < 1100) {
@@ -58,6 +63,10 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
     [displayGraph],
   );
 
+  const generatePDF = useCallback(async () => {
+    return await createOpenPDF(aggregationByMonthPDF(groupingMonthly, sortedDate, barImageURL)).finally();
+  }, [barImageURL, sortedDate]);
+
   return (
     <>
       <Box>
@@ -73,35 +82,37 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
           <Table sx={{ width: windowSize ? '100%' : '50%' }}>
             <CommonTableHeader categoryHeaderList={aggregationMonthlyHeaderList} />
             <TableBody>
-              {Object.entries(groupingMonthly).map(([monthKey, data]) => {
-                return (
-                  <React.Fragment key={monthKey}>
-                    <TableRow sx={{ padding: commonPadding5 }}>
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <CustomDate
-                          value={dayjs(monthKey)}
-                          edit={false}
-                          onChangeValue={changeValue}
-                          paramKey={'paymentDay'}
-                          id={monthKey.length}
-                          format="YYYY年MM月"
-                        />
-                      </TableCell>
-                      <TableCell align="center" sx={{ padding: commonPadding5 }}>
-                        <CustomNumberFormat
-                          value={data.totalUsageFee}
-                          suffix=" 円"
-                          edit={false}
-                          align="center"
-                          onChangeValue={changeValue}
-                          paramKey={'totalAmount'}
-                          id={monthKey.length}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  </React.Fragment>
-                );
-              })}
+              {Object.entries(groupingMonthly)
+                .sort(([a], [b]) => dayjs(a).diff(dayjs(b)))
+                .map(([monthKey, data]) => {
+                  return (
+                    <React.Fragment key={monthKey}>
+                      <TableRow sx={{ padding: commonPadding5 }}>
+                        <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                          <CustomDate
+                            value={dayjs(monthKey)}
+                            edit={false}
+                            onChangeValue={changeValue}
+                            paramKey={'paymentDay'}
+                            id={monthKey.length}
+                            format="YYYY年MM月"
+                          />
+                        </TableCell>
+                        <TableCell align="center" sx={{ padding: commonPadding5 }}>
+                          <CustomNumberFormat
+                            value={data.totalUsageFee}
+                            suffix=" 円"
+                            edit={false}
+                            align="center"
+                            onChangeValue={changeValue}
+                            paramKey={'totalAmount'}
+                            id={monthKey.length}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    </React.Fragment>
+                  );
+                })}
 
               <TableRow sx={{ padding: commonPadding5 }}>
                 <TableCell align="center" sx={{ padding: commonPadding5 }}>
@@ -152,13 +163,23 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
 
           <Box sx={{ width: windowSize ? '100%' : '50%', display: 'grid', justifyContent: 'center' }}>
             {displayGraph === '1' ? (
-              <BarGraph MonthlyGrouping={groupingMonthly} title={'一ヶ月の支出'} label={'paymentDay'} />
+              <BarGraph
+                MonthlyGrouping={groupingMonthly}
+                title={'一ヶ月の支出'}
+                label={'paymentDay'}
+                setBarImageURL={setBarImageURL}
+              />
             ) : (
               <></>
             )}
           </Box>
         </TableContainer>
-        <CommonFooterAggregation sortedDate={sortedDate} />
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+          <Button variant="outlined" onClick={generatePDF}>
+            PDFデータのダウンロード
+          </Button>
+          <CommonFooterAggregation sortedDate={sortedDate} />
+        </Box>
       </Box>
     </>
   );
