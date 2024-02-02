@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {
   MCategory,
   MCompany,
@@ -67,8 +68,10 @@ export const sumEachMonthlyArray = (monthlyData: TMonthlySpending[]): MonthlyGro
       groupedByMonth[monthKey].totalUsageFee += entry.usageFee || 0;
     }
   }
-
-  return groupedByMonth;
+  const result: MonthlyGrouping = Object.fromEntries(
+    Object.entries(groupedByMonth).sort(([a], [b]) => dayjs(a).diff(dayjs(b))),
+  );
+  return result;
 };
 
 /** カテゴリーが使われている数を算出 */
