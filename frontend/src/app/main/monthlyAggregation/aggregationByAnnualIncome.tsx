@@ -3,7 +3,7 @@
 import { RootState } from '@/app/_store/store';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import useWindowSize from '@/app/_util/useWindowSize';
-import { Box, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
@@ -17,12 +17,14 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { getAllIncomeLink } from '@/app/_api/url';
 import { setBonusContent, setBonusTaxContent, setSalaryContent, setSalaryTaxContent } from '@/app/_store/slice';
+import { useGeneratePDF } from '@/app/_util/generatePDF/useGeneratePDF';
+import { aggregationByAnnualIncomePDF } from '@/app/_util/generatePDF/aggregate/aggregationByAnnualIncomePDF';
 
 type AggregationByAnnualIncomeProps = {
   //
 };
 
-interface AmountTypeWithTax extends AmoutType {
+export interface AmountTypeWithTax extends AmoutType {
   annualTax: number | null;
   taxPercentage: number | null;
   disposableIncome: number | null;
@@ -42,9 +44,11 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
   const [sortedDate, setSortedDate] = useState<SortedDateType>();
   const [displayGraph, setDisplayGraph] = useState<string>('1');
   const [arrayAmount, setArrayAmount] = useState<Array<AmountTypeWithTax>>([]);
+  const [barImageURL, setBarImageURL] = useState<string>('');
 
   const jwtToken = Cookies.get('authToken');
   const dispatch = useDispatch();
+  const { createOpenPDF } = useGeneratePDF();
 
   useEffect(() => {
     if (salaryData.length === 0 || salaryTaxData.length === 0 || bonusData.length === 0 || bonusTaxData.length === 0) {
@@ -200,6 +204,10 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
     return result;
   };
 
+  const generatePDF = useCallback(async () => {
+    return await createOpenPDF(aggregationByAnnualIncomePDF(arrayAmount, sortedDate, barImageURL)).finally();
+  }, [barImageURL, sortedDate]);
+
   return (
     <>
       <Box>
@@ -283,10 +291,19 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
           </Table>
 
           <Box sx={{ width: windowSize ? '100%' : '50%', display: 'grid', justifyContent: 'center' }}>
-            {displayGraph === '1' ? <BarGraph AmoutType={amount} title={'年収推移'} label={'categoryName'} /> : <></>}
+            {displayGraph === '1' ? (
+              <BarGraph AmoutType={amount} title={'年収推移'} label={'categoryName'} setBarImageURL={setBarImageURL} />
+            ) : (
+              <></>
+            )}
           </Box>
         </TableContainer>
-        <CommonFooterAggregation sortedDate={sortedDate} />
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+          <Button variant="outlined" onClick={generatePDF}>
+            PDFデータのダウンロード
+          </Button>
+          <CommonFooterAggregation sortedDate={sortedDate} />
+        </Box>
       </Box>
     </>
   );
