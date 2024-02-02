@@ -66,11 +66,15 @@ const BarGraph = <T extends AmoutType, U extends MonthlyGrouping>(props: BarGrap
     datasets: [
       {
         label: title,
+        // data:
+        //   label === 'categoryName'
+        //     ? AmoutType?.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1)).map(
+        //         (a) => a.totalAmount ?? null,
+        //       )
+        //     : Object.entries(MonthlyGrouping ?? {}).map(([a, b]) => b?.totalUsageFee),
         data:
           label === 'categoryName'
-            ? AmoutType?.sort((a, b) => (Number(a.totalAmount) > Number(b.totalAmount) ? -1 : 1)).map(
-                (a) => a.totalAmount ?? null,
-              )
+            ? AmoutType?.map((a) => a.totalAmount ?? null)
             : Object.entries(MonthlyGrouping ?? {}).map(([a, b]) => b?.totalUsageFee),
 
         backgroundColor: color200.map((a) => a),
