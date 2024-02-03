@@ -36,6 +36,8 @@ import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHe
 import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
+import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
+import { Button } from '@mui/material';
 
 export type EnhancedTableToolbarProps<T> = {
   numSelected: number;
@@ -142,6 +144,20 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [editLogValue, setEditLogValue] = useState<Array<TMonthlySpending>>([]);
 
   const utilMethods = useCommonFunctions<TMonthlySpending>();
+
+  const formatedData = [...monthlyData]
+    ?.sort((a, b) => {
+      if (a.sort !== null && b.sort !== null) {
+        return a.sort - b.sort;
+      } else {
+        return 0;
+      }
+    })
+    .map(({ category, id, categoryId, ...data }) => {
+      return { ...data, paymentDay: dayjs(data.paymentDay).format('YYYY-MM-DD') };
+    });
+
+  const csv = new ExportCSVData({ fileName: 'TMonthlySpending', file: formatedData, availableDate: true });
 
   useEffect(() => {
     if (width < 840) {
@@ -354,7 +370,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
               setOrderBy={setOrderBy}
               labelList={monthlySpendingHeaderList}
             />
-
+            <Button onClick={() => csv.createCSVFile()}>text</Button>
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = row.sort !== null ? selectedData(row.sort as number) : undefined;
