@@ -4,7 +4,7 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import { RootState } from '@/app/_store/store';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,7 @@ import axios from 'axios';
 import { getHireDate } from '@/app/_api/url';
 import Cookies from 'js-cookie';
 import { setHireDateContent } from '@/app/_store/slice';
+import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
 
 type HireDateTableProps = {
   //
@@ -41,6 +42,24 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
   const jwtToken = Cookies.get('authToken');
 
   const dispatch = useDispatch();
+
+  const formatedData = [...hireDateData]
+    ?.sort((a, b) => {
+      if (a.sort !== null && b.sort !== null) {
+        return a.sort - b.sort;
+      } else {
+        return 0;
+      }
+    })
+    .map(({ id, companyId, ...data }) => {
+      return {
+        ...data,
+        hireDate: dayjs(data.hireDate).format('YYYY-MM-DD'),
+        retirementDate: dayjs(data.retirementDate).format('YYYY-MM-DD'),
+      };
+    });
+
+  const csv = new ExportCSVData({ fileName: 'MHireDate', file: formatedData, availableDate: true });
 
   useEffect(() => {
     if (width < 840) {
@@ -186,6 +205,11 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 1rem' }}>
+            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={hireDateData.length === 0}>
+              CSVダウンロード
+            </Button>
+          </Box>
         </Paper>
       </Box>
       <CreateNewRecordsDialog

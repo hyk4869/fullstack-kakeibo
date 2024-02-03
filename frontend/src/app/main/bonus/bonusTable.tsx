@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Button,
   Checkbox,
   Paper,
   Table,
@@ -31,10 +32,11 @@ import CustomNumberFormat from '../../_customComponents/customNumeric';
 import CustomDate from '@/app/_customComponents/customDate';
 import dayjs from 'dayjs';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
-import { setBonusContent, setCreateBonus } from '@/app/_store/slice';
+import { setBonusContent } from '@/app/_store/slice';
 import { getBonus, postDeleteBonus } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/bonus/createNewRecordsDialog';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
+import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar = <T,>(props: EnhancedTableToolbarProps<T>): React.ReactElement => {
@@ -123,6 +125,20 @@ const BonusTable: React.FC<BonusTableProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TBonus>();
+
+  const formatedData = [...bonusData]
+    ?.sort((a, b) => {
+      if (a.sort !== null && b.sort !== null) {
+        return a.sort - b.sort;
+      } else {
+        return 0;
+      }
+    })
+    .map(({ id, MCompany, TBonus, companyId, ...data }) => {
+      return { ...data, payday: dayjs(data.payday).format('YYYY-MM-DD') };
+    });
+
+  const csv = new ExportCSVData({ fileName: 'TBonus', file: formatedData, availableDate: true });
 
   useEffect(() => {
     if (width < 840) {
@@ -342,15 +358,20 @@ const BonusTable: React.FC<BonusTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[20, 50, 100]}
-            component="div"
-            count={bonusData.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={changePage}
-            onRowsPerPageChange={changeRowsPerPage}
-          />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
+            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={bonusData.length === 0}>
+              CSVダウンロード
+            </Button>
+            <TablePagination
+              rowsPerPageOptions={[20, 50, 100]}
+              component="div"
+              count={bonusData.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={changePage}
+              onRowsPerPageChange={changeRowsPerPage}
+            />
+          </Box>
         </Paper>
       </Box>
     </>

@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Button,
   Checkbox,
   Paper,
   Table,
@@ -35,6 +36,7 @@ import { setSalaryContent } from '@/app/_store/slice';
 import { getSalary, postDeleteSalary } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
+import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
 
 /** 上のeditボタン */
 const EnhancedTableToolbar = <T,>(props: EnhancedTableToolbarProps<T>): React.ReactElement => {
@@ -123,6 +125,20 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const utilMethods = useCommonFunctions<TSalary>();
+
+  const formatedData = [...salaryData]
+    ?.sort((a, b) => {
+      if (a.sort !== null && b.sort !== null) {
+        return a.sort - b.sort;
+      } else {
+        return 0;
+      }
+    })
+    .map(({ id, MCompany, TTax, companyId, ...data }) => {
+      return { ...data, payday: dayjs(data.payday).format('YYYY-MM-DD') };
+    });
+
+  const csv = new ExportCSVData({ fileName: 'TSalary', file: formatedData, availableDate: true });
 
   useEffect(() => {
     if (width < 840) {
@@ -349,15 +365,20 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[20, 50, 100]}
-            component="div"
-            count={salaryData.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={changePage}
-            onRowsPerPageChange={changeRowsPerPage}
-          />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
+            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={salaryData.length === 0}>
+              CSVダウンロード
+            </Button>
+            <TablePagination
+              rowsPerPageOptions={[20, 50, 100]}
+              component="div"
+              count={salaryData.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={changePage}
+              onRowsPerPageChange={changeRowsPerPage}
+            />
+          </Box>
         </Paper>
       </Box>
     </>

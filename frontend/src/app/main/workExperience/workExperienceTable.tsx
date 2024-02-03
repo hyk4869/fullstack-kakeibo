@@ -20,6 +20,7 @@ import axios from 'axios';
 import { getCompany } from '@/app/_api/url';
 import Cookies from 'js-cookie';
 import { setCompanyContent } from '@/app/_store/slice';
+import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
 
 type WorkExperienceTableProps = {
   //
@@ -42,6 +43,20 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
   const { width, height } = useWindowSize();
   const jwtToken = Cookies.get('authToken');
   const dispatch = useDispatch();
+
+  const formatedData = [...companyData]
+    ?.sort((a, b) => {
+      if (a.sort !== null && b.sort !== null) {
+        return a.sort - b.sort;
+      } else {
+        return 0;
+      }
+    })
+    .map(({ id, ...data }) => {
+      return { ...data };
+    });
+
+  const csv = new ExportCSVData({ fileName: 'MCompany', file: formatedData, availableDate: true });
 
   useEffect(() => {
     if (width < 840) {
@@ -189,6 +204,11 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 1rem' }}>
+            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={companyData.length === 0}>
+              CSVダウンロード
+            </Button>
+          </Box>
         </Paper>
         <Box
           sx={{

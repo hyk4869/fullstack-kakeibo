@@ -20,6 +20,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { getCategoryLink } from '@/app/_api/url';
 import { setCategoryContent } from '@/app/_store/slice';
+import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
 
 type CategoryTableProps = {
   //
@@ -50,6 +51,24 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
   const jwtToken = Cookies.get('authToken');
 
   const dispatch = useDispatch();
+
+  const formatedData = [...categoryData]
+    ?.sort((a, b) => {
+      if (a.sort !== null && b.sort !== null) {
+        return a.sort - b.sort;
+      } else {
+        return 0;
+      }
+    })
+    .map(({ id, ...data }) => {
+      return {
+        ...data,
+      };
+    });
+
+  const csv = new ExportCSVData({ fileName: 'MCategory', file: formatedData, availableDate: true });
+
+  console.log(categoryData);
 
   useEffect(() => {
     if (width < 840) {
@@ -171,6 +190,11 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 1rem' }}>
+            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={categoryData.length === 0}>
+              CSVダウンロード
+            </Button>
+          </Box>
         </Paper>
         <Box
           sx={{

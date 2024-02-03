@@ -370,7 +370,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
               setOrderBy={setOrderBy}
               labelList={monthlySpendingHeaderList}
             />
-            <Button onClick={() => csv.createCSVFile()}>text</Button>
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = row.sort !== null ? selectedData(row.sort as number) : undefined;
@@ -455,15 +454,21 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[20, 50, 100]}
-          component="div"
-          count={monthlyData.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={changePage}
-          onRowsPerPageChange={changeRowsPerPage}
-        />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
+          <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={monthlyData.length === 0}>
+            CSVダウンロード
+          </Button>
+
+          <TablePagination
+            rowsPerPageOptions={[20, 50, 100]}
+            component="div"
+            count={monthlyData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={changePage}
+            onRowsPerPageChange={changeRowsPerPage}
+          />
+        </Box>
       </Paper>
     </Box>
   );
