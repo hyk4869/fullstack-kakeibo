@@ -23,7 +23,10 @@ export class ExportCSVData<T extends { [key: string]: any }> {
       return '';
     }
     const header = Object?.keys(data[0]).join(',');
-    const rows = data.map((item) => Object.values(item).map(String).join(','));
+    const rows = data.map((item) => {
+      const rowValues = Object.values(item).map((value) => (value !== null ? String(value) : ''));
+      return rowValues.join(',');
+    });
     return `${header}\n${rows.join('\n')}`;
   }
 
