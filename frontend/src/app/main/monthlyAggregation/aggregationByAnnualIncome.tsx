@@ -108,7 +108,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
   /**
    * 年収計算
    */
-  const displayData = (): AmoutType[] => {
+  const displayData = useCallback((): AmoutType[] => {
     const categoryTotal: { [categoryId: number]: { total: number; categoryName?: string } } = {};
 
     const newBonusArray = bonusData
@@ -202,7 +202,7 @@ const AggregationByAnnualIncome: React.FC<AggregationByAnnualIncomeProps> = () =
 
     setArrayAmount(value);
     return result;
-  };
+  }, [amount, arrayAmount]);
 
   const generatePDF = useCallback(async () => {
     return await createOpenPDF(aggregationByAnnualIncomePDF(arrayAmount, sortedDate, barImageURL)).finally();
