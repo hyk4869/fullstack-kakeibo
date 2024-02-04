@@ -19,7 +19,7 @@ export class BonusInfoService {
         TBonus: true,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;
@@ -104,7 +104,7 @@ export class BonusInfoService {
             MCompany: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -149,7 +149,7 @@ export class BonusInfoService {
             MCompany: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -250,7 +250,7 @@ export class BonusInfoService {
             TTaxBonus: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -300,7 +300,7 @@ export class BonusInfoService {
             TTaxBonus: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -319,7 +319,7 @@ export class BonusInfoService {
         userId: userID,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;

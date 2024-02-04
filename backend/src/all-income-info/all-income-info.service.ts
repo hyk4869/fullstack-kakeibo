@@ -30,7 +30,7 @@ export class AllIncomeInfoService {
         TBonus: true,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;
@@ -42,7 +42,7 @@ export class AllIncomeInfoService {
         userId: userID,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;
@@ -58,7 +58,7 @@ export class AllIncomeInfoService {
         MCompany: true,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;
@@ -74,7 +74,7 @@ export class AllIncomeInfoService {
         TTax: true,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;

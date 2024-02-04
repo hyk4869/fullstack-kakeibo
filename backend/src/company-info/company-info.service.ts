@@ -77,7 +77,7 @@ export class CompanyInfoService {
             userId: userData,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -166,7 +166,7 @@ export class CompanyInfoService {
             userId: userData,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 

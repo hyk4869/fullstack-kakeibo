@@ -22,7 +22,7 @@ export class SalaryInfoService {
         MCompany: true,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;
@@ -103,7 +103,7 @@ export class SalaryInfoService {
             MCompany: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -148,7 +148,7 @@ export class SalaryInfoService {
             MCompany: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -171,7 +171,7 @@ export class SalaryInfoService {
         TTax: true,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;
@@ -257,7 +257,7 @@ export class SalaryInfoService {
             MCompany: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -307,7 +307,7 @@ export class SalaryInfoService {
             TTax: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 

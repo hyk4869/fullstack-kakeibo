@@ -22,7 +22,7 @@ export class MonthlySpendingService {
         category: true,
       },
       orderBy: {
-        id: 'asc',
+        sort: 'asc',
       },
     });
     return result;
@@ -135,7 +135,7 @@ export class MonthlySpendingService {
               category: true,
             },
             orderBy: {
-              id: 'asc',
+              sort: 'asc',
             },
           });
 
@@ -193,7 +193,7 @@ export class MonthlySpendingService {
             category: true,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
@@ -267,7 +267,7 @@ export class MonthlySpendingService {
             userId: userData,
           },
           orderBy: {
-            id: 'asc',
+            sort: 'asc',
           },
         });
 
