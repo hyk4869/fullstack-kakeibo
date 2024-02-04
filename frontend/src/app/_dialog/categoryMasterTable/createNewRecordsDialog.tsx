@@ -42,12 +42,15 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [maxHeight, setMaxHeight] = useState<string>('');
 
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof MCategory>('sort');
   const [windowSize, setWindowSize] = useState<boolean>(false);
 
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
+  const heightValue = useSelector((state: RootState) => state.headerHeightSlice);
+
   const { width, height } = useWindowSize();
 
   useEffect(() => {
@@ -68,12 +71,14 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   }, [increment]);
 
   useEffect(() => {
-    if (width < 640) {
+    if (width < 670) {
       setWindowSize(true);
+      setMaxHeight(`calc(100vh * (1 - 0.35) - ${heightValue}px)`);
     } else {
       setWindowSize(false);
+      setMaxHeight(`calc(100vh * (1 - 0.15) - ${heightValue}px)`);
     }
-  }, [width]);
+  }, [width, height]);
 
   /** 新しいレコードの追加 */
   const addNewArray = useCallback(() => {
@@ -185,7 +190,14 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             showDialog={showDialog}
             onCloseAddRecords={onCloseAddRecords}
           />
-          <TableContainer sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxHeight: '550px' }}>
+          <TableContainer
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+              maxHeight: maxHeight,
+            }}
+          >
             <Table>
               <CommonTableHeader categoryHeaderList={categoryHeaderList} />
 
