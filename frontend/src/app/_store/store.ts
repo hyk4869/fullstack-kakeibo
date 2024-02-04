@@ -10,6 +10,7 @@ import {
   getSalary,
   getSalaryTax,
   getUserInfo,
+  headerHeightSlice,
 } from './slice';
 
 export const store = configureStore({
@@ -24,6 +25,7 @@ export const store = configureStore({
     getSalary: getSalary.reducer,
     getBonusTax: getBonusTax.reducer,
     getBonus: getBonus.reducer,
+    headerHeightSlice: headerHeightSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

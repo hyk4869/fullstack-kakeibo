@@ -106,6 +106,7 @@ const BonusTable: React.FC<BonusTableProps> = () => {
   const bonusData = useSelector((state: RootState) => state.getBonus);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
   const user = useSelector((state: RootState) => state.getUserInfo);
+  const heightValue = useSelector((state: RootState) => state.headerHeightSlice);
 
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
@@ -120,7 +121,6 @@ const BonusTable: React.FC<BonusTableProps> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [deleteSomething, setDeleteSomething] = useState<Array<TBonus>>([]);
   const [windowSize, setWindowSize] = useState<boolean>(false);
-  const [maxHeightState, setMaxHeightState] = useState<number>(0);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
 
@@ -145,16 +145,6 @@ const BonusTable: React.FC<BonusTableProps> = () => {
       setWindowSize(true);
     } else {
       setWindowSize(false);
-    }
-    if (height > 930) {
-      const subtractionHeigh = height * 0.3;
-      setMaxHeightState(height - subtractionHeigh);
-    } else if (height > 800) {
-      const subtractionHeigh = height * 0.35;
-      setMaxHeightState(height - subtractionHeigh);
-    } else if (height <= 795) {
-      const subtractionHeigh = height * 0.5;
-      setMaxHeightState(height - subtractionHeigh);
     }
   }, [width, height]);
 
@@ -261,7 +251,7 @@ const BonusTable: React.FC<BonusTableProps> = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%', position: 'relative', top: `calc(${heightValue}px * (1 + 0.1))` }}>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <EnhancedTableToolbar
             numSelected={selected.length}
@@ -276,7 +266,7 @@ const BonusTable: React.FC<BonusTableProps> = () => {
             windowSize={windowSize}
             reduxValue={bonusData}
           />
-          <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
+          <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
             <Table stickyHeader aria-label="sticky table">
               <CommonTDataTableHeader<TBonus>
                 numSelected={selected.length}

@@ -30,6 +30,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const hireDateData = useSelector((state: RootState) => state.getHireDate);
   const user = useSelector((state: RootState) => state.getUserInfo);
+  const heightValue = useSelector((state: RootState) => state.headerHeightSlice);
 
   const [edit, setEdit] = useState<boolean>(false);
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
@@ -134,7 +135,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%', position: 'relative', top: `calc(${heightValue}px * (1 + 0.1))` }}>
         <Paper sx={{ width: '95%', margin: '0.5rem auto', background: grey[50] }}>
           <Box>
             <CommonTopEditButton
@@ -149,7 +150,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
               deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
-          <TableContainer>
+          <TableContainer sx={{ height: `calc(100vh * (1 - 0.32) - ${heightValue}px)` }}>
             <Table>
               <CommonTableHeader categoryHeaderList={hireDateHeaderList} />
               <TableBody>

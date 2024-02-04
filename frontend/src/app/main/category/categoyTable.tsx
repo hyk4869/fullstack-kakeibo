@@ -36,6 +36,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const monthlyData = useSelector((state: RootState) => state.getMonthlySpendingContent);
   const user = useSelector((state: RootState) => state.getUserInfo);
+  const heightValue = useSelector((state: RootState) => state.headerHeightSlice);
 
   const [edit, setEdit] = useState<boolean>(false);
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
@@ -67,8 +68,6 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
     });
 
   const csv = new ExportCSVData({ fileName: 'MCategory', file: formatedData, availableDate: true });
-
-  console.log(categoryData);
 
   useEffect(() => {
     if (width < 840) {
@@ -143,7 +142,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
   const deleteArrayValue = () => {};
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%', position: 'relative', top: `calc(${heightValue}px * (1 + 0.1))` }}>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <Box>
             <CommonTopEditButton
@@ -158,7 +157,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
               deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
-          <TableContainer>
+          <TableContainer sx={{ height: `calc(100vh * (1 - 0.32) - ${heightValue}px)` }}>
             <Table>
               <CommonTableHeader categoryHeaderList={categoryHeaderList} />
               <TableBody>

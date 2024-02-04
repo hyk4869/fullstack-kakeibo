@@ -45,6 +45,16 @@ export const getUserInfo = createSlice({
   },
 });
 
+export const headerHeightSlice = createSlice({
+  name: 'headerHeight',
+  initialState: 0,
+  reducers: {
+    setHeaderHeight: (state, action: PayloadAction<number>) => {
+      return action.payload;
+    },
+  },
+});
+
 /** 月の出費関連 */
 export const getMonthlySpendingContent = createSlice({
   name: 'getMonthlySpendingContent',
@@ -305,3 +315,4 @@ export const { setSalaryContent, setCreateSalary } = getSalary.actions;
 export const { setBonusTaxContent, setCreateBonusTax } = getBonusTax.actions;
 export const { setBonusContent, setCreateBonus } = getBonus.actions;
 export const { setEnableEdit } = enableEdit.actions;
+export const { setHeaderHeight } = headerHeightSlice.actions;

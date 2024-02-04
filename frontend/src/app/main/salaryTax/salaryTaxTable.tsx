@@ -106,6 +106,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const companyData = useSelector((state: RootState) => state.getCompanyContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
   const user = useSelector((state: RootState) => state.getUserInfo);
+  const heightValue = useSelector((state: RootState) => state.headerHeightSlice);
 
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
@@ -120,7 +121,6 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [maxHeightState, setMaxHeightState] = useState<number>(0);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
 
@@ -145,16 +145,6 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
       setWindowSize(true);
     } else {
       setWindowSize(false);
-    }
-    if (height > 930) {
-      const subtractionHeigh = height * 0.3;
-      setMaxHeightState(height - subtractionHeigh);
-    } else if (height > 800) {
-      const subtractionHeigh = height * 0.35;
-      setMaxHeightState(height - subtractionHeigh);
-    } else if (height <= 795) {
-      const subtractionHeigh = height * 0.5;
-      setMaxHeightState(height - subtractionHeigh);
     }
   }, [width, height]);
 
@@ -288,7 +278,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%', position: 'relative', top: `calc(${heightValue}px * (1 + 0.1))` }}>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
           <EnhancedTableToolbar
             numSelected={selected.length}
@@ -303,7 +293,7 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
             windowSize={windowSize}
             reduxValue={salaryTaxData}
           />
-          <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
+          <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
             <Table stickyHeader aria-label="sticky table">
               <CommonTDataTableHeader<TSalaryTax>
                 numSelected={selected.length}

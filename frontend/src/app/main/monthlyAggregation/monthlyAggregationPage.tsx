@@ -8,6 +8,8 @@ import useWindowSize from '@/app/_util/useWindowSize';
 import AggregationByMonth from './aggregationByMonth';
 import AggregationByDetailMonth from './aggregationByDetailMonth';
 import AggregationByAnnualIncome from './aggregationByAnnualIncome';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/_store/store';
 
 type MonthlyAggregationProps = {
   //
@@ -15,6 +17,8 @@ type MonthlyAggregationProps = {
 const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
   const [changePage, setChangePage] = useState<string>('1');
   const [windowSize, setWindowSize] = useState<boolean>(false);
+
+  const heightValue = useSelector((state: RootState) => state.headerHeightSlice);
 
   const { width, height } = useWindowSize();
 
@@ -32,7 +36,7 @@ const MonthlyAggregation: React.FC<MonthlyAggregationProps> = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%', position: 'relative', top: `calc(${heightValue}px * (1 + 0.1))` }}>
         <Paper sx={{ width: '95%', margin: '0.5rem auto', background: grey[50] }}>
           <TabContext value={changePage}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

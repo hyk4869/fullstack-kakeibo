@@ -123,6 +123,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const categoryData = useSelector((state: RootState) => state.getCategoryContent);
   const enableEdit = useSelector((state: RootState) => state.enableEdit);
   const user = useSelector((state: RootState) => state.getUserInfo);
+  const heightValue = useSelector((state: RootState) => state.headerHeightSlice);
 
   const { width, height } = useWindowSize();
   const dispatch = useDispatch();
@@ -137,7 +138,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [deleteSomething, setDeleteSomething] = useState<Array<TMonthlySpending>>([]);
   const [windowSize, setWindowSize] = useState<boolean>(false);
-  const [maxHeightState, setMaxHeightState] = useState<number>(0);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
 
@@ -164,16 +164,6 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
       setWindowSize(true);
     } else {
       setWindowSize(false);
-    }
-    if (height > 930) {
-      const subtractionHeigh = height * 0.3;
-      setMaxHeightState(height - subtractionHeigh);
-    } else if (height > 800) {
-      const subtractionHeigh = height * 0.35;
-      setMaxHeightState(height - subtractionHeigh);
-    } else if (height <= 795) {
-      const subtractionHeigh = height * 0.5;
-      setMaxHeightState(height - subtractionHeigh);
     }
   }, [width, height]);
 
@@ -343,8 +333,14 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   // };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
+    <Box sx={{ width: '100%', position: 'relative', top: `calc(${heightValue}px * (1 + 0.1))` }}>
+      <Paper
+        sx={{
+          width: '95%',
+          margin: '1rem auto',
+          background: grey[50],
+        }}
+      >
         <EnhancedTableToolbar
           numSelected={selected.length}
           edit={edit}
@@ -358,7 +354,7 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           windowSize={windowSize}
           setEditLogValue={setEditLogValue}
         />
-        <TableContainer sx={{ maxHeight: `${maxHeightState}px` }}>
+        <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
           <Table stickyHeader aria-label="sticky table">
             <CommonTDataTableHeader<TMonthlySpending>
               numSelected={selected.length}
