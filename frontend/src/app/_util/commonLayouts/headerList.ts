@@ -3,7 +3,7 @@ import { commonTableHeaderType } from './commonTableHeader';
 /** カテゴリマスタのヘッダー */
 export const categoryHeaderList: commonTableHeaderType[] = [
   {
-    label: 'id',
+    label: 'categoryId',
     id: 'categoryId',
   },
   {
@@ -19,7 +19,7 @@ export const categoryHeaderList: commonTableHeaderType[] = [
 /** カテゴリーマスタがどれだけ参照されているかのヘッダー */
 export const numberOfCategoryHeaderList: commonTableHeaderType[] = [
   {
-    label: 'id',
+    label: 'categoryId',
     id: 'categoryId',
   },
   {
@@ -159,6 +159,22 @@ export const workExperienceHeaderList: commonTableHeaderType[] = [
   {
     label: '',
     id: '',
+  },
+];
+
+/** 職歴マスタがどれだけ参照されているかのヘッダー */
+export const numberOfWorkExperienceHeaderList: commonTableHeaderType[] = [
+  {
+    id: 'companyNum',
+    label: '会社番号',
+  },
+  {
+    id: 'name',
+    label: '会社名',
+  },
+  {
+    label: '参照されている数',
+    id: 'amount',
   },
 ];
 

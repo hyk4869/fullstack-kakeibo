@@ -150,7 +150,7 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
               deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
-          <TableContainer sx={{ height: `calc(100vh * (1 - 0.32) - ${heightValue}px)` }}>
+          <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
             <Table>
               <CommonTableHeader categoryHeaderList={hireDateHeaderList} />
               <TableBody>

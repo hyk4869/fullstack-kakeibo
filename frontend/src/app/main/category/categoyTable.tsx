@@ -157,7 +157,7 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
               deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
-          <TableContainer sx={{ height: `calc(100vh * (1 - 0.32) - ${heightValue}px)` }}>
+          <TableContainer sx={{ height: `calc(100vh * (1 - 0.35) - ${heightValue}px)` }}>
             <Table>
               <CommonTableHeader categoryHeaderList={categoryHeaderList} />
               <TableBody>

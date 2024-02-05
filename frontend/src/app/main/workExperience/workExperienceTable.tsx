@@ -37,7 +37,6 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
   const [editValue, setEditValue] = useState<Array<MCompany>>([]);
   const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
-  // const [amount, setAmount] = useState<Array<ReferenceType>>([]);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [windowSize, setWindowSize] = useState<boolean>(false);
@@ -72,12 +71,6 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
       setEditValue(companyData);
     }
   }, [companyData]);
-
-  // useEffect(() => {
-  //   if (companyData.length !== 0) {
-  //     setAmount(sumEachCategory(categoryData, monthlyData));
-  //   }
-  // }, [companyData]);
 
   const changeValue = useCallback(
     (id: number, paramKey: string, value: unknown) => {
@@ -154,7 +147,7 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
               deleteArrayValue={() => deleteArrayValue()}
             />
           </Box>
-          <TableContainer sx={{ height: `calc(100vh * (1 - 0.32) - ${heightValue}px)` }}>
+          <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
             <Table>
               <CommonTableHeader categoryHeaderList={workExperienceHeaderList} />
               <TableBody>
@@ -211,34 +204,12 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
             </Button>
           </Box>
         </Paper>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: '1rem',
-            margin: '1rem auto',
-            width: '95%',
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-        >
-          <Button onClick={() => setIsShowCategoryMaster(true)} variant="outlined">
-            参照されている数を表示
-          </Button>
-        </Box>
       </Box>
       <CreateNewRecordsDialog
         openDialog={openAddContent}
         onCloseAddRecords={() => setOpenAddContent(false)}
         edit={edit}
       />
-      {/* <ShowWorkExperienceMaster
-        isShowCategoryMaster={isShowCategoryMaster}
-        onCloseCategoryMaster={() => setIsShowCategoryMaster(false)}
-        amount={amount}
-      /> */}
       <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
     </>
   );
