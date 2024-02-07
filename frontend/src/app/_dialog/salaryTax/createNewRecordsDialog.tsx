@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { useSelector } from 'react-redux';
 import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
@@ -10,7 +9,6 @@ import { grey } from '@mui/material/colors';
 import NextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportExampleCSV } from '../../_util/CSV/exportExampleCSV';
-import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
 import { salaryHeaders } from '../../_util/CSV/exportCSVTitleName';
 import {
@@ -41,7 +39,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [incrementArray, setIncrementArray] = useState<Array<number>>([]);
   const [makeNewArray, setMakeNewArray] = useState<Array<TSalaryTax>>([]);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
-  const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [maxHeight, setMaxHeight] = useState<string>('');
@@ -430,9 +427,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             convertTypes={convertSalaryTaxTypes}
             nullCheck={salaryTaxNullCheck}
           />
-          <Button onClick={() => setIsShowCategoryMaster(true)} variant="outlined">
-            カテゴリーIDを参照する
-          </Button>
         </Box>
 
         <NextActionDialog
@@ -443,10 +437,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           onCloseMonthlyDialog={onCloseAddRecords}
           setMakeNewArray={setMakeNewArray}
         />
-        {/* <ShowCategoryMaster
-          isShowCategoryMaster={isShowCategoryMaster}
-          onCloseCategoryMaster={() => setIsShowCategoryMaster(false)}
-        /> */}
       </Dialog>
     </Box>
   );

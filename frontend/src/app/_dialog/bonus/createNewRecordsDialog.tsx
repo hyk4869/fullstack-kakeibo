@@ -12,7 +12,6 @@ import { grey } from '@mui/material/colors';
 import NextActionDialog from './nextActionDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ExportExampleCSV } from '../../_util/CSV/exportExampleCSV';
-import { ShowCategoryMaster } from './showCategory';
 import TablePagination from '@mui/material/TablePagination';
 import { salaryHeaders } from '../../_util/CSV/exportCSVTitleName';
 import {
@@ -43,7 +42,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [incrementArray, setIncrementArray] = useState<Array<number>>([]);
   const [makeNewArray, setMakeNewArray] = useState<Array<TBonus>>([]);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
-  const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [maxHeight, setMaxHeight] = useState<string>('');
@@ -318,9 +316,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             convertTypes={convertBonusTypes}
             nullCheck={bonusNullCheck}
           />
-          <Button onClick={() => setIsShowCategoryMaster(true)} variant="outlined">
-            カテゴリーIDを参照する
-          </Button>
         </Box>
 
         <NextActionDialog
@@ -331,10 +326,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           onCloseMonthlyDialog={onCloseAddRecords}
           setMakeNewArray={setMakeNewArray}
         />
-        {/* <ShowCategoryMaster
-          isShowCategoryMaster={isShowCategoryMaster}
-          onCloseCategoryMaster={() => setIsShowCategoryMaster(false)}
-        /> */}
       </Dialog>
     </Box>
   );
