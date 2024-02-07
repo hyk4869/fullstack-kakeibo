@@ -77,7 +77,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
       setMaxHeight(`calc(100vh * (1 - 0.35) - ${heightValue}px)`);
     } else {
       setWindowSize(false);
-      setMaxHeight(`calc(100vh * (1 - 0.15) - ${heightValue}px)`);
+      setMaxHeight(`calc(100vh * (1 - 0.19) - ${heightValue}px)`);
     }
   }, [width, height]);
 
