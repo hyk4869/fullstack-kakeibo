@@ -193,7 +193,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
           <TableContainer
             sx={{
               display: 'flex',
-              justifyContent: 'center',
+              justifyContent: 'flex-start',
               width: '100%',
               maxHeight: maxHeight,
             }}
