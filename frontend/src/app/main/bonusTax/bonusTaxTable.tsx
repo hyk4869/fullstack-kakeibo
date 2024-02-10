@@ -11,13 +11,10 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
-  Toolbar,
   Tooltip,
 } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
 import { TBonusTax } from '@/app/_store/interfacesInfo';
-import { alpha } from '@mui/material/styles';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
 import { Order, getComparator, stableSort } from '@/app/_util/utils';
 import { monthlyTaxHeaderList } from '@/app/_util/commonLayouts/headerList';
@@ -36,66 +33,6 @@ import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon
 import CreateNewRecordsDialog from '@/app/_dialog/bonusTax/createNewRecordsDialog';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
-
-/** 上のeditボタン */
-const EnhancedTableToolbar = <T,>(props: EnhancedTableToolbarProps<T>): React.ReactElement => {
-  const {
-    numSelected,
-    edit,
-    dataLength,
-    handleEditFlag,
-    saveValue,
-    deleteArrayValue,
-    enableEdit,
-    isLoading,
-    setIsLoading,
-    windowSize,
-    reduxValue,
-  } = props;
-
-  const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
-  const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-        display: 'block',
-      }}
-    >
-      <CommonTopEditButton
-        edit={edit}
-        handleEditFlag={handleEditFlag}
-        title={'賞与に対する税金関係'}
-        setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
-        saveValue={saveValue}
-        numSelected={numSelected}
-        windowSize={windowSize}
-        dataLength={dataLength}
-        deleteArrayValue={() => deleteArrayValue()}
-        enableEdit={enableEdit}
-        setOpenFetchDialog={() => setOpenFetchDialog(true)}
-      />
-      <CreateNewRecordsDialog
-        openDialog={openAddRecordsDialog}
-        onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
-        edit={edit}
-      />
-      <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
-      <FetchDataDialog
-        openFetchDialog={openFetchDialog}
-        onCloseDialog={() => setOpenFetchDialog(false)}
-        setReduxValue={(payload: unknown[]) => setBonusTaxContent(payload as TBonusTax[])}
-        reduxValue={reduxValue!}
-        api={getBonusTax}
-      />
-    </Toolbar>
-  );
-};
 
 type BonusTaxProps = {
   //
@@ -123,6 +60,9 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
+
+  const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
+  const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
 
   const utilMethods = useCommonFunctions<TBonusTax>();
 
@@ -282,19 +222,35 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
     <>
       <Box sx={{ width: '100%', position: 'relative', top: `calc(${heightValue}px * (1 + 0.1))` }}>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
-          <EnhancedTableToolbar
-            numSelected={selected.length}
-            edit={edit}
-            dataLength={bonusTaxData.length}
-            handleEditFlag={editFlag}
-            saveValue={saveValue}
-            deleteArrayValue={deleteArrayValue}
-            enableEdit={enableEdit}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            windowSize={windowSize}
-            reduxValue={bonusTaxData}
-          />
+          <Box>
+            <CommonTopEditButton
+              edit={edit}
+              handleEditFlag={editFlag}
+              title={'賞与に対する税金関係'}
+              setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
+              saveValue={saveValue}
+              numSelected={selected.length}
+              windowSize={windowSize}
+              dataLength={bonusTaxData.length}
+              deleteArrayValue={() => deleteArrayValue()}
+              enableEdit={enableEdit}
+              setOpenFetchDialog={() => setOpenFetchDialog(true)}
+            />
+            <CreateNewRecordsDialog
+              openDialog={openAddRecordsDialog}
+              onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
+              edit={edit}
+            />
+            <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
+            <FetchDataDialog
+              openFetchDialog={openFetchDialog}
+              onCloseDialog={() => setOpenFetchDialog(false)}
+              setReduxValue={(payload: unknown[]) => setBonusTaxContent(payload as TBonusTax[])}
+              reduxValue={bonusTaxData!}
+              api={getBonusTax}
+            />
+          </Box>
+
           <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
             <Table stickyHeader aria-label="sticky table">
               <CommonTDataTableHeader<TBonusTax>

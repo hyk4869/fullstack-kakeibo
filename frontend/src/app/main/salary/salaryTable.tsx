@@ -11,12 +11,9 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
-  Toolbar,
 } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { EnhancedTableToolbarProps } from '../summaryTable/summaryTable';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
-import { alpha } from '@mui/material/styles';
 import LoadingContent from '../../_util/commonLayouts/loading';
 import { grey } from '@mui/material/colors';
 import { Order, getComparator, stableSort } from '@/app/_util/utils';
@@ -37,66 +34,6 @@ import { getSalary, postDeleteSalary } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
-
-/** 上のeditボタン */
-const EnhancedTableToolbar = <T,>(props: EnhancedTableToolbarProps<T>): React.ReactElement => {
-  const {
-    numSelected,
-    edit,
-    dataLength,
-    handleEditFlag,
-    saveValue,
-    deleteArrayValue,
-    enableEdit,
-    isLoading,
-    setIsLoading,
-    windowSize,
-    reduxValue,
-  } = props;
-
-  const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
-  const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-        display: 'block',
-      }}
-    >
-      <CommonTopEditButton
-        edit={edit}
-        handleEditFlag={handleEditFlag}
-        title={'給与明細'}
-        setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
-        saveValue={saveValue}
-        numSelected={numSelected}
-        windowSize={windowSize}
-        dataLength={dataLength}
-        deleteArrayValue={() => deleteArrayValue()}
-        enableEdit={enableEdit}
-        setOpenFetchDialog={() => setOpenFetchDialog(true)}
-      />
-      <CreateNewRecordsDialog
-        openDialog={openAddRecordsDialog}
-        onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
-        edit={edit}
-      />
-      <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
-      <FetchDataDialog
-        openFetchDialog={openFetchDialog}
-        onCloseDialog={() => setOpenFetchDialog(false)}
-        setReduxValue={(payload: unknown[]) => setSalaryContent(payload as TSalary[])}
-        reduxValue={reduxValue!}
-        api={getSalary}
-      />
-    </Toolbar>
-  );
-};
 
 type SalaryTableProps = {
   //
@@ -123,6 +60,9 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [rowNumber, setRowNumber] = useState<number>(0);
+
+  const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
+  const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
 
   const utilMethods = useCommonFunctions<TSalary>();
 
@@ -259,19 +199,35 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
     <>
       <Box sx={{ width: '100%', position: 'relative', top: `calc(${heightValue}px * (1 + 0.1))` }}>
         <Paper sx={{ width: '95%', margin: '1rem auto', background: grey[50] }}>
-          <EnhancedTableToolbar
-            numSelected={selected.length}
-            edit={edit}
-            dataLength={salaryData.length}
-            handleEditFlag={editFlag}
-            saveValue={saveValue}
-            deleteArrayValue={deleteArrayValue}
-            enableEdit={enableEdit}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            windowSize={windowSize}
-            reduxValue={salaryData}
-          />
+          <Box>
+            <CommonTopEditButton
+              edit={edit}
+              handleEditFlag={editFlag}
+              title={'給与明細'}
+              setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
+              saveValue={saveValue}
+              numSelected={selected.length}
+              windowSize={windowSize}
+              dataLength={salaryData.length}
+              deleteArrayValue={() => deleteArrayValue()}
+              enableEdit={enableEdit}
+              setOpenFetchDialog={() => setOpenFetchDialog(true)}
+            />
+            <CreateNewRecordsDialog
+              openDialog={openAddRecordsDialog}
+              onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
+              edit={edit}
+            />
+            <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
+            <FetchDataDialog
+              openFetchDialog={openFetchDialog}
+              onCloseDialog={() => setOpenFetchDialog(false)}
+              setReduxValue={(payload: unknown[]) => setSalaryContent(payload as TSalary[])}
+              reduxValue={salaryData!}
+              api={getSalary}
+            />
+          </Box>
+
           <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
             <Table stickyHeader aria-label="sticky table">
               <CommonTDataTableHeader<TSalary>

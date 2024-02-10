@@ -51,7 +51,25 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
           <Box sx={{ padding: '1rem', minWidth: '190px', fontSize: '0.8rem' }}>レコード数：{dataLength}件</Box>
         </Box>
       )}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '1rem', paddingBottom: '5px' }}>
+      <Box
+        sx={
+          !windowSize
+            ? {
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: '100%',
+                gap: '1rem',
+                paddingBottom: '5px',
+              }
+            : {
+                display: 'block',
+                '& > *': {
+                  marginInlineEnd: '0.5rem',
+                },
+                paddingLeft: '1rem',
+              }
+        }
+      >
         <Button color="primary" variant="outlined" onClick={setOpenFetchDialog}>
           データ取得
         </Button>

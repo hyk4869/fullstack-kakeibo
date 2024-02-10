@@ -10,7 +10,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { blue } from '@mui/material/colors';
 import PersonIcon from '@mui/icons-material/Person';
 import SideBar from './sideBar';
-import useWindowSize from '../_util/useWindowSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../_store/store';
 import SettingDialog from './setting';
@@ -25,7 +24,6 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const { width, height } = useWindowSize();
   const userData = useSelector((state: RootState) => state.getUserInfo);
   const heightValue = useSelector((state: RootState) => state.headerHeightSlice);
 
@@ -80,8 +78,6 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {headerName}
           </Typography>
-          {/* TODO: 後で消す */}
-          {`確認用 width: ${width}`} - {`height: ${height}`}
           <Button color="inherit" onClick={openSetting} id="person">
             <PersonIcon />
           </Button>

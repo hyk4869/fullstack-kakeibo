@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,7 +8,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
@@ -38,76 +36,6 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
 import { Button } from '@mui/material';
-
-export type EnhancedTableToolbarProps<T> = {
-  numSelected: number;
-  edit: boolean;
-  dataLength: number;
-  handleEditFlag: () => void;
-  saveValue: () => void;
-  deleteArrayValue: () => void;
-  enableEdit: boolean;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  windowSize: boolean;
-  setEditLogValue?: React.Dispatch<React.SetStateAction<TMonthlySpending[]>>;
-  reduxValue?: T[];
-};
-
-/** 上のeditボタン */
-const EnhancedTableToolbar = <T,>(props: EnhancedTableToolbarProps<T>): React.ReactElement => {
-  const {
-    numSelected,
-    edit,
-    dataLength,
-    handleEditFlag,
-    saveValue,
-    deleteArrayValue,
-    enableEdit,
-    isLoading,
-    setIsLoading,
-    windowSize,
-    setEditLogValue,
-  } = props;
-
-  const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
-  const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-        display: 'block',
-      }}
-    >
-      <CommonTopEditButton
-        edit={edit}
-        handleEditFlag={handleEditFlag}
-        title={'クレジットカード明細'}
-        setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
-        saveValue={saveValue}
-        numSelected={numSelected}
-        windowSize={windowSize}
-        dataLength={dataLength}
-        deleteArrayValue={() => deleteArrayValue()}
-        enableEdit={enableEdit}
-        setOpenFetchDialog={() => setOpenFetchDialog(true)}
-      />
-      <CreateNewRecordsDialog
-        openDialog={openAddRecordsDialog}
-        onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
-        edit={edit}
-        setEditLogValue={setEditLogValue}
-      />
-      <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
-      <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} />
-    </Toolbar>
-  );
-};
 
 type SummaryTableProps = {
   //
@@ -142,6 +70,9 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
   const [rowNumber, setRowNumber] = useState<number>(0);
 
   const [editLogValue, setEditLogValue] = useState<Array<TMonthlySpending>>([]);
+
+  const [openAddRecordsDialog, setOpenAddRecordsDialog] = useState<boolean>(false);
+  const [openFetchDialog, setOpenFetchDialog] = useState<boolean>(false);
 
   const utilMethods = useCommonFunctions<TMonthlySpending>();
 
@@ -341,19 +272,30 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
           background: grey[50],
         }}
       >
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          edit={edit}
-          dataLength={monthlyData.length}
-          handleEditFlag={editFlag}
-          saveValue={saveValue}
-          deleteArrayValue={deleteArrayValue}
-          enableEdit={enableEdit}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-          windowSize={windowSize}
-          setEditLogValue={setEditLogValue}
-        />
+        <Box>
+          <CommonTopEditButton
+            edit={edit}
+            handleEditFlag={editFlag}
+            title={'クレジットカード明細'}
+            setOpenAddContent={() => setOpenAddRecordsDialog(!openAddRecordsDialog)}
+            saveValue={saveValue}
+            numSelected={selected.length}
+            windowSize={windowSize}
+            dataLength={monthlyData.length}
+            deleteArrayValue={() => deleteArrayValue()}
+            enableEdit={enableEdit}
+            setOpenFetchDialog={() => setOpenFetchDialog(true)}
+          />
+          <CreateNewRecordsDialog
+            openDialog={openAddRecordsDialog}
+            onCloseAddRecords={() => setOpenAddRecordsDialog(false)}
+            edit={edit}
+            setEditLogValue={setEditLogValue}
+          />
+          <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
+          <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} />
+        </Box>
+
         <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
           <Table stickyHeader aria-label="sticky table">
             <CommonTDataTableHeader<TMonthlySpending>
