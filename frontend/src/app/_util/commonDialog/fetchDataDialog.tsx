@@ -72,7 +72,7 @@ const FetchDataDialog = <T,>(props: FetchDataDialogProps<T>): React.ReactElement
         </Box>
 
         <Box sx={{ padding: '2rem' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '20px' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
             <Button
               variant="outlined"
               color="error"
@@ -80,7 +80,7 @@ const FetchDataDialog = <T,>(props: FetchDataDialogProps<T>): React.ReactElement
               sx={{}}
               disabled={reduxValue.length <= 0}
             >
-              テーブルをクリア
+              テーブルクリア
             </Button>
             <Button variant="contained" onClick={getAllContent} sx={{}}>
               全取得

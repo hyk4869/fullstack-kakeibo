@@ -430,7 +430,12 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
             </Table>
           </TableContainer>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
-            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={bonusTaxData.length === 0}>
+            <Button
+              variant="outlined"
+              onClick={() => csv.createCSVFile()}
+              disabled={bonusTaxData.length === 0}
+              size="small"
+            >
               CSVダウンロード
             </Button>
 

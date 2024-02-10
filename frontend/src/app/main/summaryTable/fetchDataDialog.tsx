@@ -15,10 +15,11 @@ import Cookies from 'js-cookie';
 type FetchDataDialogProps = {
   openFetchDialog: boolean;
   onCloseDialog: () => void;
+  windowSize: boolean;
 };
 
 const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
-  const { openFetchDialog, onCloseDialog } = props;
+  const { openFetchDialog, onCloseDialog, windowSize } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -127,24 +128,23 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
         </Box>
 
         <Box sx={{ padding: '2rem' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <Box sx={{ display: 'flex', flexDirection: !windowSize ? 'row' : 'column' }}>
               <CustomDate value={startDate} edit={true} onChangeValue={changeValue} paramKey="startDate" id={0} />
-            </Box>
-            <span style={{ transform: 'translateX(7px)' }}>{'~'}</span>
-            <Box sx={{ margin: ' 0 1rem' }}>
+              <span style={{ padding: '0 1rem' }}>{'~'}</span>
               <CustomDate value={endDate} edit={true} onChangeValue={changeValue} paramKey="endDate" id={1} />
             </Box>
+
             <Tooltip title={'取得する日付を選んでください'} arrow>
               <Box>
                 <Button variant="outlined" disabled={disable} onClick={getSomeContent}>
-                  期間を指定して取得
+                  期間で取得
                 </Button>
               </Box>
             </Tooltip>
           </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '20px', marginTop: '2rem' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
             <Button
               variant="outlined"
               color="error"
@@ -152,7 +152,7 @@ const FetchDataDialog: React.FC<FetchDataDialogProps> = (props) => {
               sx={{}}
               disabled={monthlyData.length <= 0}
             >
-              テーブルをクリア
+              テーブルクリア
             </Button>
             <Button variant="contained" onClick={getAllContent} sx={{}}>
               全取得

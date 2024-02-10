@@ -312,7 +312,12 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
             </Table>
           </TableContainer>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
-            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={salaryData.length === 0}>
+            <Button
+              variant="outlined"
+              onClick={() => csv.createCSVFile()}
+              disabled={salaryData.length === 0}
+              size="small"
+            >
               CSVダウンロード
             </Button>
             <TablePagination

@@ -293,7 +293,11 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
             setEditLogValue={setEditLogValue}
           />
           <LoadingContent isLoading={isLoading} closeLoading={() => setIsLoading(false)} />
-          <FetchDataDialog openFetchDialog={openFetchDialog} onCloseDialog={() => setOpenFetchDialog(false)} />
+          <FetchDataDialog
+            openFetchDialog={openFetchDialog}
+            onCloseDialog={() => setOpenFetchDialog(false)}
+            windowSize={windowSize}
+          />
         </Box>
 
         <TableContainer sx={{ height: `calc(100vh * (1 - 0.26) - ${heightValue}px)` }}>
@@ -392,8 +396,20 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
-          <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={monthlyData.length === 0}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0 1rem',
+          }}
+        >
+          <Button
+            variant="outlined"
+            onClick={() => csv.createCSVFile()}
+            disabled={monthlyData.length === 0}
+            size="small"
+          >
             CSVダウンロード
           </Button>
 

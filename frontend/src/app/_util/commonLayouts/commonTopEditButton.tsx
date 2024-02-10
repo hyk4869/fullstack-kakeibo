@@ -58,7 +58,7 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
                 display: 'flex',
                 justifyContent: 'flex-end',
                 width: '100%',
-                gap: '1rem',
+                gap: '0.5rem',
                 paddingBottom: '5px',
               }
             : {
@@ -70,31 +70,44 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
               }
         }
       >
-        <Button color="primary" variant="outlined" onClick={setOpenFetchDialog}>
-          データ取得
-        </Button>
-        <Button
-          color={edit ? 'error' : 'primary'}
-          variant="contained"
-          onClick={handleEditFlag}
-          disabled={!idDisabled()}
+        <Box sx={{ display: 'flex', flexDirection: !windowSize ? 'row' : 'column', gap: '0.5rem' }}>
+          <Button color="primary" variant="outlined" onClick={setOpenFetchDialog}>
+            データ取得
+          </Button>
+          <Button
+            color={edit ? 'error' : 'primary'}
+            variant="contained"
+            onClick={handleEditFlag}
+            disabled={!idDisabled()}
+          >
+            <Tooltip title={edit ? '保存するには「保存を押してください」' : undefined} arrow>
+              <span>{edit ? 'キャンセル' : '編集'}</span>
+            </Tooltip>
+          </Button>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: !windowSize ? 'row' : 'column',
+            gap: '0.5rem',
+            paddingTop: !windowSize ? '' : '0.5rem',
+          }}
         >
-          <Tooltip title={edit ? '保存するには「保存を押してください」' : undefined} arrow>
-            <span>{edit ? 'キャンセル' : '編集'}</span>
-          </Tooltip>
-        </Button>
-        <Button
-          variant="contained"
-          disabled={edit === false}
-          sx={{ cursor: 'pointer' }}
-          color="primary"
-          onClick={setOpenAddContent}
-        >
-          追加
-        </Button>
-        <Button variant="outlined" disabled={edit === false} color="primary" onClick={saveValue}>
-          保存
-        </Button>
+          <Button
+            variant="contained"
+            disabled={edit === false}
+            sx={{ cursor: 'pointer' }}
+            color="primary"
+            onClick={setOpenAddContent}
+          >
+            追加
+          </Button>
+          <Button variant="outlined" disabled={edit === false} color="primary" onClick={saveValue}>
+            保存
+          </Button>
+        </Box>
+
         {numSelected > 0 ? (
           <Tooltip title="Delete">
             <IconButton onClick={() => deleteArrayValue()}>

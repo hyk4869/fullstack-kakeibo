@@ -199,7 +199,12 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
             </Table>
           </TableContainer>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 1rem' }}>
-            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={companyData.length === 0}>
+            <Button
+              variant="outlined"
+              onClick={() => csv.createCSVFile()}
+              disabled={companyData.length === 0}
+              size="small"
+            >
               CSVダウンロード
             </Button>
           </Box>

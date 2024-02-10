@@ -305,7 +305,12 @@ const BonusTable: React.FC<BonusTableProps> = () => {
             </Table>
           </TableContainer>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
-            <Button variant="outlined" onClick={() => csv.createCSVFile()} disabled={bonusData.length === 0}>
+            <Button
+              variant="outlined"
+              onClick={() => csv.createCSVFile()}
+              disabled={bonusData.length === 0}
+              size="small"
+            >
               CSVダウンロード
             </Button>
             <TablePagination
