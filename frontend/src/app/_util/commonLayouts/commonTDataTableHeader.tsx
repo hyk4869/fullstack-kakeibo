@@ -58,7 +58,8 @@ const CommonTDataTableHeader = <T,>(props: CommonTDataTableHeaderProps<T>): Reac
             key={a.id}
             align={'center'}
             sortDirection={orderBy === a.id ? order : false}
-            sx={{ background: grey[50], minWidth: labelList.length >= 7 ? '150px' : 'auto' }}
+            // sx={{ background: grey[50], minWidth: labelList.length >= 7 ? '150px' : 'auto' }}
+            sx={{ background: grey[50], minWidth: '130px' }}
           >
             <TableSortLabel
               active={orderBy === a.id}
