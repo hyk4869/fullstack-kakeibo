@@ -7,7 +7,7 @@ type ListContentType = {
 
 export const HomeListURL: Array<ListContentType> = [
   { label: 'Home', key: 1, link: '/', isMaster: false },
-  { label: 'Sample Form', key: 2, link: '/main/test', isMaster: false },
+  // { label: 'Sample Form', key: 2, link: '/main/test', isMaster: false },
 ];
 
 export const MonthlySpendingListURL: Array<ListContentType> = [
