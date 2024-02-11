@@ -6,7 +6,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import SyncIcon from '@mui/icons-material/Sync';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 
 type CommonEditButtopnProps = {
@@ -84,7 +84,7 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
             sx={{ ':hover': { color: 'primary.main' } }}
             disabled={edit === false}
           >
-            <AddCircleOutlineIcon />
+            <AddIcon />
           </IconButton>
         </Tooltip>
 

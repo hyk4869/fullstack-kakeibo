@@ -41,7 +41,6 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
   const [incrementArray, setIncrementArray] = useState<Array<number>>([]);
   const [makeNewArray, setMakeNewArray] = useState<Array<TSalary>>([]);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
-  const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
@@ -200,6 +199,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             addNewArray={addNewArray}
             showDialog={showDialog}
             onCloseAddRecords={onCloseAddRecords}
+            windowSize={windowSize}
           />
 
           <TableContainer

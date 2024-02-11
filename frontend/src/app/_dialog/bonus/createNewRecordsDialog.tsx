@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { useSelector } from 'react-redux';
 import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
@@ -200,6 +199,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             addNewArray={addNewArray}
             showDialog={showDialog}
             onCloseAddRecords={onCloseAddRecords}
+            windowSize={windowSize}
           />
 
           <TableContainer

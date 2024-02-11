@@ -197,6 +197,7 @@ const CreateNewRecordsDialog: React.FC<CreateNewRecordsDialogProps> = (props) =>
             addNewArray={addNewArray}
             showDialog={showDialog}
             onCloseAddRecords={onCloseAddRecords}
+            windowSize={windowSize}
           />
           <TableContainer
             sx={{
