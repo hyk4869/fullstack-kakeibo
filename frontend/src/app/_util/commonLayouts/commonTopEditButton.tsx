@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -44,6 +44,7 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
       return true;
     }
   };
+
   return (
     <>
       {numSelected > 0 ? (
@@ -51,67 +52,81 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
           {numSelected} レコードが選択されました。
         </Box>
       ) : (
-        <Box sx={{ display: windowSize ? 'block' : 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: windowSize ? 'block' : 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box sx={{ padding: '1rem', minWidth: '250px', fontSize: '1.3rem' }}>{title}</Box>
-          <Box sx={{ padding: '1rem', minWidth: '190px', fontSize: '0.8rem' }}>レコード数：{dataLength}件</Box>
+          <Box sx={{ padding: windowSize ? '0.1rem 1rem' : '1rem', minWidth: '190px', fontSize: '0.75rem' }}>
+            レコード数：{dataLength}件
+          </Box>
         </Box>
       )}
-      <Box
-        sx={
-          !windowSize
-            ? {
-                display: 'flex',
-                justifyContent: 'flex-end',
-                width: '100%',
-                gap: '0.5rem',
-                paddingBottom: '5px',
-              }
-            : {
-                display: 'block',
-                '& > *': {
-                  marginInlineEnd: '0.5rem',
-                },
-                paddingLeft: '1rem',
-              }
-        }
-      >
-        <Box sx={{ display: 'flex', flexDirection: !windowSize ? 'row' : 'column', gap: '0.5rem' }}>
-          <Button color="primary" variant="outlined" onClick={setOpenFetchDialog}>
-            データ取得
-          </Button>
-          <Button
-            color={edit ? 'error' : 'primary'}
-            variant="contained"
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '1rem', paddingBottom: '5px' }}>
+        {/* <Button color="primary" variant="outlined" onClick={setOpenFetchDialog}>
+          データ取得
+        </Button> */}
+
+        <Tooltip title="データ取得を行います" arrow>
+          <IconButton onClick={setOpenFetchDialog} size="medium" sx={{ ':hover': { color: 'primary.main' } }}>
+            <SyncIcon />
+          </IconButton>
+        </Tooltip>
+
+        {/* <Button
+          color={edit ? 'error' : 'primary'}
+          variant="contained"
+          onClick={handleEditFlag}
+          disabled={!idDisabled()}
+        >
+          <Tooltip title={edit ? '保存するには「保存を押してください」' : undefined} arrow>
+            <span>{edit ? 'キャンセル' : '編集'}</span>
+          </Tooltip>
+        </Button> */}
+
+        <Tooltip title={edit ? 'キャンセル' : '編集'} arrow>
+          <IconButton
             onClick={handleEditFlag}
             disabled={!idDisabled()}
+            size="medium"
+            sx={{ ':hover': { color: edit ? 'error.main' : 'primary.main' } }}
           >
-            <Tooltip title={edit ? '保存するには「保存を押してください」' : undefined} arrow>
-              <span>{edit ? 'キャンセル' : '編集'}</span>
-            </Tooltip>
-          </Button>
-        </Box>
+            {edit ? <CloseIcon /> : <EditIcon />}
+          </IconButton>
+        </Tooltip>
 
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: !windowSize ? 'row' : 'column',
-            gap: '0.5rem',
-            paddingTop: !windowSize ? '' : '0.5rem',
-          }}
+        {/* <Button
+          variant="contained"
+          disabled={edit === false}
+          sx={{ cursor: 'pointer' }}
+          color="primary"
+          onClick={setOpenAddContent}
         >
-          <Button
-            variant="contained"
-            disabled={edit === false}
-            sx={{ cursor: 'pointer' }}
-            color="primary"
+          追加
+        </Button> */}
+
+        <Tooltip title="データの追加を行います" arrow>
+          <IconButton
             onClick={setOpenAddContent}
+            size="medium"
+            sx={{ ':hover': { color: 'primary.main' } }}
+            disabled={edit === false}
           >
-            追加
-          </Button>
-          <Button variant="outlined" disabled={edit === false} color="primary" onClick={saveValue}>
-            保存
-          </Button>
-        </Box>
+            <AddCircleOutlineIcon />
+          </IconButton>
+        </Tooltip>
+
+        {/* <Button variant="outlined" disabled={edit === false} color="primary" onClick={saveValue}>
+          保存
+        </Button> */}
+
+        <Tooltip title="保存" arrow>
+          <IconButton
+            onClick={saveValue}
+            size="medium"
+            sx={{ ':hover': { color: 'primary.main' } }}
+            disabled={edit === false}
+          >
+            <SaveIcon />
+          </IconButton>
+        </Tooltip>
 
         {numSelected > 0 ? (
           <Tooltip title="Delete">
