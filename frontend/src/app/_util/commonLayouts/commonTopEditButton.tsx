@@ -60,26 +60,11 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
         </Box>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '1rem', paddingBottom: '5px' }}>
-        {/* <Button color="primary" variant="outlined" onClick={setOpenFetchDialog}>
-          データ取得
-        </Button> */}
-
         <Tooltip title="データ取得を行います" arrow>
           <IconButton onClick={setOpenFetchDialog} size="medium" sx={{ ':hover': { color: 'primary.main' } }}>
             <SyncIcon />
           </IconButton>
         </Tooltip>
-
-        {/* <Button
-          color={edit ? 'error' : 'primary'}
-          variant="contained"
-          onClick={handleEditFlag}
-          disabled={!idDisabled()}
-        >
-          <Tooltip title={edit ? '保存するには「保存を押してください」' : undefined} arrow>
-            <span>{edit ? 'キャンセル' : '編集'}</span>
-          </Tooltip>
-        </Button> */}
 
         <Tooltip title={edit ? 'キャンセル' : '編集'} arrow>
           <IconButton
@@ -92,16 +77,6 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
           </IconButton>
         </Tooltip>
 
-        {/* <Button
-          variant="contained"
-          disabled={edit === false}
-          sx={{ cursor: 'pointer' }}
-          color="primary"
-          onClick={setOpenAddContent}
-        >
-          追加
-        </Button> */}
-
         <Tooltip title="データの追加を行います" arrow>
           <IconButton
             onClick={setOpenAddContent}
@@ -112,10 +87,6 @@ const CommonTopEditButton: React.FC<CommonEditButtopnProps> = (props) => {
             <AddCircleOutlineIcon />
           </IconButton>
         </Tooltip>
-
-        {/* <Button variant="outlined" disabled={edit === false} color="primary" onClick={saveValue}>
-          保存
-        </Button> */}
 
         <Tooltip title="保存" arrow>
           <IconButton
