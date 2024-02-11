@@ -10,8 +10,6 @@ export class SalaryInfoService {
 
   private util = new UtilFunctions(this.prisma);
 
-  //TODO: もう少しコンパクトにまとめる
-
   async getSalaryTax(userID: string): Promise<TTax[]> {
     const result = await this.prisma.tTax.findMany({
       where: {
