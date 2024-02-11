@@ -11,8 +11,6 @@ import {
   UserInfo,
 } from './interfacesInfo';
 
-//TODO: 後で全体的に見直し
-
 /** User情報 */
 export const getUserInfo = createSlice({
   name: 'getUserInfo',
@@ -93,13 +91,6 @@ export const getMonthlySpendingContent = createSlice({
         return matchingItem ? { ...existingItem, ...matchingItem } : existingItem;
       });
 
-      return updatedState;
-    },
-
-    /** 値の削除 */
-    setDeleteMonthlySpending: (state, action: PayloadAction<TMonthlySpending[]>) => {
-      const deletedIds = action.payload.map((item) => item.sort);
-      const updatedState = state.filter((item) => deletedIds.includes(item.sort));
       return updatedState;
     },
   },
@@ -305,7 +296,7 @@ export const enableEdit = createSlice({
 });
 
 export const { setUserInfo } = getUserInfo.actions;
-export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending, setDeleteMonthlySpending } =
+export const { setMonthlySpending, setCreateMonthlySpending, setEditMonthlySpending } =
   getMonthlySpendingContent.actions;
 export const { setCategoryContent, setCreateCategoryContent } = getCategoryContent.actions;
 export const { setCompanyContent, setCreateCompanyContent } = getCompanyContent.actions;
