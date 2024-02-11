@@ -2,7 +2,7 @@
 
 import { RootState } from '@/app/_store/store';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingContent from '../../_util/commonLayouts/loading';
@@ -21,6 +21,7 @@ import { getCompany } from '@/app/_api/url';
 import Cookies from 'js-cookie';
 import { setCompanyContent } from '@/app/_store/slice';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
+import CommonTableFooter from '@/app/_util/commonFooter/commonTableFooter';
 
 type WorkExperienceTableProps = {
   //
@@ -36,7 +37,6 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const [openAddContent, setOpenAddContent] = useState<boolean>(false);
   const [editValue, setEditValue] = useState<Array<MCompany>>([]);
-  const [isShowCategoryMaster, setIsShowCategoryMaster] = useState<boolean>(false);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [windowSize, setWindowSize] = useState<boolean>(false);
@@ -198,16 +198,8 @@ const WorkExperienceTable: React.FC<WorkExperienceTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 1rem' }}>
-            <Button
-              variant="outlined"
-              onClick={() => csv.createCSVFile()}
-              disabled={companyData.length === 0}
-              size="small"
-            >
-              CSVダウンロード
-            </Button>
-          </Box>
+
+          <CommonTableFooter createCSVFile={() => csv.createCSVFile()} arrayLength={companyData.length} />
         </Paper>
       </Box>
       <CreateNewRecordsDialog

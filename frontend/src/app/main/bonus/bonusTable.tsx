@@ -1,17 +1,6 @@
 'use client';
 
-import {
-  Box,
-  Button,
-  Checkbox,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableRow,
-} from '@mui/material';
+import { Box, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import LoadingContent from '../../_util/commonLayouts/loading';
@@ -34,6 +23,7 @@ import { getBonus, postDeleteBonus } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/bonus/createNewRecordsDialog';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
+import CommonTableFooter from '@/app/_util/commonFooter/commonTableFooter';
 
 type BonusTableProps = {
   //
@@ -304,25 +294,15 @@ const BonusTable: React.FC<BonusTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
-            <Button
-              variant="outlined"
-              onClick={() => csv.createCSVFile()}
-              disabled={bonusData.length === 0}
-              size="small"
-            >
-              CSVダウンロード
-            </Button>
-            <TablePagination
-              rowsPerPageOptions={[20, 50, 100]}
-              component="div"
-              count={bonusData.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={changePage}
-              onRowsPerPageChange={changeRowsPerPage}
-            />
-          </Box>
+
+          <CommonTableFooter
+            createCSVFile={() => csv.createCSVFile()}
+            arrayLength={bonusData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            changePage={changePage}
+            changeRowsPerPage={changeRowsPerPage}
+          />
         </Paper>
       </Box>
     </>

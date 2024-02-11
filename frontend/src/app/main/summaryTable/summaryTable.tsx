@@ -6,7 +6,6 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
@@ -35,7 +34,7 @@ import useCommonFunctions from '@/app/_util/useCommonFunctions';
 import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
-import { Button } from '@mui/material';
+import CommonTableFooter from '@/app/_util/commonFooter/commonTableFooter';
 
 type SummaryTableProps = {
   //
@@ -396,33 +395,15 @@ const SummaryTable: React.FC<SummaryTableProps> = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '0 1rem',
-          }}
-        >
-          <Button
-            variant="outlined"
-            onClick={() => csv.createCSVFile()}
-            disabled={monthlyData.length === 0}
-            size="small"
-          >
-            CSVダウンロード
-          </Button>
 
-          <TablePagination
-            rowsPerPageOptions={[20, 50, 100]}
-            component="div"
-            count={monthlyData.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={changePage}
-            onRowsPerPageChange={changeRowsPerPage}
-          />
-        </Box>
+        <CommonTableFooter
+          createCSVFile={() => csv.createCSVFile()}
+          arrayLength={monthlyData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          changePage={changePage}
+          changeRowsPerPage={changeRowsPerPage}
+        />
       </Paper>
     </Box>
   );

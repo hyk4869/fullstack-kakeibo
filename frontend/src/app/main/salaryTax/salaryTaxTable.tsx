@@ -33,6 +33,7 @@ import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon
 import CreateNewRecordsDialog from '@/app/_dialog/salaryTax/createNewRecordsDialog';
 import FetchDataDialog from '../../_util/commonDialog/fetchDataDialog';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
+import CommonTableFooter from '@/app/_util/commonFooter/commonTableFooter';
 
 type SalaryTaxProps = {
   //
@@ -427,25 +428,15 @@ const SalaryTaxTable: React.FC<SalaryTaxProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
-            <Button
-              variant="outlined"
-              onClick={() => csv.createCSVFile()}
-              disabled={salaryTaxData.length === 0}
-              size="small"
-            >
-              CSVダウンロード
-            </Button>
-            <TablePagination
-              rowsPerPageOptions={[20, 50, 75]}
-              component="div"
-              count={salaryTaxData.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={changePage}
-              onRowsPerPageChange={changeRowsPerPage}
-            />
-          </Box>
+
+          <CommonTableFooter
+            createCSVFile={() => csv.createCSVFile()}
+            arrayLength={salaryTaxData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            changePage={changePage}
+            changeRowsPerPage={changeRowsPerPage}
+          />
         </Paper>
       </Box>
     </>

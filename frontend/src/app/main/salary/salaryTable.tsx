@@ -34,6 +34,7 @@ import { getSalary, postDeleteSalary } from '@/app/_api/url';
 import CreateNewRecordsDialog from '@/app/_dialog/salary/createNewRecordsDialog';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
+import CommonTableFooter from '@/app/_util/commonFooter/commonTableFooter';
 
 type SalaryTableProps = {
   //
@@ -311,25 +312,15 @@ const SalaryTable: React.FC<SalaryTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
-            <Button
-              variant="outlined"
-              onClick={() => csv.createCSVFile()}
-              disabled={salaryData.length === 0}
-              size="small"
-            >
-              CSVダウンロード
-            </Button>
-            <TablePagination
-              rowsPerPageOptions={[20, 50, 100]}
-              component="div"
-              count={salaryData.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={changePage}
-              onRowsPerPageChange={changeRowsPerPage}
-            />
-          </Box>
+
+          <CommonTableFooter
+            createCSVFile={() => csv.createCSVFile()}
+            arrayLength={salaryData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            changePage={changePage}
+            changeRowsPerPage={changeRowsPerPage}
+          />
         </Paper>
       </Box>
     </>

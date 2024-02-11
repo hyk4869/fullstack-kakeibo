@@ -21,6 +21,7 @@ import axios from 'axios';
 import { getCategoryLink } from '@/app/_api/url';
 import { setCategoryContent } from '@/app/_store/slice';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
+import CommonTableFooter from '@/app/_util/commonFooter/commonTableFooter';
 
 type CategoryTableProps = {
   //
@@ -189,16 +190,8 @@ const CategoryTable: React.FC<CategoryTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 1rem' }}>
-            <Button
-              variant="outlined"
-              onClick={() => csv.createCSVFile()}
-              disabled={categoryData.length === 0}
-              size="small"
-            >
-              CSVダウンロード
-            </Button>
-          </Box>
+
+          <CommonTableFooter createCSVFile={() => csv.createCSVFile()} arrayLength={categoryData.length} />
         </Paper>
         <Box
           sx={{

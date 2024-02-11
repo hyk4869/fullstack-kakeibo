@@ -4,7 +4,7 @@ import { commonPadding5 } from '@/app/_customComponents/customProperties';
 import { RootState } from '@/app/_store/store';
 import CommonTopEditButton from '@/app/_util/commonLayouts/commonTopEditButton';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,7 @@ import { getHireDate } from '@/app/_api/url';
 import Cookies from 'js-cookie';
 import { setHireDateContent } from '@/app/_store/slice';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
+import CommonTableFooter from '@/app/_util/commonFooter/commonTableFooter';
 
 type HireDateTableProps = {
   //
@@ -206,16 +207,8 @@ const HireDateTable: React.FC<HireDateTableProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 1rem' }}>
-            <Button
-              variant="outlined"
-              onClick={() => csv.createCSVFile()}
-              disabled={hireDateData.length === 0}
-              size="small"
-            >
-              CSVダウンロード
-            </Button>
-          </Box>
+
+          <CommonTableFooter createCSVFile={() => csv.createCSVFile()} arrayLength={hireDateData.length} />
         </Paper>
       </Box>
       <CreateNewRecordsDialog

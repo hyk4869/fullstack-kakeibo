@@ -1,18 +1,6 @@
 'use client';
 
-import {
-  Box,
-  Button,
-  Checkbox,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableRow,
-  Tooltip,
-} from '@mui/material';
+import { Box, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TBonusTax } from '@/app/_store/interfacesInfo';
 import CommonTDataTableHeader from '@/app/_util/commonLayouts/commonTDataTableHeader';
@@ -33,6 +21,7 @@ import CommonEditDeleteIcon from '@/app/_util/commonLayouts/commonEditDeleteIcon
 import CreateNewRecordsDialog from '@/app/_dialog/bonusTax/createNewRecordsDialog';
 import FetchDataDialog from '@/app/_util/commonDialog/fetchDataDialog';
 import { ExportCSVData } from '@/app/_util/CSV/exportCSVData';
+import CommonTableFooter from '@/app/_util/commonFooter/commonTableFooter';
 
 type BonusTaxProps = {
   //
@@ -429,26 +418,15 @@ const BonusTaxTable: React.FC<BonusTaxProps> = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem' }}>
-            <Button
-              variant="outlined"
-              onClick={() => csv.createCSVFile()}
-              disabled={bonusTaxData.length === 0}
-              size="small"
-            >
-              CSVダウンロード
-            </Button>
 
-            <TablePagination
-              rowsPerPageOptions={[20, 50, 75]}
-              component="div"
-              count={bonusTaxData.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={changePage}
-              onRowsPerPageChange={changeRowsPerPage}
-            />
-          </Box>
+          <CommonTableFooter
+            createCSVFile={() => csv.createCSVFile()}
+            arrayLength={bonusTaxData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            changePage={changePage}
+            changeRowsPerPage={changeRowsPerPage}
+          />
         </Paper>
       </Box>
     </>
