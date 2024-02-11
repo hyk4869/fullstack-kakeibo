@@ -1,6 +1,7 @@
-import { Box, Button, TablePagination } from '@mui/material';
-import React from 'react';
+import { Box, Button, IconButton, TablePagination, Tooltip } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import useWindowSize from '../useWindowSize';
 
 type CommonFooterProps = {
   createCSVFile: () => void;
@@ -13,6 +14,16 @@ type CommonFooterProps = {
 
 const CommonTableFooter: React.FC<CommonFooterProps> = (props) => {
   const { createCSVFile, arrayLength, rowsPerPage, page, changePage, changeRowsPerPage } = props;
+  const [changeIconSize, setChangeIconSize] = useState<boolean>(false);
+  const { width, height } = useWindowSize();
+
+  useEffect(() => {
+    if (width < 650) {
+      setChangeIconSize(true);
+    } else {
+      setChangeIconSize(false);
+    }
+  }, [width, height]);
 
   return (
     <>
@@ -24,9 +35,22 @@ const CommonTableFooter: React.FC<CommonFooterProps> = (props) => {
           padding: rowsPerPage !== undefined ? '0 1rem' : '0.75rem 1rem',
         }}
       >
-        <Button variant="outlined" onClick={() => createCSVFile()} disabled={arrayLength === 0} size="small">
-          CSVダウンロード
-        </Button>
+        {changeIconSize ? (
+          <Tooltip title="データをCSVとしてダウンロード" arrow>
+            <IconButton
+              onClick={() => createCSVFile()}
+              disabled={arrayLength === 0}
+              size="medium"
+              sx={{ padding: '0', margin: '0', ':hover': { color: 'primary.main' } }}
+            >
+              <FileDownloadIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Button variant="outlined" onClick={() => createCSVFile()} disabled={arrayLength === 0} size="small">
+            CSVダウンロード
+          </Button>
+        )}
 
         {rowsPerPage !== undefined && page !== undefined && changePage && changeRowsPerPage ? (
           <TablePagination
