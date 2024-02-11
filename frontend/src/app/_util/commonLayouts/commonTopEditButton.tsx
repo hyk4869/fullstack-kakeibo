@@ -3,6 +3,11 @@ import { Box, Button, IconButton, Tooltip } from '@mui/material';
 import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import SyncIcon from '@mui/icons-material/Sync';
+import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SaveIcon from '@mui/icons-material/Save';
 
 type CommonEditButtopnProps = {
   edit: boolean;
