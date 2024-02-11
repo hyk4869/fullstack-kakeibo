@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import { setCategoryContent, setCompanyContent, setHireDateContent, setUserInfo } from '../_store/slice';
 import { useRouter } from 'next/navigation';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 type SettingDialogProps = {
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
@@ -50,7 +52,12 @@ const SettingDialog: React.FC<SettingDialogProps> = (props) => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         id="person"
       >
-        <MenuItem onClick={logout}>Logout</MenuItem>
+        <MenuItem sx={{ padding: '0.75rem 2rem' }} disabled={true}>
+          <SettingsIcon sx={{ marginRight: 2 }} /> Setting
+        </MenuItem>
+        <MenuItem onClick={logout} sx={{ padding: '0.75rem 2rem' }}>
+          <LogoutIcon sx={{ marginRight: 2 }} /> Logout
+        </MenuItem>
       </Menu>
     </Box>
   );

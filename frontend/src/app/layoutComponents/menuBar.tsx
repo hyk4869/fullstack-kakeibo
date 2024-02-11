@@ -35,7 +35,6 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
     return (
       <Box sx={{ display: 'flex', gap: '20px' }}>
         <Box>{TitleName ?? ''}</Box>
-        <Box>{userData.userID + ' 様' ?? ''}</Box>
       </Box>
     );
   }, [TitleName, userData.userID]);
@@ -78,8 +77,14 @@ const CustomMenuBar: React.FC<CustomMenuBarProps> = (props) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {headerName}
           </Typography>
-          <Button color="inherit" onClick={openSetting} id="person">
+          <Button
+            color="inherit"
+            onClick={openSetting}
+            id="person"
+            sx={{ textTransform: 'none', display: 'flex', gap: '0.5rem' }}
+          >
             <PersonIcon />
+            <Box>{userData.userID + ' 様' ?? ''}</Box>
           </Button>
         </Toolbar>
       </AppBar>
