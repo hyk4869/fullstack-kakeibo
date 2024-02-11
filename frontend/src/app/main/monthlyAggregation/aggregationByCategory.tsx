@@ -2,7 +2,7 @@
 import CustomTextfield from '@/app/_customComponents/customTextfield';
 import CustomNumberFormat from '@/app/_customComponents/customNumeric';
 import { RootState } from '@/app/_store/store';
-import { Box, TableBody, TableCell, TableContainer, TableRow, Table, Button } from '@mui/material';
+import { Box, TableBody, TableCell, TableContainer, TableRow, Table, Tooltip, IconButton } from '@mui/material';
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { commonPadding5, messageRedirect } from '@/app/_customComponents/customProperties';
@@ -18,6 +18,7 @@ import CommonFooterAggregation from './commonFooter';
 import { aggregationHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { useGeneratePDF } from '@/app/_util/generatePDF/useGeneratePDF';
 import { aggregationByCategoryPDF } from '@/app/_util/generatePDF/aggregate/aggregationByCategoryPDF';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 type AggregationByCategoryProps = {
   //
@@ -194,10 +195,13 @@ const AggregationByCategory: React.FC<AggregationByCategoryProps> = () => {
             </Box>
           </Box>
         </TableContainer>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-          <Button variant="outlined" onClick={generatePDF}>
-            PDFデータのダウンロード
-          </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem' }}>
+          <Tooltip title="データをPDFとしてダウンロード" arrow>
+            <IconButton onClick={generatePDF} size="medium" sx={{ ':hover': { color: 'primary.main' } }}>
+              <FileDownloadIcon />
+            </IconButton>
+          </Tooltip>
+
           <CommonFooterAggregation sortedDate={sortedDate} />
         </Box>
       </Box>

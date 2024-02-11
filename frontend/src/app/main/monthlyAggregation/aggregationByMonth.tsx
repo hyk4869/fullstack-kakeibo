@@ -3,7 +3,7 @@
 import { RootState } from '@/app/_store/store';
 import CommonTableHeader from '@/app/_util/commonLayouts/commonTableHeader';
 import useWindowSize from '@/app/_util/useWindowSize';
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CustomNumberFormat from '../../_customComponents/customNumeric';
@@ -18,6 +18,7 @@ import BarGraph, { MonthlyGrouping } from '@/app/_util/commonGraph/barGraph';
 import { aggregationMonthlyHeaderList } from '@/app/_util/commonLayouts/headerList';
 import { useGeneratePDF } from '@/app/_util/generatePDF/useGeneratePDF';
 import { aggregationByMonthPDF } from '@/app/_util/generatePDF/aggregate/aggregationByMonthPDF';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 type AggregationByMonthProps = {
   //
@@ -174,10 +175,12 @@ const AggregationByMonth: React.FC<AggregationByMonthProps> = () => {
             )}
           </Box>
         </TableContainer>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-          <Button variant="outlined" onClick={generatePDF}>
-            PDFデータのダウンロード
-          </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem' }}>
+          <Tooltip title="データをPDFとしてダウンロード" arrow>
+            <IconButton onClick={generatePDF} size="medium" sx={{ ':hover': { color: 'primary.main' } }}>
+              <FileDownloadIcon />
+            </IconButton>
+          </Tooltip>
           <CommonFooterAggregation sortedDate={sortedDate} />
         </Box>
       </Box>
