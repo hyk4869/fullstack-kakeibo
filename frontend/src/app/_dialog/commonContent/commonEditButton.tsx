@@ -60,7 +60,7 @@ export const CommonEditButton = <T,>(props: CommonEditButtonProps<T>): React.Rea
           </Tooltip>
 
           <Tooltip title="キャンセル" arrow>
-            <IconButton onClick={onCloseAddRecords} disabled={makeNewArray.length <= 0} size="medium" color="error">
+            <IconButton onClick={onCloseAddRecords} size="medium" color="error">
               <CloseIcon />
             </IconButton>
           </Tooltip>
